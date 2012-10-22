@@ -33,57 +33,115 @@ class World(DirectObject):
 
 		plane.reparentTo(self.mainNode)
 
-class Unit():
+		player = Player(self.mainNode)
+
+
+
+class Unit(object):
+
+	strength = 0
+	constitution = 0
+	dexterity = 0
+	damage = 0
+	attackBonus = 0
+	maxHealthPoints = 0
+	armorClass = 0
+	movementSpeed = 0
+
+	level = 0
+	experience = 0
+	prevEXP = 0
 
 	def __init__(self):
 		print("Unit class instantiated")
 		self.initAttributes()
-		self.initLevel()
+		self.initlevel()
 
 	def initAttributes(self):
-		self.Strength = 0
-		self.Constitution = 0
-		self.Dexterity = 0
+		self.strength = 0
+		self.constitution = 0
+		self.dexterity = 0
 
-		self.Damage = 0 # affected by strength
-		self.AttackBonus = 0 # Affected by strength
-		self.MaxHealthPoints = 0 # affected by constitution
-		self.ArmorClass = 0 # affected by dexterity
+		self.damage = 0 # affected by strength
+		self.attackBonus = 0 # Affected by strength
+		self.maxHealthPoints = 0 # affected by constitution
+		self.armorClass = 0 # affected by dexterity
 
-		self.MovementSpeed = 0.5 # Not affected by attributes
+		self.movementSpeed = 0.5 # Not affected by attributes
 
-		self.currentHealthPoints = self.MaxHealthPoints
-		self.damageModifier = 1 # Added to Damage to calculate total damage
+		self._currentHealthPoints = self.maxHealthPoints
+		self._damageModifier = 1 # Added to damage to calculate total damage
 
-	def initLevel(self):
-		self.Level = 1
-		self.Experience = 0
-		self.PreviousEXP = 0
+		self.updateHealthPoints() # initialize the hit points
 
-	def getCurrentDamage(self):
-		return self.Damage + self.damageModifier
+	def initlevel(self):
+		self.level = 1
+		self.experience = 0
+		self.prevEXP = 0
+
+	def getCurrentdamage(self):
+		return self.damage + self._damageModifier
 
 	def increaseStrength(self):
-		self.Strength += 1
+		self.strength += 1
 
-		self.damageModifier = 1 + (self.Strength - 10) / 2
+	def getCurrentdamageModifier(self):
+		self._damageModifier = 1 + (self.strength - 10) / 2
+		return self._damageModifier
 
 	def giveEXP(self, value):
-		self.Experience += value
-		if self.Experience > self.PreviousEXP + (self.Level * 1000):
+		self.experience += value
+		if self.experience > self.prevEXP + (self.level * 1000):
 			self.increaseLevel()
 
 	def increaseLevel(self):
-		self.PreviousEXP += (self.Level * 1000)
-		self.Level += 1
+		self.prevEXP += (self.level * 1000) # increment prevExp
+		self.level += 1 # increment level
+		self.updateHealthPoints() # Make sure the player's health is updated
 
-		if self.Level % 4 == 0:
+		if self.level % 4 == 0: # Every 4th level increase attribute
 			self.increaseStrength()
-
+			
 	def updateHealthPoints(self):
-		self.MaxHealthPoints = (self.Level * (8 + ((self.Constitution - 10) / 2)))
+		self.maxHealthPoints = (self.level * (10 + ((self.constitution - 10) / 2)))
 
 
+
+
+
+class Player(Unit):
+
+	def __init__(self, parentNode):
+		print("Player class instantiated")
+		super(Player, self).__init__()
+		
+		self.initPlayerAttributes()
+
+		self.playerNode = parentNode.attachNewNode('playerNode')
+
+		self.initPlayerModel(self.playerNode)
+		self.updatePlayerCamera(self.playerNode)
+
+	def initPlayerAttributes(self):
+		self.strength = 16
+		self.constitution = 14
+		self.dexterity = 10
+
+		self.damage += self.getCurrentdamageModifier()
+
+	def updatePlayerCamera(self, playerNode):
+		base.camera.lookAt(playerNode)
+		base.camera.setPos(playerNode.getX(), 
+						   playerNode.getY() - 4, 
+						   playerNode.getZ() + 5)
+
+	def initPlayerModel(self, playerNode):
+		self._playerModel = Actor("models/BendingCan.egg")
+
+		self._playerModel.setPos(2, 0, 1)
+		self._playerModel.setScale(0.1)		
+
+		self._playerModel.reparentTo(playerNode)
 
 app = World()
 run()
