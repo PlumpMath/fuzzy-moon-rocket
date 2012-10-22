@@ -49,21 +49,26 @@ class Unit():
 		self.HealthPoints = 0 # affected by constitution
 		self.ArmorClass = 0 # affected by dexterity
 
+	def increaseStrength(self):
+		self.Strength += 1
+
 	def initLevel(self):
 		self.Level = 1
 		self.Experience = 0
+		self.PreviousEXP = 0
 
 	def giveEXP(self, value):
 		self.Experience += value
-		if self.Experience % 1000:
+		if self.Experience > self.PreviousEXP + (self.Level * 1000):
 			self.increaseLevel()
-		
+
 
 	def increaseLevel(self):
+		self.PreviousEXP += (self.Level * 1000)
 		self.Level += 1
 
 		if self.Level % 4 == 0:
-			self.Strength += 1
+			increaseStrength()
 
 
 
