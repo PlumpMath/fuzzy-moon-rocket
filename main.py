@@ -38,6 +38,7 @@ class Unit():
 	def __init__(self):
 		print("Unit class instantiated")
 		self.initAttributes()
+		self.initLevel()
 
 	def initAttributes(self):
 		self.Strength = 0
@@ -46,29 +47,41 @@ class Unit():
 
 		self.Damage = 0 # affected by strength
 		self.AttackBonus = 0 # Affected by strength
-		self.HealthPoints = 0 # affected by constitution
+		self.MaxHealthPoints = 0 # affected by constitution
 		self.ArmorClass = 0 # affected by dexterity
 
-	def increaseStrength(self):
-		self.Strength += 1
+		self.MovementSpeed = 0.5 # Not affected by attributes
+
+		self.currentHealthPoints = self.MaxHealthPoints
+		self.damageModifier = 1 # Added to Damage to calculate total damage
 
 	def initLevel(self):
 		self.Level = 1
 		self.Experience = 0
 		self.PreviousEXP = 0
 
+	def getCurrentDamage(self):
+		return self.Damage + self.damageModifier
+
+	def increaseStrength(self):
+		self.Strength += 1
+
+		self.damageModifier = 1 + (self.Strength - 10) / 2
+
 	def giveEXP(self, value):
 		self.Experience += value
 		if self.Experience > self.PreviousEXP + (self.Level * 1000):
 			self.increaseLevel()
-
 
 	def increaseLevel(self):
 		self.PreviousEXP += (self.Level * 1000)
 		self.Level += 1
 
 		if self.Level % 4 == 0:
-			increaseStrength()
+			self.increaseStrength()
+
+	def updateHealthPoints(self):
+		self.MaxHealthPoints = (self.Level * (8 + ((self.Constitution - 10) / 2)))
 
 
 
