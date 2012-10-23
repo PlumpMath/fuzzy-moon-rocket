@@ -5,6 +5,7 @@ class Map:
         print("Map class instantiated")
         self.initSun(parentNode)
         self.initGround(parentNode)
+        self.initFog(parentNode)
 
     def initSun(self, parentNode):
         # Setup directional light
@@ -13,7 +14,7 @@ class Map:
 
         self.dlightNode = parentNode.attachNewNode(self.dlight)
         self.dlightNode.setHpr(0, -150, 0)
-        parentNode.setLight(self.dlightNode)    
+        parentNode.setLight(self.dlightNode)
 
     def initGround(self, parentNode):
         # Setup environment (plane)
@@ -23,4 +24,11 @@ class Map:
         self.plane.setHpr(0, -90, 0)
         self.plane.setScale(5)
 
-        self.plane.reparentTo(parentNode)        
+        self.plane.reparentTo(parentNode)
+
+    def initFog(self, parentNode):
+        # Setup fog 
+        self.fog = Fog('Fog1')
+        self.fog.setColor(0.1, 0.25, 0.25)
+        self.fog.setExpDensity(0.05)
+        parentNode.setFog(self.fog)

@@ -54,6 +54,6 @@ class Player(Unit):
 		base.camera.setPos(playerNode.getX(), 
 						   playerNode.getY() + self._cameraYModifier, 
 						   playerNode.getZ() + self._cameraZModifier)
-
+		
 	def getPos(self):
 		return self.playerNode.getPos()
