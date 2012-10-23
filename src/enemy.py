@@ -5,15 +5,11 @@ from unit import Unit
 
 class Enemy(Unit):
 
-	enemyList = []
-
-	def __init__(self, parentNode):
+	def __init__(self, parentNode, enemyList):
 		print("Enemy class instantiated")
-		self.createEnemy(parentNode)
 
-	def createEnemy(self, parentNode):
-		self.enemy = parentNode.attachNewNode('enemy' + str(len(self.enemyList)))
-		self.enemyList.append(self.enemy)
+		self.enemy = parentNode.attachNewNode('enemy' + str(len(enemyList)))
+		enemyList.append(self.enemy)
 
 		self.loadEnemyModel(self.enemy)
 
