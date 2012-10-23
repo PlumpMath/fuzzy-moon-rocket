@@ -5,7 +5,7 @@ from direct.actor.Actor import Actor
 from direct.task import Task
 import sys
 
-from src import player, enemy
+from src import player, enemy, gui
 
 class World(DirectObject):
 	
@@ -29,6 +29,8 @@ class World(DirectObject):
 
 		self.enemy = enemy.Enemy(self.mainNode)
 		self.enemy.moveEnemy((0, 0, 1))
+
+		self.gui = gui.GUI()
 
 	def initSun(self, parentNode):
 		# Setup directional light
