@@ -25,7 +25,8 @@ class Player(Unit):
 
 		#self.damage += self.getCurrentdamageModifier()
 
-	def updatePlayerCamera(self, playerNode):		
+	def updatePlayerCamera(self, playerNode):	
+		base.disableMouse()	
 		base.camera.setPos(playerNode.getX(), 
 						   playerNode.getY() - 5, 
 						   playerNode.getZ() + 5)

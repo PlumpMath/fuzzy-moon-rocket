@@ -6,9 +6,10 @@ class Unit(object):
 	constitution = 0
 	dexterity = 0
 	
-	damage = 0
+	#damage = 0
+	currentHealthPoints = 0
 	maxHealthPoints = 0
-	armorClass = 0
+	#armorClass = 0
 	movementSpeed = 0
 
 	level = 0
@@ -25,17 +26,10 @@ class Unit(object):
 		self.constitution = 0
 		self.dexterity = 0
 
-		#self.damage = 0 # affected by strength
-		#self.attackBonus = 0 # Affected by strength
-		#self.maxHealthPoints = 0 # affected by constitution
-		#self.armorClass = 0 # affected by dexterity
-
 		self.movementSpeed = 0.5 # Not affected by attributes
 
-		#self._currentHealthPoints = self.maxHealthPoints
-		#self._damageModifier = 1 # Added to damage to calculate total damage
-
 		self.updateMaxHealthPoints() # initialize the hit points
+		self.currentHealthPoints = self.maxHealthPoints
 
 	def initlevel(self):
 		self.level = 1
@@ -68,7 +62,9 @@ class Unit(object):
 			self.increaseStrength()
 			
 	def updateMaxHealthPoints(self):
-		self.maxHealthPoints = (self.level * (10 + self.getConstitutionModifier()))
+		self.fighterBaseHealthPoints = 15
+		self.fighterHealthPointsPerLevel = 8
+		self.maxHealthPoints = self.fighterBaseHealthPoints + (self.level * (self.fighterHealthPointsPerLevel + self.getConstitutionModifier()))
 
 	def getInitiativeRoll(self):
 		return (self.level / 2) + self.getDexterityModifier() + getD20()
@@ -78,3 +74,7 @@ class Unit(object):
 
 	def getDamageBonus(self):
 		return self.getStrengthModifier() + getD8()
+
+	def getArmorClass(self):
+		self.baseArmorClass = 10
+		return self.baseArmorClass + (self.level / 2) + self.getDexterityModifier()
