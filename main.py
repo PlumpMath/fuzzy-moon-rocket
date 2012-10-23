@@ -25,6 +25,9 @@ class World(DirectObject):
 
 		self.player = Player(self.mainNode)
 
+		self.enemy = Enemy(self.mainNode)
+		self.enemy.moveEnemy((0, 0, 1))
+
 	def initSun(self, parentNode):
 		# Setup directional light
 		self.dlight = DirectionalLight('dlight')
@@ -45,13 +48,14 @@ class World(DirectObject):
 		self.plane.reparentTo(parentNode)		
 
 	def initCamera(self, initLookAt):
+		# Setup initial camera (later overridden by Player)
 		base.disableMouse()
 		base.camera.setPos(0, 5, 5)
 		base.camera.lookAt(initLookAt)		
 
 
 class Unit(object):
-
+	# Declare class variables
 	strength = 0
 	constitution = 0
 	dexterity = 0
@@ -119,7 +123,29 @@ class Unit(object):
 		self.maxHealthPoints = (self.level * (10 + ((self.constitution - 10) / 2)))
 
 
+class Enemy(Unit):
 
+	enemyList = []
+
+	def __init__(self, parentNode):
+		print("Enemy class instantiated")
+		self.createEnemy(parentNode)
+
+	def createEnemy(self, parentNode):
+		self.enemy = parentNode.attachNewNode('enemy' + str(len(self.enemyList)))
+		self.enemyList.append(self.enemy)
+
+		self.loadEnemyModel(self.enemy)
+
+	def loadEnemyModel(self, enemyNode):
+		self.enemyModel = loader.loadModel("models/funny_sphere.egg")
+		self.enemyModel.reparentTo(enemyNode)
+
+		enemyNode.setPos(-2, 0, 1)
+		enemyNode.setScale(0.1)
+
+	def moveEnemy(self, moveTo):
+		self.enemy.setPos(moveTo)
 
 
 class Player(Unit):
@@ -135,7 +161,6 @@ class Player(Unit):
 		self.initPlayerModel(self.playerNode)
 		self.updatePlayerCamera(self.playerNode)
 
-		#self.initPlayerControls()
 		self.mouseHandler = MouseHandler()
 
 	def initPlayerAttributes(self):
@@ -162,6 +187,8 @@ class Player(Unit):
 		playerNode.setScale(0.1)
 		playerNode.setPos(2, 0, 1)
 
+	def getPos(self):
+		return self.playerNode.getPos()
 
 
 class MouseHandler(DirectObject):
