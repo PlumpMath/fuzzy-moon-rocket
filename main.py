@@ -5,10 +5,12 @@ from direct.actor.Actor import Actor
 from direct.task import Task
 import sys
 
-from src import player, enemy, gui
+from src import player, enemy, gui, hud
 
 class World(DirectObject):
 	
+	enemyList = []
+
 	def __init__(self):
 		# Set background color
 		base.setBackgroundColor(0.5, 0.5, 0.5, 1)
@@ -27,10 +29,12 @@ class World(DirectObject):
 
 		self.player = player.Player(self.mainNode)
 
-		self.enemy = enemy.Enemy(self.mainNode)
+		self.enemy = enemy.Enemy(self.mainNode, self.enemyList)
 		self.enemy.moveEnemy((0, 0, 1))
 
 		self.gui = gui.GUI()
+
+		self.hud = hud.HUD()
 
 	def initSun(self, parentNode):
 		# Setup directional light
