@@ -3,6 +3,7 @@ from direct.showbase.DirectObject import DirectObject
 from panda3d.core import *
 from direct.actor.Actor import Actor
 from direct.task import Task
+import sys
 
 class World(DirectObject):
 	
@@ -16,25 +17,37 @@ class World(DirectObject):
 		# Main game node
 		self.mainNode = render.attachNewNode('mainNode')	
 
+		self.initSun(self.mainNode)
+
+		self.initGround(self.mainNode)
+
+		self.initCamera(self.plane)
+
+		self.player = Player(self.mainNode)
+
+	def initSun(self, parentNode):
 		# Setup directional light
-		dlight = DirectionalLight('dlight')
-		dlight.setColor(VBase4(1, 1, 0.5, 1))
+		self.dlight = DirectionalLight('dlight')
+		self.dlight.setColor(VBase4(1, 1, 0.5, 1))
 
-		dlightNode = self.mainNode.attachNewNode(dlight)
-		dlightNode.setHpr(0, -60, 0)
-		self.mainNode.setLight(dlightNode)		
+		self.dlightNode = self.mainNode.attachNewNode(self.dlight)
+		self.dlightNode.setHpr(0, -140, 0)
+		parentNode.setLight(self.dlightNode)	
 
+	def initGround(self, parentNode):
 		# Setup environment (plane)
-		plane = loader.loadModel(self.modelsDir + "grass_plane.egg")
+		self.plane = loader.loadModel(self.modelsDir + "grass_plane.egg")
 
-		plane.setPos(0, 0, 0)
-		plane.setHpr(0, -90, 0)
-		plane.setScale(5)
+		self.plane.setPos(0, 0, 0)
+		self.plane.setHpr(0, -90, 0)
+		self.plane.setScale(5)
 
-		plane.reparentTo(self.mainNode)
+		self.plane.reparentTo(parentNode)		
 
-		player = Player(self.mainNode)
-
+	def initCamera(self, initLookAt):
+		base.disableMouse()
+		base.camera.setPos(0, 5, 5)
+		base.camera.lookAt(initLookAt)		
 
 
 class Unit(object):
@@ -122,6 +135,9 @@ class Player(Unit):
 		self.initPlayerModel(self.playerNode)
 		self.updatePlayerCamera(self.playerNode)
 
+		#self.initPlayerControls()
+		self.mouseHandler = MouseHandler()
+
 	def initPlayerAttributes(self):
 		self.strength = 16
 		self.constitution = 14
@@ -129,19 +145,47 @@ class Player(Unit):
 
 		self.damage += self.getCurrentdamageModifier()
 
-	def updatePlayerCamera(self, playerNode):
-		base.camera.lookAt(playerNode)
+	def updatePlayerCamera(self, playerNode):		
 		base.camera.setPos(playerNode.getX(), 
-						   playerNode.getY() - 4, 
+						   playerNode.getY() - 5, 
 						   playerNode.getZ() + 5)
+		base.camera.lookAt(playerNode)
 
 	def initPlayerModel(self, playerNode):
 		self._playerModel = Actor("models/BendingCan.egg")
 
-		self._playerModel.setPos(2, 0, 1)
-		self._playerModel.setScale(0.1)		
+		#self._playerModel.setPos(2, 0, 1)
+		#self._playerModel.setScale(0.1)		
 
 		self._playerModel.reparentTo(playerNode)
+
+		playerNode.setScale(0.1)
+		playerNode.setPos(2, 0, 1)
+
+
+
+class MouseHandler(DirectObject):
+
+	mouseX = 0
+	mouseY = 0
+
+	def __init__(self):
+		self.initMouseControls()
+
+	def initMouseControls(self):
+		# Initialize movement controls
+
+		self.accept('mouse1', self.move)
+
+	def move(self):
+		# Get mouse position
+		if base.mouseWatcherNode.hasMouse():
+			self.mouseX = base.mouseWatcherNode.getMouseX()
+			self.mouseY = base.mouseWatcherNode.getMouseY()
+
+		print ("x: " + str(self.mouseX) + ", y: " + str(self.mouseY))
+
+
 
 app = World()
 run()
