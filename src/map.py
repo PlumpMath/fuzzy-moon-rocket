@@ -2,6 +2,7 @@ from panda3d.core import *
 
 class Map:
     def __init__(self, parentNode):
+        print("Map class instantiated")
         self.initSun(parentNode)
         self.initGround(parentNode)
 
