@@ -27,8 +27,7 @@ class HUD:
 		self.exitButton = DirectButton(text = "Exit",
 									pos = (1.2, 0, 0.9),
 									scale = 0.1,
-									#command=self.exitGame)
-									class = sys.exit())
+									command=self.exitGame)
 
 
 	def exitGame(self):

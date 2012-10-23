@@ -8,7 +8,7 @@ import sys
 from src import player, enemy, gui, hud
 
 class World(DirectObject):
-	
+
 	enemyList = []
 
 	def __init__(self):

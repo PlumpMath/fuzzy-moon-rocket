@@ -23,7 +23,7 @@ class Player(Unit):
 		self.constitution = 14
 		self.dexterity = 10
 
-		self.damage += self.getCurrentdamageModifier()
+		#self.damage += self.getCurrentdamageModifier()
 
 	def updatePlayerCamera(self, playerNode):		
 		base.camera.setPos(playerNode.getX(), 
