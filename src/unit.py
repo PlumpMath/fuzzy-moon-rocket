@@ -70,7 +70,7 @@ class Unit(object):
 		self.maxHealthPoints = self.fighterBaseHealthPoints + (self.level * (self.fighterHealthPointsPerLevel + self.getConstitutionModifier()))
 
 	def receiveDamage(self, damageAmount):
-		self._currentHealthPoints = self._currentHealthPoints- damageAmount
+		self._currentHealthPoints -= damageAmount
 		if self._currentHealthPoints <= 0:
 			print("Unit died!")
 			self._isDead = True
@@ -98,4 +98,5 @@ class Unit(object):
 		return self._currentHealthPoints
 
 	def getCurrentHealthPointsAsPercentage(self):
-		return (self._currentHealthPoints / self.maxHealthPoints) * 100
+		self._result = (float(self._currentHealthPoints) / self.maxHealthPoints) * 100.0
+		return self._result

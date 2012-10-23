@@ -1,18 +1,28 @@
-from direct.gui.DirectGui import DirectButton
+from direct.gui.DirectGui import DirectButton, DirectWaitBar
 from direct.gui.OnscreenText import OnscreenText
 from direct.task import Task
 import sys
 
+import player
+
 class HUD:
 
-	def __init__(self):
+	#_playerRef
+
+	def __init__(self, playerRef):
 		print("HUD class instantiated")
+
+		self._playerRef = playerRef
 
 		self.gameText = OnscreenText(text = "Fuzzy Moon Rocket",
 					pos = (1, 0.9), 
 					bg = (0.25, 0.25, 0.25, 1))
 
+		self.initHealthBar()
+
 		taskMgr.add(self.removeTitle, 'RemoveTitleTask')
+
+		taskMgr.add(self.updateHealthBar, 'UpdateHealthBarTask')
 
 
 	def removeTitle(self, task):
@@ -29,6 +39,14 @@ class HUD:
 									scale = 0.1,
 									command=self.exitGame)
 
-
 	def exitGame(self):
 		sys.exit()
+
+	def initHealthBar(self):
+		self.healthBar = DirectWaitBar(text = "Health", value = 100, pos = (0, 0, -0.9))
+
+	def updateHealthBar(self, task):
+		self.healthBar['value'] = self._playerRef.getCurrentHealthPointsAsPercentage()
+
+		# Continue calling task in next frame
+		return task.cont

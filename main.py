@@ -28,7 +28,12 @@ class World(DirectObject):
 
 		self.gui = gui.GUI()
 
-		self.hud = hud.HUD()	
+		self.hud = hud.HUD(self.player)
+
+		self.accept('1', self.setHalfHealth)
+
+	def setHalfHealth(self):
+		self.player.receiveDamage(self.player.maxHealthPoints / 2)
 
 app = World()
 run()

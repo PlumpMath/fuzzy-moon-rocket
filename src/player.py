@@ -36,8 +36,8 @@ class Player(Unit):
 		self._cameraYModifier = -5
 		self._cameraZModifier = 5
 
-		base.disableMouse()	
-		base.camera.setPos(playerNode.getX(), 
+		base.disableMouse()
+		base.camera.setPos(playerNode.getX(),
 						   playerNode.getY() + self._cameraYModifier, 
 						   playerNode.getZ() + self._cameraZModifier)
 		base.camera.lookAt(playerNode)
