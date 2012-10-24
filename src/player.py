@@ -57,3 +57,16 @@ class Player(Unit):
         
     def getPos(self):
         return self.playerNode.getPos()
+
+    def getEXPToNextLevel(self):
+        return self._prevEXP + (self.level * 1000)
+
+    def giveEXP(self, value):
+        print("Giving EXP :" + str(value))
+        self.experience += value
+        if self.experience >= self.getEXPToNextLevel():
+            self.increaseLevel()
+
+    def getEXPToNextLevelInPercentage(self):
+        return (float(self.experience) - self._prevEXP) / (self.level * 1000.0) * 100.0
+
