@@ -9,40 +9,40 @@ from src import player, enemy, gui, hud, map
 
 class World(ShowBase):
 
-	enemyList = []
+    enemyList = []
 
-	def __init__(self):
-		#ShowBase.__init__(self)
+    def __init__(self):
+        #ShowBase.__init__(self)
 
-		# Set background color
-		base.setBackgroundColor(0.1, 0.1, 0.1, 1)
+        # Set background color
+        base.setBackgroundColor(0.1, 0.1, 0.1, 1)
 
-		# Main game node
-		self.mainNode = render.attachNewNode('mainNode')
+        # Main game node
+        self.mainNode = render.attachNewNode('mainNode')
 
-		# Instantiate other classes
-		self.mapHandler = map.Map(self.mainNode)
+        # Instantiate other classes
+        self.mapHandler = map.Map(self.mainNode)
 
-		self.player = player.Player(self.mainNode)
+        self.player = player.Player(self.mainNode)
 
-		self.enemy = enemy.Enemy(self.mainNode, 
-								self.enemyList, 
-								self.player,
-								500)
-		self.enemy.moveEnemy((0, 0, 1))
+        self.enemy = enemy.Enemy(self.mainNode, 
+                                self.enemyList, 
+                                self.player,
+                                500)
+        self.enemy.moveEnemy((0, 0, 1))
 
-		self.gui = gui.GUI()
+        self.gui = gui.GUI()
 
-		self.hud = hud.HUD(self.player)
+        self.hud = hud.HUD(self.player)
 
-		self.accept('1', self.setHalfHealth)
-		self.accept('2', self.killEnemy)
+        self.accept('1', self.setHalfHealth)
+        self.accept('2', self.killEnemy)
 
-	def setHalfHealth(self):
-		self.player.receiveDamage(self.player.maxHealthPoints / 2)
+    def setHalfHealth(self):
+        self.player.receiveDamage(self.player.maxHealthPoints / 2)
 
-	def killEnemy(self):
-		self.enemy.onDeath()
+    def killEnemy(self):
+        self.enemy.onDeath()
 
 app = World()
 run()
