@@ -7,8 +7,6 @@ import player
 
 class HUD:
 
-	#_playerRef
-
 	def __init__(self, playerRef):
 		print("HUD class instantiated")
 

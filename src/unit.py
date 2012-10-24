@@ -49,6 +49,7 @@ class Unit(object):
 		return (self.dexterity - 10) / 2
 
 	def giveEXP(self, value):
+		print("Giving EXP :" + str(value))
 		self.experience += value
 		if self.experience > self._prevEXP + (self.level * 1000):
 			self.increaseLevel()
@@ -80,6 +81,12 @@ class Unit(object):
 			self._currentHealthPoints += healAmount
 			if self._currentHealthPoints > self.maxHealthPoints:
 				self._currentHealthPoints = self.maxHealthPoints
+
+	def getIsDead(self):
+		if self._isDead or self._currentHealthPoints <= 0:
+			return True
+		else:
+			return False
 
 	def getInitiativeRoll(self):
 		return (self.level / 2) + self.getDexterityModifier() + getD20()

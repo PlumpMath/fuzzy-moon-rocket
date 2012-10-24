@@ -16,14 +16,17 @@ class World(DirectObject):
 		base.setBackgroundColor(0.1, 0.1, 0.1, 1)
 
 		# Main game node
-		self.mainNode = render.attachNewNode('mainNode')	
+		self.mainNode = render.attachNewNode('mainNode')
 
 		# Instantiate other classes
 		self.mapHandler = map.Map(self.mainNode)
 
 		self.player = player.Player(self.mainNode)
 
-		self.enemy = enemy.Enemy(self.mainNode, self.enemyList)
+		self.enemy = enemy.Enemy(self.mainNode, 
+								self.enemyList, 
+								self.player,
+								15)
 		self.enemy.moveEnemy((0, 0, 1))
 
 		self.gui = gui.GUI()
@@ -31,9 +34,13 @@ class World(DirectObject):
 		self.hud = hud.HUD(self.player)
 
 		self.accept('1', self.setHalfHealth)
+		self.accept('2', self.killEnemy)
 
 	def setHalfHealth(self):
 		self.player.receiveDamage(self.player.maxHealthPoints / 2)
+
+	def killEnemy(self):
+		self.enemy.onDeath()
 
 app = World()
 run()
