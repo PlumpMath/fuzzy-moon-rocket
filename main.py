@@ -1,5 +1,5 @@
 import direct.directbase.DirectStart
-from direct.showbase.DirectObject import DirectObject
+from direct.showbase.ShowBase import ShowBase
 from panda3d.core import *
 from direct.actor.Actor import Actor
 from direct.task import Task
@@ -7,11 +7,13 @@ import sys
 
 from src import player, enemy, gui, hud, map
 
-class World(DirectObject):
+class World(ShowBase):
 
 	enemyList = []
 
 	def __init__(self):
+		#ShowBase.__init__(self)
+
 		# Set background color
 		base.setBackgroundColor(0.1, 0.1, 0.1, 1)
 
@@ -26,7 +28,7 @@ class World(DirectObject):
 		self.enemy = enemy.Enemy(self.mainNode, 
 								self.enemyList, 
 								self.player,
-								15)
+								500)
 		self.enemy.moveEnemy((0, 0, 1))
 
 		self.gui = gui.GUI()

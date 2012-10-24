@@ -48,11 +48,17 @@ class Unit(object):
 	def getDexterityModifier(self):
 		return (self.dexterity - 10) / 2
 
+	def getEXPToNextLevel(self):
+		return self._prevEXP + (self.level * 1000)
+
 	def giveEXP(self, value):
 		print("Giving EXP :" + str(value))
 		self.experience += value
-		if self.experience > self._prevEXP + (self.level * 1000):
+		if self.experience >= self.getEXPToNextLevel():
 			self.increaseLevel()
+
+	def getEXPToNextLevelInPercentage(self):
+		return (float(self.experience) - self._prevEXP) / (self.level * 1000.0) * 100.0
 
 	def increaseStrength(self):
 		self.strength += 1	

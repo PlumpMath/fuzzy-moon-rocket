@@ -17,10 +17,11 @@ class HUD:
 					bg = (0.25, 0.25, 0.25, 1))
 
 		self.initHealthBar()
+		self.initEXPBar()
 
 		taskMgr.add(self.removeTitle, 'RemoveTitleTask')
 
-		taskMgr.add(self.updateHealthBar, 'UpdateHealthBarTask')
+		taskMgr.add(self.updateBars, 'UpdateBarsTask')
 
 
 	def removeTitle(self, task):
@@ -46,8 +47,31 @@ class HUD:
 									pos = (0, 0, -0.9),
 									scale = 0.75)
 
-	def updateHealthBar(self, task):
+	def updateBars(self, task):
 		self.healthBar['value'] = self._playerRef.getCurrentHealthPointsAsPercentage()
-
+		self.updateEXPBar()
 		# Continue calling task in next frame
 		return task.cont
+
+	def initEXPBar(self):
+		self.expBar = DirectWaitBar(text = '',
+									value = 0,
+									pos = (0, 0, -0.79),
+									scale = 0.5,
+									barColor = (0, 1, 0, 0.5))
+		self.expBarText = OnscreenText(text = '',
+									parent = self.expBar,
+									pos = (0.2, -0.025),
+									scale = 0.1,
+									mayChange = 1)
+		self.expBarLvlText = OnscreenText(text = '',
+										parent = self.expBar,
+										pos = (-0.8, -0.025),
+										scale = 0.1,
+										mayChange = 1)
+
+	def updateEXPBar(self):
+		self.expBar['value'] = self._playerRef.getEXPToNextLevelInPercentage()
+		self._newEXPBarText = str(self._playerRef.experience) + ' / ' + str(self._playerRef.getEXPToNextLevel()) + ' experience points'
+		self.expBarText.setText(self._newEXPBarText)
+		self.expBarLvlText.setText('Level ' + str(self._playerRef.level))
