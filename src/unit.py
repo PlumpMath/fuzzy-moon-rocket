@@ -32,7 +32,9 @@ class Unit(object):
         self.movementSpeed = 0.5 # Not affected by attributes
 
         self.updateMaxHealthPoints() # initialize the hit points
-        self._currentHealthPoints = self.maxHealthPoints # Start currentHealthPoints at Max HP
+        
+        # Initialize currentHealthPoints at Max HP
+        self._currentHealthPoints = self.maxHealthPoints 
 
     def initlevel(self):
         self.level = 1
@@ -54,15 +56,21 @@ class Unit(object):
     def increaseLevel(self):
         self._prevEXP += (self.level * 1000) # increment prevExp
         self.level += 1 # increment level
-        self.updateHealthPoints() # Make sure the player's health is updated
+        
+        # Make sure the player's health is updated
+        self.updateHealthPoints() 
 
-        if (self.level - 1) % 4 == 0: # Every 4th level (starting at level 4) increase attribute
+        # Every 4th level (starting at level 4) increase attribute
+        if (self.level - 1) % 4 == 0: 
             self.increaseStrength()
 
     def updateMaxHealthPoints(self):
         self.fighterBaseHealthPoints = 15
         self.fighterHealthPointsPerLevel = 8
-        self.maxHealthPoints = self.fighterBaseHealthPoints + (self.level * (self.fighterHealthPointsPerLevel + self.getConstitutionModifier()))
+        self.maxHealthPoints = (self.fighterBaseHealthPoints + 
+                                (self.level * 
+                                (self.fighterHealthPointsPerLevel + 
+                                 self.getConstitutionModifier())))
 
     def receiveDamage(self, damageAmount):
         self._currentHealthPoints -= damageAmount
@@ -99,5 +107,5 @@ class Unit(object):
         return self._currentHealthPoints
 
     def getCurrentHealthPointsAsPercentage(self):
-        self._result = (float(self._currentHealthPoints) / self.maxHealthPoints) * 100.0
-        return self._result
+        return ((float(self._currentHealthPoints) / 
+                    self.maxHealthPoints) * 100.0)

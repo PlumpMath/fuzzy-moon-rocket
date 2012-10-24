@@ -22,8 +22,8 @@ class Player(Unit):
         taskMgr.doMethodLater(1, 
                             self.updateCameraPosition, 
                             'updateCameraPositionTask', 
-                            extraArgs = [self.playerNode], 
-                            appendTask = True)
+                            extraArgs=[self.playerNode], 
+                            appendTask=True)
 
     def initPlayerAttributes(self):
         # Initialize player attributes
@@ -61,12 +61,12 @@ class Player(Unit):
     def getEXPToNextLevel(self):
         return self._prevEXP + (self.level * 1000)
 
-    def giveEXP(self, value):
+    def receiveEXP(self, value):
         print("Giving EXP :" + str(value))
         self.experience += value
         if self.experience >= self.getEXPToNextLevel():
             self.increaseLevel()
 
     def getEXPToNextLevelInPercentage(self):
-        return (float(self.experience) - self._prevEXP) / (self.level * 1000.0) * 100.0
-
+        return ((float(self.experience) - self._prevEXP) / 
+                    (self.level * 1000.0) * 100.0)

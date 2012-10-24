@@ -42,7 +42,7 @@ class Enemy(Unit):
     def onDeath(self):
         if self.getIsDead():
             # Award the player exp
-            self._playerRef.giveEXP(self.EXPAward)
+            self._playerRef.receiveEXP(self.EXPAward)
 
             # Change animation to death
 
