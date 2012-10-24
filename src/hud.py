@@ -43,7 +43,10 @@ class HUD:
 		sys.exit()
 
 	def initHealthBar(self):
-		self.healthBar = DirectWaitBar(text = "Health", value = 100, pos = (0, 0, -0.9))
+		self.healthBar = DirectWaitBar(text = "Health", 
+									value = 100, 
+									pos = (0, 0, -0.9),
+									scale = 0.75)
 
 	def updateHealthBar(self, task):
 		self.healthBar['value'] = self._playerRef.getCurrentHealthPointsAsPercentage()
