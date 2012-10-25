@@ -30,8 +30,9 @@ class World(ShowBase):
                                 self.enemyList, 
                                 self.player,
                                 500,
-                                self.AIworld)
-        self.enemy.moveEnemy((-2, 0, 1))
+                                self.AIworld,
+                                self)
+        self.enemy.moveEnemy((-5, 0, 0))
 
         self.gui = gui.GUI()
 

@@ -83,4 +83,4 @@ class MouseHandler(ShowBase):
         #Register the ray as something that can cause collisions
         self.mPickerTraverser.addCollider(self.mPickNP, self.mCollisionQue)
         #if you want to show collisions for debugging turn this on
-        #self.mPickerTraverser.showCollisions(base.render)
+        self.mPickerTraverser.showCollisions(base.render)

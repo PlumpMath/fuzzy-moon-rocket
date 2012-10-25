@@ -18,13 +18,19 @@ class Map:
 
     def initGround(self, parentNode):
         # Setup environment (plane)
+        self.planeNode = parentNode.attachNewNode('planeNode')
         self.plane = loader.loadModel("models/grass_plane.egg")
 
         self.plane.setPos(0, 0, 0)
         self.plane.setHpr(0, -90, 0)
         self.plane.setScale(5)
 
-        self.plane.reparentTo(parentNode)
+        self.plane.reparentTo(self.planeNode)
+
+        self.planeNode.setName('ground')
+        #self.planeNode.setTag('ground, '1')
+
+        self.plane.node().setIntoCollideMask(BitMask32.bit(1))
 
     def initFog(self, parentNode):
         # Setup fog 

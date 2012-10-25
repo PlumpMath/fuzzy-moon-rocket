@@ -1,3 +1,4 @@
+#from direct.showbase.DirectObject import DirectObject
 from panda3d.core import *
 from direct.actor.Actor import Actor
 from panda3d.ai import *
@@ -8,24 +9,28 @@ class Enemy(Unit):
 
     # Declare class variables
     EXPAward = 0
+    PerceptionRange = 50 # Range that enemies will perceive player
 
     # Declare private variables
     _removeCorpseDelay = 3 # seconds before corpse is cleaned
 
 
-    def __init__(self, parentNode, enemyList, playerRef, EXPAward, AIworldRef):
+    def __init__(self, parentNode, enemyList, playerRef, EXPAward, AIworldRef, worldRef):
         print("Enemy class instantiated")
 
         self._enemyListRef = enemyList
         self._AIworldRef = AIworldRef
-        self._playerRef = playerRef        
+        self._playerRef = playerRef
+        self._worldRef = worldRef
 
-        self.enemy = parentNode.attachNewNode('enemy' + str(len(self._enemyListRef)-1))
-        self._enemyListRef.append(self.enemy)
+        self.enemyNode = parentNode.attachNewNode('enemy' + str(len(self._enemyListRef)-1))
+        self._enemyListRef.append(self.enemyNode)
 
-        self.loadEnemyModel(self.enemy)
+        self.loadEnemyModel(self.enemyNode)
 
         self.setEXPReward(EXPAward)
+
+        self.enemyNode.setTag('enemy', '1') 
 
     def loadEnemyModel(self, enemyNode):
         self.enemyModel = Actor("models/funny_sphere.egg")
@@ -34,6 +39,34 @@ class Enemy(Unit):
         enemyNode.setPos(-2, 0, 1)
         enemyNode.setScale(0.1)
 
+        self.initEnemyCollision(self.enemyModel)
+
+        self.initEnemyAi(enemyNode)
+
+    def initEnemyCollision(self, enemyModel):
+        pass
+        #self.floorCollision = enemyModel.attachNewNode(CollisionNode('colNode'))
+        #self.floorCollision.node().addSolid(CollisionRay(0, 0, 0, 0, 0, -1))
+
+        #self.floorCollisionHandler = CollisionHandlerFloor()
+        #self.floorCollisionHandler.addCollider(self.floorCollision, enemyModel)
+
+        #self.enemyCollSphere = CollisionSphere(0, 0, 0,
+        #                                self.PerceptionRange)
+        #self.collisionNode = enemyModel.attachNewNode(CollisionNode('cnode'))
+        #self.collisionNode.node().addSolid(self.enemyCollSphere)
+        
+        #self.collisionNode.show() # Remove to hide collision sphere
+
+        #self.collisionHandler = CollisionHandlerEvent()
+        #self.collisionHandler.addInPattern()
+        #self._worldRef.accept('player', self.handleCollision)
+
+    def handleCollision(self, entry):
+        print entry
+        pass
+
+    def initEnemyAi(self, enemyNode):
         self.enemyAI = AICharacter('enemy',
                                 enemyNode,
                                 100, # Mass
@@ -48,7 +81,7 @@ class Enemy(Unit):
         #self._AIworldRef.addObstacle(enemyNode)
 
     def moveEnemy(self, moveTo):
-        self.enemy.setPos(moveTo)
+        self.enemyNode.setPos(moveTo)
 
     def setEXPReward(self, value):
         self.EXPAward = value
@@ -74,9 +107,9 @@ class Enemy(Unit):
         self.enemyModel.delete()
 
         # Remove the enemy node
-        self.enemy.removeNode()
+        self.enemyNode.removeNode()
 
         return task.done
 
     def getEnemyNode(self):
-        return self.enemy
+        return self.enemyNode
