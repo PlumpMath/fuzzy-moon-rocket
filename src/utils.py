@@ -12,6 +12,22 @@ def getD8():
 def getD20():
     return random.randint(1, 20)
 
+def makeCollisionNodePath(nodepath, solid,show=False):
+    '''
+    Creates a collision node and attaches the collision solid to the
+    supplied NodePath. Returns the nodepath of the collision node.
+
+    '''
+    # Creates a collision node named after the name of the NodePath.
+    collNode = CollisionNode("%s" % nodepath.getName()) 
+    collNode.addSolid(solid)
+    collisionNP = nodepath.attachNewNode(collNode)
+    
+    if show:
+        collisionNP.show()
+
+    return collisionNP
+
 class MouseHandler(ShowBase):
 
     mouseX = 0
@@ -46,8 +62,7 @@ class MouseHandler(ShowBase):
                 self.returnPos = entry.getSurfacePoint(base.render)
 
         self._playerRef.move(self.returnPos.getX(),
-                            self.returnPos.getY(),
-                            self.returnPos.getZ())
+                             self.returnPos.getY())
 
     def setupMouseCollision(self):
         #Since we are using collision detection to do picking, we set it up 
@@ -83,4 +98,4 @@ class MouseHandler(ShowBase):
         #Register the ray as something that can cause collisions
         self.mPickerTraverser.addCollider(self.mPickNP, self.mCollisionQue)
         #if you want to show collisions for debugging turn this on
-        self.mPickerTraverser.showCollisions(base.render)
+        #self.mPickerTraverser.showCollisions(base.render)
