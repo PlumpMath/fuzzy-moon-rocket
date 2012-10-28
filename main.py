@@ -10,15 +10,28 @@ from src import player, enemy, gui, hud, map
 
 class World(ShowBase):
 
+    # Global debug setting
+    global debug 
+
+    # Array of enemies
     enemyList = []
 
     def __init__(self):
+        # Enable or disable debugging
+        debug = True
+
         # Set background color
         base.setBackgroundColor(0.1, 0.1, 0.1, 1)
 
         # Main game node
         self.mainNode = render.attachNewNode('mainNode')
 
+        # Create the main traverser
+        base.cTrav = CollisionTraverser()
+        # Fluid move prevents quantum tunnelling. 
+        base.cTrav.setRespectPrevTransform(True)
+
+        # Initialize global AI
         self.initAI()
 
         # Instantiate other classes
@@ -26,20 +39,24 @@ class World(ShowBase):
 
         self.player = player.Player(self.mainNode, self.AIworld)
 
-        self.enemy = enemy.Enemy(self.mainNode, 
-                                self.enemyList, 
-                                self.player,
-                                500,
-                                self.AIworld,
-                                self)
-        self.enemy.moveEnemy((-5, 0, 0))
-
         self.gui = gui.GUI()
-
         self.hud = hud.HUD(self.player)
 
-        self.accept('1', self.setHalfHealth)
-        self.accept('2', self.killEnemy)
+        # For debugging
+        if debug:
+            self.enemy = enemy.Enemy(self.mainNode, 
+                                    self.enemyList, 
+                                    self.player,
+                                    500,
+                                    self.AIworld,
+                                    self)
+            self.enemy.moveEnemy(-5, 0)
+
+            self.accept('1', self.setHalfHealth)
+            self.accept('2', self.killEnemy)
+            self.accept('3', self.outputInfo)
+
+            base.cTrav.showCollisions(base.render)
 
     def setHalfHealth(self):
         self.player.receiveDamage(self.player.maxHealthPoints / 2)
@@ -47,16 +64,29 @@ class World(ShowBase):
     def killEnemy(self):
         self.enemy.onDeath()
 
+    def outputInfo(self):
+        print('player pos: ' + str(self.player.playerNode.getPos()))
+
     def initAI(self):
         # Create the AI world
-        self.AIworld = AIWorld(render)
+        self.AIworld = AIWorld(self.mainNode)
 
         # AI World update
-        taskMgr.add(self.AIUpdate, 'AIUpdateTask')
+        AiUpdateTask = taskMgr.add(self.AIUpdate, 'AIUpdateTask')
+        AiUpdateTask.last = 0
 
     def AIUpdate(self, task):
+        # Make sure we're not taking too long
+        deltaTime = task.time - task.last
+        task.last = task.time
+
+        if deltaTime > .2: 
+            return task.cont
+
+        # Update Ai world
         self.AIworld.update()
+
         return task.cont
 
-app = World()
+World()
 run()

@@ -6,7 +6,7 @@ class Map:
         print("Map class instantiated")
         self.initSun(parentNode)
         self.initGround(parentNode)
-        self.initFog(parentNode)
+        #self.initFog(parentNode)
 
     def initSun(self, parentNode):
         # Setup directional light
@@ -20,21 +20,26 @@ class Map:
     def initGround(self, parentNode):
         # Setup environment (plane)
         self.planeNode = parentNode.attachNewNode('planeNode')
-        plane = loader.loadModel("models/grass_plane.egg")
-        plane.reparentTo(self.planeNode)
+        self.planeModel = loader.loadModel("models/grass_plane.egg")
+        self.planeModel.reparentTo(self.planeNode)
+        self.planeModel.setCollideMask(BitMask32.allOff())
+        self.planeModel.setScale(10)
         self.planeNode.setPos(0, 0, 0)
         self.planeNode.setHpr(0, -90, 0)
-        self.planeNode.setScale(5)
+        #self.planeNode.setScale(5)
         self.planeNode.setName('ground')
 
-        collPlane = CollisionPlane(Plane(Vec3(0, 0, .1),
-                                    Point3(0, 0, 0)))
-        planeCollNodePath = utils.makeCollisionNodePath(self.planeNode, collPlane)
+        collPlaneGeometry = CollisionPlane(Plane(Vec3(0, 0, 1), Point3(0, 0, 0)))
+        self.collPlane = self.planeModel.attachNewNode(CollisionNode('groundcnode'))
+        self.collPlane.node().addSolid(collPlaneGeometry)
+        self.collPlane.node().setIntoCollideMask(BitMask32.bit(1) | BitMask32.allOn())
+        self.collPlane.node().setFromCollideMask(BitMask32.allOff())
+        self.collPlane.show()
 
     def initFog(self, parentNode):
         # Setup fog 
         self.fog = Fog('Fog1')
         self.fog.setColor(0.1, 0.25, 0.25)
         self.fog.setExpDensity(0.05)
-        #parentNode.setFog(self.fog)
+        parentNode.setFog(self.fog)
 

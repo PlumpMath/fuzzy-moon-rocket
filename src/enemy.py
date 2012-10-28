@@ -80,8 +80,8 @@ class Enemy(Unit):
         #self.enemyAIBehaviors.obstacleAvoidance(1.0)
         #self._AIworldRef.addObstacle(enemyNode)
 
-    def moveEnemy(self, moveTo):
-        self.enemyNode.setPos(moveTo)
+    def moveEnemy(self, x, y):
+        self.enemyNode.setPos(Vec3(x, y, 0.5))
 
     def setEXPReward(self, value):
         self.EXPAward = value
@@ -100,7 +100,7 @@ class Enemy(Unit):
 
     def removeCorpse(self, task):
         # Remove enemy from enemyList
-        self._enemyListRef.remove(self.enemy)
+        self._enemyListRef.remove(self.enemyNode)
 
         # Cleanup the enemy model
         self.enemyModel.cleanup()
