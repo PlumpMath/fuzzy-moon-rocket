@@ -1,6 +1,6 @@
 from panda3d.core import *
 from direct.actor.Actor import Actor
-#from panda3d.ai import *
+from panda3d.ai import *
 
 import utils
 from unit import Unit
@@ -22,6 +22,8 @@ class Player(Unit):
         self.initPlayerAttributes()
         self.initPlayerModel()
         self.initPlayerCamera()
+
+        self.initPlayerAi()
 
         self.initPlayerMovement()
         self.initPlayerCollisionHandlers()
@@ -64,13 +66,18 @@ class Player(Unit):
         return self._prevEXP + (self.level * 1000)
 
     def receiveEXP(self, value):
-        print("Giving EXP :" + str(value))
+       #print("Giving EXP :" + str(value))
         self.experience += value
         if self.experience >= self.getEXPToNextLevel():
             self.increaseLevel()
 
     def getEXPToNextLevelInPercentage(self):
         return ((float(self.experience) - self._prevEXP) / (self.level * 1000.0) * 100.0)
+
+    def initPlayerAi(self):
+        self.playerAi = AICharacter('player', self.playerNode, 100, 0.05, 5)
+        self._AIworldRef.addAiChar(self.playerAi)
+        self.playerAiBehaviors = self.playerAi.getAiBehaviors()
 
     def initPlayerMovement(self):
         self.destination = Point3.zero()
@@ -92,7 +99,7 @@ class Player(Unit):
         #utils.fromCol(self.playerNode, self.pusherHandler, CollisionSphere(0, 0, 1, .5), self.wallMask, True)
 
     def setPlayerDestination(self, position):
-        print('setPlayerPosition: ' + str(position))
+        #print('setPlayerPosition: ' + str(position))
         self.destination = position
         pitchRoll = self.playerNode.getP(), self.playerNode.getR()
 

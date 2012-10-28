@@ -6,7 +6,7 @@ from direct.task import Task
 from panda3d.ai import *
 import sys
 
-from src import player, enemy, gui, hud, map
+from src import utils, player, enemy, gui, hud, map
 
 class World(ShowBase):
 
@@ -55,17 +55,21 @@ class World(ShowBase):
             self.accept('1', self.setHalfHealth)
             self.accept('2', self.killEnemy)
             self.accept('3', self.outputInfo)
+            self.accept('4', self.outputTime)
 
             base.cTrav.showCollisions(base.render)
 
     def setHalfHealth(self):
-        self.player.receiveDamage(self.player.maxHealthPoints / 2)
+        self.player.receiveDamage(self.player.maxHealthPoints - utils.getD8())
 
     def killEnemy(self):
         self.enemy.onDeath()
 
     def outputInfo(self):
         print('player pos: ' + str(self.player.playerNode.getPos()))
+
+    def outputTime(self):
+        print(str(globalClock.getFrameTime()))
 
     def initAI(self):
         # Create the AI world

@@ -3,6 +3,14 @@ from direct.showbase.ShowBase import ShowBase
 from panda3d.core import *
 import random
 
+def getIsInRange(pos1, pos2, threshold=100):
+    xDiff = abs(pos1.getX() - pos2.getX())
+    yDiff = abs(pos1.getY() - pos2.getY())
+    if xDiff < threshold and yDiff < threshold:
+        return True 
+
+    return False
+
 def getD6():
     return random.randint(1, 6)
 
@@ -45,7 +53,7 @@ class MouseHandler():
         DO.accept('mouse1', self.onClick)
 
     def onClick(self):
-        print('click')
+        #print('click')
         if base.mouseWatcherNode.hasMouse():
             mousePos = base.mouseWatcherNode.getMouse()
             pos3d = Point3()

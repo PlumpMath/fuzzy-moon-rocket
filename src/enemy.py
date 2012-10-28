@@ -3,17 +3,18 @@ from panda3d.core import *
 from direct.actor.Actor import Actor
 from panda3d.ai import *
 
+import utils
 from unit import Unit
 
 class Enemy(Unit):
 
     # Declare class variables
     EXPAward = 0
-    PerceptionRange = 50 # Range that enemies will perceive player
+    perceptionRange = 100 # Range that enemies will perceive player
 
     # Declare private variables
     _removeCorpseDelay = 3 # seconds before corpse is cleaned
-
+    _inCombat = False
 
     def __init__(self, parentNode, enemyList, playerRef, EXPAward, AIworldRef, worldRef):
         print("Enemy class instantiated")
@@ -26,65 +27,59 @@ class Enemy(Unit):
         self.enemyNode = parentNode.attachNewNode('enemy' + str(len(self._enemyListRef)-1))
         self._enemyListRef.append(self.enemyNode)
 
-        self.loadEnemyModel(self.enemyNode)
+        self.loadEnemyModel()
+        self.initEnemyAi()
 
         self.setEXPReward(EXPAward)
 
         self.enemyNode.setTag('enemy', '1') 
 
-    def loadEnemyModel(self, enemyNode):
+    def loadEnemyModel(self):
         self.enemyModel = Actor("models/funny_sphere.egg")
-        self.enemyModel.reparentTo(enemyNode)
+        self.enemyModel.reparentTo(self.enemyNode)
 
-        enemyNode.setPos(-2, 0, 1)
-        enemyNode.setScale(0.1)
+        self.enemyNode.setPos(-2, 0, 1)
+        self.enemyNode.setScale(0.1)
 
-        self.initEnemyCollision(self.enemyModel)
-
-        self.initEnemyAi(enemyNode)
-
-    def initEnemyCollision(self, enemyModel):
-        pass
-        #self.floorCollision = enemyModel.attachNewNode(CollisionNode('colNode'))
-        #self.floorCollision.node().addSolid(CollisionRay(0, 0, 0, 0, 0, -1))
-
-        #self.floorCollisionHandler = CollisionHandlerFloor()
-        #self.floorCollisionHandler.addCollider(self.floorCollision, enemyModel)
-
-        #self.enemyCollSphere = CollisionSphere(0, 0, 0,
-        #                                self.PerceptionRange)
-        #self.collisionNode = enemyModel.attachNewNode(CollisionNode('cnode'))
-        #self.collisionNode.node().addSolid(self.enemyCollSphere)
-        
-        #self.collisionNode.show() # Remove to hide collision sphere
-
-        #self.collisionHandler = CollisionHandlerEvent()
-        #self.collisionHandler.addInPattern()
-        #self._worldRef.accept('player', self.handleCollision)
-
-    def handleCollision(self, entry):
-        print entry
-        pass
-
-    def initEnemyAi(self, enemyNode):
+    def initEnemyAi(self):
         self.enemyAI = AICharacter('enemy',
-                                enemyNode,
+                                self.enemyNode,
                                 100, # Mass
                                 0.05, # Movt force
                                 4) # Max force
         self._AIworldRef.addAiChar(self.enemyAI)
 
         self.enemyAIBehaviors = self.enemyAI.getAiBehaviors()
-        #self.enemyAIBehaviors.pursue(self._playerRef.getPlayerNode())
 
-        #self.enemyAIBehaviors.obstacleAvoidance(1.0)
-        #self._AIworldRef.addObstacle(enemyNode)
+        enemyUpdateTask = taskMgr.add(self.enemyUpdater, 'enemyUpdaterTask')
+        enemyUpdateTask.last = 0
 
-    def moveEnemy(self, x, y):
-        self.enemyNode.setPos(Vec3(x, y, 0.5))
+    def enemyUpdater(self, task):
+        deltaTime = task.time - task.last
+        task.last = task.time
+
+        if deltaTime < .2:
+            return task.cont
+
+        playerPos = self._playerRef.playerNode.getPos()
+        enemyPos = self.enemyNode.getPos()
+
+        if utils.getIsInRange(playerPos, enemyPos, self.perceptionRange):
+            if not self._inCombat:
+                    self.enemyAIBehaviors.pursue(self._playerRef.playerNode)
+                    self._inCombat = True
+                    print('start chasing')
+            else:
+                    self.attack()
+                    print('attack!')
+
+        return task.cont
 
     def setEXPReward(self, value):
         self.EXPAward = value
+
+    def attack(self):
+        self._playerRef.receiveDamage(self.getDamageBonus())
 
     def onDeath(self):
         if self.getIsDead():
@@ -113,3 +108,6 @@ class Enemy(Unit):
 
     def getEnemyNode(self):
         return self.enemyNode
+
+    def moveEnemy(self, x, y):
+        self.enemyNode.setPos(x, y, 1)
