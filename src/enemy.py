@@ -31,8 +31,10 @@ class Enemy(FSM, Unit):
         self._playerRef = playerRef
         self._worldRef = worldRef
 
+        self.topEnemyNode = parentNode.attachNewNode('topEnemyNode')
+
         enemyName = 'enemy' + str(len(self._enemyListRef))
-        self.enemyNode = parentNode.attachNewNode(enemyName)
+        self.enemyNode = self.topEnemyNode.attachNewNode(enemyName)
         self._enemyListRef.append(self.enemyNode)
 
         utils.enemyDictionary[self.enemyNode.getName()] = self
@@ -40,7 +42,9 @@ class Enemy(FSM, Unit):
         self.loadEnemyModel()
         self.initAttributes()
         self.initEnemyAi()
-        self.initEnemyCollision()
+        
+        self.initEnemyCollisionHandlers()
+        self.initEnemyCollisionSolids()
 
         self.setEXPReward(EXPAward)
 
@@ -50,12 +54,6 @@ class Enemy(FSM, Unit):
 
         self.enemyNode.setPos(-2, 0, 1)
         self.enemyNode.setScale(0.1)
-
-    def initEnemyCollision(self):
-        self.sphereCollNode = CollisionNode(self.enemyNode.getName())
-        self.sphereNodePath = self.enemyNode.attachNewNode(self.sphereCollNode)
-        self.collSphere = CollisionSphere(0, 0, 0, 10)
-        self.sphereCollNode.addSolid(self.collSphere)
 
     def initAttributes(self):
         self.strength = 16
@@ -91,6 +89,7 @@ class Enemy(FSM, Unit):
 
         #if deltaTime < .2:
         #    return task.cont
+        self.checkGroundCollisions()
 
         #print('enemyUpdater')
         if self.state == 'Death':
@@ -138,7 +137,7 @@ class Enemy(FSM, Unit):
 
     def exitPursue(self):
         print('exitPursue')
-        self.enemyAIBehaviors.removeAi('pursue')
+        #self.enemyAIBehaviors.removeAi('pursue')
 
     def enterCombat(self):
         print('enterCombat')
@@ -173,6 +172,7 @@ class Enemy(FSM, Unit):
 
     def enterIdle(self):
         print('enterIdle')
+        self.enemyAIBehaviors.removeAi('pursue')
         self.enemyAIBehaviors.wander(2.5, 0, 5)
 
     def exitIdle(self):
@@ -224,8 +224,6 @@ class Enemy(FSM, Unit):
             # Change state
             self.request('Death')
 
-            # Change animation to death
-
             # Remove enemy
             taskMgr.doMethodLater(self._removeCorpseDelay,
                              self.removeCorpse,
@@ -244,6 +242,7 @@ class Enemy(FSM, Unit):
 
         # Remove the enemy node
         self.enemyNode.removeNode()
+        self.topEnemyNode.removeNode()
 
         return task.done
 
@@ -251,4 +250,41 @@ class Enemy(FSM, Unit):
         return self.enemyNode
 
     def moveEnemy(self, x, y):
-        self.enemyNode.setPos(x, y, 1)
+        self.enemyNode.setPos(x, y, 10)
+
+    def initEnemyCollisionHandlers(self):
+        self.groundHandler = CollisionHandlerQueue()
+
+    def initEnemyCollisionSolids(self):
+        sphereCollNode = CollisionNode(self.enemyNode.getName())
+        sphereNodePath = self.enemyNode.attachNewNode(sphereCollNode)
+        collSphere = CollisionSphere(0, 0, 0, 10)
+        sphereCollNode.addSolid(collSphere)
+        #self.sphereCollNode.show()
+
+        groundRay = CollisionRay(0, 0, 10, 0, 0, -1)
+        groundColl = CollisionNode('groundRay')
+        groundColl.addSolid(groundRay)
+        groundColl.setIntoCollideMask(BitMask32.allOff())
+        groundColl.setFromCollideMask(BitMask32.bit(1))
+        self.groundRayNode = self.topEnemyNode.attachNewNode(groundColl)
+        #self.groundRayNode.show()
+
+        base.cTrav.addCollider(self.groundRayNode, self.groundHandler)
+
+    def checkGroundCollisions(self):
+        zModifier = 0.5
+
+        if self.groundHandler.getNumEntries() > 0:
+            self.groundHandler.sortEntries()
+            entries = []
+            for i in range(self.groundHandler.getNumEntries()):
+                entry = self.groundHandler.getEntry(i)
+                entries.append(entry)
+
+            entries.sort(lambda x,y: cmp(y.getSurfacePoint(render).getZ(),
+                                        x.getSurfacePoint(render).getZ()))
+
+            if (len(entries) > 0) and (entries[0].getIntoNode().getName() == 'groundcnode'):
+                newZ = entries[0].getSurfacePoint(base.render).getZ()
+                self.enemyNode.setZ(zModifier + newZ)

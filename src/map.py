@@ -30,11 +30,12 @@ class Map:
         self.planeNode.setName('ground')
 
         collPlaneGeometry = CollisionPlane(Plane(Vec3(0, 0, 1), Point3(0, 0, 0)))
-        self.collPlane = self.planeModel.attachNewNode(CollisionNode('groundcnode'))
+        self.collPlane = self.planeNode.attachNewNode(CollisionNode('groundcnode'))
         self.collPlane.node().addSolid(collPlaneGeometry)
-        self.collPlane.node().setIntoCollideMask(BitMask32.bit(1) | BitMask32.allOn())
+        self.collPlane.node().setIntoCollideMask(BitMask32.bit(1))
         self.collPlane.node().setFromCollideMask(BitMask32.allOff())
-        self.collPlane.show()
+        self.collPlane.setHpr(0, 90, 0)
+        #self.collPlane.show()
 
     def initFog(self, parentNode):
         # Setup fog 

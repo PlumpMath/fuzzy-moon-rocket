@@ -37,7 +37,8 @@ class MouseHandler():
 
         self.pickerCollNode = CollisionNode('mouseRay')
         self.pickerNodePath = camera.attachNewNode(self.pickerCollNode)
-        #self.pickerCollNode.setFromCollideMask(BitMask32.bit(1))
+        self.pickerCollNode.setFromCollideMask(BitMask32.bit(1))
+        self.pickerCollNode.setIntoCollideMask(BitMask32.allOff())
         self.pickerRay = CollisionRay()
         self.pickerCollNode.addSolid(self.pickerRay)
         base.cTrav.addCollider(self.pickerNodePath, self.collisionHandler)

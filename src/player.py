@@ -9,7 +9,7 @@ from unit import Unit
 class Player(FSM, Unit):
 
     # Declare private variables
-    _playerStartPos = Point3(0, 0, 0.5)
+    _playerStartPos = Point3(0, 0, 10)
     _cameraYModifier = -22 # Relative to player Y
     _cameraZPos = 20 # Absolute Z position
 
@@ -135,21 +135,33 @@ class Player(FSM, Unit):
         self.velocity = Vec3.zero()
 
     def initPlayerCollisionHandlers(self):
-        pass
-        #self.floorHandler = CollisionHandlerFloor()
-        #self.pusherHandler = CollisionHandlerPusher()
-        #self.floorHandler.setMaxVelocity(14)
-        #self.floorHandler.setOffset(1)
-
-        #self.allMasks = BitMask32.bit(0)
-        #self.groundMask = BitMask32.bit(1)
-        #self.wallMask = BitMask32.bit(2)
+        self.groundHandler = CollisionHandlerQueue()
 
     def initPlayerCollisionSolids(self):
-        pass
-        #utils.fromCol(self.playerNode, self.floorHandler, CollisionRay(0, 0, -1, 0, 0, -1), self.allMasks | self.groundMask)
+        groundRay = CollisionRay(0, 0, 10, 0, 0, -1)
+        groundColl = CollisionNode('groundRay')
+        groundColl.addSolid(groundRay)
+        groundColl.setIntoCollideMask(BitMask32.allOff())
+        groundColl.setFromCollideMask(BitMask32.bit(1))
+        self.groundRayNode = self.playerNode.attachNewNode(groundColl)
+        self.groundRayNode.show()
 
-        #utils.fromCol(self.playerNode, self.pusherHandler, CollisionSphere(0, 0, 1, .5), self.wallMask, True)
+        base.cTrav.addCollider(self.groundRayNode, self.groundHandler)
+
+    def checkGroundCollisions(self):
+        if self.groundHandler.getNumEntries() > 0:
+            self.groundHandler.sortEntries()
+            entries = []
+            for i in range(self.groundHandler.getNumEntries()):
+                entry = self.groundHandler.getEntry(i)
+                entries.append(entry)
+
+            entries.sort(lambda x,y: cmp(y.getSurfacePoint(render).getZ(),
+                                        x.getSurfacePoint(render).getZ()))
+
+            if (len(entries) > 0) and (entries[0].getIntoNode().getName() == 'groundcnode'):
+                newZ = entries[0].getSurfacePoint(base.render).getZ()
+                self.playerNode.setZ(newZ)
 
     def setPlayerDestination(self, position):
         if self.state == 'Death':
@@ -198,6 +210,7 @@ class Player(FSM, Unit):
             return task.cont
 
         self.updatePlayerPosition(deltaTime)
+        self.checkGroundCollisions()
 
         base.camera.setPos(self.playerNode.getX(),
                            self.playerNode.getY() + self._cameraYModifier,
