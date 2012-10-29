@@ -22,26 +22,6 @@ def getD8():
 def getD20():
     return random.randint(1, 20)
 
-def fromCol(parent,handler,type,mask = BitMask32.allOn(),debug=False): 
-        """Setup a from collision solid. 
-        
-        Last I checked CollisionPolygon 's and CollisionTube 's can't be used 
-        as from solids. If you pass one, it won't hit anything""" 
-        nodepath = parent.attachNewNode(CollisionNode('frmcol')) 
-        nodepath.node().addSolid(type)#add the solid to the new collisionNode 
-        nodepath.node().setFromCollideMask(mask)#allow selective masking 
-        nodepath.setCollideMask(BitMask32.allOff())#it's a from solid only. 
-        ####uncomment this line to make the collision solid visible: 
-        if debug:
-            nodepath.show() 
-        
-        base.cTrav.addCollider(nodepath, handler)#add to the traverser 
-        try:#the next line doesn't work on queues. (not necessary) 
-            handler.addCollider(nodepath, parent)#keep the ward out of trouble 
-        except: 
-            pass#Don't care. This method needs to work on queues too. 
-        return nodepath#we might need the new CollisionNode again later.     
-
 class MouseHandler():
 
     def __init__(self, playerRef):

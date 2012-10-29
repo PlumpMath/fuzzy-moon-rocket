@@ -50,19 +50,20 @@ class World(ShowBase):
                                     50,
                                     self.AIworld,
                                     self)
-            self.enemy.moveEnemy(0, -10)
+            self.enemy.moveEnemy(0, 15)
 
-            self.accept('1', self.setHalfHealth)
+            self.accept('1', self.damagePlayer)
             self.accept('2', self.killEnemy)
             self.accept('3', self.outputInfo)
             self.accept('4', self.outputTime)
             self.accept('5', self.addEnemy)
             self.accept('6', self.levelPlayerUp)
+            self.accept('7', self.healPlayer)
 
             #base.cTrav.showCollisions(base.render)
 
     # Start of debugging methods implementation
-    def setHalfHealth(self):
+    def damagePlayer(self):
         self.player.receiveDamage(self.player.maxHealthPoints - utils.getD8())
 
     def killEnemy(self):
@@ -87,6 +88,8 @@ class World(ShowBase):
     def levelPlayerUp(self):
         for i in range(10):
             self.player.increaseLevel()
+
+    def healPlayer(self):
         self.player.heal(self.player.maxHealthPoints)
 
     # End of debugging implementation

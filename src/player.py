@@ -34,7 +34,7 @@ class Player(FSM, Unit):
         self.initPlayerCollisionHandlers()
         self.initPlayerCollisionSolids()
 
-        self._mouseHandler = utils.MouseHandler(self)
+        utils.MouseHandler(self)
 
         playerUpdateTask = taskMgr.add(self.playerUpdate, 'playerUpdateTask')
         playerUpdateTask.last = 0
@@ -100,19 +100,14 @@ class Player(FSM, Unit):
 
         if self.getIsDead():
             print('player is already dead')
-            #self.onDeath()
             self.request('Death')
-            #attackSequence.finish()
 
         elif enemy.getIsDead():
             print('enemy is already dead')
             self.request('Idle')
-            #attackSequence.finish()
 
         elif utils.getIsInRange(playerPos, enemyPos, self.combatRange) == False:
             print('enemy fled away from combat range')
-            #attackSequence.finish()
-            #self.request('Pursue')
 
         #elif utils.getIsInRange(playerPos, enemyPos, self.perceptionRange) == False:
         #    print('enemy fled away from perception range')
