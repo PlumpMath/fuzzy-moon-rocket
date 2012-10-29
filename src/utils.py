@@ -1,5 +1,4 @@
 from direct.showbase.DirectObject import DirectObject
-from direct.showbase.ShowBase import ShowBase
 from panda3d.core import *
 import random
 
@@ -46,6 +45,8 @@ class MouseHandler():
     def onClick(self):
         #print('click')
         if base.mouseWatcherNode.hasMouse():
+            mousePos = base.mouseWatcherNode.getMouse()
+            self.pickerRay.setFromLens(base.camNode, mousePos.getX(), mousePos.getY())
 
             if self.collisionHandler.getNumEntries() > 0:
                 self.collisionHandler.sortEntries()
@@ -56,10 +57,7 @@ class MouseHandler():
                     if entryName[:5] == 'enemy' and not entry.isEmpty():
                         enemy = enemyDictionary[entryName]
                         self._playerRef.setCurrentTarget(enemy)
-                        #self._playerRef.setPlayerDestination(entry.getPos())
-                        #return
 
-            mousePos = base.mouseWatcherNode.getMouse()
             pos3d = Point3()
             nearPoint = Point3()
             farPoint = Point3()
@@ -70,6 +68,4 @@ class MouseHandler():
                         base.render.getRelativePoint(camera, farPoint)):
                 #print('Mouse ray intersects ground at ', pos3d)
                 self._playerRef.setPlayerDestination(pos3d)
-
-            self.pickerRay.setFromLens(base.camNode, mousePos.getX(), mousePos.getY())
 

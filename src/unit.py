@@ -112,4 +112,4 @@ class Unit(object):
 
     def getCurrentHealthPointsAsPercentage(self):
         return ((float(self._currentHealthPoints) / 
-                    (self.maxHealthPoints+.1)) * 100.0)
+                    self.maxHealthPoints) * 100.0)

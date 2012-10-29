@@ -59,8 +59,7 @@ class World(ShowBase):
             self.accept('5', self.addEnemy)
             self.accept('6', self.levelPlayerUp)
             self.accept('7', self.healPlayer)
-
-            #base.cTrav.showCollisions(base.render)
+            self.accept('8', self.showAllCollisions)
 
     # Start of debugging methods implementation
     def damagePlayer(self):
@@ -91,6 +90,9 @@ class World(ShowBase):
 
     def healPlayer(self):
         self.player.heal(self.player.maxHealthPoints)
+
+    def showAllCollisions(self):
+        base.cTrav.showCollisions(base.render)
 
     # End of debugging implementation
 

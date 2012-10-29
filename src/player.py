@@ -83,13 +83,16 @@ class Player(FSM, Unit):
         return ((float(self.experience) - self._prevEXP) / (self.level * 1000.0) * 100.0)
 
     def setCurrentTarget(self, enemyTarget):
-        print('setCurrentTarget: ' + str(enemyTarget))
+        #print('setCurrentTarget: ' + str(enemyTarget))
         self._currentTarget = enemyTarget
 
     def getCurrentTarget(self):
         return self._currentTarget
 
     def attackEnemy(self, enemy):
+        if self.state == 'Death':
+            return
+
         print('attack Enemy!')
 
         if self.getCurrentTarget() != enemy:
@@ -149,6 +152,8 @@ class Player(FSM, Unit):
         #utils.fromCol(self.playerNode, self.pusherHandler, CollisionSphere(0, 0, 1, .5), self.wallMask, True)
 
     def setPlayerDestination(self, position):
+        if self.state == 'Death':
+            return
         #print('setPlayerPosition: ' + str(position))
         self.destination = position
         pitchRoll = self.playerNode.getP(), self.playerNode.getR()
@@ -164,6 +169,9 @@ class Player(FSM, Unit):
 
     def updatePlayerPosition(self, deltaTime):
         #print('updatePlayerPosition')
+        if self.state == 'Death':
+            return
+
         newX = self.playerNode.getX() + self.velocity.getX() * deltaTime
         newY = self.playerNode.getY() + self.velocity.getY() * deltaTime
         newZ = self.playerNode.getZ()
@@ -179,6 +187,9 @@ class Player(FSM, Unit):
             self.velocity *= self.movementSpeed
 
     def playerUpdate(self, task):
+        if self.state == 'Death':
+            return
+
         # Don't run if we're taking too long
         deltaTime = task.time - task.last
         task.last = task.time

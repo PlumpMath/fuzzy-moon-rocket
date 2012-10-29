@@ -96,6 +96,9 @@ class Enemy(FSM, Unit):
         if self.state == 'Death':
             return task.done
 
+        if self._playerRef.getIsDead():
+            return task.cont
+
         playerPos = self._playerRef.playerNode.getPos()
         enemyPos = self.enemyNode.getPos()
 
@@ -139,7 +142,6 @@ class Enemy(FSM, Unit):
 
     def enterCombat(self):
         print('enterCombat')
-
         delay = Wait(1.5)
         
         attackSequence = Sequence()
@@ -161,7 +163,6 @@ class Enemy(FSM, Unit):
             attackSequence.append(delay)
 
         attackSequence.loop()
-
 
     def exitCombat(self):
         print('exitCombat')
