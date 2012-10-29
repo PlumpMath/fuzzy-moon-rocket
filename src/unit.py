@@ -29,7 +29,7 @@ class Unit(object):
         self.dexterity = 1
 
         # Initialize movement speed value
-        self.movementSpeed = 0.5 # Not affected by attributes
+        self.movementSpeed = 2.5 # Not affected by attributes
 
         self.updateMaxHealthPoints() # initialize the hit points
         
@@ -58,11 +58,15 @@ class Unit(object):
         self.level += 1 # increment level
         
         # Make sure the player's health is updated
-        self.updateHealthPoints() 
+        self.updateMaxHealthPoints() 
 
         # Every 4th level (starting at level 4) increase attribute
         if (self.level - 1) % 4 == 0: 
             self.increaseStrength()
+
+    def initHealth(self):
+        self.updateMaxHealthPoints()
+        self._currentHealthPoints = self.maxHealthPoints
 
     def updateMaxHealthPoints(self):
         self.fighterBaseHealthPoints = 15
@@ -91,13 +95,13 @@ class Unit(object):
             return False
 
     def getInitiativeRoll(self):
-        return (self.level / 2) + self.getDexterityModifier() + getD20()
+        return (self.level / 2) + self.getDexterityModifier() + utils.getD20()
 
     def getAttackBonus(self):
-        return (self.level / 2) + self.getStrengthModifier() + getD20()
+        return (self.level / 2) + self.getStrengthModifier() + utils.getD20()
 
     def getDamageBonus(self):
-        return self.getStrengthModifier() + getD8()
+        return self.getStrengthModifier() + utils.getD8()
 
     def getArmorClass(self):
         self.baseArmorClass = 10
@@ -108,4 +112,4 @@ class Unit(object):
 
     def getCurrentHealthPointsAsPercentage(self):
         return ((float(self._currentHealthPoints) / 
-                    self.maxHealthPoints) * 100.0)
+                    (self.maxHealthPoints+.1)) * 100.0)

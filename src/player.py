@@ -1,19 +1,24 @@
 from panda3d.core import *
 from direct.actor.Actor import Actor
+from direct.fsm.FSM import FSM
 from panda3d.ai import *
 
 import utils
 from unit import Unit
 
-class Player(Unit):
+class Player(FSM, Unit):
 
-    playerStartPos = (0, 0, 1)
+    # Declare private variables
+    _playerStartPos = Point3(0, 0, 0.5)
     _cameraYModifier = -22 # Relative to player Y
     _cameraZPos = 20 # Absolute Z position
 
+    _currentTarget = None
+
     def __init__(self, parentNode, AIworldRef):
         print("Player class instantiated")
-        super(Player, self).__init__()
+        Unit.__init__(self)
+        FSM.__init__(self, 'playerFSM')
 
         self._AIworldRef = AIworldRef
         
@@ -40,7 +45,10 @@ class Player(Unit):
         self.constitution = 14
         self.dexterity = 10
 
+        self.combatRange = 2
         self.movementSpeed = 5
+
+        self.initHealth()
 
     def initPlayerModel(self):
         # Initialize the player model (Actor)
@@ -50,7 +58,7 @@ class Player(Unit):
         self.playerModel.setCollideMask(BitMask32.allOff())
         self.playerModel.setScale(0.2)
 
-        self.playerNode.setPos(self.playerStartPos)
+        self.playerNode.setPos(self._playerStartPos)
         self.playerNode.setName('playerNode')
         self.playerNode.setCollideMask(BitMask32.allOff())
 
@@ -74,27 +82,74 @@ class Player(Unit):
     def getEXPToNextLevelInPercentage(self):
         return ((float(self.experience) - self._prevEXP) / (self.level * 1000.0) * 100.0)
 
+    def setCurrentTarget(self, enemyTarget):
+        print('setCurrentTarget: ' + str(enemyTarget))
+        self._currentTarget = enemyTarget
+
+    def getCurrentTarget(self):
+        return self._currentTarget
+
+    def attackEnemy(self, enemy):
+        print('attack Enemy!')
+
+        if self.getCurrentTarget() != enemy:
+            return
+
+        playerPos = self.playerNode.getPos()
+        enemyPos = enemy.enemyNode.getPos()
+
+        if self.getIsDead():
+            print('player is already dead')
+            #self.onDeath()
+            self.request('Death')
+            #attackSequence.finish()
+
+        elif enemy.getIsDead():
+            print('enemy is already dead')
+            self.request('Idle')
+            #attackSequence.finish()
+
+        elif utils.getIsInRange(playerPos, enemyPos, self.combatRange) == False:
+            print('enemy fled away from combat range')
+            #attackSequence.finish()
+            #self.request('Pursue')
+
+        #elif utils.getIsInRange(playerPos, enemyPos, self.perceptionRange) == False:
+        #    print('enemy fled away from perception range')
+            #self.request('Idle')
+
+        else:
+            # Play attack animation
+            if enemy.getArmorClass() <= self.getAttackBonus():
+                dmg = self.getDamageBonus()
+                print('Player hit the enemy for: ' + str(dmg) + ' damage')
+                # We hit the enemy
+                enemy.receiveDamage(dmg)
+
     def initPlayerAi(self):
         self.playerAi = AICharacter('player', self.playerNode, 100, 0.05, 5)
         self._AIworldRef.addAiChar(self.playerAi)
         self.playerAiBehaviors = self.playerAi.getAiBehaviors()
+        #self.playerAiBehaviors.obstacleAvoidance(1.0)
 
     def initPlayerMovement(self):
         self.destination = Point3.zero()
         self.velocity = Vec3.zero()
 
     def initPlayerCollisionHandlers(self):
-        self.floorHandler = CollisionHandlerFloor()
+        pass
+        #self.floorHandler = CollisionHandlerFloor()
         #self.pusherHandler = CollisionHandlerPusher()
-        self.floorHandler.setMaxVelocity(14)
-        self.floorHandler.setOffset(1)
+        #self.floorHandler.setMaxVelocity(14)
+        #self.floorHandler.setOffset(1)
 
-        self.allMasks = BitMask32.bit(0)
-        self.groundMask = BitMask32.bit(1)
-        self.wallMask = BitMask32.bit(2)
+        #self.allMasks = BitMask32.bit(0)
+        #self.groundMask = BitMask32.bit(1)
+        #self.wallMask = BitMask32.bit(2)
 
     def initPlayerCollisionSolids(self):
-        utils.fromCol(self.playerNode, self.floorHandler, CollisionRay(0, 0, -1, 0, 0, -1),  self.groundMask)
+        pass
+        #utils.fromCol(self.playerNode, self.floorHandler, CollisionRay(0, 0, -1, 0, 0, -1), self.allMasks | self.groundMask)
 
         #utils.fromCol(self.playerNode, self.pusherHandler, CollisionSphere(0, 0, 1, .5), self.wallMask, True)
 
@@ -143,4 +198,19 @@ class Player(Unit):
                            self.playerNode.getZ() + self._cameraZPos)
 
         return task.cont
+
+    def enterCombat(self):
+        print('player enter combat')
+
+    def exitCombat(self):
+        print('player exit combat')
+
+    def enterIdle(self):
+        print('player enter idle')
+
+    def exitIdle(self):
+        print('player exit idle')
+
+    def enterDeath(self):
+        print('player dead')
 

@@ -47,18 +47,21 @@ class World(ShowBase):
             self.enemy = enemy.Enemy(self.mainNode, 
                                     self.enemyList, 
                                     self.player,
-                                    500,
+                                    50,
                                     self.AIworld,
                                     self)
-            self.enemy.moveEnemy(-5, 0)
+            self.enemy.moveEnemy(0, -10)
 
             self.accept('1', self.setHalfHealth)
             self.accept('2', self.killEnemy)
             self.accept('3', self.outputInfo)
             self.accept('4', self.outputTime)
+            self.accept('5', self.addEnemy)
+            self.accept('6', self.levelPlayerUp)
 
-            base.cTrav.showCollisions(base.render)
+            #base.cTrav.showCollisions(base.render)
 
+    # Start of debugging methods implementation
     def setHalfHealth(self):
         self.player.receiveDamage(self.player.maxHealthPoints - utils.getD8())
 
@@ -70,6 +73,23 @@ class World(ShowBase):
 
     def outputTime(self):
         print(str(globalClock.getFrameTime()))
+
+    def addEnemy(self):
+        newEnemy = enemy.Enemy(self.mainNode, 
+                               self.enemyList,
+                               self.player,
+                               50,
+                               self.AIworld,
+                               self)
+        newEnemy.moveEnemy(10 - utils.getD20(), 
+                           10 - utils.getD20())
+
+    def levelPlayerUp(self):
+        for i in range(10):
+            self.player.increaseLevel()
+        self.player.heal(self.player.maxHealthPoints)
+
+    # End of debugging implementation
 
     def initAI(self):
         # Create the AI world

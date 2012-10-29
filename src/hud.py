@@ -19,11 +19,30 @@ class HUD:
 
         self.initHealthBar()
         self.initEXPBar()
+        self.initTargetBar()
 
         taskMgr.add(self.removeTitle, 'RemoveTitleTask')
 
         taskMgr.add(self.updateBars, 'UpdateBarsTask')
 
+    def initTargetBar(self):
+        self.targetBar = DirectWaitBar(
+                                    text="Target health",
+                                    value=1,
+                                    pos=(0.1, 0, 0.9),
+                                    scale = 0.5)
+        self.targetBar.hide()
+
+    def updateTargetBar(self):
+        currentTarget = self._playerRef.getCurrentTarget()
+        if not currentTarget is None:
+            if not currentTarget.getIsDead():
+                self.targetBar.show()
+                self.targetBar['value'] = currentTarget.getCurrentHealthPointsAsPercentage()
+            else:
+                # Remove player target and hide bar
+                self._playerRef.setCurrentTarget(None)
+                self.targetBar.hide()
 
     def removeTitle(self, task):
         if task.time > 3:
@@ -53,6 +72,7 @@ class HUD:
     def updateBars(self, task):
         self.healthBar['value'] = self._playerRef.getCurrentHealthPointsAsPercentage()
         self.updateEXPBar()
+        self.updateTargetBar()
         # Continue calling task in next frame
         return task.cont
 

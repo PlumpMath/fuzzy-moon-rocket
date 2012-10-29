@@ -3,7 +3,9 @@ from direct.showbase.ShowBase import ShowBase
 from panda3d.core import *
 import random
 
-def getIsInRange(pos1, pos2, threshold=100):
+enemyDictionary = {}
+
+def getIsInRange(pos1, pos2, threshold=10):
     xDiff = abs(pos1.getX() - pos2.getX())
     yDiff = abs(pos1.getY() - pos2.getY())
     if xDiff < threshold and yDiff < threshold:
@@ -52,9 +54,31 @@ class MouseHandler():
         DO = DirectObject()
         DO.accept('mouse1', self.onClick)
 
+        self.collisionHandler = CollisionHandlerQueue()
+
+        self.pickerCollNode = CollisionNode('mouseRay')
+        self.pickerNodePath = camera.attachNewNode(self.pickerCollNode)
+        #self.pickerCollNode.setFromCollideMask(BitMask32.bit(1))
+        self.pickerRay = CollisionRay()
+        self.pickerCollNode.addSolid(self.pickerRay)
+        base.cTrav.addCollider(self.pickerNodePath, self.collisionHandler)
+
     def onClick(self):
         #print('click')
         if base.mouseWatcherNode.hasMouse():
+
+            if self.collisionHandler.getNumEntries() > 0:
+                self.collisionHandler.sortEntries()
+                for i in range(self.collisionHandler.getNumEntries()):
+                    entry = self.collisionHandler.getEntry(i).getIntoNodePath()
+                    entryName = entry.getName()
+                    #print('entry found: ' + entryName)
+                    if entryName[:5] == 'enemy' and not entry.isEmpty():
+                        enemy = enemyDictionary[entryName]
+                        self._playerRef.setCurrentTarget(enemy)
+                        #self._playerRef.setPlayerDestination(entry.getPos())
+                        #return
+
             mousePos = base.mouseWatcherNode.getMouse()
             pos3d = Point3()
             nearPoint = Point3()
@@ -66,3 +90,6 @@ class MouseHandler():
                         base.render.getRelativePoint(camera, farPoint)):
                 #print('Mouse ray intersects ground at ', pos3d)
                 self._playerRef.setPlayerDestination(pos3d)
+
+            self.pickerRay.setFromLens(base.camNode, mousePos.getX(), mousePos.getY())
+
