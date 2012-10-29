@@ -93,10 +93,10 @@ class Player(FSM, Unit):
         if self.state == 'Death':
             return
 
-        print('attack Enemy!')
-
         if self.getCurrentTarget() != enemy:
             return
+
+        print('Attack enemy!')
 
         playerPos = self.playerNode.getPos()
         enemyPos = enemy.enemyNode.getPos()
@@ -144,7 +144,7 @@ class Player(FSM, Unit):
         groundColl.setIntoCollideMask(BitMask32.allOff())
         groundColl.setFromCollideMask(BitMask32.bit(1))
         self.groundRayNode = self.playerNode.attachNewNode(groundColl)
-        self.groundRayNode.show()
+        #self.groundRayNode.show()
 
         base.cTrav.addCollider(self.groundRayNode, self.groundHandler)
 
@@ -191,7 +191,7 @@ class Player(FSM, Unit):
         self.playerNode.setFluidPos(newX, newY, newZ)
 
         self.velocity = self.destination - self.playerNode.getPos()
-        if self.velocity.lengthSquared() < 0.1:
+        if self.velocity.lengthSquared() < 1:
             self.velocity = Vec3.zero()
             #print('destination reached')
         else:
