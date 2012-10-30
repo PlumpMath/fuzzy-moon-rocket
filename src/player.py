@@ -45,8 +45,13 @@ class Player(FSM, Unit):
         self.constitution = 14
         self.dexterity = 10
 
-        self.combatRange = 2
-        self.movementSpeed = 5
+        self.combatRange = 1 # Melee
+        self.movementSpeed = 5 # ?
+        self.attackBonus = 6 # ?
+        self.damageBonus = 0 # ?
+        self.damageRange = 8 # = Longsword
+        self.initiativeBonus = 1 # ?
+        self.armorClass = 10 # Armor? 
 
         self.initHealth()
 

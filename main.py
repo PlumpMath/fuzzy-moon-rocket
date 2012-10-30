@@ -61,41 +61,33 @@ class World(ShowBase):
             self.showCollisions = False
 
     # Start of debugging methods implementation
-    def damagePlayer(self):
+    def damagePlayer(self): # key 1
         self.player.receiveDamage(self.player.maxHealthPoints - utils.getD8())
 
-    def killEnemy(self):
+    def killEnemy(self): # key 2
         self.enemy.onDeath()
 
-    def outputInfo(self):
+    def outputInfo(self): # key 3
         print('player pos: ' + str(self.player.playerNode.getPos()))
 
-    def outputTime(self):
+    def outputTime(self): # key 4
         print(str(globalClock.getFrameTime()))
 
-    def addEnemy(self):
-        attributes = enemy.Attributes(strength=10,
-                               constitution=10,
-                               dexterity=10,
-                               movementSpeed=0.1,
-                               maxMovementSpeed=5.0,
-                               expAward=20,
-                               mass=50,
-                               combatRange=1,
-                               perceptionRange=5)
+    def addEnemy(self): # key 5
+        attributes = enemy.koboldMinion
 
-        newEnemy = enemy.Enemy(self, attributes)
+        newEnemy = enemy.Enemy(self, 'funny_sphere', attributes)
         newEnemy.moveEnemy(10 - utils.getD20(), 
                            10 - utils.getD20())
 
-    def levelPlayerUp(self):
+    def levelPlayerUp(self): # key 6
         for i in range(10):
             self.player.increaseLevel()
 
-    def healPlayer(self):
+    def healPlayer(self): # key 7
         self.player.heal(self.player.maxHealthPoints)
 
-    def showAllCollisions(self):
+    def showAllCollisions(self): # key 8
         if self.showCollisions:
             base.cTrav.hideCollisions()
             self.showCollisions = False
@@ -103,7 +95,7 @@ class World(ShowBase):
             base.cTrav.showCollisions(base.render)
             self.showCollisions = True
 
-    def printStats(self):
+    def printStats(self): # key 9
         print('Strength: ' + str(self.player.strength))
         print('Constitution: ' + str(self.player.constitution))
         print('Dexterity: ' + str(self.player.dexterity))

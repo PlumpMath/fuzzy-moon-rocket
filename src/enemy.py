@@ -10,15 +10,29 @@ from collections import namedtuple
 import utils
 from unit import Unit
 
-Attributes = namedtuple('Attributes', ['strength', 'constitution', 'dexterity', 'expAward', 'perceptionRange', 'combatRange', 'movementSpeed', 'maxMovementSpeed', 'mass'])
+Attributes = namedtuple('Attributes', ['strength', 'constitution', 'dexterity', 'expAward', 'perceptionRange', 'combatRange', 'movementSpeed', 'mass', 'initiativeBonus', 'fixedHealthPoints', 'armorClass', 'startLevel', 'damageBonus', 'damageRange', 'attackBonus'])
+
+# Kobold Minion uses fixedHealthPoints, which given any other value than 0 will fix the units health to that value
+# Mass should be thought of as approximate weight in kilograms
+koboldMinion = Attributes(strength=8, constitution=12, dexterity=16, initiativeBonus=3, fixedHealthPoints=1, armorClass=15, movementSpeed=6, perceptionRange=2, combatRange=1, mass=60, expAward=25, startLevel=1, damageRange=0, damageBonus=4, attackBonus=5)
+
+# Kobold Skirmisher has combatRange of 1, means very short range (melee)
+# Perception +1 bonus gives perception range 2
+koboldSkirmisher = Attributes(strength=8, constitution=11, dexterity=16, initiativeBonus=5, fixedHealthPoints=27, armorClass=15, movementSpeed=6, perceptionRange=1, combatRange=1, mass=60, expAward=100, startLevel=1, damageRange=8, damageBonus=0, attackBonus=6)
+
+# Kobold Slinger has combat range 3 (ranged), which means that perception +1 gives perception range 4
+# Damage bonus 3 gives constant +3 to damage, while damage range 4 means 1d4 (1-4)
+koboldSlinger = Attributes(strength=9, constitution=12, dexterity=17, fixedHealthPoints=24, initiativeBonus=3, perceptionRange=4, combatRange=3, movementSpeed=6, armorClass=13, mass=60, expAward=100, startLevel=2, damageBonus=3, damageRange=4, attackBonus=5)
+
+# Enemy unit automatically levels up to startLevel
+koboldWyrmpriest = Attributes(strength=9, constitution=12, dexterity=16, initiativeBonus=4, fixedHealthPoints=36, armorClass=17, movementSpeed=6, combatRange=1, perceptionRange=5, mass=70, expAward=150, startLevel=3, damageRange=8, damageBonus=0, attackBonus=7)
 
 class Enemy(FSM, Unit):
 
     # Declare private variables
     _removeCorpseDelay = 3 # seconds before corpse is cleaned
-    _inCombat = False
 
-    def __init__(self, mainRef, attributes):
+    def __init__(self, mainRef, modelName, attributes):
         print("Enemy class instantiated")
         Unit.__init__(self)
         FSM.__init__(self, 'playerFSM')
@@ -27,6 +41,7 @@ class Enemy(FSM, Unit):
         self._AIworldRef = mainRef.AIworld
         self._playerRef = mainRef.player
         self._worldRef = mainRef
+        self._modelName = modelName
 
         self.topEnemyNode = mainRef.mainNode.attachNewNode('topEnemyNode')
 
@@ -43,13 +58,10 @@ class Enemy(FSM, Unit):
         self.initEnemyCollisionHandlers()
         self.initEnemyCollisionSolids()
 
-        #self.setEXPReward(EXPAward)
-
         self.targeted = False
-        #self.enemyNode.ColorAttrib.makeVertex()
 
     def loadEnemyModel(self):
-        self.enemyModel = Actor("models/funny_sphere.egg")
+        self.enemyModel = Actor('models/' + self._modelName + '.egg')
         self.enemyModel.reparentTo(self.enemyNode)
 
         self.enemyNode.setPos(-2, 0, 1)
@@ -62,11 +74,20 @@ class Enemy(FSM, Unit):
 
         self.mass = attributes.mass
         self.movementSpeed = attributes.movementSpeed
-        self.maxMovementSpeed = attributes.maxMovementSpeed
         self.perceptionRange = attributes.perceptionRange
         self.combatRange = attributes.combatRange
+        self.attackBonus = attributes.attackBonus
+        self.damageBonus = attributes.damageBonus
+        self.damageRange = attributes.damageRange
+        self.initiativeBonus = attributes.initiativeBonus
+        self.fixedHealthPoints = attributes.fixedHealthPoints
+        self.armorClass = attributes.armorClass
 
-        self.setEXPReward(attributes.expAward)
+        if attributes.startLevel > 1:
+            for i in range(attributes.startLevel-1):
+                enemy.increaseLevel()
+
+        self.expAward = attributes.expAward
 
         self.initHealth()
 
@@ -74,8 +95,8 @@ class Enemy(FSM, Unit):
         self.enemyAI = AICharacter('enemy',
                                 self.enemyNode,
                                 self.mass, # Mass
-                                self.movementSpeed, # Movt force
-                                self.maxMovementSpeed) # Max force
+                                0.1, # Movt force
+                                self.movementSpeed) # Max force
         self._AIworldRef.addAiChar(self.enemyAI)
 
         self.enemyAIBehaviors = self.enemyAI.getAiBehaviors()
@@ -216,13 +237,10 @@ class Enemy(FSM, Unit):
             else:
                 print('Enemy missed the player')
 
-    def setEXPReward(self, value):
-        self.EXPAward = value
-
     def onDeath(self):
         if self.getIsDead():
             # Award the player exp
-            self._playerRef.receiveEXP(self.EXPAward)
+            self._playerRef.receiveEXP(self.expAward)
 
             # Change state
             self.request('Death')

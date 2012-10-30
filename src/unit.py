@@ -20,10 +20,18 @@ class Unit(object):
 
     def __init__(self):
         print("Unit class instantiated")
-        self.initUnitHealth()
+        self.initUnitAttributes()
         self.initlevel()
 
-    def initUnitHealth(self):
+    def initUnitAttributes(self):
+        self.initiativeBonus = 0
+
+        self.attackBonus = 0
+        self.damageBonus = 0
+        self.damageRange = 0
+        self.fixedHealthPoints = 0
+        self.armorClass = 0
+
         # Initialize currentHealthPoints at Max HP
         self._currentHealthPoints = self.maxHealthPoints 
 
@@ -60,12 +68,13 @@ class Unit(object):
         self._currentHealthPoints = self.maxHealthPoints
 
     def updateMaxHealthPoints(self):
-        self.fighterBaseHealthPoints = 15
-        self.fighterHealthPointsPerLevel = 8
-        self.maxHealthPoints = (self.fighterBaseHealthPoints + 
-                                (self.level * 
-                                (self.fighterHealthPointsPerLevel + 
-                                 self.getConstitutionModifier())))
+        if self.fixedHealthPoints == 0:
+            self.fighterHealthPointsPerLevel = 8
+            self.maxHealthPoints =  (self.level * 
+                                    (self.fighterHealthPointsPerLevel + 
+                                     self.getConstitutionModifier()))
+        else:
+            self.maxHealthPoints = self.fixedHealthPoints
 
     def receiveDamage(self, damageAmount):
         self._currentHealthPoints -= damageAmount
@@ -86,17 +95,26 @@ class Unit(object):
             return False
 
     def getInitiativeRoll(self):
-        return (self.level / 2) + self.getDexterityModifier() + utils.getD20()
+        return self.initiativeBonus + (self.level / 2) + self.getDexterityModifier() + utils.getD20()
 
     def getAttackBonus(self):
-        return (self.level / 2) + self.getStrengthModifier() + utils.getD20()
+        return self.attackBonus + (self.level / 2) + self.getStrengthModifier() + utils.getD20()
 
     def getDamageBonus(self):
-        return self.getStrengthModifier() + utils.getD8()
+        randomDamage = 0
+        if self.damageRange == 4:
+            randomDamage = utils.getD4()
+        elif self.damageRange == 6:
+            randomDamage = utils.getD6()
+        elif self.damageRange == 8:
+            randomDamage = utils.getD8()
+        elif self.damageRange == 10:
+            randomDamage = utils.getD10()
+
+        return self.getStrengthModifier() + randomDamage + self.damageBonus
 
     def getArmorClass(self):
-        self.baseArmorClass = 10
-        return self.baseArmorClass + (self.level / 2) + self.getDexterityModifier()
+        return self.armorClass + (self.level / 2) + self.getDexterityModifier()
 
     def getCurrentHealthPoints(self):
         return self._currentHealthPoints
