@@ -15,14 +15,14 @@ class Player(FSM, Unit):
 
     _currentTarget = None
 
-    def __init__(self, parentNode, AIworldRef):
+    def __init__(self, mainRef):
         print("Player class instantiated")
         Unit.__init__(self)
         FSM.__init__(self, 'playerFSM')
 
-        self._AIworldRef = AIworldRef
+        self._AIworldRef = mainRef.AIworld
         
-        self.playerNode = parentNode.attachNewNode('playerNode')
+        self.playerNode = mainRef.mainNode.attachNewNode('playerNode')
 
         self.initPlayerAttributes()
         self.initPlayerModel()
@@ -96,8 +96,6 @@ class Player(FSM, Unit):
         if self.getCurrentTarget() != enemy:
             return
 
-        print('Attack enemy!')
-
         playerPos = self.playerNode.getPos()
         enemyPos = enemy.enemyNode.getPos()
 
@@ -117,7 +115,9 @@ class Player(FSM, Unit):
             #self.request('Idle')
 
         else:
+            print('Attack enemy!')
             # Play attack animation
+
             if enemy.getArmorClass() <= self.getAttackBonus():
                 dmg = self.getDamageBonus()
                 print('Player hit the enemy for: ' + str(dmg) + ' damage')
@@ -200,7 +200,7 @@ class Player(FSM, Unit):
 
     def playerUpdate(self, task):
         if self.state == 'Death':
-            return
+            return task.done
 
         # Don't run if we're taking too long
         deltaTime = task.time - task.last
@@ -211,12 +211,39 @@ class Player(FSM, Unit):
 
         self.updatePlayerPosition(deltaTime)
         self.checkGroundCollisions()
+        #self.updatePlayerTarget()
 
         base.camera.setPos(self.playerNode.getX(),
                            self.playerNode.getY() + self._cameraYModifier,
                            self.playerNode.getZ() + self._cameraZPos)
 
         return task.cont
+
+    def updatePlayerTarget(self):
+        enemy = self.getCurrentTarget()
+        if enemy is None:
+            return
+
+        if not enemy.targeted:
+            print('select target: ' + str(enemy.enemyNode.getName()))
+            enemy.targeted = True
+
+            #enemy.enemyModel.setColorScale(0.1, 1.0, 0.1, 1.0)
+            #enemyMaterial = Material()
+            #enemyMaterial.setEmission(VBase4(0, 1, 0, 1))
+            #shinyMaterial.setShininess(50.0)
+
+            #enemy.enemyNode.setMaterial(enemyMaterial)
+
+            playerPos = self.playerNode.getPos()
+            enemyPos = enemy.enemyNode.getPos()
+
+            if not utils.getIsInRange(playerPos, enemyPos, self.combatRange) or enemy.getIsDead():
+                print('unselected target')
+                enemy.targeted = False
+                #enemy.enemyModel.clearColorScale()
+                #enemy.enemyNode.clearShininess()
+                #enemyMaterial.clearEmission()
 
     def enterCombat(self):
         print('player enter combat')

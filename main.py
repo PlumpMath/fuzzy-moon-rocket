@@ -37,19 +37,16 @@ class World(ShowBase):
         # Instantiate other classes
         self.mapHandler = map.Map(self.mainNode)
 
-        self.player = player.Player(self.mainNode, self.AIworld)
+        self.player = player.Player(self)
 
         self.gui = gui.GUI()
         self.hud = hud.HUD(self.player)
 
+        self.accept('escape', self.endGame)
+
         # For debugging
         if debug:
-            self.enemy = enemy.Enemy(self.mainNode, 
-                                    self.enemyList, 
-                                    self.player,
-                                    50,
-                                    self.AIworld,
-                                    self)
+            self.enemy = enemy.Enemy(self, 50)
             self.enemy.moveEnemy(0, 15)
 
             self.accept('1', self.damagePlayer)
@@ -60,6 +57,9 @@ class World(ShowBase):
             self.accept('6', self.levelPlayerUp)
             self.accept('7', self.healPlayer)
             self.accept('8', self.showAllCollisions)
+            self.accept('9', self.printStats)
+
+            self.showCollisions = False
 
     # Start of debugging methods implementation
     def damagePlayer(self):
@@ -75,12 +75,7 @@ class World(ShowBase):
         print(str(globalClock.getFrameTime()))
 
     def addEnemy(self):
-        newEnemy = enemy.Enemy(self.mainNode, 
-                               self.enemyList,
-                               self.player,
-                               50,
-                               self.AIworld,
-                               self)
+        newEnemy = enemy.Enemy(self, 50)
         newEnemy.moveEnemy(10 - utils.getD20(), 
                            10 - utils.getD20())
 
@@ -92,7 +87,21 @@ class World(ShowBase):
         self.player.heal(self.player.maxHealthPoints)
 
     def showAllCollisions(self):
-        base.cTrav.showCollisions(base.render)
+        if self.showCollisions:
+            base.cTrav.hideCollisions()
+            self.showCollisions = False
+        else:
+            base.cTrav.showCollisions(base.render)
+            self.showCollisions = True
+
+    def printStats(self):
+        print('Strength: ' + str(self.player.strength))
+        print('Constitution: ' + str(self.player.constitution))
+        print('Dexterity: ' + str(self.player.dexterity))
+        print('Movement speed: ' + str(self.player.movementSpeed))
+        print('Combat range: ' + str(self.player.combatRange))
+        print('Current health: ' + str(self.player.getCurrentHealthPoints()))
+        print('Max health: ' + str(self.player.maxHealthPoints))
 
     # End of debugging implementation
 
@@ -101,10 +110,10 @@ class World(ShowBase):
         self.AIworld = AIWorld(self.mainNode)
 
         # AI World update
-        AiUpdateTask = taskMgr.add(self.AIUpdate, 'AIUpdateTask')
+        AiUpdateTask = taskMgr.add(self.AiUpdate, 'AIUpdateTask')
         AiUpdateTask.last = 0
 
-    def AIUpdate(self, task):
+    def AiUpdate(self, task):
         # Make sure we're not taking too long
         deltaTime = task.time - task.last
         task.last = task.time
@@ -116,6 +125,9 @@ class World(ShowBase):
         self.AIworld.update()
 
         return task.cont
+
+    def endGame(self):
+        sys.exit()
 
 World()
 run()

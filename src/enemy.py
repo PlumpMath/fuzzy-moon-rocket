@@ -10,28 +10,21 @@ from unit import Unit
 
 class Enemy(FSM, Unit):
 
-    #enemyDictionary[0] = None
-
-    # Declare class variables
-    EXPAward = 0
-    #perceptionRange # Range that enemies will perceive player
-    #combatRange 
-
     # Declare private variables
     _removeCorpseDelay = 3 # seconds before corpse is cleaned
     _inCombat = False
 
-    def __init__(self, parentNode, enemyList, playerRef, EXPAward, AIworldRef, worldRef):
+    def __init__(self, mainRef, EXPAward):
         print("Enemy class instantiated")
         Unit.__init__(self)
         FSM.__init__(self, 'playerFSM')
 
-        self._enemyListRef = enemyList
-        self._AIworldRef = AIworldRef
-        self._playerRef = playerRef
-        self._worldRef = worldRef
+        self._enemyListRef = mainRef.enemyList
+        self._AIworldRef = mainRef.AIworld
+        self._playerRef = mainRef.player
+        self._worldRef = mainRef
 
-        self.topEnemyNode = parentNode.attachNewNode('topEnemyNode')
+        self.topEnemyNode = mainRef.mainNode.attachNewNode('topEnemyNode')
 
         enemyName = 'enemy' + str(len(self._enemyListRef))
         self.enemyNode = self.topEnemyNode.attachNewNode(enemyName)
@@ -47,6 +40,9 @@ class Enemy(FSM, Unit):
         self.initEnemyCollisionSolids()
 
         self.setEXPReward(EXPAward)
+
+        self.targeted = False
+        #self.enemyNode.ColorAttrib.makeVertex()
 
     def loadEnemyModel(self):
         self.enemyModel = Actor("models/funny_sphere.egg")
