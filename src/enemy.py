@@ -5,8 +5,12 @@ from direct.fsm.FSM import FSM
 from panda3d.ai import *
 from direct.interval.IntervalGlobal import *
 
+from collections import namedtuple
+
 import utils
 from unit import Unit
+
+Attributes = namedtuple('Attributes', ['strength', 'constitution', 'dexterity', 'expAward', 'perceptionRange', 'combatRange', 'movementSpeed', 'maxMovementSpeed', 'mass'])
 
 class Enemy(FSM, Unit):
 
@@ -14,7 +18,7 @@ class Enemy(FSM, Unit):
     _removeCorpseDelay = 3 # seconds before corpse is cleaned
     _inCombat = False
 
-    def __init__(self, mainRef, EXPAward):
+    def __init__(self, mainRef, attributes):
         print("Enemy class instantiated")
         Unit.__init__(self)
         FSM.__init__(self, 'playerFSM')
@@ -33,13 +37,13 @@ class Enemy(FSM, Unit):
         utils.enemyDictionary[self.enemyNode.getName()] = self
 
         self.loadEnemyModel()
-        self.initAttributes()
+        self.initAttributes(attributes)
         self.initEnemyAi()
         
         self.initEnemyCollisionHandlers()
         self.initEnemyCollisionSolids()
 
-        self.setEXPReward(EXPAward)
+        #self.setEXPReward(EXPAward)
 
         self.targeted = False
         #self.enemyNode.ColorAttrib.makeVertex()
@@ -51,22 +55,25 @@ class Enemy(FSM, Unit):
         self.enemyNode.setPos(-2, 0, 1)
         self.enemyNode.setScale(0.1)
 
-    def initAttributes(self):
-        self.strength = 16
-        self.constitution = 14
-        self.dexterity = 12
+    def initAttributes(self, attributes):
+        self.strength = attributes.strength
+        self.constitution = attributes.constitution
+        self.dexterity = attributes.dexterity
 
-        self.movementSpeed = 0.1
-        self.maxMovementSpeed = 5
-        self.perceptionRange = 10
-        self.combatRange = 1
+        self.mass = attributes.mass
+        self.movementSpeed = attributes.movementSpeed
+        self.maxMovementSpeed = attributes.maxMovementSpeed
+        self.perceptionRange = attributes.perceptionRange
+        self.combatRange = attributes.combatRange
+
+        self.setEXPReward(attributes.expAward)
 
         self.initHealth()
 
     def initEnemyAi(self):
         self.enemyAI = AICharacter('enemy',
                                 self.enemyNode,
-                                100, # Mass
+                                self.mass, # Mass
                                 self.movementSpeed, # Movt force
                                 self.maxMovementSpeed) # Max force
         self._AIworldRef.addAiChar(self.enemyAI)
@@ -254,7 +261,7 @@ class Enemy(FSM, Unit):
     def initEnemyCollisionSolids(self):
         sphereCollNode = CollisionNode(self.enemyNode.getName())
         sphereNodePath = self.enemyNode.attachNewNode(sphereCollNode)
-        collSphere = CollisionSphere(0, 0, 0, 10)
+        collSphere = CollisionSphere(0, 0, 0, 15)
         sphereCollNode.addSolid(collSphere)
         #self.sphereCollNode.show()
 

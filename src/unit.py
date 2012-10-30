@@ -20,19 +20,10 @@ class Unit(object):
 
     def __init__(self):
         print("Unit class instantiated")
-        self.initAttributes()
+        self.initUnitHealth()
         self.initlevel()
 
-    def initAttributes(self):
-        self.strength = 1 # Start attributes arbitrarily at 1
-        self.constitution = 1
-        self.dexterity = 1
-
-        # Initialize movement speed value
-        self.movementSpeed = 2.5 # Not affected by attributes
-
-        self.updateMaxHealthPoints() # initialize the hit points
-        
+    def initUnitHealth(self):
         # Initialize currentHealthPoints at Max HP
         self._currentHealthPoints = self.maxHealthPoints 
 

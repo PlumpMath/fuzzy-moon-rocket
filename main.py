@@ -46,8 +46,7 @@ class World(ShowBase):
 
         # For debugging
         if debug:
-            self.enemy = enemy.Enemy(self, 50)
-            self.enemy.moveEnemy(0, 15)
+            self.addEnemy()
 
             self.accept('1', self.damagePlayer)
             self.accept('2', self.killEnemy)
@@ -75,7 +74,17 @@ class World(ShowBase):
         print(str(globalClock.getFrameTime()))
 
     def addEnemy(self):
-        newEnemy = enemy.Enemy(self, 50)
+        attributes = enemy.Attributes(strength=10,
+                               constitution=10,
+                               dexterity=10,
+                               movementSpeed=0.1,
+                               maxMovementSpeed=5.0,
+                               expAward=20,
+                               mass=50,
+                               combatRange=1,
+                               perceptionRange=5)
+
+        newEnemy = enemy.Enemy(self, attributes)
         newEnemy.moveEnemy(10 - utils.getD20(), 
                            10 - utils.getD20())
 
