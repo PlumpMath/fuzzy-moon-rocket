@@ -51,7 +51,7 @@ class Player(FSM, Unit):
         self.damageBonus = 0 # ?
         self.damageRange = 8 # = Longsword
         self.initiativeBonus = 1 # ?
-        self.armorClass = 10 # Armor? 
+        self.armorClass = 10 + 8 # Base armor class + fullplate armor
 
         self.initHealth()
 

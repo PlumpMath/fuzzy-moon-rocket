@@ -33,7 +33,7 @@ class Unit(object):
         self.armorClass = 0
 
         # Initialize currentHealthPoints at Max HP
-        self._currentHealthPoints = self.maxHealthPoints 
+        self.initHealth()
 
     def initlevel(self):
         self.level = 1
@@ -65,7 +65,7 @@ class Unit(object):
 
     def initHealth(self):
         self.updateMaxHealthPoints()
-        self._currentHealthPoints = self.maxHealthPoints
+        self.currentHealthPoints = self.maxHealthPoints
 
     def updateMaxHealthPoints(self):
         if self.fixedHealthPoints == 0:
@@ -77,19 +77,19 @@ class Unit(object):
             self.maxHealthPoints = self.fixedHealthPoints
 
     def receiveDamage(self, damageAmount):
-        self._currentHealthPoints -= damageAmount
-        if self._currentHealthPoints <= 0:
+        self.currentHealthPoints -= damageAmount
+        if self.currentHealthPoints <= 0:
             print("Unit died!")
             self._isDead = True
 
     def heal(self, healAmount):
-        if self._isDead == False:
-            self._currentHealthPoints += healAmount
-            if self._currentHealthPoints > self.maxHealthPoints:
-                self._currentHealthPoints = self.maxHealthPoints
+        if not self.getIsDead():
+            self.currentHealthPoints += healAmount
+            if self.currentHealthPoints > self.maxHealthPoints:
+                self.currentHealthPoints = self.maxHealthPoints
 
     def getIsDead(self):
-        if self._isDead or self._currentHealthPoints <= 0:
+        if self._isDead or self.currentHealthPoints <= 0:
             return True
         else:
             return False
@@ -98,7 +98,8 @@ class Unit(object):
         return self.initiativeBonus + (self.level / 2) + self.getDexterityModifier() + utils.getD20()
 
     def getAttackBonus(self):
-        return self.attackBonus + (self.level / 2) + self.getStrengthModifier() + utils.getD20()
+        modifier = self.getStrengthModifier() if self.getStrengthModifier() > self.getDexterityModifier() else self.getDexterityModifier()
+        return self.attackBonus + (self.level / 2) + modifier + utils.getD20()
 
     def getDamageBonus(self):
         randomDamage = 0
@@ -116,9 +117,6 @@ class Unit(object):
     def getArmorClass(self):
         return self.armorClass + (self.level / 2) + self.getDexterityModifier()
 
-    def getCurrentHealthPoints(self):
-        return self._currentHealthPoints
-
     def getCurrentHealthPointsAsPercentage(self):
-        return ((float(self._currentHealthPoints) / 
+        return ((float(self.currentHealthPoints) / 
                     self.maxHealthPoints) * 100.0)

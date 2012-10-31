@@ -41,7 +41,6 @@ class Enemy(FSM, Unit):
         self._AIworldRef = mainRef.AIworld
         self._playerRef = mainRef.player
         self._worldRef = mainRef
-        self._modelName = modelName
 
         self.topEnemyNode = mainRef.mainNode.attachNewNode('topEnemyNode')
 
@@ -51,7 +50,7 @@ class Enemy(FSM, Unit):
 
         utils.enemyDictionary[self.enemyNode.getName()] = self
 
-        self.loadEnemyModel()
+        self.loadEnemyModel(modelName)
         self.initAttributes(attributes)
         self.initEnemyAi()
         
@@ -60,8 +59,8 @@ class Enemy(FSM, Unit):
 
         self.targeted = False
 
-    def loadEnemyModel(self):
-        self.enemyModel = Actor('models/' + self._modelName + '.egg')
+    def loadEnemyModel(self, modelName):
+        self.enemyModel = Actor('models/' + modelName + '.egg')
         self.enemyModel.reparentTo(self.enemyNode)
 
         self.enemyNode.setPos(-2, 0, 1)
