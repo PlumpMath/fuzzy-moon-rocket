@@ -246,6 +246,7 @@ class Player(FSM, Unit):
             if not utils.getIsInRange(playerPos, enemyPos, self.combatRange) or enemy.getIsDead():
                 print('unselected target')
                 enemy.targeted = False
+                self.setCurrentTarget(None)
                 #enemy.enemyModel.clearColorScale()
                 #enemy.enemyNode.clearShininess()
                 #enemyMaterial.clearEmission()

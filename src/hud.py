@@ -36,13 +36,11 @@ class HUD:
     def updateTargetBar(self):
         currentTarget = self._playerRef.getCurrentTarget()
         if not currentTarget is None:
-            if not currentTarget.getIsDead():
-                self.targetBar.show()
-                self.targetBar['value'] = currentTarget.getCurrentHealthPointsAsPercentage()
-            else:
-                # Remove player target and hide bar
-                self._playerRef.setCurrentTarget(None)
-                self.targetBar.hide()
+            self.targetBar.show()
+            self.targetBar['value'] = currentTarget.getCurrentHealthPointsAsPercentage()
+        else:
+            # Hide bar
+            self.targetBar.hide()
 
     def removeTitle(self, task):
         if task.time > 3:
