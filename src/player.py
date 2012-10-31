@@ -10,8 +10,8 @@ class Player(FSM, Unit):
 
     # Declare private variables
     _playerStartPos = Point3(0, 0, 10)
-    _cameraYModifier = -22 # Relative to player Y
-    _cameraZPos = 20 # Absolute Z position
+    _cameraYModifier = -75 # Relative to player Y
+    _cameraZPos = 60 # Absolute Z position
 
     _currentTarget = None
 
@@ -45,8 +45,8 @@ class Player(FSM, Unit):
         self.constitution = 14
         self.dexterity = 10
 
-        self.combatRange = 1 # Melee
-        self.movementSpeed = 5 # ?
+        self.combatRange = 10 * 1 # Melee
+        self.movementSpeed = 10 # ?
         self.attackBonus = 6 # ?
         self.damageBonus = 0 # ?
         self.damageRange = 8 # = Longsword
@@ -57,11 +57,15 @@ class Player(FSM, Unit):
 
     def initPlayerModel(self):
         # Initialize the player model (Actor)
-        self.playerModel = Actor("models/BendingCan.egg")
+        modelPrefix = 'models/player-'
+        self.playerModel = Actor(modelPrefix + 'model.egg', {
+            'run':modelPrefix+'run.egg',
+            'attack':modelPrefix+'attack.egg'
+            })
         self.playerModel.reparentTo(self.playerNode)
         self.playerModel.setName('playerModel')
         self.playerModel.setCollideMask(BitMask32.allOff())
-        self.playerModel.setScale(0.2)
+        self.playerModel.setH(180)
 
         self.playerNode.setPos(self._playerStartPos)
         self.playerNode.setName('playerNode')
@@ -79,7 +83,6 @@ class Player(FSM, Unit):
         return self._prevEXP + (self.level * 1000)
 
     def receiveEXP(self, value):
-       #print("Giving EXP :" + str(value))
         self.experience += value
         if self.experience >= self.getEXPToNextLevel():
             self.increaseLevel()
@@ -95,7 +98,7 @@ class Player(FSM, Unit):
         return self._currentTarget
 
     def attackEnemy(self, enemy):
-        if self.state == 'Death':
+        if self.getIsDead():
             return
 
         if self.getCurrentTarget() != enemy:
@@ -111,17 +114,20 @@ class Player(FSM, Unit):
         elif enemy.getIsDead():
             print('enemy is already dead')
             self.request('Idle')
+            enemy = None
 
-        elif utils.getIsInRange(playerPos, enemyPos, self.combatRange) == False:
-            print('enemy fled away from combat range')
-
-        #elif utils.getIsInRange(playerPos, enemyPos, self.perceptionRange) == False:
-        #    print('enemy fled away from perception range')
-            #self.request('Idle')
+        elif not utils.getIsInRange(playerPos, enemyPos, self.combatRange):
+            print('Enemy fled away from combat range')
+            if self.state == 'Combat':
+                self.request('Idle')
 
         else:
             print('Attack enemy!')
             # Play attack animation
+            if self.state != 'Combat':
+                self.request('Combat')
+
+            self.playerModel.play('attack')
 
             if enemy.getArmorClass() <= self.getAttackBonus():
                 dmg = self.getDamageBonus()
@@ -141,6 +147,7 @@ class Player(FSM, Unit):
 
     def initPlayerCollisionHandlers(self):
         self.groundHandler = CollisionHandlerQueue()
+        self.collPusher = CollisionHandlerPusher()
 
     def initPlayerCollisionSolids(self):
         groundRay = CollisionRay(0, 0, 10, 0, 0, -1)
@@ -153,6 +160,19 @@ class Player(FSM, Unit):
 
         base.cTrav.addCollider(self.groundRayNode, self.groundHandler)
 
+        collSphereNode = CollisionNode('playerCollSphere')
+        collSphere = CollisionSphere(0, 0, 3, 4)
+        collSphereNode.addSolid(collSphere)
+
+        collSphereNode.setIntoCollideMask(BitMask32.bit(2))
+        collSphereNode.setFromCollideMask(BitMask32.bit(2))
+        
+        sphereNode = self.playerNode.attachNewNode(collSphereNode)
+        #sphereNode.show()
+
+        base.cTrav.addCollider(sphereNode, self.collPusher)
+        self.collPusher.addCollider(sphereNode, self.playerNode)
+
     def checkGroundCollisions(self):
         if self.groundHandler.getNumEntries() > 0:
             self.groundHandler.sortEntries()
@@ -164,7 +184,7 @@ class Player(FSM, Unit):
             entries.sort(lambda x,y: cmp(y.getSurfacePoint(render).getZ(),
                                         x.getSurfacePoint(render).getZ()))
 
-            if (len(entries) > 0) and (entries[0].getIntoNode().getName() == 'groundcnode'):
+            if (len(entries) > 0) and (entries[0].getIntoNode().getName() == 'ground'):
                 newZ = entries[0].getSurfacePoint(base.render).getZ()
                 self.playerNode.setZ(newZ)
 
@@ -184,6 +204,9 @@ class Player(FSM, Unit):
         self.velocity.normalize()
         self.velocity *= self.movementSpeed
 
+        if self.state != 'Run':
+            self.request('Run')
+
     def updatePlayerPosition(self, deltaTime):
         #print('updatePlayerPosition')
         if self.state == 'Death':
@@ -196,9 +219,11 @@ class Player(FSM, Unit):
         self.playerNode.setFluidPos(newX, newY, newZ)
 
         self.velocity = self.destination - self.playerNode.getPos()
-        if self.velocity.lengthSquared() < 1:
+        if self.velocity.lengthSquared() < .5:
             self.velocity = Vec3.zero()
             #print('destination reached')
+            if self.state == 'Run':
+                self.request('Idle')
         else:
             self.velocity.normalize()
             self.velocity *= self.movementSpeed
@@ -216,7 +241,7 @@ class Player(FSM, Unit):
 
         self.updatePlayerPosition(deltaTime)
         self.checkGroundCollisions()
-        #self.updatePlayerTarget()
+        self.updatePlayerTarget()
 
         base.camera.setPos(self.playerNode.getX(),
                            self.playerNode.getY() + self._cameraYModifier,
@@ -233,36 +258,37 @@ class Player(FSM, Unit):
             print('select target: ' + str(enemy.enemyNode.getName()))
             enemy.targeted = True
 
-            #enemy.enemyModel.setColorScale(0.1, 1.0, 0.1, 1.0)
-            #enemyMaterial = Material()
-            #enemyMaterial.setEmission(VBase4(0, 1, 0, 1))
-            #shinyMaterial.setShininess(50.0)
+        playerPos = self.playerNode.getPos()
+        enemyPos = enemy.enemyNode.getPos()
 
-            #enemy.enemyNode.setMaterial(enemyMaterial)
+        if enemy.getIsDead():
+            print('unselected target')
+            enemy.targeted = False
+            self.setCurrentTarget(None)
 
-            playerPos = self.playerNode.getPos()
-            enemyPos = enemy.enemyNode.getPos()
+    def setPlayerStartPosition(self, pos):
+        self.playerNode.setPos(pos)
+        self.destination = pos
 
-            if not utils.getIsInRange(playerPos, enemyPos, self.combatRange) or enemy.getIsDead():
-                print('unselected target')
-                enemy.targeted = False
-                self.setCurrentTarget(None)
-                #enemy.enemyModel.clearColorScale()
-                #enemy.enemyNode.clearShininess()
-                #enemyMaterial.clearEmission()
+    def enterRun(self):
+        #print('running')
+        self.playerModel.loop('run')
+
+        #print(self.playerModel.getCurrentAnim())
+
+    def exitRun(self):
+        self.playerModel.stop()
 
     def enterCombat(self):
-        print('player enter combat')
+        #self.playerModel.loop('attack')
+        self.destination = self.playerNode.getPos()
 
     def exitCombat(self):
-        print('player exit combat')
+        self.playerModel.stop()
 
     def enterIdle(self):
-        print('player enter idle')
+        self.playerModel.pose('attack', 0)
 
     def exitIdle(self):
-        print('player exit idle')
-
-    def enterDeath(self):
-        print('player dead')
+        pass
 
