@@ -60,4 +60,4 @@ class GUI(object):
                                                    indicatorValue=0))
 
         for button in self._buttons:
-            button['others'] = self._buttons
+            button.setOthers(self._buttons)
