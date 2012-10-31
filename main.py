@@ -38,6 +38,7 @@ class World(ShowBase):
         self.mapHandler = map.Map(self.mainNode)
 
         self.player = player.Player(self)
+        self.player.setPlayerStartPosition(self.mapHandler.startPos)
 
         self.gui = gui.GUI()
         self.hud = hud.HUD(self.player)
@@ -77,8 +78,9 @@ class World(ShowBase):
         attributes = enemy.koboldMinion
 
         newEnemy = enemy.Enemy(self, 'funny_sphere', attributes)
-        newEnemy.moveEnemy(10 - utils.getD20(), 
-                           10 - utils.getD20())
+        #newEnemy.moveEnemy(10 - utils.getD20(), 
+        #                   10 - utils.getD20())
+        newEnemy.moveEnemy(self.mapHandler.exitPos.getX(), self.mapHandler.exitPos.getY())
 
     def levelPlayerUp(self): # key 6
         for i in range(10):

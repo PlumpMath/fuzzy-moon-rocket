@@ -19,23 +19,31 @@ class Map:
 
     def initGround(self, parentNode):
         # Setup environment (plane)
-        self.planeNode = parentNode.attachNewNode('planeNode')
-        self.planeModel = loader.loadModel("models/grass_plane.egg")
-        self.planeModel.reparentTo(self.planeNode)
-        self.planeModel.setCollideMask(BitMask32.allOff())
-        self.planeModel.setScale(10)
-        self.planeNode.setPos(0, 0, 0)
-        self.planeNode.setHpr(0, -90, 0)
-        #self.planeNode.setScale(5)
-        self.planeNode.setName('ground')
+        self.areaNode = parentNode.attachNewNode('areaNode')
 
-        collPlaneGeometry = CollisionPlane(Plane(Vec3(0, 0, 1), Point3(0, 0, 0)))
-        self.collPlane = self.planeNode.attachNewNode(CollisionNode('groundcnode'))
-        self.collPlane.node().addSolid(collPlaneGeometry)
-        self.collPlane.node().setIntoCollideMask(BitMask32.bit(1))
-        self.collPlane.node().setFromCollideMask(BitMask32.allOff())
-        self.collPlane.setHpr(0, 90, 0)
-        #self.collPlane.show()
+        areaModel = loader.loadModel('models/area_1.egg')
+        areaModel.reparentTo(self.areaNode)
+        areaModel.setCollideMask(BitMask32.allOff())
+
+        self.areaNode.setPos(0, 0, 0)
+        self.areaNode.setName('ground')
+
+        self.ground = areaModel.find('**/ground')
+        self.ground.setCollideMask(BitMask32.bit(1))
+
+        self.collidersGroup = areaModel.find('**/colliders')
+        self.collidersGroup.setCollideMask(BitMask32.bit(2))
+        #areaColliders = []
+        #for i in range(1, 29):
+        #    collider = areaModel.find('**/coll_' + str(i))
+        #    collider.node().setIntoCollideMask(BitMask32.bit(2))
+        #    collider.node().setFromCollideMask(BitMask32.allOff())
+
+        #    areaColliders.append(collider)
+        #    print('Found collider: ' + str(collider))
+
+        self.startPos = areaModel.find('**/startPos').getPos()
+        self.exitPos = areaModel.find('**/exitPos').getPos()
 
     def initFog(self, parentNode):
         # Setup fog 
