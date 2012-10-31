@@ -104,8 +104,12 @@ class World(ShowBase):
         print('Dexterity: ' + str(self.player.dexterity))
         print('Movement speed: ' + str(self.player.movementSpeed))
         print('Combat range: ' + str(self.player.combatRange))
-        print('Current health: ' + str(self.player.getCurrentHealthPoints()))
+        print('Current health: ' + str(self.player.currentHealthPoints))
         print('Max health: ' + str(self.player.maxHealthPoints))
+        if self.player.getCurrentTarget() is not None:
+            print('Target pos: ' + str(self.player.getCurrentTarget().enemyNode.getPos()))
+  
+
 
     # End of debugging implementation
 

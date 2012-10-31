@@ -107,7 +107,62 @@ class Enemy(FSM, Unit):
 
         self.request('Idle')
 
+    def initEnemyCollisionHandlers(self):
+        self.groundHandler = CollisionHandlerQueue()
+        self.collPusher = CollisionHandlerPusher()
+
+    def initEnemyCollisionSolids(self):
+        pickerSphereCollNode = CollisionNode(self.enemyNode.getName())
+        pickerSphereNodePath = self.enemyNode.attachNewNode(pickerSphereCollNode)
+        pickerCollSphere = CollisionSphere(0, 0, 1, 10)
+        pickerSphereCollNode.addSolid(pickerCollSphere)
+        pickerSphereCollNode.setFromCollideMask(BitMask32.allOff())
+        pickerSphereCollNode.setIntoCollideMask(BitMask32.bit(1))
+        #sphereNodePath.show()
+
+        collSphereNode = CollisionNode('enemyCollSphere')
+        collSphere = CollisionSphere(0, 0, 1, 4)
+        collSphereNode.addSolid(collSphere)
+
+        collSphereNode.setIntoCollideMask(BitMask32.allOff())
+        collSphereNode.setFromCollideMask(BitMask32.bit(2))
+        
+        self.sphereNode = self.enemyNode.attachNewNode(collSphereNode)
+        #sphereNode.show()
+
+        base.cTrav.addCollider(self.sphereNode, self.collPusher)
+        self.collPusher.addCollider(self.sphereNode, self.enemyNode)
+
+        groundRay = CollisionRay(0, 0, 10, 0, 0, -1)
+        groundColl = CollisionNode('groundRay')
+        groundColl.addSolid(groundRay)
+        groundColl.setIntoCollideMask(BitMask32.allOff())
+        groundColl.setFromCollideMask(BitMask32.bit(1))
+        self.groundRayNode = self.topEnemyNode.attachNewNode(groundColl)
+        #self.groundRayNode.show()
+
+        base.cTrav.addCollider(self.groundRayNode, self.groundHandler)
+
+    def checkGroundCollisions(self):
+        zModifier = 0.5
+
+        if self.groundHandler.getNumEntries() > 0:
+            self.groundHandler.sortEntries()
+            entries = []
+            for i in range(self.groundHandler.getNumEntries()):
+                entry = self.groundHandler.getEntry(i)
+                entries.append(entry)
+
+            entries.sort(lambda x,y: cmp(y.getSurfacePoint(render).getZ(),
+                                        x.getSurfacePoint(render).getZ()))
+
+            if (len(entries) > 0) and (entries[0].getIntoNode().getName() == 'ground'):
+                newZ = entries[0].getSurfacePoint(base.render).getZ()
+                self.enemyNode.setZ(zModifier + newZ)
+
     def enemyUpdater(self, task):
+        self.checkGroundCollisions()
+
         if self.getIsDead():
             return task.done
 
@@ -229,6 +284,9 @@ class Enemy(FSM, Unit):
             else:
                 print('Enemy missed the player')
 
+    def moveEnemy(self, x, y):
+        self.enemyNode.setPos(x, y, 1)
+
     def onDeath(self):
         if self.getIsDead():
             # Award the player exp
@@ -264,59 +322,3 @@ class Enemy(FSM, Unit):
         self.topEnemyNode.removeNode()
 
         return task.done
-
-    def moveEnemy(self, x, y):
-        self.enemyNode.setPos(x, y, 1)
-
-    def initEnemyCollisionHandlers(self):
-        self.groundHandler = CollisionHandlerQueue()
-        self.collPusher = CollisionHandlerPusher()
-
-    def initEnemyCollisionSolids(self):
-        pickerSphereCollNode = CollisionNode(self.enemyNode.getName())
-        pickerSphereNodePath = self.enemyNode.attachNewNode(pickerSphereCollNode)
-        pickerCollSphere = CollisionSphere(0, 0, 1, 10)
-        pickerSphereCollNode.addSolid(pickerCollSphere)
-        pickerSphereCollNode.setFromCollideMask(BitMask32.allOff())
-        pickerSphereCollNode.setIntoCollideMask(BitMask32.bit(1))
-        #sphereNodePath.show()
-
-        collSphereNode = CollisionNode('enemyCollSphere')
-        collSphere = CollisionSphere(0, 0, 1, 4)
-        collSphereNode.addSolid(collSphere)
-
-        collSphereNode.setIntoCollideMask(BitMask32.allOff())
-        collSphereNode.setFromCollideMask(BitMask32.bit(2))
-        
-        self.sphereNode = self.enemyNode.attachNewNode(collSphereNode)
-        #sphereNode.show()
-
-        base.cTrav.addCollider(self.sphereNode, self.collPusher)
-        self.collPusher.addCollider(self.sphereNode, self.enemyNode)
-
-        groundRay = CollisionRay(0, 0, 10, 0, 0, -1)
-        groundColl = CollisionNode('groundRay')
-        groundColl.addSolid(groundRay)
-        groundColl.setIntoCollideMask(BitMask32.allOff())
-        groundColl.setFromCollideMask(BitMask32.bit(1))
-        self.groundRayNode = self.topEnemyNode.attachNewNode(groundColl)
-        #self.groundRayNode.show()
-
-        base.cTrav.addCollider(self.groundRayNode, self.groundHandler)
-
-    def checkGroundCollisions(self):
-        zModifier = 0.5
-
-        if self.groundHandler.getNumEntries() > 0:
-            self.groundHandler.sortEntries()
-            entries = []
-            for i in range(self.groundHandler.getNumEntries()):
-                entry = self.groundHandler.getEntry(i)
-                entries.append(entry)
-
-            entries.sort(lambda x,y: cmp(y.getSurfacePoint(render).getZ(),
-                                        x.getSurfacePoint(render).getZ()))
-
-            if (len(entries) > 0) and (entries[0].getIntoNode().getName() == 'ground'):
-                newZ = entries[0].getSurfacePoint(base.render).getZ()
-                self.enemyNode.setZ(zModifier + newZ)

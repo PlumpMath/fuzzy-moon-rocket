@@ -1,6 +1,5 @@
 import time
 
-
 class GUI(object):
     _LABELS = ["Strongly do not want to continue", "Do not want to continue",
               "Neither", "Want to continue", "Strongly want to continue"]
