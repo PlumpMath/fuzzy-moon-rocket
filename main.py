@@ -17,6 +17,7 @@ class World(ShowBase):
     enemyList = []
 
     def __init__(self):
+        print('World class instantiated')
         # Enable or disable debugging
         debug = True
 

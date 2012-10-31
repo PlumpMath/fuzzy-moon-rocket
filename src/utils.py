@@ -24,6 +24,7 @@ def getD20():
 class MouseHandler():
 
     def __init__(self, playerRef):
+        print('MouseHandler class instantiated')
         self._playerRef = playerRef
         self.setupMouseCollision()
 
