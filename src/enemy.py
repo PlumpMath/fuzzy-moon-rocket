@@ -57,16 +57,20 @@ class Enemy(FSM, Unit):
         self.initEnemyCollisionHandlers()
         self.initEnemyCollisionSolids()
 
-        self.targeted = False
+        self.request('Idle')
 
     def loadEnemyModel(self, modelName):
-        self.enemyModel = Actor('models/' + modelName + '.egg')
+        modelPrefix = 'models/'
+        self.enemyModel = Actor(modelPrefix + modelName + '-model.egg', {
+                'walk':modelPrefix+modelName+'-walk.egg',
+                'attack':modelPrefix+modelName+'-attack.egg'
+            })
         self.enemyModel.reparentTo(self.enemyNode)
 
         self.enemyNode.setPos(Point3.zero())
 
     def initAttributes(self, attributes):
-        rangeMultiplier = 20
+        rangeMultiplier = 10
         speedMultiplier = 3
 
         self.strength = attributes.strength
@@ -114,14 +118,14 @@ class Enemy(FSM, Unit):
     def initEnemyCollisionSolids(self):
         pickerSphereCollNode = CollisionNode(self.enemyNode.getName())
         pickerSphereNodePath = self.enemyNode.attachNewNode(pickerSphereCollNode)
-        pickerCollSphere = CollisionSphere(0, 0, 1, 10)
+        pickerCollSphere = CollisionSphere(0, 0, 1, 6)
         pickerSphereCollNode.addSolid(pickerCollSphere)
         pickerSphereCollNode.setFromCollideMask(BitMask32.allOff())
         pickerSphereCollNode.setIntoCollideMask(BitMask32.bit(1))
         #sphereNodePath.show()
 
         collSphereNode = CollisionNode('enemyCollSphere')
-        collSphere = CollisionSphere(0, 0, 1, 4)
+        collSphere = CollisionSphere(0, 0, 1, 3)
         collSphereNode.addSolid(collSphere)
 
         collSphereNode.setIntoCollideMask(BitMask32.allOff())
@@ -142,6 +146,7 @@ class Enemy(FSM, Unit):
         #self.groundRayNode.show()
 
         base.cTrav.addCollider(self.groundRayNode, self.groundHandler)
+
 
     def checkGroundCollisions(self):
         zModifier = 0.5
@@ -202,16 +207,10 @@ class Enemy(FSM, Unit):
 
         return task.cont
 
-    def enterPursue(self):
-        print('enterPursue')
-        self.enemyAIBehaviors.pursue(self._playerRef.playerNode)
-
-    def exitPursue(self):
-        print('exitPursue')
-        self.enemyAIBehaviors.removeAi('pursue')
-
     def enterCombat(self):
-        print('enterCombat')
+        #print('enemy enterCombat')
+        self.enemyModel.stop()
+
         delay = Wait(1.5)
         
         self.attackSequence = Sequence()
@@ -235,20 +234,33 @@ class Enemy(FSM, Unit):
         self.attackSequence.loop()
 
     def exitCombat(self):
-        print('exitCombat')
+        #print('enemy exitCombat')
+        pass
 
     def enterDeath(self):
-        print('enterDeath')
+        #print('enemy enterDeath')
         self.enemyAIBehaviors.removeAi('all')
 
+    def enterPursue(self):
+        #print('enemy enterPursue')
+        self.enemyAIBehaviors.pursue(self._playerRef.playerNode)
+        self.enemyModel.loop('walk')
+
+    def exitPursue(self):
+        #print('enemy exitPursue')
+        self.enemyAIBehaviors.removeAi('pursue')
+
     def enterIdle(self):
-        print('enterIdle')
+        #print('enemy enterIdle')
         self.enemyAIBehaviors.removeAi('pursue')
         self.enemyAIBehaviors.wander(2.5, 0, 5)
 
+        self.enemyModel.loop('walk')
+
     def exitIdle(self):
-        print('exitIdle')
+        #print('enemy exitIdle')
         self.enemyAIBehaviors.removeAi('wander')
+
 
     def attackPlayer(self, attackSequence):
         playerPos = self._playerRef.playerNode.getPos()
@@ -275,7 +287,8 @@ class Enemy(FSM, Unit):
             attackSequence.finish()
 
         else:
-            # Play attack animation
+            self.enemyModel.play('attack')
+
             print('Attack player!')
             if self._playerRef.getArmorClass() <= self.getAttackBonus():
                 dmg = self.getDamageBonus()
@@ -286,6 +299,7 @@ class Enemy(FSM, Unit):
 
     def moveEnemy(self, x, y):
         self.enemyNode.setPos(x, y, 1)
+
 
     def onDeath(self):
         if self.getIsDead():

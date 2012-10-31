@@ -1,0 +1,2245 @@
+<CoordinateSystem> { Z-Up }
+
+<Comment> {
+  "maya2egg2012 -p -a chan -pd 'C:/Users/Rami Ahmed Bock/Desktop' -cs z-up -uo cm -trans all -o 'C:/Users/Rami Ahmed Bock/Desktop/player-pose.egg' 'C:/Users/Rami Ahmed Bock/Documents/maya/projects/default/scenes/character_pose_temp.mb'"
+}
+<Table> {
+  <Bundle> character_pose_temp {
+    <Table> "<skeleton>" {
+      <Table> spaceFarmer {
+        <Xfm$Anim_S$> xform {
+          <Scalar> fps { 25 }
+          <Char*> order { srpht }
+        }
+        <Table> Main {
+          <Xfm$Anim_S$> xform {
+            <Scalar> fps { 25 }
+            <Char*> order { srpht }
+          }
+          <Table> MotionSystem {
+            <Xfm$Anim_S$> xform {
+              <Scalar> fps { 25 }
+              <Char*> order { srpht }
+            }
+            <Table> FKSystem {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+              }
+              <Table> FKParentConstraintToAnkle_R {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> h { <V> { 90 } }
+                  <S$Anim> p { <V> { -1.07996 } }
+                  <S$Anim> r { <V> { -180 } }
+                  <S$Anim> x { <V> { -0.691062 } }
+                  <S$Anim> y { <V> { 0.0603524 } }
+                  <S$Anim> z { <V> { 0.560364 } }
+                }
+                <Table> FKOffsetMiddleToe1_R {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 87.4682 } }
+                    <S$Anim> p { <V> { 66.8886 } }
+                    <S$Anim> r { <V> { -87.2476 } }
+                    <S$Anim> x { <V> { 0.318249 } }
+                    <S$Anim> y { <V> { 0.00384258 } }
+                    <S$Anim> z { <V> { 0.203839 } }
+                  }
+                  <Table> FKExtraMiddleToe1_R {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> FKMiddleToe1_R {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                      <Table> FKXMiddleToe1_R {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                        }
+                        <Table> FKXMiddleToe2_R {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> x { <V> { 0.584037 } }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              <Table> FKParentConstraintToChest_M {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> h { <V> { 180 } }
+                  <S$Anim> r { <V> { -90 } }
+                  <S$Anim> y { <V> { 0.157435 } }
+                  <S$Anim> z { <V> { 5.66981 } }
+                }
+                <Table> FKOffsetScapula_R {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { -90 } }
+                    <S$Anim> p { <V> { -43.6534 } }
+                    <S$Anim> r { <V> { 90 } }
+                    <S$Anim> x { <V> { 0.425191 } }
+                    <S$Anim> z { <V> { -0.815346 } }
+                  }
+                  <Table> FKExtraScapula_R {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> FKScapula_R {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                      <Table> FKXScapula_R {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                        }
+                        <Table> FKOffsetShoulder_R {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> h { <V> { 0.072673 } }
+                            <S$Anim> p { <V> { -2.93903 } }
+                            <S$Anim> r { <V> { -1.80162 } }
+                            <S$Anim> x { <V> { 0.709471 } }
+                          }
+                          <Table> FKExtraShoulder_R {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                            }
+                            <Table> FKShoulder_R {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                              }
+                              <Table> FKXShoulder_R {
+                                <Xfm$Anim_S$> xform {
+                                  <Scalar> fps { 25 }
+                                  <Char*> order { srpht }
+                                }
+                                <Table> FKOffsetElbow_R {
+                                  <Xfm$Anim_S$> xform {
+                                    <Scalar> fps { 25 }
+                                    <Char*> order { srpht }
+                                    <S$Anim> r { <V> { 8.7493 } }
+                                    <S$Anim> x { <V> { 0.962059 } }
+                                  }
+                                  <Table> FKExtraElbow_R {
+                                    <Xfm$Anim_S$> xform {
+                                      <Scalar> fps { 25 }
+                                      <Char*> order { srpht }
+                                    }
+                                    <Table> FKElbow_R {
+                                      <Xfm$Anim_S$> xform {
+                                        <Scalar> fps { 25 }
+                                        <Char*> order { srpht }
+                                      }
+                                      <Table> FKXElbow_R {
+                                        <Xfm$Anim_S$> xform {
+                                          <Scalar> fps { 25 }
+                                          <Char*> order { srpht }
+                                        }
+                                        <Table> FKOffsetWrist_R {
+                                          <Xfm$Anim_S$> xform {
+                                            <Scalar> fps { 25 }
+                                            <Char*> order { srpht }
+                                            <S$Anim> h { <V> { 0.0265098 } }
+                                            <S$Anim> p { <V> { 2.95411 } }
+                                            <S$Anim> r { <V> { -6.19185 } }
+                                            <S$Anim> x { <V> { 1.11408 } }
+                                          }
+                                          <Table> FKExtraWrist_R {
+                                            <Xfm$Anim_S$> xform {
+                                              <Scalar> fps { 25 }
+                                              <Char*> order { srpht }
+                                            }
+                                            <Table> FKWrist_R {
+                                              <Xfm$Anim_S$> xform {
+                                                <Scalar> fps { 25 }
+                                                <Char*> order { srpht }
+                                              }
+                                              <Table> FKXWrist_R {
+                                                <Xfm$Anim_S$> xform {
+                                                  <Scalar> fps { 25 }
+                                                  <Char*> order { srpht }
+                                                }
+                                                <Table> FKXCup_R {
+                                                  <Xfm$Anim_S$> xform {
+                                                    <Scalar> fps { 25 }
+                                                    <Char*> order { srpht }
+                                                    <S$Anim> h { <V> { -0.422206 } }
+                                                    <S$Anim> p { <V> { 0.00782332 } }
+                                                    <S$Anim> r { <V> { -5.38848 } }
+                                                    <S$Anim> x { <V> { 0.149786 } }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                <Table> FKOffsetNeck_M {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { 0.499933 } }
+                  }
+                  <Table> FKExtraNeck_M {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> FKNeck_M {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                      <Table> FKXNeck_M {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                        }
+                        <Table> FKOffsetHead_M {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> x { <V> { 0.782706 } }
+                          }
+                          <Table> FKExtraHead_M {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                            }
+                            <Table> FKHead_M {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                              }
+                              <Table> FKXHead_M {
+                                <Xfm$Anim_S$> xform {
+                                  <Scalar> fps { 25 }
+                                  <Char*> order { srpht }
+                                }
+                                <Table> FKXHair_M {
+                                  <Xfm$Anim_S$> xform {
+                                    <Scalar> fps { 25 }
+                                    <Char*> order { srpht }
+                                    <S$Anim> x { <V> { 0.871857 } }
+                                  }
+                                }
+                                <Table> FKXNose_M {
+                                  <Xfm$Anim_S$> xform {
+                                    <Scalar> fps { 25 }
+                                    <Char*> order { srpht }
+                                    <S$Anim> y { <V> { 1 } }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                <Table> FKOffsetScapula_L {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 90 } }
+                    <S$Anim> p { <V> { -43.6534 } }
+                    <S$Anim> r { <V> { 90 } }
+                    <S$Anim> x { <V> { 0.425191 } }
+                    <S$Anim> z { <V> { 0.815346 } }
+                  }
+                  <Table> FKExtraScapula_L {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> FKScapula_L {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                      <Table> FKXScapula_L {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                        }
+                        <Table> FKOffsetShoulder_L {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> h { <V> { 0.072673 } }
+                            <S$Anim> p { <V> { -2.93903 } }
+                            <S$Anim> r { <V> { -1.80162 } }
+                            <S$Anim> x { <V> { -0.709471 } }
+                          }
+                          <Table> FKExtraShoulder_L {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                            }
+                            <Table> FKShoulder_L {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                              }
+                              <Table> FKXShoulder_L {
+                                <Xfm$Anim_S$> xform {
+                                  <Scalar> fps { 25 }
+                                  <Char*> order { srpht }
+                                }
+                                <Table> FKOffsetElbow_L {
+                                  <Xfm$Anim_S$> xform {
+                                    <Scalar> fps { 25 }
+                                    <Char*> order { srpht }
+                                    <S$Anim> r { <V> { 8.7493 } }
+                                    <S$Anim> x { <V> { -0.962059 } }
+                                  }
+                                  <Table> FKExtraElbow_L {
+                                    <Xfm$Anim_S$> xform {
+                                      <Scalar> fps { 25 }
+                                      <Char*> order { srpht }
+                                    }
+                                    <Table> FKElbow_L {
+                                      <Xfm$Anim_S$> xform {
+                                        <Scalar> fps { 25 }
+                                        <Char*> order { srpht }
+                                      }
+                                      <Table> FKXElbow_L {
+                                        <Xfm$Anim_S$> xform {
+                                          <Scalar> fps { 25 }
+                                          <Char*> order { srpht }
+                                        }
+                                        <Table> FKOffsetWrist_L {
+                                          <Xfm$Anim_S$> xform {
+                                            <Scalar> fps { 25 }
+                                            <Char*> order { srpht }
+                                            <S$Anim> h { <V> { 0.0265098 } }
+                                            <S$Anim> p { <V> { 2.95411 } }
+                                            <S$Anim> r { <V> { -6.19185 } }
+                                            <S$Anim> x { <V> { -1.11408 } }
+                                          }
+                                          <Table> FKExtraWrist_L {
+                                            <Xfm$Anim_S$> xform {
+                                              <Scalar> fps { 25 }
+                                              <Char*> order { srpht }
+                                            }
+                                            <Table> FKWrist_L {
+                                              <Xfm$Anim_S$> xform {
+                                                <Scalar> fps { 25 }
+                                                <Char*> order { srpht }
+                                              }
+                                              <Table> FKXWrist_L {
+                                                <Xfm$Anim_S$> xform {
+                                                  <Scalar> fps { 25 }
+                                                  <Char*> order { srpht }
+                                                }
+                                                <Table> FKXCup_L {
+                                                  <Xfm$Anim_S$> xform {
+                                                    <Scalar> fps { 25 }
+                                                    <Char*> order { srpht }
+                                                    <S$Anim> h { <V> { -0.422206 } }
+                                                    <S$Anim> p { <V> { 0.00782332 } }
+                                                    <S$Anim> r { <V> { -5.38848 } }
+                                                    <S$Anim> x { <V> { -0.149786 } }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              <Table> FKParentConstraintToRoot_M {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> h { <V> { 180 } }
+                  <S$Anim> r { <V> { -90 } }
+                  <S$Anim> y { <V> { 0.157435 } }
+                  <S$Anim> z { <V> { 3.40002 } }
+                }
+                <Table> FKOffsetHip_R {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 179.026 } }
+                    <S$Anim> x { <V> { -0.566686 } }
+                    <S$Anim> y { <V> { 0.18158 } }
+                    <S$Anim> z { <V> { -0.691062 } }
+                  }
+                  <Table> FKExtraHip_R {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> FKHip_R {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                      <Table> FKXHip_R {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                        }
+                        <Table> FKOffsetKnee_R {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> h { <V> { 5.98761 } }
+                            <S$Anim> x { <V> { 1.0972 } }
+                          }
+                          <Table> FKExtraKnee_R {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                            }
+                            <Table> FKKnee_R {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                              }
+                              <Table> FKXKnee_R {
+                                <Xfm$Anim_S$> xform {
+                                  <Scalar> fps { 25 }
+                                  <Char*> order { srpht }
+                                }
+                                <Table> FKOffsetAnkle_R {
+                                  <Xfm$Anim_S$> xform {
+                                    <Scalar> fps { 25 }
+                                    <Char*> order { srpht }
+                                    <S$Anim> h { <V> { -95.0133 } }
+                                    <S$Anim> p { <V> { -88.92 } }
+                                    <S$Anim> x { <V> { 1.18045 } }
+                                  }
+                                  <Table> FKExtraAnkle_R {
+                                    <Xfm$Anim_S$> xform {
+                                      <Scalar> fps { 25 }
+                                      <Char*> order { srpht }
+                                    }
+                                    <Table> FKAnkle_R {
+                                      <Xfm$Anim_S$> xform {
+                                        <Scalar> fps { 25 }
+                                        <Char*> order { srpht }
+                                      }
+                                      <Table> FKXAnkle_R {
+                                        <Xfm$Anim_S$> xform {
+                                          <Scalar> fps { 25 }
+                                          <Char*> order { srpht }
+                                        }
+                                        <Table> FKXHeel_R {
+                                          <Xfm$Anim_S$> xform {
+                                            <Scalar> fps { 25 }
+                                            <Char*> order { srpht }
+                                            <S$Anim> h { <V> { 89.9809 } }
+                                            <S$Anim> r { <V> { -91.08 } }
+                                            <S$Anim> x { <V> { -0.424407 } }
+                                            <S$Anim> y { <V> { 0.00816136 } }
+                                            <S$Anim> z { <V> { 0.432939 } }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                <Table> FKOffsetHip_L {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { -0.974362 } }
+                    <S$Anim> x { <V> { -0.566686 } }
+                    <S$Anim> y { <V> { 0.18158 } }
+                    <S$Anim> z { <V> { 0.691062 } }
+                  }
+                  <Table> FKExtraHip_L {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> FKHip_L {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                      <Table> FKXHip_L {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                        }
+                        <Table> FKOffsetKnee_L {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> h { <V> { 5.98761 } }
+                            <S$Anim> x { <V> { -1.0972 } }
+                          }
+                          <Table> FKExtraKnee_L {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                            }
+                            <Table> FKKnee_L {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                              }
+                              <Table> FKXKnee_L {
+                                <Xfm$Anim_S$> xform {
+                                  <Scalar> fps { 25 }
+                                  <Char*> order { srpht }
+                                }
+                                <Table> FKOffsetAnkle_L {
+                                  <Xfm$Anim_S$> xform {
+                                    <Scalar> fps { 25 }
+                                    <Char*> order { srpht }
+                                    <S$Anim> h { <V> { -95.0133 } }
+                                    <S$Anim> p { <V> { -88.92 } }
+                                    <S$Anim> x { <V> { -1.18045 } }
+                                  }
+                                  <Table> FKExtraAnkle_L {
+                                    <Xfm$Anim_S$> xform {
+                                      <Scalar> fps { 25 }
+                                      <Char*> order { srpht }
+                                    }
+                                    <Table> FKAnkle_L {
+                                      <Xfm$Anim_S$> xform {
+                                        <Scalar> fps { 25 }
+                                        <Char*> order { srpht }
+                                      }
+                                      <Table> FKXAnkle_L {
+                                        <Xfm$Anim_S$> xform {
+                                          <Scalar> fps { 25 }
+                                          <Char*> order { srpht }
+                                        }
+                                        <Table> FKXHeel_L {
+                                          <Xfm$Anim_S$> xform {
+                                            <Scalar> fps { 25 }
+                                            <Char*> order { srpht }
+                                            <S$Anim> h { <V> { 89.9809 } }
+                                            <S$Anim> r { <V> { -91.08 } }
+                                            <S$Anim> x { <V> { 0.424407 } }
+                                            <S$Anim> y { <V> { -0.00816136 } }
+                                            <S$Anim> z { <V> { -0.432939 } }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              <Table> FKParentConstraintToAnkle_L {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> h { <V> { 90 } }
+                  <S$Anim> p { <V> { 1.07996 } }
+                  <S$Anim> x { <V> { 0.691062 } }
+                  <S$Anim> y { <V> { 0.0603524 } }
+                  <S$Anim> z { <V> { 0.560364 } }
+                }
+                <Table> FKOffsetMiddleToe1_L {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 87.4682 } }
+                    <S$Anim> p { <V> { 66.8886 } }
+                    <S$Anim> r { <V> { -87.2476 } }
+                    <S$Anim> x { <V> { -0.318249 } }
+                    <S$Anim> y { <V> { -0.00384258 } }
+                    <S$Anim> z { <V> { -0.203839 } }
+                  }
+                  <Table> FKExtraMiddleToe1_L {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> FKMiddleToe1_L {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                      <Table> FKXMiddleToe1_L {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                        }
+                        <Table> FKXMiddleToe2_L {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> x { <V> { -0.584037 } }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              <Table> FKParentConstraintFingers_R {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> h { <V> { 90.0049 } }
+                  <S$Anim> p { <V> { 46.0884 } }
+                  <S$Anim> r { <V> { 90.7445 } }
+                  <S$Anim> x { <V> { -2.82267 } }
+                  <S$Anim> y { <V> { 0.0530585 } }
+                  <S$Anim> z { <V> { 4.1761 } }
+                }
+              }
+              <Table> FKParentConstraintFingers_L {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> h { <V> { 89.9951 } }
+                  <S$Anim> p { <V> { -46.0884 } }
+                  <S$Anim> r { <V> { -89.2555 } }
+                  <S$Anim> x { <V> { 2.82267 } }
+                  <S$Anim> y { <V> { 0.0530585 } }
+                  <S$Anim> z { <V> { 4.1761 } }
+                }
+              }
+              <Table> RootCenterBtwLegsBlended_M {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> y { <V> { 0.157435 } }
+                  <S$Anim> z { <V> { 3.40002 } }
+                }
+                <Table> CenterOffset_M {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                  }
+                  <Table> CenterExtra_M {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> Center_M {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                      <Table> FKOffsetRoot_M {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> h { <V> { 180 } }
+                          <S$Anim> r { <V> { -90 } }
+                        }
+                        <Table> FKExtraRoot_M {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                          }
+                          <Table> FKRoot_M {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                            }
+                            <Table> HipSwingerGroupRoot_M {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                                <S$Anim> x { <V> { 0.790664 } }
+                              }
+                              <Table> FKXRoot_M {
+                                <Xfm$Anim_S$> xform {
+                                  <Scalar> fps { 25 }
+                                  <Char*> order { srpht }
+                                  <S$Anim> x { <V> { -0.790664 } }
+                                }
+                                <Table> HipSwingerStabalizeRoot_M {
+                                  <Xfm$Anim_S$> xform {
+                                    <Scalar> fps { 25 }
+                                    <Char*> order { srpht }
+                                    <S$Anim> h { <V> { -180 } }
+                                    <S$Anim> r { <V> { -90 } }
+                                    <S$Anim> x { <V> { 0.790664 } }
+                                  }
+                                  <Table> FKOffsetBackA_M {
+                                    <Xfm$Anim_S$> xform {
+                                      <Scalar> fps { 25 }
+                                      <Char*> order { srpht }
+                                      <S$Anim> h { <V> { 180 } }
+                                      <S$Anim> r { <V> { -90 } }
+                                    }
+                                    <Table> FKExtraBackA_M {
+                                      <Xfm$Anim_S$> xform {
+                                        <Scalar> fps { 25 }
+                                        <Char*> order { srpht }
+                                      }
+                                      <Table> FKBackA_M {
+                                        <Xfm$Anim_S$> xform {
+                                          <Scalar> fps { 25 }
+                                          <Char*> order { srpht }
+                                        }
+                                        <Table> FKXBackA_M {
+                                          <Xfm$Anim_S$> xform {
+                                            <Scalar> fps { 25 }
+                                            <Char*> order { srpht }
+                                          }
+                                          <Table> FKOffsetBackB_M {
+                                            <Xfm$Anim_S$> xform {
+                                              <Scalar> fps { 25 }
+                                              <Char*> order { srpht }
+                                              <S$Anim> x { <V> { 0.790664 } }
+                                            }
+                                            <Table> FKExtraBackB_M {
+                                              <Xfm$Anim_S$> xform {
+                                                <Scalar> fps { 25 }
+                                                <Char*> order { srpht }
+                                              }
+                                              <Table> FKBackB_M {
+                                                <Xfm$Anim_S$> xform {
+                                                  <Scalar> fps { 25 }
+                                                  <Char*> order { srpht }
+                                                }
+                                                <Table> FKXBackB_M {
+                                                  <Xfm$Anim_S$> xform {
+                                                    <Scalar> fps { 25 }
+                                                    <Char*> order { srpht }
+                                                  }
+                                                  <Table> FKOffsetChest_M {
+                                                    <Xfm$Anim_S$> xform {
+                                                      <Scalar> fps { 25 }
+                                                      <Char*> order { srpht }
+                                                      <S$Anim> x { <V> { 0.688455 } }
+                                                    }
+                                                    <Table> FKExtraChest_M {
+                                                      <Xfm$Anim_S$> xform {
+                                                        <Scalar> fps { 25 }
+                                                        <Char*> order { srpht }
+                                                      }
+                                                      <Table> FKChest_M {
+                                                        <Xfm$Anim_S$> xform {
+                                                          <Scalar> fps { 25 }
+                                                          <Char*> order { srpht }
+                                                        }
+                                                        <Table> FKXChest_M {
+                                                          <Xfm$Anim_S$> xform {
+                                                            <Scalar> fps { 25 }
+                                                            <Char*> order { srpht }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                      <Table> HipSwingerOffsetRoot_M {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> h { <V> { 180 } }
+                          <S$Anim> r { <V> { -90 } }
+                          <S$Anim> x { <V> { -1.95608 } }
+                          <S$Anim> z { <V> { 0.790664 } }
+                        }
+                        <Table> HipSwingerRoot_M {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            <Table> IKSystem {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+              }
+              <Table> IKParentConstraint {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                }
+                <Table> IKParentConstraintShoulder_R {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 90 } }
+                    <S$Anim> p { <V> { 46.3466 } }
+                    <S$Anim> r { <V> { 90 } }
+                    <S$Anim> x { <V> { -0.815346 } }
+                    <S$Anim> y { <V> { 0.157435 } }
+                    <S$Anim> z { <V> { 6.095 } }
+                  }
+                  <Table> IKOffsetShoulder_R {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                      <S$Anim> h { <V> { 0.0726729 } }
+                      <S$Anim> p { <V> { -2.93903 } }
+                      <S$Anim> r { <V> { -1.80162 } }
+                      <S$Anim> x { <V> { 0.709471 } }
+                    }
+                    <Table> IKXShoulder_R {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                      <Table> IKXElbow_R {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> r { <V> { 8.74919 } }
+                          <S$Anim> x { <V> { 0.962059 } }
+                        }
+                        <Table> IKXWrist_R {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> h { <V> { 0.0264961 } }
+                            <S$Anim> p { <V> { 2.95411 } }
+                            <S$Anim> r { <V> { -6.19174 } }
+                            <S$Anim> x { <V> { 1.11408 } }
+                          }
+                        }
+                        <Table> effector1 {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> x { <V> { 1.11408 } }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                <Table> IKParentConstraintHip_R {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 180 } }
+                    <S$Anim> r { <V> { -90 } }
+                    <S$Anim> y { <V> { 0.157435 } }
+                    <S$Anim> z { <V> { 3.40002 } }
+                  }
+                  <Table> IKOffsetHip_R {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                      <S$Anim> h { <V> { 179.026 } }
+                      <S$Anim> x { <V> { -0.566686 } }
+                      <S$Anim> y { <V> { 0.18158 } }
+                      <S$Anim> z { <V> { -0.691062 } }
+                    }
+                    <Table> IKXHip_R {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                      <Table> IKXKnee_R {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> h { <V> { 5.98762 } }
+                          <S$Anim> x { <V> { 1.0972 } }
+                        }
+                        <Table> IKXAnkle_R {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> h { <V> { -95.0133 } }
+                            <S$Anim> p { <V> { -88.92 } }
+                            <S$Anim> x { <V> { 1.18045 } }
+                          }
+                          <Table> IKXMiddleToe1_R {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                              <S$Anim> h { <V> { 87.4682 } }
+                              <S$Anim> p { <V> { 66.8886 } }
+                              <S$Anim> r { <V> { -87.2476 } }
+                              <S$Anim> x { <V> { 0.318249 } }
+                              <S$Anim> y { <V> { 0.00384258 } }
+                              <S$Anim> z { <V> { 0.203839 } }
+                            }
+                            <Table> IKXMiddleToe2_R {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                                <S$Anim> x { <V> { 0.584037 } }
+                              }
+                            }
+                            <Table> effector3 {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                                <S$Anim> x { <V> { 0.584037 } }
+                              }
+                            }
+                          }
+                          <Table> effector4 {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                              <S$Anim> x { <V> { 0.318249 } }
+                              <S$Anim> y { <V> { 0.00384258 } }
+                              <S$Anim> z { <V> { 0.203839 } }
+                            }
+                          }
+                        }
+                        <Table> effector2 {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> x { <V> { 1.18045 } }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                <Table> IKParentConstraintRoot_M {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 180 } }
+                    <S$Anim> r { <V> { -90 } }
+                    <S$Anim> y { <V> { 0.157435 } }
+                    <S$Anim> z { <V> { 3.40002 } }
+                  }
+                  <Table> IKOffsetRoot_M {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> IKXRoot_M {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                      <Table> IKXBackA_M {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> x { <V> { 0.790664 } }
+                        }
+                        <Table> IKXBackB_M {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> x { <V> { 0.790664 } }
+                          }
+                          <Table> IKXChest_M {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                              <S$Anim> x { <V> { 0.688455 } }
+                            }
+                          }
+                        }
+                        <Table> IKfake1Spine_M {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> x { <V> { 0.790664 } }
+                          }
+                          <Table> IKfake2Spine_M {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                              <S$Anim> x { <V> { 0.688455 } }
+                            }
+                          }
+                          <Table> effector5 {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                              <S$Anim> x { <V> { 0.688455 } }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                <Table> IKParentConstraintShoulder_L {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 90 } }
+                    <S$Anim> p { <V> { -46.3466 } }
+                    <S$Anim> r { <V> { -90 } }
+                    <S$Anim> x { <V> { 0.815346 } }
+                    <S$Anim> y { <V> { 0.157435 } }
+                    <S$Anim> z { <V> { 6.095 } }
+                  }
+                  <Table> IKOffsetShoulder_L {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                      <S$Anim> h { <V> { 0.0726725 } }
+                      <S$Anim> p { <V> { -2.93903 } }
+                      <S$Anim> r { <V> { -1.80162 } }
+                      <S$Anim> x { <V> { -0.709471 } }
+                    }
+                    <Table> IKXShoulder_L {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                      <Table> IKXElbow_L {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> r { <V> { 8.7492 } }
+                          <S$Anim> x { <V> { -0.962059 } }
+                        }
+                        <Table> IKXWrist_L {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> h { <V> { 0.0264963 } }
+                            <S$Anim> p { <V> { 2.95411 } }
+                            <S$Anim> r { <V> { -6.19175 } }
+                            <S$Anim> x { <V> { -1.11408 } }
+                          }
+                        }
+                        <Table> effector7 {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> x { <V> { -1.11408 } }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                <Table> IKParentConstraintHip_L {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 180 } }
+                    <S$Anim> r { <V> { -90 } }
+                    <S$Anim> y { <V> { 0.157435 } }
+                    <S$Anim> z { <V> { 3.40002 } }
+                  }
+                  <Table> IKOffsetHip_L {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                      <S$Anim> h { <V> { -0.974361 } }
+                      <S$Anim> x { <V> { -0.566686 } }
+                      <S$Anim> y { <V> { 0.18158 } }
+                      <S$Anim> z { <V> { 0.691062 } }
+                    }
+                    <Table> IKXHip_L {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                      <Table> IKXKnee_L {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> h { <V> { 5.98762 } }
+                          <S$Anim> x { <V> { -1.0972 } }
+                        }
+                        <Table> IKXAnkle_L {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> h { <V> { -95.0133 } }
+                            <S$Anim> p { <V> { -88.92 } }
+                            <S$Anim> x { <V> { -1.18045 } }
+                          }
+                          <Table> IKXMiddleToe1_L {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                              <S$Anim> h { <V> { 87.4682 } }
+                              <S$Anim> p { <V> { 66.8886 } }
+                              <S$Anim> r { <V> { -87.2476 } }
+                              <S$Anim> x { <V> { -0.318249 } }
+                              <S$Anim> y { <V> { -0.00384258 } }
+                              <S$Anim> z { <V> { -0.203839 } }
+                            }
+                            <Table> IKXMiddleToe2_L {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                                <S$Anim> x { <V> { -0.584037 } }
+                              }
+                            }
+                            <Table> effector9 {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                                <S$Anim> x { <V> { -0.584037 } }
+                              }
+                            }
+                          }
+                          <Table> effector10 {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                              <S$Anim> x { <V> { -0.318249 } }
+                              <S$Anim> y { <V> { -0.00384258 } }
+                              <S$Anim> z { <V> { -0.203839 } }
+                            }
+                          }
+                        }
+                        <Table> effector8 {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> x { <V> { -1.18045 } }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              <Table> IKHandle {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                }
+                <Table> IKParentConstraintArm_R {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { -2.82266 } }
+                    <S$Anim> y { <V> { 0.0530565 } }
+                    <S$Anim> z { <V> { 4.1761 } }
+                  }
+                  <Table> IKExtraArm_R {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> IKArm_R {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                      <Table> IKmessureConstrainToArm_R {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                        }
+                      }
+                    }
+                  }
+                }
+                <Table> PoleParentConstraintArm_R {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { -2.16944 } }
+                    <S$Anim> y { <V> { 2.17385 } }
+                    <S$Anim> z { <V> { 4.94804 } }
+                  }
+                  <Table> PoleExtraArm_R {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> PoleArm_R {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                    }
+                  }
+                }
+                <Table> IKParentConstraintLeg_R {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { -0.691062 } }
+                    <S$Anim> y { <V> { 0.0603522 } }
+                    <S$Anim> z { <V> { 0.560364 } }
+                  }
+                  <Table> IKExtraLeg_R {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> IKLeg_R {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                      <Table> IKFootRollLeg_R {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> r { <V> { -180 } }
+                        }
+                        <Table> IKRollLegHeel_R {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> y { <V> { 0.424406 } }
+                            <S$Anim> z { <V> { 0.433017 } }
+                          }
+                          <Table> IKExtraLegHeel_R {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                            }
+                            <Table> IKLegHeel_R {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                              }
+                              <Table> IKRollLegToe_R {
+                                <Xfm$Anim_S$> xform {
+                                  <Scalar> fps { 25 }
+                                  <Char*> order { srpht }
+                                  <S$Anim> y { <V> { -1.27992 } }
+                                  <S$Anim> z { <V> { -0.000120688 } }
+                                }
+                                <Table> IKExtraLegToe_R {
+                                  <Xfm$Anim_S$> xform {
+                                    <Scalar> fps { 25 }
+                                    <Char*> order { srpht }
+                                  }
+                                  <Table> IKLegToe_R {
+                                    <Xfm$Anim_S$> xform {
+                                      <Scalar> fps { 25 }
+                                      <Char*> order { srpht }
+                                    }
+                                    <Table> IKLiftToeLegToe_R {
+                                      <Xfm$Anim_S$> xform {
+                                        <Scalar> fps { 25 }
+                                        <Char*> order { srpht }
+                                        <S$Anim> y { <V> { 0.53726 } }
+                                        <S$Anim> z { <V> { -0.229021 } }
+                                      }
+                                    }
+                                    <Table> IKRollLegBall_R {
+                                      <Xfm$Anim_S$> xform {
+                                        <Scalar> fps { 25 }
+                                        <Char*> order { srpht }
+                                        <S$Anim> y { <V> { 0.53726 } }
+                                        <S$Anim> z { <V> { -0.229021 } }
+                                      }
+                                      <Table> IKExtraLegBall_R {
+                                        <Xfm$Anim_S$> xform {
+                                          <Scalar> fps { 25 }
+                                          <Char*> order { srpht }
+                                        }
+                                        <Table> IKLegBall_R {
+                                          <Xfm$Anim_S$> xform {
+                                            <Scalar> fps { 25 }
+                                            <Char*> order { srpht }
+                                          }
+                                          <Table> IKFootPivotBallReverseLeg_R {
+                                            <Xfm$Anim_S$> xform {
+                                              <Scalar> fps { 25 }
+                                              <Char*> order { srpht }
+                                              <S$Anim> r { <V> { 180 } }
+                                            }
+                                            <Table> IKmessureConstrainToLeg_R {
+                                              <Xfm$Anim_S$> xform {
+                                                <Scalar> fps { 25 }
+                                                <Char*> order { srpht }
+                                                <S$Anim> y { <V> { 0.318249 } }
+                                                <S$Anim> z { <V> { 0.203875 } }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                <Table> PoleAimLeg_R {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { -90 } }
+                    <S$Anim> r { <V> { 92.129 } }
+                    <S$Anim> x { <V> { -0.691062 } }
+                    <S$Anim> y { <V> { -0.0241449 } }
+                    <S$Anim> z { <V> { 2.83334 } }
+                  }
+                }
+                <Table> PoleParentConstraintLeg_R {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { -0.691062 } }
+                    <S$Anim> y { <V> { -2.25642 } }
+                    <S$Anim> z { <V> { 1.65401 } }
+                  }
+                  <Table> PoleExtraLeg_R {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> PoleLeg_R {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                    }
+                  }
+                }
+                <Table> IKParentConstraintSpine0_M {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> y { <V> { 0.157435 } }
+                    <S$Anim> z { <V> { 3.40002 } }
+                  }
+                  <Table> IKExtraSpine0_M {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> IKSpine0_M {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                      <Table> IKStiffStartOrientSpine_M {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> h { <V> { 180 } }
+                          <S$Anim> r { <V> { -90 } }
+                        }
+                        <Table> IKXSpineLocator1_M {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> h { <V> { -180 } }
+                            <S$Anim> r { <V> { -90 } }
+                            <S$Anim> x { <V> { 0.378297 } }
+                          }
+                        }
+                      }
+                      <Table> IKSpine0AlignTo_M {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> h { <V> { 180 } }
+                          <S$Anim> r { <V> { -90 } }
+                        }
+                      }
+                      <Table> IKOrientToSpine_M {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> h { <V> { 180 } }
+                          <S$Anim> r { <V> { -90 } }
+                        }
+                      }
+                    }
+                  }
+                }
+                <Table> IKParentConstraintSpine2_M {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> y { <V> { 0.157435 } }
+                    <S$Anim> z { <V> { 4.53491 } }
+                  }
+                  <Table> IKExtraSpine2_M {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> IKSpine2_M {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                    }
+                  }
+                }
+                <Table> IKParentConstraintSpine4_M {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> y { <V> { 0.157435 } }
+                    <S$Anim> z { <V> { 5.66981 } }
+                  }
+                  <Table> IKExtraSpine4_M {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> IKSpine4_M {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                      <Table> IKStiffEndOrientSpine_M {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> h { <V> { -180 } }
+                          <S$Anim> r { <V> { 90 } }
+                        }
+                        <Table> IKXSpineLocator3_M {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> h { <V> { 180 } }
+                            <S$Anim> r { <V> { 90 } }
+                            <S$Anim> x { <V> { 0.378297 } }
+                          }
+                        }
+                      }
+                      <Table> IKSpine4AlignTo_M {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> h { <V> { 180 } }
+                          <S$Anim> r { <V> { -90 } }
+                        }
+                      }
+                      <Table> IKSpine4AlignUnTwistToOffset_M {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> h { <V> { 180 } }
+                          <S$Anim> r { <V> { -90 } }
+                        }
+                        <Table> IKSpine4AlignUnTwistTo_M {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                <Table> IKParentConstraintArm_L {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { 2.82266 } }
+                    <S$Anim> y { <V> { 0.0530565 } }
+                    <S$Anim> z { <V> { 4.1761 } }
+                  }
+                  <Table> IKExtraArm_L {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> IKArm_L {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                      <Table> IKmessureConstrainToArm_L {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                        }
+                      }
+                    }
+                  }
+                }
+                <Table> PoleParentConstraintArm_L {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { 2.16944 } }
+                    <S$Anim> y { <V> { 2.17385 } }
+                    <S$Anim> z { <V> { 4.94804 } }
+                  }
+                  <Table> PoleExtraArm_L {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> PoleArm_L {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                    }
+                  }
+                }
+                <Table> IKParentConstraintLeg_L {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { 0.691062 } }
+                    <S$Anim> y { <V> { 0.0603522 } }
+                    <S$Anim> z { <V> { 0.560364 } }
+                  }
+                  <Table> IKExtraLeg_L {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> IKLeg_L {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                      <Table> IKFootRollLeg_L {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> r { <V> { 180 } }
+                        }
+                        <Table> IKRollLegHeel_L {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> y { <V> { 0.424406 } }
+                            <S$Anim> z { <V> { 0.433017 } }
+                          }
+                          <Table> IKExtraLegHeel_L {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                            }
+                            <Table> IKLegHeel_L {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                              }
+                              <Table> IKRollLegToe_L {
+                                <Xfm$Anim_S$> xform {
+                                  <Scalar> fps { 25 }
+                                  <Char*> order { srpht }
+                                  <S$Anim> y { <V> { -1.27992 } }
+                                  <S$Anim> z { <V> { -0.000120688 } }
+                                }
+                                <Table> IKExtraLegToe_L {
+                                  <Xfm$Anim_S$> xform {
+                                    <Scalar> fps { 25 }
+                                    <Char*> order { srpht }
+                                  }
+                                  <Table> IKLegToe_L {
+                                    <Xfm$Anim_S$> xform {
+                                      <Scalar> fps { 25 }
+                                      <Char*> order { srpht }
+                                    }
+                                    <Table> IKLiftToeLegToe_L {
+                                      <Xfm$Anim_S$> xform {
+                                        <Scalar> fps { 25 }
+                                        <Char*> order { srpht }
+                                        <S$Anim> y { <V> { 0.53726 } }
+                                        <S$Anim> z { <V> { -0.229021 } }
+                                      }
+                                    }
+                                    <Table> IKRollLegBall_L {
+                                      <Xfm$Anim_S$> xform {
+                                        <Scalar> fps { 25 }
+                                        <Char*> order { srpht }
+                                        <S$Anim> y { <V> { 0.53726 } }
+                                        <S$Anim> z { <V> { -0.229021 } }
+                                      }
+                                      <Table> IKExtraLegBall_L {
+                                        <Xfm$Anim_S$> xform {
+                                          <Scalar> fps { 25 }
+                                          <Char*> order { srpht }
+                                        }
+                                        <Table> IKLegBall_L {
+                                          <Xfm$Anim_S$> xform {
+                                            <Scalar> fps { 25 }
+                                            <Char*> order { srpht }
+                                          }
+                                          <Table> IKFootPivotBallReverseLeg_L {
+                                            <Xfm$Anim_S$> xform {
+                                              <Scalar> fps { 25 }
+                                              <Char*> order { srpht }
+                                              <S$Anim> r { <V> { -180 } }
+                                            }
+                                            <Table> IKmessureConstrainToLeg_L {
+                                              <Xfm$Anim_S$> xform {
+                                                <Scalar> fps { 25 }
+                                                <Char*> order { srpht }
+                                                <S$Anim> y { <V> { 0.318249 } }
+                                                <S$Anim> z { <V> { 0.203875 } }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                <Table> PoleAimLeg_L {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { -90 } }
+                    <S$Anim> r { <V> { 92.129 } }
+                    <S$Anim> x { <V> { 0.691062 } }
+                    <S$Anim> y { <V> { -0.0241449 } }
+                    <S$Anim> z { <V> { 2.83334 } }
+                  }
+                }
+                <Table> PoleParentConstraintLeg_L {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { 0.691062 } }
+                    <S$Anim> y { <V> { -2.25642 } }
+                    <S$Anim> z { <V> { 1.65401 } }
+                  }
+                  <Table> PoleExtraLeg_L {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                    }
+                    <Table> PoleLeg_L {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                      }
+                    }
+                  }
+                }
+              }
+              <Table> IKStatic {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                }
+                <Table> IKParentConstraintArm_RStatic {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { -2.82266 } }
+                    <S$Anim> y { <V> { 0.0530565 } }
+                    <S$Anim> z { <V> { 4.1761 } }
+                  }
+                }
+                <Table> PoleParentConstraintArm_RStatic {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { -2.16944 } }
+                    <S$Anim> y { <V> { 2.17385 } }
+                    <S$Anim> z { <V> { 4.94804 } }
+                  }
+                }
+                <Table> PoleParentConstraintLeg_RStatic {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { -0.691062 } }
+                    <S$Anim> y { <V> { -2.25642 } }
+                    <S$Anim> z { <V> { 1.65401 } }
+                  }
+                }
+                <Table> IKParentConstraintArm_LStatic {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { 2.82266 } }
+                    <S$Anim> y { <V> { 0.0530565 } }
+                    <S$Anim> z { <V> { 4.1761 } }
+                  }
+                }
+                <Table> PoleParentConstraintArm_LStatic {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { 2.16944 } }
+                    <S$Anim> y { <V> { 2.17385 } }
+                    <S$Anim> z { <V> { 4.94804 } }
+                  }
+                }
+                <Table> PoleParentConstraintLeg_LStatic {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { 0.691062 } }
+                    <S$Anim> y { <V> { -2.25642 } }
+                    <S$Anim> z { <V> { 1.65401 } }
+                  }
+                }
+              }
+              <Table> IKMessure {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                }
+                <Table> IKmessureLoc1Arm_R {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { -1.32867 } }
+                    <S$Anim> y { <V> { 0.157435 } }
+                    <S$Anim> z { <V> { 5.60525 } }
+                  }
+                  <Table> IKmessureLoc2Arm_R {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                      <S$Anim> x { <V> { -1.494 } }
+                      <S$Anim> y { <V> { -0.104378 } }
+                      <S$Anim> z { <V> { -1.42915 } }
+                    }
+                  }
+                }
+                <Table> IKmessureLoc1Leg_R {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { -0.691062 } }
+                    <S$Anim> y { <V> { -0.0241449 } }
+                    <S$Anim> z { <V> { 2.83334 } }
+                  }
+                  <Table> IKmessureLoc2Leg_R {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                      <S$Anim> y { <V> { 0.0844971 } }
+                      <S$Anim> z { <V> { -2.27297 } }
+                    }
+                  }
+                }
+                <Table> IKmessureLoc1Arm_L {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { 1.32867 } }
+                    <S$Anim> y { <V> { 0.157435 } }
+                    <S$Anim> z { <V> { 5.60525 } }
+                  }
+                  <Table> IKmessureLoc2Arm_L {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                      <S$Anim> x { <V> { 1.494 } }
+                      <S$Anim> y { <V> { -0.104378 } }
+                      <S$Anim> z { <V> { -1.42915 } }
+                    }
+                  }
+                }
+                <Table> IKmessureLoc1Leg_L {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { 0.691062 } }
+                    <S$Anim> y { <V> { -0.0241449 } }
+                    <S$Anim> z { <V> { 2.83334 } }
+                  }
+                  <Table> IKmessureLoc2Leg_L {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                      <S$Anim> y { <V> { 0.0844971 } }
+                      <S$Anim> z { <V> { -2.27297 } }
+                    }
+                  }
+                }
+              }
+            }
+            <Table> FKIKSystem {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+              }
+              <Table> FKIKParentConstraintArm_R {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> x { <V> { -2.24085 } }
+                  <S$Anim> y { <V> { 0.0912226 } }
+                  <S$Anim> z { <V> { 5.81402 } }
+                }
+              }
+              <Table> FKIKParentConstraintLeg_R {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> x { <V> { -1.47349 } }
+                  <S$Anim> y { <V> { -0.00302059 } }
+                  <S$Anim> z { <V> { 2.26509 } }
+                }
+              }
+              <Table> FKIKParentConstraintSpine_M {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> x { <V> { 0.78243 } }
+                  <S$Anim> y { <V> { 0.157435 } }
+                  <S$Anim> z { <V> { 3.96747 } }
+                }
+              }
+              <Table> FKIKParentConstraintArm_L {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> x { <V> { 2.24085 } }
+                  <S$Anim> y { <V> { 0.0912226 } }
+                  <S$Anim> z { <V> { 5.81402 } }
+                }
+              }
+              <Table> FKIKParentConstraintLeg_L {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> x { <V> { 1.47349 } }
+                  <S$Anim> y { <V> { -0.00302059 } }
+                  <S$Anim> z { <V> { 2.26509 } }
+                }
+              }
+            }
+            <Table> RootSystem {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+              }
+              <Table> RootCenter_M {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> y { <V> { 0.157435 } }
+                  <S$Anim> z { <V> { 3.40002 } }
+                }
+              }
+              <Table> RootCenterBtwLegs_M {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> y { <V> { 0.157435 } }
+                  <S$Anim> z { <V> { 0.560364 } }
+                }
+                <Table> RootCenterBtwLegsOffset_M {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> z { <V> { 2.83966 } }
+                  }
+                }
+              }
+            }
+            <Table> TwistSystem {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+              }
+              <Table> TwistFollowRoot_M {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> y { <V> { 0.157435 } }
+                  <S$Anim> z { <V> { 3.40002 } }
+                }
+                <Table> UnTwistRoot_M {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 180 } }
+                    <S$Anim> r { <V> { -90 } }
+                  }
+                  <Table> UnTwistEndRoot_M {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                      <S$Anim> x { <V> { 2.26978 } }
+                    }
+                  }
+                  <Table> effector6 {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                      <S$Anim> x { <V> { 2.26978 } }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          <Table> DeformationSystem {
+            <Xfm$Anim_S$> xform {
+              <Scalar> fps { 25 }
+              <Char*> order { srpht }
+            }
+            <Table> Root_M {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+                <S$Anim> h { <V> { 180 } }
+                <S$Anim> r { <V> { -90 } }
+                <S$Anim> y { <V> { 0.157435 } }
+                <S$Anim> z { <V> { 3.40002 } }
+              }
+              <Table> BackA_M {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> x { <V> { 0.790664 } }
+                }
+                <Table> BackB_M {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { 0.790664 } }
+                  }
+                  <Table> Chest_M {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                      <S$Anim> x { <V> { 0.688455 } }
+                    }
+                    <Table> Scapula_R {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                        <S$Anim> h { <V> { -90 } }
+                        <S$Anim> p { <V> { -43.6534 } }
+                        <S$Anim> r { <V> { 90 } }
+                        <S$Anim> x { <V> { 0.425191 } }
+                        <S$Anim> z { <V> { -0.815346 } }
+                      }
+                      <Table> Shoulder_R {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> h { <V> { 0.0726733 } }
+                          <S$Anim> p { <V> { -2.93902 } }
+                          <S$Anim> r { <V> { -1.80162 } }
+                          <S$Anim> x { <V> { 0.709471 } }
+                        }
+                        <Table> Elbow_R {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> r { <V> { 8.74919 } }
+                            <S$Anim> x { <V> { 0.962059 } }
+                          }
+                          <Table> Wrist_R {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                              <S$Anim> h { <V> { 0.0264961 } }
+                              <S$Anim> p { <V> { 2.95411 } }
+                              <S$Anim> r { <V> { -6.19174 } }
+                              <S$Anim> x { <V> { 1.11408 } }
+                            }
+                            <Table> Cup_R {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                                <S$Anim> h { <V> { -0.422206 } }
+                                <S$Anim> p { <V> { 0.00782332 } }
+                                <S$Anim> r { <V> { -5.38848 } }
+                                <S$Anim> x { <V> { 0.149786 } }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                    <Table> Neck_M {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                        <S$Anim> x { <V> { 0.499933 } }
+                      }
+                      <Table> Head_M {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> x { <V> { 0.782706 } }
+                        }
+                        <Table> Hair_M {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> x { <V> { 0.871857 } }
+                          }
+                        }
+                        <Table> Nose_M {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> y { <V> { 1 } }
+                          }
+                        }
+                      }
+                    }
+                    <Table> Scapula_L {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                        <S$Anim> h { <V> { 90 } }
+                        <S$Anim> p { <V> { -43.6534 } }
+                        <S$Anim> r { <V> { 90 } }
+                        <S$Anim> x { <V> { 0.425191 } }
+                        <S$Anim> z { <V> { 0.815346 } }
+                      }
+                      <Table> Shoulder_L {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> h { <V> { 0.0726725 } }
+                          <S$Anim> p { <V> { -2.93902 } }
+                          <S$Anim> r { <V> { -1.80162 } }
+                          <S$Anim> x { <V> { -0.709471 } }
+                        }
+                        <Table> Elbow_L {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> r { <V> { 8.7492 } }
+                            <S$Anim> x { <V> { -0.962059 } }
+                          }
+                          <Table> Wrist_L {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                              <S$Anim> h { <V> { 0.0264963 } }
+                              <S$Anim> p { <V> { 2.95411 } }
+                              <S$Anim> r { <V> { -6.19175 } }
+                              <S$Anim> x { <V> { -1.11408 } }
+                            }
+                            <Table> Cup_L {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                                <S$Anim> h { <V> { -0.422206 } }
+                                <S$Anim> p { <V> { 0.00782332 } }
+                                <S$Anim> r { <V> { -5.38848 } }
+                                <S$Anim> x { <V> { -0.149786 } }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              <Table> Hip_R {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> h { <V> { 179.026 } }
+                  <S$Anim> x { <V> { -0.566686 } }
+                  <S$Anim> y { <V> { 0.18158 } }
+                  <S$Anim> z { <V> { -0.691062 } }
+                }
+                <Table> Knee_R {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 5.98762 } }
+                    <S$Anim> x { <V> { 1.0972 } }
+                  }
+                  <Table> Ankle_R {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                      <S$Anim> h { <V> { -95.0133 } }
+                      <S$Anim> p { <V> { -88.92 } }
+                      <S$Anim> x { <V> { 1.18045 } }
+                    }
+                    <Table> MiddleToe1_R {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                        <S$Anim> h { <V> { 87.4682 } }
+                        <S$Anim> p { <V> { 66.8886 } }
+                        <S$Anim> r { <V> { -87.2476 } }
+                        <S$Anim> x { <V> { 0.318249 } }
+                        <S$Anim> y { <V> { 0.00384258 } }
+                        <S$Anim> z { <V> { 0.203839 } }
+                      }
+                      <Table> MiddleToe2_R {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> x { <V> { 0.584037 } }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              <Table> Hip_L {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> h { <V> { -0.974361 } }
+                  <S$Anim> x { <V> { -0.566686 } }
+                  <S$Anim> y { <V> { 0.18158 } }
+                  <S$Anim> z { <V> { 0.691062 } }
+                }
+                <Table> Knee_L {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 5.98762 } }
+                    <S$Anim> x { <V> { -1.0972 } }
+                  }
+                  <Table> Ankle_L {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                      <S$Anim> h { <V> { -95.0133 } }
+                      <S$Anim> p { <V> { -88.92 } }
+                      <S$Anim> x { <V> { -1.18045 } }
+                    }
+                    <Table> MiddleToe1_L {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                        <S$Anim> h { <V> { 87.4682 } }
+                        <S$Anim> p { <V> { 66.8886 } }
+                        <S$Anim> r { <V> { -87.2476 } }
+                        <S$Anim> x { <V> { -0.318249 } }
+                        <S$Anim> y { <V> { -0.00384258 } }
+                        <S$Anim> z { <V> { -0.203839 } }
+                      }
+                      <Table> MiddleToe2_L {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> x { <V> { -0.584037 } }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        <Table> Geometry {
+          <Xfm$Anim_S$> xform {
+            <Scalar> fps { 25 }
+            <Char*> order { srpht }
+          }
+          <Table> geoGRP {
+            <Xfm$Anim_S$> xform {
+              <Scalar> fps { 25 }
+              <Char*> order { srpht }
+              <S$Anim> i { <V> { 1.83834 } }
+              <S$Anim> j { <V> { 1.83834 } }
+              <S$Anim> k { <V> { 1.83834 } }
+            }
+            <Table> farmer_helmet {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+                <S$Anim> z { <V> { 1.87901 } }
+              }
+            }
+            <Table> pitchFork1 {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+                <S$Anim> i { <V> { 0.543969 } }
+                <S$Anim> j { <V> { 0.543969 } }
+                <S$Anim> k { <V> { 0.543969 } }
+                <S$Anim> h { <V> { 62.3135 } }
+                <S$Anim> p { <V> { -5.39252 } }
+                <S$Anim> r { <V> { -4.84353 } }
+                <S$Anim> x { <V> { -1.54554 } }
+                <S$Anim> y { <V> { 0.127642 } }
+                <S$Anim> z { <V> { 0.441849 } }
+              }
+            }
+          }
+        }
+      }
+    }
+    <Table> morph {
+    }
+  }
+}

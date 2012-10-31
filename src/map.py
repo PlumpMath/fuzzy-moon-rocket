@@ -23,25 +23,20 @@ class Map:
 
         areaModel = loader.loadModel('models/area_1.egg')
         areaModel.reparentTo(self.areaNode)
-        areaModel.setCollideMask(BitMask32.allOff())
 
+        # Make sure area is centered in world and that it has recognizable name
         self.areaNode.setPos(0, 0, 0)
-        self.areaNode.setName('ground')
+        #self.areaNode.setName('ground')
 
+        # The ground is the walk plane, it collides with mouse ray and player- and enemies ground rays
         self.ground = areaModel.find('**/ground')
         self.ground.setCollideMask(BitMask32.bit(1))
 
+        # Colliders are obstacles in areas, they collide with enemies and the player
         self.collidersGroup = areaModel.find('**/colliders')
         self.collidersGroup.setCollideMask(BitMask32.bit(2))
-        #areaColliders = []
-        #for i in range(1, 29):
-        #    collider = areaModel.find('**/coll_' + str(i))
-        #    collider.node().setIntoCollideMask(BitMask32.bit(2))
-        #    collider.node().setFromCollideMask(BitMask32.allOff())
 
-        #    areaColliders.append(collider)
-        #    print('Found collider: ' + str(collider))
-
+        # Locate starting and exiting positions
         self.startPos = areaModel.find('**/startPos').getPos()
         self.exitPos = areaModel.find('**/exitPos').getPos()
 

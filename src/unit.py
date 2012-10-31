@@ -79,7 +79,7 @@ class Unit(object):
     def receiveDamage(self, damageAmount):
         self.currentHealthPoints -= damageAmount
         if self.currentHealthPoints <= 0:
-            print("Unit died!")
+            #print("Unit died!")
             self._isDead = True
 
     def heal(self, healAmount):

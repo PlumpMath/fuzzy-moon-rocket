@@ -38,8 +38,7 @@ class World(ShowBase):
         # Instantiate other classes
         self.mapHandler = map.Map(self.mainNode)
 
-        self.player = player.Player(self)
-        self.player.setPlayerStartPosition(self.mapHandler.startPos)
+        self.player = player.Player(self, self.mapHandler.startPos)
 
         self.gui = gui.GUI()
         self.hud = hud.HUD(self.player)
@@ -78,7 +77,7 @@ class World(ShowBase):
     def addEnemy(self): # key 5
         attributes = enemy.koboldMinion
 
-        newEnemy = enemy.Enemy(self, 'funny_sphere', attributes)
+        newEnemy = enemy.Enemy(self, 'minion', attributes)
         #newEnemy.moveEnemy(10 - utils.getD20(), 
         #                   10 - utils.getD20())
         newEnemy.moveEnemy(self.mapHandler.exitPos.getX(), self.mapHandler.exitPos.getY())
