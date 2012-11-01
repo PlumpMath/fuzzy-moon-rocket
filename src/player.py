@@ -68,7 +68,7 @@ class Player(FSM, Unit):
         self.playerModel = Actor(modelPrefix + 'model.egg', {
             'run':modelPrefix+'run.egg',
             'attack':modelPrefix+'attack.egg',
-            'idle':modelPrefix+'pose.egg'
+            'idle':modelPrefix+'idle.egg'
             })
 
         self.playerModel.reparentTo(self.playerNode)
@@ -228,7 +228,7 @@ class Player(FSM, Unit):
         self.playerNode.setFluidPos(newX, newY, newZ)
 
         self.velocity = self.destination - self.playerNode.getPos()
-        if self.velocity.lengthSquared() < 1:
+        if self.velocity.lengthSquared() < 5:
             self.velocity = Vec3.zero()
             #print('destination reached')
             if self.state == 'Run':
@@ -304,7 +304,7 @@ class Player(FSM, Unit):
         self.playerModel.stop()
 
     def enterIdle(self):
-        self.playerModel.pose('idle', 0)
+        self.playerModel.play('idle')
 
     def exitIdle(self):
         self.playerModel.stop()

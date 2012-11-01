@@ -63,7 +63,9 @@ class Enemy(FSM, Unit):
         modelPrefix = 'models/'
         self.enemyModel = Actor(modelPrefix + modelName + '-model.egg', {
                 'walk':modelPrefix+modelName+'-walk.egg',
-                'attack':modelPrefix+modelName+'-attack.egg'
+                'attack':modelPrefix+modelName+'-attack.egg',
+                'death1':modelPrefix+modelName+'-death1.egg',
+                'death2':modelPrefix+modelName+'-death2.egg'
             })
         self.enemyModel.reparentTo(self.enemyNode)
 
@@ -241,6 +243,9 @@ class Enemy(FSM, Unit):
         #print('enemy enterDeath')
         self.enemyAIBehaviors.removeAi('all')
 
+        randomDeathAnim = 'death' + str(utils.getD2())
+        self.enemyModel.play(randomDeathAnim)
+
     def enterPursue(self):
         #print('enemy enterPursue')
         self.enemyAIBehaviors.pursue(self._playerRef.playerNode)
@@ -287,9 +292,14 @@ class Enemy(FSM, Unit):
             attackSequence.finish()
 
         else:
+            print('Attack player!')
             self.enemyModel.play('attack', fromFrame=0, toFrame=12)
 
-            print('Attack player!')
+            # Make sure enemy is facing player when attacking
+            pitchRoll = (self.enemyNode.getP(), self.enemyNode.getR())
+            self.enemyNode.lookAt(self._playerRef.playerNode)
+            self.enemyNode.setHpr(self.enemyNode.getH()-180, *pitchRoll)
+
             if self._playerRef.getArmorClass() <= self.getAttackBonus():
                 dmg = self.getDamageBonus()
                 print('Enemy hit the player for ' + str(dmg) + ' damage')

@@ -12,11 +12,20 @@ def getIsInRange(pos1, pos2, threshold=10):
 
     return False
 
+def getD2():
+    return random.randint(1, 2)
+
+def getD4():
+    return random.randint(1, 4)
+
 def getD6():
     return random.randint(1, 6)
 
 def getD8():
     return random.randint(1, 8)
+
+def getD10():
+    return random.randint(1, 10)
 
 def getD20():
     return random.randint(1, 20)
