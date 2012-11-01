@@ -38,7 +38,7 @@ class World(ShowBase):
         # Instantiate other classes
         self.mapHandler = map.Map(self.mainNode)
 
-        self.player = player.Player(self, self.mapHandler.startPos)
+        self.player = player.Player(self, self.mapHandler.startPos, self.mapHandler.exitPos)
 
         self.gui = gui.GUI()
         self.hud = hud.HUD(self.player)

@@ -14,7 +14,7 @@ class Player(FSM, Unit):
 
     _currentTarget = None
 
-    def __init__(self, mainRef, playerStartPos):
+    def __init__(self, mainRef, playerStartPos, playerExitPos):
         print("Player class instantiated")
         Unit.__init__(self)
         FSM.__init__(self, 'playerFSM')
@@ -29,7 +29,7 @@ class Player(FSM, Unit):
 
         self.initPlayerAi()
 
-        self.initPlayerMovement(playerStartPos)
+        self.initPlayerMovement(playerStartPos, playerExitPos)
         self.initPlayerCollisionHandlers()
         self.initPlayerCollisionSolids()
 
@@ -99,12 +99,15 @@ class Player(FSM, Unit):
         self.playerAiBehaviors = self.playerAi.getAiBehaviors()
         #self.playerAiBehaviors.obstacleAvoidance(1.0)
 
-    def initPlayerMovement(self, playerStartPos):
+    def initPlayerMovement(self, playerStartPos, playerExitPos):
         # Make sure the player starts at the starting position
+        self.exitPos = playerExitPos
         self.startPos = playerStartPos
         self.playerNode.setPos(playerStartPos)
         self.destination = Point3(playerStartPos)
         self.velocity = Vec3.zero()
+
+        self.playerNode.lookAt(playerExitPos)
 
     def initPlayerCollisionHandlers(self):
         self.groundHandler = CollisionHandlerQueue()
@@ -136,16 +139,19 @@ class Player(FSM, Unit):
 
     def initSelector(self):
         self.selector = Actor('models/selector.egg')
-        animName = self.selector.getAnimNames()
-        self.selector.loop(animName[0], fromFrame=0, toFrame=12)
+        self.selector.setCollideMask(BitMask32.allOff())
+
+        self.selectorAnimName = self.selector.getAnimNames()
 
 
     def addSelectorToEnemy(self, enemyTarget):
         if enemyTarget is not None:
             self.selector.reparentTo(enemyTarget.enemyNode)
+            self.selector.loop(self.selectorAnimName[0], fromFrame=0, toFrame=12)
 
     def removeSelectorFromEnemy(self):
         if self.selector is not None:
+            self.selector.stop()
             self.selector.detachNode()
 
     def setPlayerDestination(self, position):
@@ -323,7 +329,8 @@ class Player(FSM, Unit):
 
 #        return task.cont
     def playIdleAnimation(self, task):
-        self.playerModel.loop('idle', fromFrame=0, toFrame=50)
+        if self.state == 'Idle':
+            self.playerModel.loop('idle', fromFrame=0, toFrame=50)
 
         return task.done
 
@@ -344,7 +351,7 @@ class Player(FSM, Unit):
         self.playerModel.stop()
         self.playerModel.play('stop')
 
-        taskMgr.doMethodLater(2, self.playIdleAnimation, 'idleAnimationTask')
+        taskMgr.doMethodLater(3, self.playIdleAnimation, 'idleAnimationTask')
 
     def exitIdle(self):
         self.playerModel.stop()
