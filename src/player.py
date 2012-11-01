@@ -97,6 +97,7 @@ class Player(FSM, Unit):
 
     def initPlayerMovement(self, playerStartPos):
         # Make sure the player starts at the starting position
+        self.startPos = playerStartPos
         self.playerNode.setPos(playerStartPos)
         self.destination = Point3(playerStartPos)
         self.velocity = Vec3.zero()
@@ -163,6 +164,8 @@ class Player(FSM, Unit):
 
     def attackEnemy(self, enemy):
         if self.getIsDead():
+            if self.state != 'Death':
+                self.request('Death')
             return
 
         if self.getCurrentTarget() != enemy:
@@ -247,7 +250,9 @@ class Player(FSM, Unit):
 
     def playerUpdate(self, task):
         if self.getIsDead():
-            return task.done
+            if self.state != 'Death':
+                self.request('Death')
+            return task.cont
 
         # Don't run if we're taking too long
         deltaTime = task.time - task.last
@@ -289,6 +294,21 @@ class Player(FSM, Unit):
     def getCurrentTarget(self):
         return self._currentTarget
 
+    def respawn(self, task):
+        # Move player back to start pos
+        self.destination = self.startPos
+        self.playerNode.setPos(self.startPos)
+
+        # Heal the player again
+        self.fullHeal()
+
+        # Make sure that isDead variable is set to false
+        self.setIsNotDead()
+
+        # Reset state back to idle
+        self.request('Idle')
+
+        return task.done
 
     def enterRun(self):
         self.playerModel.loop('run', fromFrame=0, toFrame=12)
@@ -308,4 +328,9 @@ class Player(FSM, Unit):
 
     def exitIdle(self):
         self.playerModel.stop()
+
+    def enterDeath(self):
+        taskMgr.doMethodLater(3, self.respawn, 'respawnTask')
+
+
 

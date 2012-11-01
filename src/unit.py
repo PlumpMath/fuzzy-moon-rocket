@@ -21,7 +21,7 @@ class Unit(object):
     def __init__(self):
         print("Unit class instantiated")
         self.initUnitAttributes()
-        self.initlevel()
+        self.initLevel()
 
     def initUnitAttributes(self):
         self.initiativeBonus = 0
@@ -35,7 +35,7 @@ class Unit(object):
         # Initialize currentHealthPoints at Max HP
         self.initHealth()
 
-    def initlevel(self):
+    def initLevel(self):
         self.level = 1
         self.experience = 0
         self._prevEXP = 0
@@ -88,11 +88,20 @@ class Unit(object):
             if self.currentHealthPoints > self.maxHealthPoints:
                 self.currentHealthPoints = self.maxHealthPoints
 
+    def fullHeal(self):
+        self.currentHealthPoints = self.maxHealthPoints
+
     def getIsDead(self):
         if self._isDead or self.currentHealthPoints <= 0:
             return True
         else:
             return False
+
+    def setIsNotDead(self):
+        if self.getIsDead():
+            self._isDead = False
+            if self.currentHealthPoints < 1:
+                self.currentHealthPoints = 1
 
     def getInitiativeRoll(self):
         return self.initiativeBonus + (self.level / 2) + self.getDexterityModifier() + utils.getD20()
