@@ -24,12 +24,12 @@ class Player(FSM, Unit):
         self.playerNode = mainRef.mainNode.attachNewNode('playerNode')
 
         self.initPlayerAttributes()
-        self.initPlayerModel(playerStartPos)
+        self.initPlayerModel()
         self.initPlayerCamera()
 
         self.initPlayerAi()
 
-        self.initPlayerMovement()
+        self.initPlayerMovement(playerStartPos)
         self.initPlayerCollisionHandlers()
         self.initPlayerCollisionSolids()
 
@@ -56,10 +56,11 @@ class Player(FSM, Unit):
         self.damageRange = 8 # = Longsword
         self.initiativeBonus = 1 # ?
         self.armorClass = 10 + 8 # Base armor class + fullplate armor
+        self.mass = 90
 
         self.initHealth()
 
-    def initPlayerModel(self, playerStartPos):
+    def initPlayerModel(self):
         # Initialize the player model (Actor)
         modelPrefix = 'models/player-'
         self.playerModel = Actor(modelPrefix + 'model.egg', {
@@ -75,10 +76,6 @@ class Player(FSM, Unit):
         # Model is backwards, fix by changing the heading
         self.playerModel.setH(180)
 
-        # Make sure the player starts at the starting position
-        self.destination = playerStartPos
-        self.playerNode.setPos(playerStartPos)
-
     def initPlayerCamera(self): 
         # Initialize the camera
         base.disableMouse()
@@ -88,13 +85,15 @@ class Player(FSM, Unit):
         base.camera.lookAt(self.playerNode)
 
     def initPlayerAi(self):
-        self.playerAi = AICharacter('player', self.playerNode, 100, 0.05, 5)
+        self.playerAi = AICharacter('player', self.playerNode, self.mass, 0.05, self.movementSpeed)
         self._AIworldRef.addAiChar(self.playerAi)
         self.playerAiBehaviors = self.playerAi.getAiBehaviors()
         #self.playerAiBehaviors.obstacleAvoidance(1.0)
 
-    def initPlayerMovement(self):
-        self.destination = Point3.zero()
+    def initPlayerMovement(self, playerStartPos):
+        # Make sure the player starts at the starting position
+        self.playerNode.setPos(playerStartPos)
+        self.destination = Point3(playerStartPos)
         self.velocity = Vec3.zero()
 
     def initPlayerCollisionHandlers(self):
@@ -175,13 +174,13 @@ class Player(FSM, Unit):
             if self.state != 'Combat':
                 self.request('Combat')
 
-            self.playerModel.play('attack')
+            self.playerModel.play('attack', fromFrame=0, toFrame=12)
 
             if enemy.getArmorClass() <= self.getAttackBonus():
                 dmg = self.getDamageBonus()
                 print('Player hit the enemy for: ' + str(dmg) + ' damage')
                 # We hit the enemy
-                enemy.receiveDamage(dmg)
+                taskMgr.doMethodLater(0.5, enemy.receiveDamage, 'receiveDamageTask', extraArgs=[dmg])
 
 
     def checkGroundCollisions(self):
@@ -260,22 +259,14 @@ class Player(FSM, Unit):
 
     def setCurrentTarget(self, enemyTarget):
         #print('setCurrentTarget: ' + str(enemyTarget))
-        try:
-            if enemyTarget.getIsDead() and self._currentTarget is not None:
-                self._currentTarget = None
-
-            elif not enemyTarget.getIsDead():
-                self._currentTarget = enemyTarget
-        except:
-            #print('setCurrentTarget() enemyTarget is None error')
-            pass
+        self._currentTarget = enemyTarget
 
     def getCurrentTarget(self):
         return self._currentTarget
 
 
     def enterRun(self):
-        self.playerModel.loop('run')
+        self.playerModel.loop('run', fromFrame=0, toFrame=12)
 
     def exitRun(self):
         self.playerModel.stop()

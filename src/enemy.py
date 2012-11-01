@@ -70,7 +70,7 @@ class Enemy(FSM, Unit):
         self.enemyNode.setPos(Point3.zero())
 
     def initAttributes(self, attributes):
-        rangeMultiplier = 10
+        rangeMultiplier = 8
         speedMultiplier = 3
 
         self.strength = attributes.strength
@@ -149,7 +149,7 @@ class Enemy(FSM, Unit):
 
 
     def checkGroundCollisions(self):
-        zModifier = 0.5
+        zModifier = 1
 
         if self.groundHandler.getNumEntries() > 0:
             self.groundHandler.sortEntries()
@@ -244,7 +244,7 @@ class Enemy(FSM, Unit):
     def enterPursue(self):
         #print('enemy enterPursue')
         self.enemyAIBehaviors.pursue(self._playerRef.playerNode)
-        self.enemyModel.loop('walk')
+        self.enemyModel.loop('walk', fromFrame=0, toFrame=12)
 
     def exitPursue(self):
         #print('enemy exitPursue')
@@ -255,7 +255,7 @@ class Enemy(FSM, Unit):
         self.enemyAIBehaviors.removeAi('pursue')
         self.enemyAIBehaviors.wander(2.5, 0, 5)
 
-        self.enemyModel.loop('walk')
+        self.enemyModel.loop('walk', fromFrame=0, toFrame=12)
 
     def exitIdle(self):
         #print('enemy exitIdle')
@@ -287,7 +287,7 @@ class Enemy(FSM, Unit):
             attackSequence.finish()
 
         else:
-            self.enemyModel.play('attack')
+            self.enemyModel.play('attack', fromFrame=0, toFrame=12)
 
             print('Attack player!')
             if self._playerRef.getArmorClass() <= self.getAttackBonus():

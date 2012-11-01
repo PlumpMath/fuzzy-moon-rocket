@@ -36,8 +36,9 @@ class HUD:
     def updateTargetBar(self):
         currentTarget = self._playerRef.getCurrentTarget()
         if not currentTarget is None:
-            self.targetBar.show()
-            self.targetBar['value'] = currentTarget.getCurrentHealthPointsAsPercentage()
+            if not currentTarget.getIsDead():
+                self.targetBar.show()
+                self.targetBar['value'] = currentTarget.getCurrentHealthPointsAsPercentage()
         else:
             # Hide bar
             self.targetBar.hide()
