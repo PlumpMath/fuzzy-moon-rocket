@@ -6,7 +6,7 @@ from direct.task import Task
 from panda3d.ai import *
 import sys
 
-from src import utils, player, enemy, gui, hud, map
+from src import utils, player, enemy, gui, hud, map, quest
 
 class World(ShowBase):
 
