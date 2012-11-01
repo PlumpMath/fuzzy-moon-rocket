@@ -6,7 +6,7 @@ class Map:
         print("Map class instantiated")
         self.initSun(parentNode)
         self.initGround(parentNode)
-        self.initWalls(parentNode)
+        #self.initWalls(parentNode)
         #self.initFog(parentNode)
 
     def initSun(self, parentNode):
@@ -53,6 +53,8 @@ class Map:
         # Locate starting and exiting positions
         self.startPos = areaModel.find('**/startPos').getPos()
         self.exitPos = areaModel.find('**/exitPos').getPos()
+
+        self.initWalls(self.areaNode)
 
         area2Model = loader.loadModel('models/area_2.egg')
         area2Model.reparentTo(self.areaNode)
