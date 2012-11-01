@@ -1,4 +1,5 @@
 import time
+from direct.gui.DirectGui import DirectFrame, DirectButton, DirectLabel, DirectRadioButton
 
 class GUI(object):
     _LABELS = ["Strongly do not want to continue", "Do not want to continue",
@@ -27,11 +28,9 @@ class GUI(object):
 
     def toggleOverlayFrame(self):
         if self._overlayVisible:
-            print "Toggle off"
             self._overlayFrame.destroy()
             self._overlayVisible = False
         else:
-            print "Toggle on"
             self._overlayFrame = DirectFrame(frameColor=(1, 1, 1, 1),
                                            # (Left,Right,Bottom,Top)
                                            frameSize=(-1.4, 1.4, 1, -1),
