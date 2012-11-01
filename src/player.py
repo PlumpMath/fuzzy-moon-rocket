@@ -68,6 +68,8 @@ class Player(FSM, Unit):
         self.playerModel = Actor(modelPrefix + 'model.egg', {
             'run':modelPrefix+'run.egg',
             'attack':modelPrefix+'attack.egg',
+            'stop':modelPrefix+'stop.egg',
+            'death':modelPrefix+'death.egg',
             'idle':modelPrefix+'idle.egg'
             })
 
@@ -314,27 +316,46 @@ class Player(FSM, Unit):
 
         return task.done
 
+#    def periodicIdleAnimation(self, task):
+#        if task.time % 3 == 0:
+#            print('idle')
+#            self.playerModel.play('idle')
+
+#        return task.cont
+    def playIdleAnimation(self, task):
+        self.playerModel.loop('idle', fromFrame=0, toFrame=50)
+
+        return task.done
+
     def enterRun(self):
         self.playerModel.loop('run', fromFrame=0, toFrame=12)
 
     def exitRun(self):
-        self.playerModel.stop()
+        pass
 
     def enterCombat(self):
-        #self.playerModel.loop('attack') # Attacks are handled by attackEnemy
+        # Attacks are handled by attackEnemy
         self.destination = self.playerNode.getPos()
 
     def exitCombat(self):
         self.playerModel.stop()
 
     def enterIdle(self):
-        self.playerModel.play('idle')
+        self.playerModel.stop()
+        self.playerModel.play('stop')
+
+        taskMgr.doMethodLater(2, self.playIdleAnimation, 'idleAnimationTask')
 
     def exitIdle(self):
         self.playerModel.stop()
 
     def enterDeath(self):
+        self.playerModel.play('death')
+
         taskMgr.doMethodLater(3, self.respawn, 'respawnTask')
+
+    def exitDeath(self):
+        self.playerModel.stop()
 
 
 
