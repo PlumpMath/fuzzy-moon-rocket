@@ -55,7 +55,7 @@ class Map:
 
     def unloadArea(self):
         # Empty list of enemy spawn points
-        enemySpawnPoints[:] = []
+        self.enemySpawnPoints[:] = []
 
         # Cleanup and remove area model
         self.areaModel.cleanup()
