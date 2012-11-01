@@ -11,7 +11,7 @@ from src import utils, player, enemy, gui, hud, map, quest
 class World(ShowBase):
 
     # Global debug setting
-    global debug 
+    global debug
 
     # Array of enemies
     enemyList = []
@@ -29,7 +29,7 @@ class World(ShowBase):
 
         # Create the main traverser
         base.cTrav = CollisionTraverser()
-        # Fluid move prevents quantum tunnelling. 
+        # Fluid move prevents quantum tunnelling.
         base.cTrav.setRespectPrevTransform(True)
 
         # Initialize global AI
@@ -48,7 +48,7 @@ class World(ShowBase):
         # For debugging
         if debug:
             self.addEnemy()
-
+            self.accept('shift-o', self.gui.toggleOverlayFrame)
             self.accept('1', self.damagePlayer)
             self.accept('2', self.killEnemy)
             self.accept('3', self.changeToGodCamera)
@@ -75,8 +75,8 @@ class World(ShowBase):
         else:
             self.player.stopCamera = True
 
-            self.player._cameraYModifier *= 2 
-            self.player._cameraZModifier *= 2 
+            self.player._cameraYModifier *= 2
+            self.player._cameraZModifier *= 2
 
     def outputTime(self): # key 4
         print(str(globalClock.getFrameTime()))
@@ -133,7 +133,7 @@ class World(ShowBase):
         deltaTime = task.time - task.last
         task.last = task.time
 
-        if deltaTime > .2: 
+        if deltaTime > .2:
             return task.cont
 
         # Update Ai world
