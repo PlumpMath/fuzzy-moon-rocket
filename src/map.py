@@ -1,88 +1,90 @@
 from panda3d.core import *
 import utils
 
+from collections import namedtuple
+
+Area = namedtuple('Area', ['modelName', 'numSpawns'] )
+
+farmArea = Area(modelName='area_1', numSpawns=2)
+cornFieldArea = Area(modelName='area_2', numSpawns=4)
+
 class Map:
     def __init__(self, parentNode):
         print("Map class instantiated")
-        self.initSun(parentNode)
-        self.initGround(parentNode)
-        #self.initWalls(parentNode)
-        #self.initFog(parentNode)
+        self._mainRef = parentNode
+        self.mapNode = parentNode.attachNewNode('mapNode')
 
-    def initSun(self, parentNode):
-        # Setup directional light
-        dlight = DirectionalLight('dlight')
-        dlight.setColor(VBase4(1, 1, 0.5, 1))
+        # Load first area
+        self.loadArea(farmArea)
 
-        self.dlightNode = parentNode.attachNewNode(dlight)
-        self.dlightNode.setHpr(0, -150, 0)
-        parentNode.setLight(self.dlightNode)
+        # Initialze sun
+        self.initSun(self._mainRef)
 
-        # Setup spot light (works better with shadow casting)
-        #self.spotLight = parentNode.attachNewNode(Spotlight('Spot'))
-        #self.spotLight.setPos(0, -200, 200)
-        #self.spotLight.lookAt(0, 0, 0)
-        #parentNode.setLight(self.spotLight)
-
-        #self.spotLight.node().setShadowCaster(True, 2024, 2024)
-        #self.spotLight.node().showFrustum()
-        #self.spotLight.node().getLens().setFov(80)
-        #self.spotLight.node().getLens().setNearFar(20, 400)
-
-        #parentNode.setShaderAuto()
-
-    def initGround(self, parentNode):
+    def loadArea(self, area):
         # Setup environment (plane)
-        self.areaNode = parentNode.attachNewNode('areaNode')
+        self.areaNode = self.mapNode.attachNewNode(area.modelName+'Node')
 
-        areaModel = loader.loadModel('models/area_1.egg')
-        areaModel.reparentTo(self.areaNode)
+        self.areaModel = loader.loadModel('models/'+area.modelName+'.egg')
+        self.areaModel.reparentTo(self.areaNode)
 
-        # Make sure area is centered in world and that it has recognizable name
+        # Make sure area is centered in world
         self.areaNode.setPos(0, 0, 0)
-        #self.areaNode.setName('ground')
+
+        # Everything should at default be non-collidable
+        self.areaModel.setCollideMask(BitMask32.allOff())
 
         # The ground is the walk plane, it collides with mouse ray and player- and enemies ground rays
-        self.ground = areaModel.find('**/ground')
+        self.ground = self.areaModel.find('**/ground')
         self.ground.setCollideMask(BitMask32.bit(1))
 
         # Colliders are obstacles in areas, they collide with enemies and the player
-        self.collidersGroup = areaModel.find('**/colliders')
+        self.collidersGroup = self.areaModel.find('**/colliders')
         self.collidersGroup.setCollideMask(BitMask32.bit(2))
 
         # Locate starting and exiting positions
-        self.startPos = areaModel.find('**/startPos').getPos()
-        self.exitPos = areaModel.find('**/exitPos').getPos()
+        self.startPos = self.areaModel.find('**/startPos').getPos()
+        self.exitPos = self.areaModel.find('**/exitPos').getPos()
 
+        # Locate and save enemy spawn points 
+        self.enemySpawnPoints = []
+        for i in range(area.numSpawns):
+            self.enemySpawnPoints.append(self.areaModel.find('**/enemySpawnPoint'+str(i)))
+
+        # Initialize walls
         self.initWalls(self.areaNode)
 
-        #area2Model = loader.loadModel('models/area_2.egg')
-        #area2Model.reparentTo(self.areaNode)
+    def unloadArea(self):
+        # Empty list of enemy spawn points
+        enemySpawnPoints[:] = []
 
-        #area2Model.setPos(0, -200, 0)
+        # Cleanup and remove area model
+        self.areaModel.cleanup()
+        self.areaModel.delete()
 
-        #self.ground2 = area2Model.find('**/ground')
-        #self.ground2.setCollideMask(BitMask32.bit(1))
+        # Cleanup and remove walls model
+        self.walls.cleanup()
+        self.walls.delete()
 
-        # Colliders are obstacles in areas, they collide with enemies and the player
-        #self.collidersGroup2 = area2Model.find('**/collision_geoms')
-        #self.collidersGroup2.setCollideMask(BitMask32.bit(2))
+        # Remove nodes
+        self.areaNode.removeNode()
 
-    def initWalls(self, parentNode):
-        walls = loader.loadModel('models/walls.egg')
-        walls.reparentTo(parentNode)
+    def initWalls(self, areaNode):
+        self.walls = loader.loadModel('models/walls.egg')
+        self.walls.reparentTo(areaNode)
 
-        walls.setPos(0, 0, 0)
+        # Visual geometry should be non-collidable
+        self.walls.setCollideMask(BitMask32.allOff())
 
-        walls.setCollideMask(BitMask32.allOff())
-
-        collisionWalls = walls.find('**/collisionWalls')
+        # Find collision geometry and make it collidable with pushers
+        collisionWalls = self.walls.find('**/collisionWalls')
         collisionWalls.setCollideMask(BitMask32.bit(2))
 
-    def initFog(self, parentNode):
-        # Setup fog 
-        self.fog = Fog('Fog1')
-        self.fog.setColor(0.1, 0.25, 0.25)
-        self.fog.setExpDensity(0.05)
-        parentNode.setFog(self.fog)
+    def initSun(self, areaNode):
+        # Setup directional light
+        sun = DirectionalLight('sun')
+        sun.setColor(VBase4(1, 1, 0.5, 1))
 
+        self.sunNode = areaNode.attachNewNode(sun)
+        self.sunNode.setP(-150)
+
+        areaNode.setLight(self.sunNode)
