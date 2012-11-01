@@ -72,11 +72,14 @@ class World(ShowBase):
     def changeToGodCamera(self): # key 3
         if self.player.stopCamera:
             self.player.stopCamera = False
+
+            self.player._cameraYModifier /= 4
+            self.player._cameraZModifier /= 4
         else:
             self.player.stopCamera = True
 
-            self.player._cameraYModifier *= 2
-            self.player._cameraZModifier *= 2
+            self.player._cameraYModifier *= 4
+            self.player._cameraZModifier *= 4
 
     def outputTime(self): # key 4
         print(str(globalClock.getFrameTime()))

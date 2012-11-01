@@ -276,10 +276,9 @@ class Player(FSM, Unit):
         self.checkGroundCollisions()
         self.updatePlayerTarget()
 
-        if not self.stopCamera:
-            base.camera.setPos(self.playerNode.getX(),
-                           self.playerNode.getY() + self._cameraYModifier,
-                           self.playerNode.getZ() + self._cameraZModifier)
+        base.camera.setPos(self.playerNode.getX(),
+                       self.playerNode.getY() + self._cameraYModifier,
+                       self.playerNode.getZ() + self._cameraZModifier)
 
         return task.cont
 
