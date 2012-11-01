@@ -78,8 +78,6 @@ class World(ShowBase):
         attributes = enemy.koboldMinion
 
         newEnemy = enemy.Enemy(self, 'minion', attributes)
-        #newEnemy.moveEnemy(10 - utils.getD20(), 
-        #                   10 - utils.getD20())
         newEnemy.moveEnemy(self.mapHandler.exitPos.getX(), self.mapHandler.exitPos.getY())
 
     def levelPlayerUp(self): # key 6

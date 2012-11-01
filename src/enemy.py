@@ -149,7 +149,7 @@ class Enemy(FSM, Unit):
 
 
     def checkGroundCollisions(self):
-        zModifier = 1
+        zModifier = .5
 
         if self.groundHandler.getNumEntries() > 0:
             self.groundHandler.sortEntries()
@@ -163,6 +163,7 @@ class Enemy(FSM, Unit):
 
             if (len(entries) > 0) and (entries[0].getIntoNode().getName() == 'ground'):
                 newZ = entries[0].getSurfacePoint(base.render).getZ()
+                print('correct enemy Z to: ' + str(newZ))
                 self.enemyNode.setZ(zModifier + newZ)
 
     def enemyUpdater(self, task):
@@ -311,6 +312,9 @@ class Enemy(FSM, Unit):
 
             # Remove enemy collision sphere (pusher)
             self.sphereNode.removeNode()
+
+            # Stop the collision pusher
+            self.collPusher = None
 
             # Remove enemy
             taskMgr.doMethodLater(self._removeCorpseDelay,
