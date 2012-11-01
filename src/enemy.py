@@ -72,6 +72,7 @@ class Enemy(FSM, Unit):
         self.enemyNode.setPos(Point3.zero())
 
     def initAttributes(self, attributes):
+        perceptionRangeMultiplier = 2
         rangeMultiplier = 8
         speedMultiplier = 3
 
@@ -81,7 +82,7 @@ class Enemy(FSM, Unit):
 
         self.mass = attributes.mass
         self.movementSpeed = speedMultiplier * attributes.movementSpeed
-        self.perceptionRange = rangeMultiplier * attributes.perceptionRange
+        self.perceptionRange = perceptionRangeMultiplier * rangeMultiplier * attributes.perceptionRange
         self.combatRange = rangeMultiplier * attributes.combatRange
         self.attackBonus = attributes.attackBonus
         self.damageBonus = attributes.damageBonus

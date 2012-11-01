@@ -6,6 +6,7 @@ class Map:
         print("Map class instantiated")
         self.initSun(parentNode)
         self.initGround(parentNode)
+        self.initWalls(parentNode)
         #self.initFog(parentNode)
 
     def initSun(self, parentNode):
@@ -16,6 +17,19 @@ class Map:
         self.dlightNode = parentNode.attachNewNode(dlight)
         self.dlightNode.setHpr(0, -150, 0)
         parentNode.setLight(self.dlightNode)
+
+        # Setup spot light (works better with shadow casting)
+        #self.spotLight = parentNode.attachNewNode(Spotlight('Spot'))
+        #self.spotLight.setPos(0, -200, 200)
+        #self.spotLight.lookAt(0, 0, 0)
+        #parentNode.setLight(self.spotLight)
+
+        #self.spotLight.node().setShadowCaster(True, 2024, 2024)
+        #self.spotLight.node().showFrustum()
+        #self.spotLight.node().getLens().setFov(80)
+        #self.spotLight.node().getLens().setNearFar(20, 400)
+
+        #parentNode.setShaderAuto()
 
     def initGround(self, parentNode):
         # Setup environment (plane)
@@ -51,6 +65,17 @@ class Map:
         # Colliders are obstacles in areas, they collide with enemies and the player
         self.collidersGroup2 = area2Model.find('**/collision_geoms')
         self.collidersGroup2.setCollideMask(BitMask32.bit(2))
+
+    def initWalls(self, parentNode):
+        walls = loader.loadModel('models/walls.egg')
+        walls.reparentTo(parentNode)
+
+        walls.setPos(0, 0, 0)
+
+        walls.setCollideMask(BitMask32.allOff())
+
+        collisionWalls = walls.find('**/collisionWalls')
+        collisionWalls.setCollideMask(BitMask32.bit(2))
 
     def initFog(self, parentNode):
         # Setup fog 

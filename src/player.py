@@ -10,7 +10,7 @@ class Player(FSM, Unit):
 
     # Declare private variables
     _cameraYModifier = -75 # Relative to player Y position
-    _cameraZPos = 60 # Relative to player Z position
+    _cameraZModifier = 60 # Relative to player Z position
 
     _currentTarget = None
 
@@ -86,8 +86,10 @@ class Player(FSM, Unit):
         base.disableMouse()
         base.camera.setPos(self.playerNode.getX(),
                            self.playerNode.getY() + self._cameraYModifier, 
-                           self.playerNode.getZ() + self._cameraZPos)
+                           self.playerNode.getZ() + self._cameraZModifier)
         base.camera.lookAt(self.playerNode)
+
+        self.stopCamera = False
 
     def initPlayerAi(self):
         self.playerAi = AICharacter('player', self.playerNode, self.mass, 0.05, self.movementSpeed)
@@ -134,6 +136,7 @@ class Player(FSM, Unit):
         self.selector = Actor('models/selector.egg')
         animName = self.selector.getAnimNames()
         self.selector.loop(animName[0], fromFrame=0, toFrame=12)
+
 
     def addSelectorToEnemy(self, enemyTarget):
         if enemyTarget is not None:
@@ -265,9 +268,10 @@ class Player(FSM, Unit):
         self.checkGroundCollisions()
         self.updatePlayerTarget()
 
-        base.camera.setPos(self.playerNode.getX(),
+        if not self.stopCamera:
+            base.camera.setPos(self.playerNode.getX(),
                            self.playerNode.getY() + self._cameraYModifier,
-                           self.playerNode.getZ() + self._cameraZPos)
+                           self.playerNode.getZ() + self._cameraZModifier)
 
         return task.cont
 

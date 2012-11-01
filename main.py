@@ -51,7 +51,7 @@ class World(ShowBase):
 
             self.accept('1', self.damagePlayer)
             self.accept('2', self.killEnemy)
-            self.accept('3', self.outputInfo)
+            self.accept('3', self.changeToGodCamera)
             self.accept('4', self.outputTime)
             self.accept('5', self.addEnemy)
             self.accept('6', self.levelPlayerUp)
@@ -69,8 +69,14 @@ class World(ShowBase):
     def killEnemy(self): # key 2
         self.enemy.onDeath()
 
-    def outputInfo(self): # key 3
-        print('player pos: ' + str(self.player.playerNode.getPos()))
+    def changeToGodCamera(self): # key 3
+        if self.player.stopCamera:
+            self.player.stopCamera = False
+        else:
+            self.player.stopCamera = True
+
+            self.player._cameraYModifier *= 2 
+            self.player._cameraZModifier *= 2 
 
     def outputTime(self): # key 4
         print(str(globalClock.getFrameTime()))
@@ -104,6 +110,7 @@ class World(ShowBase):
         print('Combat range: ' + str(self.player.combatRange))
         print('Current health: ' + str(self.player.currentHealthPoints))
         print('Max health: ' + str(self.player.maxHealthPoints))
+        print('Position: ' + str(self.player.playerNode.getPos()))
         if self.player.getCurrentTarget() is not None:
             print('Target pos: ' + str(self.player.getCurrentTarget().enemyNode.getPos()))
 
