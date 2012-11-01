@@ -36,7 +36,7 @@ class World(ShowBase):
         self.initAI()
 
         # Instantiate other classes
-        self.mapHandler = map.Map(self.mainNode)
+        self.mapHandler = map.Map(self)
 
         self.player = player.Player(self, self.mapHandler.startPos, self.mapHandler.exitPos)
 
@@ -47,7 +47,7 @@ class World(ShowBase):
 
         # For debugging
         if debug:
-            self.addEnemy()
+            #self.addEnemy()
             self.accept('shift-o', self.gui.toggleOverlayFrame)
             self.accept('1', self.damagePlayer)
             self.accept('2', self.killEnemy)

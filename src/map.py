@@ -1,26 +1,32 @@
 from panda3d.core import *
-import utils
 
 from collections import namedtuple
 
-Area = namedtuple('Area', ['modelName', 'numSpawns'] )
+import utils
 
-farmArea = Area(modelName='area_1', numSpawns=2)
-cornFieldArea = Area(modelName='area_2', numSpawns=4)
+import enemy
+
+Area = namedtuple('Area', ['modelName', 'numSpawns', 'numEnemiesPerSpawn'] )
+
+farmArea = Area(modelName='area_1', numSpawns=2, numEnemiesPerSpawn=1)
+cornFieldArea = Area(modelName='area_2', numSpawns=4, numEnemiesPerSpawn=2)
 
 class Map:
-    def __init__(self, parentNode):
+    def __init__(self, main):
         print("Map class instantiated")
-        self._mainRef = parentNode
-        self.mapNode = parentNode.attachNewNode('mapNode')
+        self._mainRef = main
 
-        # Load first area
-        self.loadArea(farmArea)
+        self.mapNode = main.mainNode.attachNewNode('mapNode')
 
         # Initialze sun
-        self.initSun(self._mainRef)
+        self.initSun(main.mainNode)
+
+        self.loadArea(farmArea)
 
     def loadArea(self, area):
+        # Initialize player reference
+        self._playerRef = None
+
         # Setup environment (plane)
         self.areaNode = self.mapNode.attachNewNode(area.modelName+'Node')
 
@@ -46,16 +52,49 @@ class Map:
         self.exitPos = self.areaModel.find('**/exitPos').getPos()
 
         # Locate and save enemy spawn points 
-        self.enemySpawnPoints = []
-        for i in range(area.numSpawns):
-            self.enemySpawnPoints.append(self.areaModel.find('**/enemySpawnPoint'+str(i)))
+        self.spawnPointsDict = {}
+        self.spawnPointsList = []
+        for i  in range(1, area.numSpawns):
+            spawnPoint = self.areaModel.find('**/enemySpawnPoint'+str(i))
+            print('located spawn point: ' + str(spawnPoint))
+            self.spawnPointsList.append(spawnPoint)
+            self.spawnPointsDict[spawnPoint] = 1 # Active
 
         # Initialize walls
         self.initWalls(self.areaNode)
 
+        enemeySpawnTask = taskMgr.doMethodLater(1.5, self.enemySpawnUpdater, 'enemySpawnTask', extraArgs=[area], appendTask=True)
+
+    def enemySpawnUpdater(self, area, task):
+        if self._playerRef is None:
+             # Load player reference
+            self._playerRef = self._mainRef.player
+
+        spawnRadius = 50
+
+        playerPos = self._playerRef.playerNode.getPos()
+
+        for spawnPoint in self.spawnPointsList:
+            spawnPos = spawnPoint.getPos()
+            if utils.getIsInRange(playerPos, spawnPos, spawnRadius):
+                if self.spawnPointsDict[spawnPoint] == 1:
+                    self.spawnPointsDict[spawnPoint] = 0
+                    self.spawnEnemies(area.numEnemiesPerSpawn, spawnPos)
+
+        # Call again after initial delay to reduce overhead
+        return task.again
+
+    def spawnEnemies(self, amount, spawnPosition):
+        for i in range(amount):
+            newEnemy = enemy.Enemy(self._mainRef, 'probe', enemy.koboldMinion)
+            newEnemy.moveEnemy(spawnPosition.getX(), spawnPosition.getY())
+
+
     def unloadArea(self):
         # Empty list of enemy spawn points
-        self.enemySpawnPoints[:] = []
+        self.spawnPointsList[:] = []
+        # Empty dict of enemy spawn point status
+        self.spawnPointsDict.clear()
 
         # Cleanup and remove area model
         self.areaModel.cleanup()
@@ -64,6 +103,9 @@ class Map:
         # Cleanup and remove walls model
         self.walls.cleanup()
         self.walls.delete()
+
+        # Remove spawn task
+        enemeySpawnTask.remove()
 
         # Remove nodes
         self.areaNode.removeNode()
