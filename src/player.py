@@ -321,12 +321,7 @@ class Player(FSM, Unit):
 
         return task.done
 
-#    def periodicIdleAnimation(self, task):
-#        if task.time % 3 == 0:
-#            print('idle')
-#            self.playerModel.play('idle')
-
-#        return task.cont
+        
     def playIdleAnimation(self, task):
         if self.state == 'Idle':
             self.playerModel.loop('idle', fromFrame=0, toFrame=50)

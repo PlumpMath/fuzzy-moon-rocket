@@ -238,7 +238,7 @@ class Enemy(FSM, Unit):
 
     def exitCombat(self):
         #print('enemy exitCombat')
-        pass
+        self.attackSequence.finish()
 
     def enterDeath(self):
         #print('enemy enterDeath')
@@ -275,22 +275,18 @@ class Enemy(FSM, Unit):
         if self.getIsDead():
             print('enemy is already dead')
             self.onDeath()
-            attackSequence.finish()
 
         elif self._playerRef.getIsDead():
             print('player is already dead')
             self.request('Idle')
-            attackSequence.finish()
 
         elif utils.getIsInRange(playerPos, enemyPos, self.combatRange) == False:
             print('player fled away from combat range')
             self.request('Pursue')
-            attackSequence.finish()
 
         elif utils.getIsInRange(playerPos, enemyPos, self.perceptionRange) == False:
             print('player fled away from perception range')
             self.request('Idle')
-            attackSequence.finish()
 
         else:
             print('Attack player!')
