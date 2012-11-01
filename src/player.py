@@ -33,6 +33,8 @@ class Player(FSM, Unit):
         self.initPlayerCollisionHandlers()
         self.initPlayerCollisionSolids()
 
+        self.initSelector()
+
         # Start mouse picking and movement
         utils.MouseHandler(self)
 
@@ -49,8 +51,8 @@ class Player(FSM, Unit):
         self.constitution = 14
         self.dexterity = 10
 
-        self.combatRange = 10 * 1 # Melee
-        self.movementSpeed = 10 # ?
+        self.combatRange = 10 # Melee
+        self.movementSpeed = 20 # ?
         self.attackBonus = 6 # ?
         self.damageBonus = 0 # ?
         self.damageRange = 8 # = Longsword
@@ -75,6 +77,9 @@ class Player(FSM, Unit):
         self.playerModel.setCollideMask(BitMask32.allOff())
         # Model is backwards, fix by changing the heading
         self.playerModel.setH(180)
+
+        # Initialize selector variable
+        self.selector = None
 
     def initPlayerCamera(self): 
         # Initialize the camera
@@ -124,6 +129,18 @@ class Player(FSM, Unit):
         base.cTrav.addCollider(sphereNode, self.collPusher)
         self.collPusher.addCollider(sphereNode, self.playerNode)
 
+    def initSelector(self):
+        self.selector = Actor('models/selector.egg')
+        animName = self.selector.getAnimNames()
+        self.selector.loop(animName[0], fromFrame=0, toFrame=12)
+
+    def addSelectorToEnemy(self, enemyTarget):
+        if enemyTarget is not None:
+            self.selector.reparentTo(enemyTarget.enemyNode)
+
+    def removeSelectorFromEnemy(self):
+        if self.selector is not None:
+            self.selector.detachNode()
 
     def setPlayerDestination(self, position):
         if self.getIsDead():
@@ -170,7 +187,11 @@ class Player(FSM, Unit):
 
         else:
             print('Attack enemy!')
-            # Play attack animation
+            # Make the player look at the enemy
+            pitchRoll = (self.playerNode.getP(), self.playerNode.getR())
+            self.playerNode.lookAt(enemy.enemyNode)
+            self.playerNode.setHpr(self.playerNode.getH(), *pitchRoll)
+
             if self.state != 'Combat':
                 self.request('Combat')
 
@@ -207,7 +228,7 @@ class Player(FSM, Unit):
         self.playerNode.setFluidPos(newX, newY, newZ)
 
         self.velocity = self.destination - self.playerNode.getPos()
-        if self.velocity.lengthSquared() < .5:
+        if self.velocity.lengthSquared() < 1:
             self.velocity = Vec3.zero()
             #print('destination reached')
             if self.state == 'Run':
@@ -260,6 +281,10 @@ class Player(FSM, Unit):
     def setCurrentTarget(self, enemyTarget):
         #print('setCurrentTarget: ' + str(enemyTarget))
         self._currentTarget = enemyTarget
+
+        if enemyTarget is not None:
+            if not enemyTarget.getIsDead():
+                self.addSelectorToEnemy(enemyTarget)
 
     def getCurrentTarget(self):
         return self._currentTarget

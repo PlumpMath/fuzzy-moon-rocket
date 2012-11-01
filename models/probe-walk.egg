@@ -1,0 +1,551 @@
+<CoordinateSystem> { Z-Up }
+
+<Comment> {
+  "maya2egg2012 -p -a chan -pd 'C:/Users/Rami Ahmed Bock/Desktop' -cs z-up -uo cm -trans all -o 'C:/Users/Rami Ahmed Bock/Desktop/probe-walk.egg' 'C:/Users/Rami Ahmed Bock/Documents/maya/projects/default/scenes/probe_walk_temp.mb'"
+}
+<Table> {
+  <Bundle> probe_walk_temp {
+    <Table> "<skeleton>" {
+      <Table> group1 {
+        <Xfm$Anim_S$> xform {
+          <Scalar> fps { 25 }
+          <Char*> order { srpht }
+          <S$Anim> i { <V> { 0.15 } }
+          <S$Anim> j { <V> { 0.15 } }
+          <S$Anim> k { <V> { 0.15 } }
+          <S$Anim> p { <V> { 90 } }
+        }
+        <Table> joint1 {
+          <Xfm$Anim_S$> xform {
+            <Scalar> fps { 25 }
+            <Char*> order { srpht }
+            <S$Anim> h { <V> { 9.22932 } }
+            <S$Anim> r { <V> { 180 } }
+            <S$Anim> x { <V> { 0.016275 } }
+            <S$Anim> y { <V> { 9 } }
+            <S$Anim> z { <V> { -3.48422 } }
+          }
+          <Table> right_mid_inner {
+            <Xfm$Anim_S$> xform {
+              <Scalar> fps { 25 }
+              <Char*> order { srpht }
+              <S$Anim> h {
+                <V> {
+                  -4.3799 22.5299 47.3964 46.6552 43.8079 38.5447
+                  23.0723 2.65373 -5.9678 -3.67839 -2.41829 -3.40075
+                  -4.3799 -4.3799 -4.3799 -4.3799 -4.3799 -4.3799
+                  -4.3799 -4.3799 -4.3799 -4.3799 -4.3799 -4.3799
+                }
+              }
+              <S$Anim> p {
+                <V> {
+                  -9.81459 -6.35046 0.172608 8.14424 16.2404 19.6048
+                  17.6192 13.5904 9.25742 4.08353 -2.37478 -7.7861
+                  -9.81459 -9.81459 -9.81459 -9.81459 -9.81459 -9.81459
+                  -9.81459 -9.81459 -9.81459 -9.81459 -9.81459 -9.81459
+                }
+              }
+              <S$Anim> r {
+                <V> {
+                  -10.2852 -6.01738 0.0603847 3.71337 7.12812 10.6507
+                  14.8413 18.6911 20.1305 14.8617 4.40205 -5.84625
+                  -10.2852 -10.2852 -10.2852 -10.2852 -10.2852 -10.2852
+                  -10.2852 -10.2852 -10.2852 -10.2852 -10.2852 -10.2852
+                }
+              }
+              <S$Anim> x { <V> { 7.38451 } }
+            }
+            <Table> joint3 {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+                <S$Anim> h { <V> { -75.4823 } }
+                <S$Anim> p { <V> { 15.913 } }
+                <S$Anim> r { <V> { -0.736708 } }
+                <S$Anim> x { <V> { 4.90184 } }
+              }
+              <Table> joint17 {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> h { <V> { 124.892 } }
+                  <S$Anim> p { <V> { 10.8203 } }
+                  <S$Anim> r { <V> { -166.24 } }
+                  <S$Anim> x { <V> { 5.74901 } }
+                }
+                <Table> joint18 {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 126.569 } }
+                    <S$Anim> p { <V> { -1.37333 } }
+                    <S$Anim> r { <V> { 179.947 } }
+                    <S$Anim> x { <V> { 1.35183 } }
+                  }
+                }
+              }
+            }
+          }
+          <Table> right_inner_back {
+            <Xfm$Anim_S$> xform {
+              <Scalar> fps { 25 }
+              <Char*> order { srpht }
+              <S$Anim> h {
+                <V> {
+                  46.754 45.333 37.7416 21.0618 1.28287 -6.61398
+                  -0.703123 6.73106 15.1187 26.2993 36.7936 44.1626
+                  46.754 46.754 46.754 46.754 46.754 46.754 46.754
+                  46.754 46.754 46.754 46.754 46.754
+                }
+              }
+              <S$Anim> p {
+                <V> {
+                  0 10.2917 19.6699 17.789 13.8629 9.19151 2.17546
+                  -6.21561 -9.84347 -8.23057 -4.82643 -1.4465 0 0 0 0 0
+                  0 0 0 0 0 0 0
+                }
+              }
+              <S$Anim> r {
+                <V> {
+                  -0 4.21961 10.8067 15.3192 19.0048 20.254 11.6696
+                  -2.78823 -10.1477 -8.40591 -4.86105 -1.44742 -0 -0 -0
+                  -0 -0 -0 -0 -0 -0 -0 -0 -0
+                }
+              }
+              <S$Anim> x { <V> { 7.39292 } }
+              <S$Anim> y { <V> { -0.0276127 } }
+              <S$Anim> z { <V> { 4.67099 } }
+            }
+            <Table> joint5 {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+                <S$Anim> h { <V> { -75.0001 } }
+                <S$Anim> p { <V> { 8.04305 } }
+                <S$Anim> r { <V> { -0.353449 } }
+                <S$Anim> x { <V> { 4.89528 } }
+              }
+              <Table> joint13 {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> h { <V> { 126.639 } }
+                  <S$Anim> p { <V> { 5.10178 } }
+                  <S$Anim> r { <V> { -173.764 } }
+                  <S$Anim> x { <V> { 5.76349 } }
+                }
+                <Table> joint14 {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 39.4165 } }
+                    <S$Anim> r { <V> { -180 } }
+                    <S$Anim> x { <V> { 1.33469 } }
+                  }
+                }
+              }
+            }
+          }
+          <Table> right_inner_front {
+            <Xfm$Anim_S$> xform {
+              <Scalar> fps { 25 }
+              <Char*> order { srpht }
+              <S$Anim> h {
+                <V> {
+                  38.1416 32.6508 22.4381 12.0919 1.10066 -4.66847
+                  9.79894 34.6677 46.9462 45.7229 42.8213 39.6043
+                  38.1416 38.1416 38.1416 38.1416 38.1416 38.1416
+                  38.1416 38.1416 38.1416 38.1416 38.1416 38.1416
+                }
+              }
+              <S$Anim> p {
+                <V> {
+                  19.9807 16.0126 9.29214 1.74955 -6.52124 -9.9912
+                  -8.14803 -4.03967 0.556308 6.15951 12.667 17.9353
+                  19.9807 19.9807 19.9807 19.9807 19.9807 19.9807
+                  19.9807 19.9807 19.9807 19.9807 19.9807 19.9807
+                }
+              }
+              <S$Anim> r {
+                <V> {
+                  11.1974 16.3518 20.856 12.2788 -2.17881 -9.54296
+                  -7.35693 -3.13291 0.604655 3.8215 7.23242 10.0565
+                  11.1974 11.1974 11.1974 11.1974 11.1974 11.1974
+                  11.1974 11.1974 11.1974 11.1974 11.1974 11.1974
+                }
+              }
+              <S$Anim> x { <V> { 7.38287 } }
+              <S$Anim> y { <V> { -0.0304215 } }
+              <S$Anim> z { <V> { -4.31837 } }
+            }
+            <Table> joint7 {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+                <S$Anim> h { <V> { -75.2769 } }
+                <S$Anim> p { <V> { 14.6288 } }
+                <S$Anim> r { <V> { -0.617883 } }
+                <S$Anim> x { <V> { 4.90643 } }
+              }
+              <Table> joint11 {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> h { <V> { 126.525 } }
+                  <S$Anim> p { <V> { 10.285 } }
+                  <S$Anim> r { <V> { -167.519 } }
+                  <S$Anim> x { <V> { 5.77084 } }
+                }
+                <Table> joint12 {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 40.018 } }
+                    <S$Anim> r { <V> { 177.908 } }
+                    <S$Anim> x { <V> { 1.33567 } }
+                  }
+                }
+              }
+            }
+          }
+          <Table> joint8 {
+            <Xfm$Anim_S$> xform {
+              <Scalar> fps { 25 }
+              <Char*> order { srpht }
+              <S$Anim> h { <V> { 19.3208 } }
+              <S$Anim> p { <V> { 2.78404 } }
+              <S$Anim> r { <V> { 15.265 } }
+              <S$Anim> x { <V> { -1.00443 } }
+              <S$Anim> y { <V> { 6.18148 } }
+              <S$Anim> z { <V> { -8.51625 } }
+            }
+            <Table> joint19 {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+                <S$Anim> h { <V> { -4.12649 } }
+                <S$Anim> p { <V> { -33.7037 } }
+                <S$Anim> r { <V> { 101.319 } }
+                <S$Anim> x { <V> { 4.33836 } }
+              }
+              <Table> joint20 {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> h { <V> { -21.3953 } }
+                  <S$Anim> p { <V> { -8.05916 } }
+                  <S$Anim> r { <V> { 5.47906 } }
+                  <S$Anim> x { <V> { 5.90657 } }
+                }
+                <Table> joint21 {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 56.0068 } }
+                    <S$Anim> r { <V> { -124.644 } }
+                    <S$Anim> x { <V> { 5.9988 } }
+                  }
+                }
+              }
+            }
+            <Table> joint22 {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+                <S$Anim> h { <V> { -7.70555 } }
+                <S$Anim> p { <V> { -8.03732 } }
+                <S$Anim> r { <V> { 109.018 } }
+                <S$Anim> x { <V> { 6.5457 } }
+                <S$Anim> y { <V> { -6.37065 } }
+                <S$Anim> z { <V> { 2.48639 } }
+              }
+              <Table> joint23 {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> h { <V> { -6.13887 } }
+                  <S$Anim> p { <V> { -3.3038 } }
+                  <S$Anim> r { <V> { 12.4465 } }
+                  <S$Anim> x { <V> { 5.74633 } }
+                }
+                <Table> joint24 {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 2.16622 } }
+                    <S$Anim> p { <V> { -19.4474 } }
+                    <S$Anim> r { <V> { -124.369 } }
+                    <S$Anim> x { <V> { 5.98264 } }
+                  }
+                }
+              }
+            }
+          }
+          <Table> joint25 {
+            <Xfm$Anim_S$> xform {
+              <Scalar> fps { 25 }
+              <Char*> order { srpht }
+              <S$Anim> h { <V> { 179.138 } }
+              <S$Anim> p { <V> { -2.78404 } }
+              <S$Anim> r { <V> { -164.735 } }
+              <S$Anim> x { <V> { -1.00443 } }
+              <S$Anim> y { <V> { 6.18148 } }
+              <S$Anim> z { <V> { -8.51625 } }
+            }
+            <Table> joint26 {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+                <S$Anim> h { <V> { -4.12649 } }
+                <S$Anim> p { <V> { -33.7037 } }
+                <S$Anim> r { <V> { 101.319 } }
+                <S$Anim> x { <V> { -4.33836 } }
+              }
+              <Table> joint27 {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> h { <V> { -21.3953 } }
+                  <S$Anim> p { <V> { -8.05916 } }
+                  <S$Anim> r { <V> { 5.47906 } }
+                  <S$Anim> x { <V> { -5.9066 } }
+                }
+                <Table> joint28 {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 56.0068 } }
+                    <S$Anim> r { <V> { -124.644 } }
+                    <S$Anim> x { <V> { -5.99877 } }
+                  }
+                }
+              }
+            }
+            <Table> joint29 {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+                <S$Anim> h { <V> { -7.70555 } }
+                <S$Anim> p { <V> { -8.03732 } }
+                <S$Anim> r { <V> { 109.018 } }
+                <S$Anim> x { <V> { -6.5457 } }
+                <S$Anim> y { <V> { 6.37065 } }
+                <S$Anim> z { <V> { -2.4864 } }
+              }
+              <Table> joint30 {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> h { <V> { -6.13887 } }
+                  <S$Anim> p { <V> { -3.3038 } }
+                  <S$Anim> r { <V> { 12.4465 } }
+                  <S$Anim> x { <V> { -5.74634 } }
+                }
+                <Table> joint31 {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 2.16622 } }
+                    <S$Anim> p { <V> { -19.4474 } }
+                    <S$Anim> r { <V> { -124.369 } }
+                    <S$Anim> x { <V> { -5.98267 } }
+                  }
+                }
+              }
+            }
+          }
+          <Table> left_inner_front {
+            <Xfm$Anim_S$> xform {
+              <Scalar> fps { 25 }
+              <Char*> order { srpht }
+              <S$Anim> h {
+                <V> {
+                  160.317 -175.714 -155.04 -158.121 -158.248 -156.873
+                  -171.471 163.687 151.511 152.35 154.087 155.785
+                  156.509 156.509 156.509 156.509 156.509 156.509
+                  156.509 156.509 156.509 156.509 156.509 156.509
+                }
+              }
+              <S$Anim> p {
+                <V> {
+                  -19.9807 -15.822 -8.9859 -1.5847 6.56746 9.98879
+                  7.14447 2.14026 -0.374983 -0.367843 -0.352809 -0.3378
+                  -0.331315 -0.331315 -0.331315 -0.331315 -0.331315
+                  -0.331315 -0.331315 -0.331315 -0.331315 -0.331315
+                  -0.331315 -0.331315
+                }
+              }
+              <S$Anim> r {
+                <V> {
+                  -168.803 -163.598 -159.151 -167.735 177.813 170.457
+                  172.66 176.873 -179.395 -176.201 -172.944 -170.437
+                  -169.484 -169.484 -169.484 -169.484 -169.484 -169.484
+                  -169.484 -169.484 -169.484 -169.484 -169.484 -169.484
+                }
+              }
+              <S$Anim> x { <V> { -6.99341 } }
+              <S$Anim> y { <V> { -2.36642 } }
+              <S$Anim> z { <V> { -4.31837 } }
+            }
+            <Table> joint33 {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+                <S$Anim> h { <V> { -75.2769 } }
+                <S$Anim> p { <V> { 14.6288 } }
+                <S$Anim> r { <V> { -0.617883 } }
+                <S$Anim> x { <V> { -4.90641 } }
+              }
+              <Table> joint34 {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> h { <V> { 126.525 } }
+                  <S$Anim> p { <V> { 10.285 } }
+                  <S$Anim> r { <V> { -167.519 } }
+                  <S$Anim> x { <V> { -5.77083 } }
+                }
+                <Table> joint35 {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 40.018 } }
+                    <S$Anim> r { <V> { 177.908 } }
+                    <S$Anim> x { <V> { -1.33565 } }
+                  }
+                }
+              }
+            }
+          }
+          <Table> left_inner_mid {
+            <Xfm$Anim_S$> xform {
+              <Scalar> fps { 25 }
+              <Char*> order { srpht }
+              <S$Anim> h {
+                <V> {
+                  -157.161 175.929 151.062 151.803 154.651 159.914
+                  175.386 -164.195 -155.574 -157.863 -159.123 -158.141
+                  -157.161 -157.161 -157.161 -157.161 -157.161 -157.161
+                  -157.161 -157.161 -157.161 -157.161 -157.161 -157.161
+                }
+              }
+              <S$Anim> p {
+                <V> {
+                  9.81459 6.35046 -0.172608 -8.14424 -16.2404 -19.6048
+                  -17.6192 -13.5904 -9.25742 -4.08353 2.37478 7.7861
+                  9.81459 9.81459 9.81459 9.81459 9.81459 9.81459
+                  9.81459 9.81459 9.81459 9.81459 9.81459 9.81459
+                }
+              }
+              <S$Anim> r {
+                <V> {
+                  169.715 173.983 -179.94 -176.287 -172.872 -169.349
+                  -165.159 -161.309 -159.869 -165.138 -175.598 174.154
+                  169.715 169.715 169.715 169.715 169.715 169.715
+                  169.715 169.715 169.715 169.715 169.715 169.715
+                }
+              }
+              <S$Anim> x { <V> { -7.0046 } }
+              <S$Anim> y { <V> { -2.33808 } }
+            }
+            <Table> joint37 {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+                <S$Anim> h { <V> { -75.4823 } }
+                <S$Anim> p { <V> { 15.913 } }
+                <S$Anim> r { <V> { -0.736708 } }
+                <S$Anim> x { <V> { -4.90188 } }
+              }
+              <Table> joint38 {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> h { <V> { 124.892 } }
+                  <S$Anim> p { <V> { 10.8203 } }
+                  <S$Anim> r { <V> { -166.24 } }
+                  <S$Anim> x { <V> { -5.74899 } }
+                }
+                <Table> joint39 {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 126.569 } }
+                    <S$Anim> p { <V> { -1.37333 } }
+                    <S$Anim> r { <V> { 179.947 } }
+                    <S$Anim> x { <V> { -1.35177 } }
+                  }
+                }
+              }
+            }
+          }
+          <Table> left_inner_back {
+            <Xfm$Anim_S$> xform {
+              <Scalar> fps { 25 }
+              <Char*> order { srpht }
+              <S$Anim> h {
+                <V> {
+                  151.705 153.126 160.717 177.397 -162.824 -154.927
+                  -160.838 -168.272 -176.66 172.159 161.665 154.296
+                  151.705 151.705 151.705 151.705 151.705 151.705
+                  151.705 151.705 151.705 151.705 151.705 151.705
+                }
+              }
+              <S$Anim> p {
+                <V> {
+                  -7.01671e-015 -10.2917 -19.6699 -17.789 -13.8629
+                  -9.19151 -2.17546 6.21561 9.84347 8.23057 4.82643
+                  1.4465 -7.01671e-015 -7.01671e-015 -7.01671e-015
+                  -7.01671e-015 -7.01671e-015 -7.01671e-015
+                  -7.01671e-015 -7.01671e-015 -7.01671e-015
+                  -7.01671e-015 -7.01671e-015 -7.01671e-015
+                }
+              }
+              <S$Anim> r {
+                <V> {
+                  -180 -175.78 -169.193 -164.681 -160.995 -159.746
+                  -168.33 177.212 169.852 171.594 175.139 178.553 -180
+                  -180 -180 -180 -180 -180 -180 -180 -180 -180 -180 -180
+                }
+              }
+              <S$Anim> x { <V> { -7.00383 } }
+              <S$Anim> y { <V> { -2.36694 } }
+              <S$Anim> z { <V> { 4.67098 } }
+            }
+            <Table> joint41 {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+                <S$Anim> h { <V> { -75.0001 } }
+                <S$Anim> p { <V> { 8.04305 } }
+                <S$Anim> r { <V> { -0.353449 } }
+                <S$Anim> x { <V> { -4.89532 } }
+              }
+              <Table> joint42 {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> h { <V> { 126.639 } }
+                  <S$Anim> p { <V> { 5.10178 } }
+                  <S$Anim> r { <V> { -173.764 } }
+                  <S$Anim> x { <V> { -5.76349 } }
+                }
+                <Table> joint43 {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 39.4165 } }
+                    <S$Anim> r { <V> { 180 } }
+                    <S$Anim> x { <V> { -1.33468 } }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    <Table> morph {
+    }
+  }
+}

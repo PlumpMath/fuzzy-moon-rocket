@@ -163,7 +163,6 @@ class Enemy(FSM, Unit):
 
             if (len(entries) > 0) and (entries[0].getIntoNode().getName() == 'ground'):
                 newZ = entries[0].getSurfacePoint(base.render).getZ()
-                print('correct enemy Z to: ' + str(newZ))
                 self.enemyNode.setZ(zModifier + newZ)
 
     def enemyUpdater(self, task):

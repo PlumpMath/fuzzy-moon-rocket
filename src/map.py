@@ -40,6 +40,18 @@ class Map:
         self.startPos = areaModel.find('**/startPos').getPos()
         self.exitPos = areaModel.find('**/exitPos').getPos()
 
+        area2Model = loader.loadModel('models/area_2.egg')
+        area2Model.reparentTo(self.areaNode)
+
+        area2Model.setPos(0, -200, 0)
+
+        self.ground2 = area2Model.find('**/ground')
+        self.ground2.setCollideMask(BitMask32.bit(1))
+
+        # Colliders are obstacles in areas, they collide with enemies and the player
+        self.collidersGroup2 = area2Model.find('**/collision_geoms')
+        self.collidersGroup2.setCollideMask(BitMask32.bit(2))
+
     def initFog(self, parentNode):
         # Setup fog 
         self.fog = Fog('Fog1')

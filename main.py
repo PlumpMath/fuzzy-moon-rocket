@@ -77,7 +77,7 @@ class World(ShowBase):
     def addEnemy(self): # key 5
         attributes = enemy.koboldMinion
 
-        newEnemy = enemy.Enemy(self, 'minion', attributes)
+        newEnemy = enemy.Enemy(self, 'probe', attributes)
         newEnemy.moveEnemy(self.mapHandler.exitPos.getX(), self.mapHandler.exitPos.getY())
 
     def levelPlayerUp(self): # key 6
