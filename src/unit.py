@@ -14,7 +14,6 @@ class Unit(object):
     experience = 0
 
     # Declare private variables
-    _currentHealthPoints = 0
     _prevEXP = 0
     _isDead = False
 

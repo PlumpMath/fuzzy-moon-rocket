@@ -58,6 +58,7 @@ class World(ShowBase):
             self.accept('7', self.healPlayer)
             self.accept('8', self.showAllCollisions)
             self.accept('9', self.printStats)
+            self.accept('0', self.showFPS)
 
             self.showCollisions = False
 
@@ -105,7 +106,9 @@ class World(ShowBase):
         print('Max health: ' + str(self.player.maxHealthPoints))
         if self.player.getCurrentTarget() is not None:
             print('Target pos: ' + str(self.player.getCurrentTarget().enemyNode.getPos()))
-  
+
+    def showFPS(self): # Key 0
+        base.setFrameRateMeter(True)
 
 
     # End of debugging implementation
