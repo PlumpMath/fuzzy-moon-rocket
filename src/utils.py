@@ -32,6 +32,8 @@ def getD20():
 
 class MouseHandler():
 
+    _mouseDown = False
+
     def __init__(self, playerRef):
         print('MouseHandler class instantiated')
         self._playerRef = playerRef
@@ -42,6 +44,7 @@ class MouseHandler():
 
         DO = DirectObject()
         DO.accept('mouse1', self.onClick)
+        DO.accept('mouse1-up', self.onMouseUp)
 
         self.collisionHandler = CollisionHandlerQueue()
 
@@ -52,6 +55,26 @@ class MouseHandler():
         self.pickerRay = CollisionRay()
         self.pickerCollNode.addSolid(self.pickerRay)
         base.cTrav.addCollider(self.pickerNodePath, self.collisionHandler)
+
+        taskMgr.add(self.moveTask, 'moveTask')
+
+    def moveTask(self, task):
+        if base.mouseWatcherNode.hasMouse():
+            if self._mouseDown:
+                mousePos = base.mouseWatcherNode.getMouse()
+
+                pos3d = Point3()
+                nearPoint = Point3()
+                farPoint = Point3()
+
+                base.camLens.extrude(mousePos, nearPoint, farPoint)
+                if self.plane.intersectsLine(pos3d, 
+                            base.render.getRelativePoint(camera, nearPoint),
+                            base.render.getRelativePoint(camera, farPoint)):
+                    #print('Mouse ray intersects ground at ', pos3d)
+                    self._playerRef.setPlayerDestination(pos3d)
+
+        return task.cont
 
     def onClick(self):
         #print('click')
@@ -69,14 +92,9 @@ class MouseHandler():
                         enemy = enemyDictionary[entryName]
                         self._playerRef.setCurrentTarget(enemy)
 
-            pos3d = Point3()
-            nearPoint = Point3()
-            farPoint = Point3()
+            self._mouseDown = True
 
-            base.camLens.extrude(mousePos, nearPoint, farPoint)
-            if self.plane.intersectsLine(pos3d, 
-                        base.render.getRelativePoint(camera, nearPoint),
-                        base.render.getRelativePoint(camera, farPoint)):
-                #print('Mouse ray intersects ground at ', pos3d)
-                self._playerRef.setPlayerDestination(pos3d)
+    def onMouseUp(self):
+        print('mouseUp')
+        self._mouseDown = False
 

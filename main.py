@@ -45,7 +45,7 @@ class World(ShowBase):
         self.gui = gui.GUI()
         self.hud = hud.HUD(self.player)
 
-
+        # Start game
         self.mapHandler.startArea()
         self.player.initStartPositions(self.mapHandler.startPos, self.mapHandler.exitPos)
 
@@ -69,6 +69,7 @@ class World(ShowBase):
 
             self.showCollisions = False
 
+    #------------------------------------------------------------------------------------
     # Start of debugging methods implementation
     def damagePlayer(self): # key 1
         self.player.receiveDamage(self.player.maxHealthPoints - utils.getD8())
@@ -126,9 +127,8 @@ class World(ShowBase):
 
     def showFPS(self): # Key 0
         base.setFrameRateMeter(True)
-
-
     # End of debugging implementation
+    #------------------------------------------------------------------------------------
 
     def initAI(self):
         # Create the AI world
@@ -155,8 +155,6 @@ class World(ShowBase):
         return task.cont
 
     def pauseGame(self):
-        #if self.stateHandler.state == self.stateHandler.PLAY:
-        #    self.stateHandler.request(self.stateHandler.PAUSE)
         if self.stateHandler.state == self.stateHandler.PAUSE:
             self.stateHandler.request(self.stateHandler.PLAY)
         else:
