@@ -37,6 +37,7 @@ class World(ShowBase):
 
         # Instantiate other classes
         self.mapHandler = map.Map(self)
+        self.mapHandler.startArea()
 
         self.player = player.Player(self, self.mapHandler.startPos, self.mapHandler.exitPos)
 

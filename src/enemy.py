@@ -46,7 +46,7 @@ class Enemy(FSM, Unit):
 
         enemyName = 'enemy' + str(len(self._enemyListRef))
         self.enemyNode = self.topEnemyNode.attachNewNode(enemyName)
-        self._enemyListRef.append(self.enemyNode)
+        self._enemyListRef.append(self)
 
         utils.enemyDictionary[self.enemyNode.getName()] = self
 
@@ -110,7 +110,7 @@ class Enemy(FSM, Unit):
         self.enemyAIBehaviors = self.enemyAI.getAiBehaviors()
         #self.enemyAIBehaviors.obstacleAvoidance(1.0)
 
-        taskMgr.add(self.enemyUpdater, 'enemyUpdaterTask')
+        self.enemyUpdater = taskMgr.add(self.enemyUpdater, 'enemyUpdaterTask')
 
         self.request('Idle')
 
@@ -307,6 +307,35 @@ class Enemy(FSM, Unit):
     def moveEnemy(self, x, y):
         self.enemyNode.setPos(x, y, 1)
 
+    def suicide(self):
+        # Remove AI behavior
+        self.enemyAIBehaviors.removeAi('all')
+
+        # Remove enemy collision sphere (pusher)
+        self.sphereNode.removeNode()
+
+        # Stop the collision pusher
+        self.collPusher = None
+
+        # Remove enemy from enemyList
+        self._enemyListRef.remove(self)
+
+        # Cleanup the enemy model
+        self.enemyModel.cleanup()
+        self.enemyModel.delete()
+
+        # Cleanup FSM
+        self.cleanup()
+
+        # Cleanup attack sequence
+        self.attackSequence = None
+
+        # Remove the enemy node
+        self.enemyNode.removeNode()
+        self.topEnemyNode.removeNode()
+
+        # Remove enemy updater task
+        self.enemyUpdater.remove()
 
     def onDeath(self):
         if self.getIsDead():
@@ -329,7 +358,7 @@ class Enemy(FSM, Unit):
 
     def removeCorpse(self, task):
         # Remove enemy from enemyList
-        self._enemyListRef.remove(self.enemyNode)
+        self._enemyListRef.remove(self)
 
         # Cleanup the enemy model
         self.enemyModel.cleanup()
@@ -344,5 +373,8 @@ class Enemy(FSM, Unit):
         # Remove the enemy node
         self.enemyNode.removeNode()
         self.topEnemyNode.removeNode()
+
+        # Remove enemy updater task
+        self.enemyUpdater.remove()
 
         return task.done

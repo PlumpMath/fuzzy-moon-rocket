@@ -1,4 +1,5 @@
 from panda3d.core import *
+from direct.actor.Actor import Actor
 
 from collections import namedtuple
 
@@ -17,6 +18,7 @@ class Map:
     def __init__(self, main):
         print("Map class instantiated")
         self._mainRef = main
+        self._enemyListRef = main.enemyList
 
         self.mapNode = main.mainNode.attachNewNode('mapNode')
 
@@ -24,6 +26,9 @@ class Map:
         self.initSun(main.mainNode)
 
         self.loadArea(farmArea)
+
+    def startArea(self):
+        self.areaNode.reparentTo(self._mainRef.mainNode)
 
     def loadArea(self, area):
         # Save area attributes
@@ -33,7 +38,8 @@ class Map:
         self._playerRef = None
 
         # Setup environment (plane)
-        self.areaNode = self.mapNode.attachNewNode(area.modelName+'Node')
+        #self.areaNode = self.mapNode.attachNewNode(area.modelName+'Node')
+        self.areaNode = NodePath(area.modelName+'Node')
 
         self.areaModel = loader.loadModel('models/'+area.modelName+'.egg')
         self.areaModel.reparentTo(self.areaNode)
@@ -56,6 +62,14 @@ class Map:
         self.startPos = self.areaModel.find('**/startPos').getPos()
         self.exitPos = self.areaModel.find('**/exitPos').getPos()
 
+        self.exitStation = Actor('models/exitStation.egg')
+        self.exitStation.reparentTo(self.areaNode)
+
+        self.exitStation.setH(-90)
+        self.exitStation.setPos(self.exitPos)
+
+        self.exitStationAnimation = self.exitStation.getAnimNames()
+
         # Locate and save enemy spawn points 
         self.spawnPointsDict = {}
         i = 1
@@ -75,7 +89,10 @@ class Map:
         self.initWalls(self.areaNode)
 
         # Initialize the task to handle enemy spawns
-        enemySpawnTask = taskMgr.doMethodLater(1.5, self.enemySpawnUpdater, 'enemySpawnTask')
+        self.enemySpawnTask = taskMgr.doMethodLater(1.5, self.enemySpawnUpdater, 'enemySpawnTask')
+
+        # Exit area task
+        self.exitAreaTask = taskMgr.doMethodLater(1.5, self.exitArea, 'exitAreaTask')
 
     def enemySpawnUpdater(self, task):
         if self._playerRef is None:
@@ -94,6 +111,7 @@ class Map:
 
                     self.spawnEnemies(spawnPos)
 
+
         # Call again after initial delay to reduce overhead
         return task.again
 
@@ -103,23 +121,50 @@ class Map:
                 newEnemy = enemy.Enemy(self._mainRef, enemyType)
                 newEnemy.moveEnemy(spawnPos.getX(), spawnPos.getY())
 
-    def unloadArea(self):
+    def exitArea(self, task):
+        exitRadius = 20
+
+        playerPos = self._playerRef.playerNode.getPos()
+
+        if utils.getIsInRange(playerPos, self.exitPos, exitRadius):
+            print('At exit!')
+            self.exitStation.play(self.exitStationAnimation, fromFrame=0, toFrame=12)
+
+            taskMgr.doMethodLater(2, self.unloadArea, 'unloadAreaTask')
+            return task.done
+
+        return task.again
+
+    def unloadArea(self, task):
+        print('unloadArea')
+
+        # Loop through all enemies and clean them up by killing them
+        for enemy in self._enemyListRef:
+            enemy.suicide()
+
         # Empty dict of enemy spawn points
         self.spawnPointsDict.clear()
 
-        # Cleanup and remove area model
-        self.areaModel.cleanup()
-        self.areaModel.delete()
+        # Remove area model
+        self.areaModel.remove()
 
-        # Cleanup and remove walls model
-        self.walls.cleanup()
-        self.walls.delete()
+        # Remove walls model
+        self.walls.remove()
+
+        # Cleanup and remove exitStation model
+        self.exitStation.cleanup()
+        self.exitStation.delete()
 
         # Remove spawn task
-        enemySpawnTask.remove()
+        self.enemySpawnTask.remove()
+        self.exitAreaTask.remove()
 
         # Remove nodes
         self.areaNode.removeNode()
+
+        #taskMgr.doMethodLater(2, self.loadArea, 'loadAreaTask', extraArgs=[cornFieldArea])
+
+        return task.done
 
     def initWalls(self, areaNode):
         self.walls = loader.loadModel('models/walls.egg')
@@ -135,9 +180,10 @@ class Map:
     def initSun(self, areaNode):
         # Setup directional light
         sun = DirectionalLight('sun')
-        sun.setColor(VBase4(1, 1, 0.5, 1))
+        sun.setColor(VBase4(1, 0.75, 0.5, 1))
 
         self.sunNode = areaNode.attachNewNode(sun)
         self.sunNode.setP(-150)
+        #self.sunNode.lookAt(0, 0, 1)
 
         areaNode.setLight(self.sunNode)
