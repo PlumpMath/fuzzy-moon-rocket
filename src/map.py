@@ -40,7 +40,7 @@ class Map:
         self._stateHandlerRef.request(self._stateHandlerRef.PLAY)
 
         # Exit area task
-        #self.exitAreaTask = taskMgr.doMethodLater(1.5, self.exitArea, 'exitAreaTask')
+        self.exitAreaTask = taskMgr.doMethodLater(1.5, self.exitArea, 'exitAreaTask')
 
     def loadArea(self, area):
         print('loadArea: ', area.modelName)
@@ -143,7 +143,7 @@ class Map:
                 newEnemy.moveEnemy(spawnPos.getX(), spawnPos.getY())
 
     def exitArea(self, task):
-        exitRadius = 20
+        exitRadius = 17
 
         playerPos = self._playerRef.playerNode.getPos()
 
