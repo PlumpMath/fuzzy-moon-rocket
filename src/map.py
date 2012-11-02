@@ -101,7 +101,7 @@ class Map:
              # Load player reference
             self._playerRef = self._mainRef.player
 
-        spawnRadius = 30
+        spawnRadius = 40
 
         playerPos = self._playerRef.playerNode.getPos()
 

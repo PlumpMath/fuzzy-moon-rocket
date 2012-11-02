@@ -60,6 +60,11 @@ class Player(FSM, Unit):
         self.armorClass = 10 + 8 # Base armor class + fullplate armor
         self.mass = 90
 
+        self.startLevel = 3
+
+        for i in range(1, self.startLevel):
+            self.increaseLevel()
+
         self.initHealth()
 
     def initPlayerModel(self):
