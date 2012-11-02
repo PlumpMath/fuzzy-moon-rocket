@@ -30,7 +30,10 @@ class Map:
     def startArea(self):
         self.areaNode.reparentTo(self._mainRef.mainNode)
 
+        #self._playerRef.initStartPositions(self.startPos, self.exitPos)
+
     def loadArea(self, area):
+        print('loadArea: ', area.modelName)
         # Save area attributes
         self._areaRef = area
 
@@ -38,7 +41,6 @@ class Map:
         self._playerRef = None
 
         # Setup environment (plane)
-        #self.areaNode = self.mapNode.attachNewNode(area.modelName+'Node')
         self.areaNode = NodePath(area.modelName+'Node')
 
         self.areaModel = loader.loadModel('models/'+area.modelName+'.egg')
@@ -99,7 +101,7 @@ class Map:
              # Load player reference
             self._playerRef = self._mainRef.player
 
-        spawnRadius = 50
+        spawnRadius = 30
 
         playerPos = self._playerRef.playerNode.getPos()
 
@@ -163,6 +165,7 @@ class Map:
         self.areaNode.removeNode()
 
         #taskMgr.doMethodLater(2, self.loadArea, 'loadAreaTask', extraArgs=[cornFieldArea])
+        #taskMgr.doMethodLater(3, self.startArea, 'startAreaTask', extraArgs=[])
 
         return task.done
 

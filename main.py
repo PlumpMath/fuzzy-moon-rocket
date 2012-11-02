@@ -37,18 +37,19 @@ class World(ShowBase):
 
         # Instantiate other classes
         self.mapHandler = map.Map(self)
-        self.mapHandler.startArea()
 
-        self.player = player.Player(self, self.mapHandler.startPos, self.mapHandler.exitPos)
+        self.player = player.Player(self)
 
         self.gui = gui.GUI()
         self.hud = hud.HUD(self.player)
 
         self.accept('escape', self.endGame)
 
+        self.mapHandler.startArea()
+        self.player.initStartPositions(self.mapHandler.startPos, self.mapHandler.exitPos)
+
         # For debugging
         if debug:
-            #self.addEnemy()
             self.accept('shift-o', self.gui.toggleOverlayFrame)
             self.accept('1', self.damagePlayer)
             self.accept('2', self.killEnemy)

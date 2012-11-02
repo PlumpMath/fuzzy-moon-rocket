@@ -14,7 +14,7 @@ class Player(FSM, Unit):
 
     _currentTarget = None
 
-    def __init__(self, mainRef, playerStartPos, playerExitPos):
+    def __init__(self, mainRef):
         print("Player class instantiated")
         Unit.__init__(self)
         FSM.__init__(self, 'playerFSM')
@@ -29,7 +29,7 @@ class Player(FSM, Unit):
 
         self.initPlayerAi()
 
-        self.initPlayerMovement(playerStartPos, playerExitPos)
+        #self.initPlayerMovement()
         self.initPlayerCollisionHandlers()
         self.initPlayerCollisionSolids()
 
@@ -99,15 +99,19 @@ class Player(FSM, Unit):
         self.playerAiBehaviors = self.playerAi.getAiBehaviors()
         #self.playerAiBehaviors.obstacleAvoidance(1.0)
 
-    def initPlayerMovement(self, playerStartPos, playerExitPos):
-        # Make sure the player starts at the starting position
+    def initStartPositions(self, playerStartPos, playerExitPos):
         self.exitPos = playerExitPos
         self.startPos = playerStartPos
-        self.playerNode.setPos(playerStartPos)
-        self.destination = Point3(playerStartPos)
+
+        self.initPlayerMovement()
+
+    def initPlayerMovement(self):
+        # Make sure the player starts at the starting position
+        self.playerNode.setPos(self.startPos)
+        self.destination = Point3(self.startPos)
         self.velocity = Vec3.zero()
 
-        self.playerNode.lookAt(playerExitPos)
+        self.playerNode.lookAt(self.exitPos)
 
     def initPlayerCollisionHandlers(self):
         self.groundHandler = CollisionHandlerQueue()
