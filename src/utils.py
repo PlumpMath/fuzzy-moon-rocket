@@ -79,6 +79,8 @@ class MouseHandler():
     def onClick(self):
         #print('click')
         if base.mouseWatcherNode.hasMouse():
+            self._mouseDown = True
+
             mousePos = base.mouseWatcherNode.getMouse()
             self.pickerRay.setFromLens(base.camNode, mousePos.getX(), mousePos.getY())
 
@@ -87,14 +89,13 @@ class MouseHandler():
                 for i in range(self.collisionHandler.getNumEntries()):
                     entry = self.collisionHandler.getEntry(i).getIntoNodePath()
                     entryName = entry.getName()
-                    #print('entry found: ' + entryName)
+ 
                     if entryName[:5] == 'enemy' and not entry.isEmpty():
                         enemy = enemyDictionary[entryName]
                         self._playerRef.setCurrentTarget(enemy)
-
-            self._mouseDown = True
+                        break;
 
     def onMouseUp(self):
-        print('mouseUp')
+        #print('mouseUp')
         self._mouseDown = False
 
