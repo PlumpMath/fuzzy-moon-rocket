@@ -60,17 +60,19 @@ class Map:
         spawnPoint = self.areaModel.find('**/enemySpawnPoint'+str(i))
         while spawnPoint.getErrorType() == 0: # While Spawn Point is found OK
             print('located spawn point: ', spawnPoint)
-            self.spawnPointsDict[spawnPoint] = 1 # Active
+            self.spawnPointsDict[spawnPoint] = 1 # Activate spawn point
 
             i += 1
             spawnPoint = self.areaModel.find('**/enemySpawnPoint'+str(i))
 
+            # Implement failsafe in case of errors to avoid infinite loop
             if i >= self.maxSpawnPointsPerArea:
                 break
 
         # Initialize walls
         self.initWalls(self.areaNode)
 
+        # Initialize the task to handle enemy spawns
         enemeySpawnTask = taskMgr.doMethodLater(1.5, self.enemySpawnUpdater, 'enemySpawnTask', extraArgs=[area], appendTask=True)
 
     def enemySpawnUpdater(self, area, task):
@@ -83,8 +85,8 @@ class Map:
         playerPos = self._playerRef.playerNode.getPos()
 
         for spawnPoint, active in self.spawnPointsDict.iteritems():
-            spawnPos = spawnPoint.getPos()
             if active == 1:
+                spawnPos = spawnPoint.getPos()
                 if utils.getIsInRange(playerPos, spawnPos, spawnRadius):
                     self.spawnPointsDict[spawnPoint] = 0
 
@@ -100,9 +102,7 @@ class Map:
 
 
     def unloadArea(self):
-        # Empty list of enemy spawn points
-        self.spawnPointsList[:] = []
-        # Empty dict of enemy spawn point status
+        # Empty dict of enemy spawn points
         self.spawnPointsDict.clear()
 
         # Cleanup and remove area model
