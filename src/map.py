@@ -32,6 +32,12 @@ class Map:
 
         #self._playerRef.initStartPositions(self.startPos, self.exitPos)
 
+        # Initialize the task to handle enemy spawns
+        self.enemySpawnTask = taskMgr.doMethodLater(1.5, self.enemySpawnUpdater, 'enemySpawnTask')
+
+        # Exit area task
+        self.exitAreaTask = taskMgr.doMethodLater(1.5, self.exitArea, 'exitAreaTask')
+
     def loadArea(self, area):
         print('loadArea: ', area.modelName)
         # Save area attributes
@@ -89,12 +95,6 @@ class Map:
 
         # Initialize walls
         self.initWalls(self.areaNode)
-
-        # Initialize the task to handle enemy spawns
-        self.enemySpawnTask = taskMgr.doMethodLater(1.5, self.enemySpawnUpdater, 'enemySpawnTask')
-
-        # Exit area task
-        self.exitAreaTask = taskMgr.doMethodLater(1.5, self.exitArea, 'exitAreaTask')
 
     def enemySpawnUpdater(self, task):
         if self._playerRef is None:
