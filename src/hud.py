@@ -1,5 +1,6 @@
 from direct.gui.DirectGui import DirectButton, DirectWaitBar
 from direct.gui.OnscreenText import OnscreenText
+from direct.gui.DirectGui import DirectFrame
 from direct.task import Task
 import sys
 
@@ -20,11 +21,12 @@ class HUD:
         self.initHealthBar()
         self.initEXPBar()
         self.initTargetBar()
+        self.createStatsButton()
 
         taskMgr.add(self.removeTitle, 'RemoveTitleTask')
 
         taskMgr.add(self.updateBars, 'UpdateBarsTask')
-
+    
     def initTargetBar(self):
         self.targetBar = DirectWaitBar(
                                     text="Target health",
@@ -50,6 +52,45 @@ class HUD:
             return task.done
 
         return task.cont
+
+    def createStatsButton(self):
+        self.statsButton = DirectButton(
+                                text = ("Stats"),
+                                pos=(1.2, 0, -0.9), 
+                                scale=.05, 
+                                command=self.showStats)
+
+    
+    def showStats(self):
+            self.myFrame = DirectFrame(
+                                frameColor=(1, 1, 1, 1),
+                                frameSize=(-0.5, 0.5, -0.5, 0.5),
+                                pos=(1.0, -0.5, 0.0)
+                                )
+            
+
+            self.statsButton = DirectButton(
+                                text = ("close"),
+                                pos=(1.0, 0.30, -0.45), 
+                                scale=.05, 
+                                command=self.exitStats)
+
+            def addStats(pos, text):
+                    return OnscreenText(text=text,
+                                        pos=(1.0, pos),
+                                        scale=0.05,
+                                        mayChange=1)  
+            self.stat1 = addStats(0.35, 'Strength: ' + str(self._playerRef.strength))
+            self.stat2 = addStats(0.25, 'Constitution: ' + str(self._playerRef.constitution))
+            self.stat3 = addStats(0.15, 'Dexterity: ' + str(self._playerRef.dexterity))
+
+
+    def exitStats(self):
+        self.myFrame.destroy()
+        self.statsButton.destroy()
+        self.stat1.destroy()
+        self.stat2.destroy()
+        self.stat3.destroy()
 
     def createExitButton(self):
         self.exitButton = DirectButton(
