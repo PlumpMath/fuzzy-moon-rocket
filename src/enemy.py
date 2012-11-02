@@ -172,7 +172,7 @@ class Enemy(FSM, Unit):
                 self.enemyNode.setZ(zModifier + newZ)
 
     def enemyUpdater(self, task):
-        if self._stateHandlerRef.state == self._stateHandlerRef.PAUSE:
+        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             self.enemyModel.stop()
             # Do not do anything when paused
             return task.cont
@@ -280,7 +280,7 @@ class Enemy(FSM, Unit):
 
 
     def attackPlayer(self, attackSequence):
-        if self._stateHandlerRef.state == self._stateHandlerRef.PAUSE:
+        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             # Do not do anything when paused
             return 
 

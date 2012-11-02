@@ -165,7 +165,7 @@ class Player(FSM, Unit):
             self.selector.detachNode()
 
     def setPlayerDestination(self, position):
-        if self._stateHandlerRef.state == self._stateHandlerRef.PAUSE:
+        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             # Do not do anything when paused
             return 
 
@@ -188,7 +188,7 @@ class Player(FSM, Unit):
             self.request('Run')
 
     def attackEnemy(self, enemy):
-        if self._stateHandlerRef.state == self._stateHandlerRef.PAUSE:
+        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             # Do not do anything when paused
             return 
 
@@ -278,7 +278,7 @@ class Player(FSM, Unit):
                 self.request('Idle')
 
     def playerUpdate(self, task):
-        if self._stateHandlerRef.state == self._stateHandlerRef.PAUSE:
+        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             self.playerModel.stop()
             # Do not do anything when paused
             return task.cont

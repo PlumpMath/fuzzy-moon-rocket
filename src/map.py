@@ -19,6 +19,7 @@ class Map:
         print("Map class instantiated")
         self._mainRef = main
         self._enemyListRef = main.enemyList
+        self._stateHandlerRef = main.stateHandler
 
         self.mapNode = main.mainNode.attachNewNode('mapNode')
 
@@ -34,6 +35,9 @@ class Map:
 
         # Initialize the task to handle enemy spawns
         self.enemySpawnTask = taskMgr.doMethodLater(1.5, self.enemySpawnUpdater, 'enemySpawnTask')
+
+        # Change state to play
+        self._stateHandlerRef.request(self._stateHandlerRef.PLAY)
 
         # Exit area task
         #self.exitAreaTask = taskMgr.doMethodLater(1.5, self.exitArea, 'exitAreaTask')
