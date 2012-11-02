@@ -10,37 +10,37 @@ from collections import namedtuple
 import utils
 from unit import Unit
 
-Attributes = namedtuple('Attributes', ['strength', 'constitution', 'dexterity', 'expAward', 'perceptionRange', 'combatRange', 'movementSpeed', 'mass', 'initiativeBonus', 'fixedHealthPoints', 'armorClass', 'startLevel', 'damageBonus', 'damageRange', 'attackBonus'])
+Attributes = namedtuple('Attributes', ['modelName', 'strength', 'constitution', 'dexterity', 'expAward', 'perceptionRange', 'combatRange', 'movementSpeed', 'mass', 'initiativeBonus', 'fixedHealthPoints', 'armorClass', 'startLevel', 'damageBonus', 'damageRange', 'attackBonus'])
 
 # Kobold Minion uses fixedHealthPoints, which given any other value than 0 will fix the units health to that value
 # Mass should be thought of as approximate weight in kilograms
-koboldMinion = Attributes(strength=8, constitution=12, dexterity=16, initiativeBonus=3, fixedHealthPoints=1, armorClass=15, movementSpeed=6, perceptionRange=2, combatRange=1, mass=60, expAward=25, startLevel=1, damageRange=0, damageBonus=4, attackBonus=5)
+koboldMinion = Attributes(modelName='probe', strength=8, constitution=12, dexterity=16, initiativeBonus=3, fixedHealthPoints=1, armorClass=15, movementSpeed=6, perceptionRange=2, combatRange=1, mass=60, expAward=25, startLevel=1, damageRange=0, damageBonus=4, attackBonus=5)
 
 # Kobold Skirmisher has combatRange of 1, means very short range (melee)
 # Perception +1 bonus gives perception range 2
-koboldSkirmisher = Attributes(strength=8, constitution=11, dexterity=16, initiativeBonus=5, fixedHealthPoints=27, armorClass=15, movementSpeed=6, perceptionRange=1, combatRange=1, mass=60, expAward=100, startLevel=1, damageRange=8, damageBonus=0, attackBonus=6)
+koboldSkirmisher = Attributes(modelName='probe', strength=8, constitution=11, dexterity=16, initiativeBonus=5, fixedHealthPoints=27, armorClass=15, movementSpeed=6, perceptionRange=1, combatRange=1, mass=60, expAward=100, startLevel=1, damageRange=8, damageBonus=0, attackBonus=6)
 
 # Kobold Slinger has combat range 3 (ranged), which means that perception +1 gives perception range 4
 # Damage bonus 3 gives constant +3 to damage, while damage range 4 means 1d4 (1-4)
-koboldSlinger = Attributes(strength=9, constitution=12, dexterity=17, fixedHealthPoints=24, initiativeBonus=3, perceptionRange=4, combatRange=3, movementSpeed=6, armorClass=13, mass=60, expAward=100, startLevel=2, damageBonus=3, damageRange=4, attackBonus=5)
+koboldSlinger = Attributes(modelName='probe', strength=9, constitution=12, dexterity=17, fixedHealthPoints=24, initiativeBonus=3, perceptionRange=4, combatRange=3, movementSpeed=6, armorClass=13, mass=60, expAward=100, startLevel=2, damageBonus=3, damageRange=4, attackBonus=5)
 
 # Enemy unit automatically levels up to startLevel
-koboldWyrmpriest = Attributes(strength=9, constitution=12, dexterity=16, initiativeBonus=4, fixedHealthPoints=36, armorClass=17, movementSpeed=6, combatRange=1, perceptionRange=5, mass=70, expAward=150, startLevel=3, damageRange=8, damageBonus=0, attackBonus=7)
+koboldWyrmpriest = Attributes(modelName='probe', strength=9, constitution=12, dexterity=16, initiativeBonus=4, fixedHealthPoints=36, armorClass=17, movementSpeed=6, combatRange=1, perceptionRange=5, mass=70, expAward=150, startLevel=3, damageRange=8, damageBonus=0, attackBonus=7)
 
 class Enemy(FSM, Unit):
 
     # Declare private variables
     _removeCorpseDelay = 3 # seconds before corpse is cleaned
 
-    def __init__(self, mainRef, modelName, attributes):
+    def __init__(self, mainRef, attributes):
         print("Enemy class instantiated")
         Unit.__init__(self)
         FSM.__init__(self, 'playerFSM')
 
-        self._enemyListRef = mainRef.enemyList
-        self._AIworldRef = mainRef.AIworld
-        self._playerRef = mainRef.player
         self._worldRef = mainRef
+        self._playerRef = mainRef.player
+        self._AIworldRef = mainRef.AIworld
+        self._enemyListRef = mainRef.enemyList
 
         self.topEnemyNode = mainRef.mainNode.attachNewNode('topEnemyNode')
 
@@ -50,7 +50,7 @@ class Enemy(FSM, Unit):
 
         utils.enemyDictionary[self.enemyNode.getName()] = self
 
-        self.loadEnemyModel(modelName)
+        self.loadEnemyModel(attributes.modelName)
         self.initAttributes(attributes)
         self.initEnemyAi()
         

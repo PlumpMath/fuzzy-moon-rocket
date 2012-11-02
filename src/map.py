@@ -3,13 +3,12 @@ from panda3d.core import *
 from collections import namedtuple
 
 import utils
-
 import enemy
 
-Area = namedtuple('Area', ['modelName', 'numEnemiesPerSpawn'] )
+Area = namedtuple('Area', ['modelName', 'enemies'] )
 
-farmArea = Area(modelName='area_1', numEnemiesPerSpawn=1)
-cornFieldArea = Area(modelName='area_2', numEnemiesPerSpawn=2)
+farmArea = Area(modelName='area_1', enemies={enemy.koboldMinion:1})
+cornFieldArea = Area(modelName='area_2', enemies={enemy.koboldMinion:2, enemy.koboldSkirmisher:1})
 
 class Map:
 
@@ -27,6 +26,9 @@ class Map:
         self.loadArea(farmArea)
 
     def loadArea(self, area):
+        # Save area attributes
+        self._areaRef = area
+
         # Initialize player reference
         self._playerRef = None
 
@@ -73,9 +75,9 @@ class Map:
         self.initWalls(self.areaNode)
 
         # Initialize the task to handle enemy spawns
-        enemeySpawnTask = taskMgr.doMethodLater(1.5, self.enemySpawnUpdater, 'enemySpawnTask', extraArgs=[area], appendTask=True)
+        enemeySpawnTask = taskMgr.doMethodLater(1.5, self.enemySpawnUpdater, 'enemySpawnTask')
 
-    def enemySpawnUpdater(self, area, task):
+    def enemySpawnUpdater(self, task):
         if self._playerRef is None:
              # Load player reference
             self._playerRef = self._mainRef.player
@@ -90,16 +92,16 @@ class Map:
                 if utils.getIsInRange(playerPos, spawnPos, spawnRadius):
                     self.spawnPointsDict[spawnPoint] = 0
 
-                    self.spawnEnemies(area.numEnemiesPerSpawn, spawnPos)
+                    self.spawnEnemies(spawnPos)
 
         # Call again after initial delay to reduce overhead
         return task.again
 
-    def spawnEnemies(self, amount, spawnPosition):
-        for i in range(amount):
-            newEnemy = enemy.Enemy(self._mainRef, 'probe', enemy.koboldMinion)
-            newEnemy.moveEnemy(spawnPosition.getX(), spawnPosition.getY())
-
+    def spawnEnemies(self, spawnPos):
+        for enemyType, enemyAmount in self._areaRef.enemies.iteritems():
+            for i in range(enemyAmount):
+                newEnemy = enemy.Enemy(self._mainRef, enemyType)
+                newEnemy.moveEnemy(spawnPos.getX(), spawnPos.getY())
 
     def unloadArea(self):
         # Empty dict of enemy spawn points
