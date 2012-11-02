@@ -1,7 +1,6 @@
 from panda3d.core import *
 from direct.actor.Actor import Actor
 from direct.fsm.FSM import FSM
-from panda3d.ai import *
 
 import utils
 from unit import Unit
@@ -20,15 +19,12 @@ class Player(FSM, Unit):
         FSM.__init__(self, 'playerFSM')
 
         self._stateHandlerRef = mainRef.stateHandler
-        self._AIworldRef = mainRef.AIworld
         
         self.playerNode = mainRef.mainNode.attachNewNode('playerNode')
 
         self.initPlayerAttributes()
         self.initPlayerModel()
         self.initPlayerCamera()
-
-        self.initPlayerAi()
 
         #self.initPlayerMovement()
         self.initPlayerCollisionHandlers()
@@ -98,12 +94,6 @@ class Player(FSM, Unit):
         base.camera.lookAt(self.playerNode)
 
         self.stopCamera = False
-
-    def initPlayerAi(self):
-        self.playerAi = AICharacter('player', self.playerNode, self.mass, 0.05, self.movementSpeed)
-        self._AIworldRef.addAiChar(self.playerAi)
-        self.playerAiBehaviors = self.playerAi.getAiBehaviors()
-        #self.playerAiBehaviors.obstacleAvoidance(1.0)
 
     def initStartPositions(self, playerStartPos, playerExitPos):
         self.exitPos = playerExitPos
