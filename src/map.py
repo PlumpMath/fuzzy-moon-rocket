@@ -53,11 +53,11 @@ class Map:
 
         # Locate and save enemy spawn points 
         self.spawnPointsDict = {}
-        self.spawnPointsList = []
+        #self.spawnPointsList = []
         for i  in range(1, area.numSpawns):
             spawnPoint = self.areaModel.find('**/enemySpawnPoint'+str(i))
             print('located spawn point: ' + str(spawnPoint))
-            self.spawnPointsList.append(spawnPoint)
+            #self.spawnPointsList.append(spawnPoint)
             self.spawnPointsDict[spawnPoint] = 1 # Active
 
         # Initialize walls
@@ -74,12 +74,22 @@ class Map:
 
         playerPos = self._playerRef.playerNode.getPos()
 
-        for spawnPoint in self.spawnPointsList:
+        for spawnPoint, active in self.spawnPointsDict.iteritems():
             spawnPos = spawnPoint.getPos()
-            if utils.getIsInRange(playerPos, spawnPos, spawnRadius):
-                if self.spawnPointsDict[spawnPoint] == 1:
+            if active == 1:
+                if utils.getIsInRange(playerPos, spawnPos, spawnRadius):
                     self.spawnPointsDict[spawnPoint] = 0
+
                     self.spawnEnemies(area.numEnemiesPerSpawn, spawnPos)
+
+
+
+        #for spawnPoint in self.spawnPointsList:
+        #    spawnPos = spawnPoint.getPos()
+        #    if utils.getIsInRange(playerPos, spawnPos, spawnRadius):
+        #        if self.spawnPointsDict[spawnPoint] == 1:
+        #            self.spawnPointsDict[spawnPoint] = 0
+        #            self.spawnEnemies(area.numEnemiesPerSpawn, spawnPos)
 
         # Call again after initial delay to reduce overhead
         return task.again
