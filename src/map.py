@@ -6,12 +6,15 @@ import utils
 
 import enemy
 
-Area = namedtuple('Area', ['modelName', 'numSpawns', 'numEnemiesPerSpawn'] )
+Area = namedtuple('Area', ['modelName', 'numEnemiesPerSpawn'] )
 
-farmArea = Area(modelName='area_1', numSpawns=2, numEnemiesPerSpawn=1)
-cornFieldArea = Area(modelName='area_2', numSpawns=4, numEnemiesPerSpawn=2)
+farmArea = Area(modelName='area_1', numEnemiesPerSpawn=1)
+cornFieldArea = Area(modelName='area_2', numEnemiesPerSpawn=2)
 
 class Map:
+
+    maxSpawnPointsPerArea = 20
+
     def __init__(self, main):
         print("Map class instantiated")
         self._mainRef = main
@@ -53,12 +56,17 @@ class Map:
 
         # Locate and save enemy spawn points 
         self.spawnPointsDict = {}
-        #self.spawnPointsList = []
-        for i  in range(1, area.numSpawns):
-            spawnPoint = self.areaModel.find('**/enemySpawnPoint'+str(i))
-            print('located spawn point: ' + str(spawnPoint))
-            #self.spawnPointsList.append(spawnPoint)
+        i = 1
+        spawnPoint = self.areaModel.find('**/enemySpawnPoint'+str(i))
+        while spawnPoint.getErrorType() == 0: # While Spawn Point is found OK
+            print('located spawn point: ', spawnPoint)
             self.spawnPointsDict[spawnPoint] = 1 # Active
+
+            i += 1
+            spawnPoint = self.areaModel.find('**/enemySpawnPoint'+str(i))
+
+            if i >= self.maxSpawnPointsPerArea:
+                break
 
         # Initialize walls
         self.initWalls(self.areaNode)
@@ -81,15 +89,6 @@ class Map:
                     self.spawnPointsDict[spawnPoint] = 0
 
                     self.spawnEnemies(area.numEnemiesPerSpawn, spawnPos)
-
-
-
-        #for spawnPoint in self.spawnPointsList:
-        #    spawnPos = spawnPoint.getPos()
-        #    if utils.getIsInRange(playerPos, spawnPos, spawnRadius):
-        #        if self.spawnPointsDict[spawnPoint] == 1:
-        #            self.spawnPointsDict[spawnPoint] = 0
-        #            self.spawnEnemies(area.numEnemiesPerSpawn, spawnPos)
 
         # Call again after initial delay to reduce overhead
         return task.again
