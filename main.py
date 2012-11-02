@@ -139,7 +139,7 @@ class World(ShowBase):
         AiUpdateTask.last = 0
 
     def AiUpdate(self, task):
-        if self.stateHandler.state == self.stateHandler.PAUSE:
+        if self.stateHandler.state != self.stateHandler.PLAY:
             return task.cont
 
         # Make sure we're not taking too long
