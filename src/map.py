@@ -36,7 +36,7 @@ class Map:
         self.enemySpawnTask = taskMgr.doMethodLater(1.5, self.enemySpawnUpdater, 'enemySpawnTask')
 
         # Exit area task
-        self.exitAreaTask = taskMgr.doMethodLater(1.5, self.exitArea, 'exitAreaTask')
+        #self.exitAreaTask = taskMgr.doMethodLater(1.5, self.exitArea, 'exitAreaTask')
 
     def loadArea(self, area):
         print('loadArea: ', area.modelName)
@@ -70,13 +70,28 @@ class Map:
         self.startPos = self.areaModel.find('**/startPos').getPos()
         self.exitPos = self.areaModel.find('**/exitPos').getPos()
 
-        self.exitStation = Actor('models/exitStation.egg')
-        self.exitStation.reparentTo(self.areaNode)
+        # Load the exit station model
+        #self.exitStation = Actor('models/exitStation.egg')
+        #self.exitStation = loader.loadModel('models/exitStation.egg')
+        #self.exitStation.reparentTo(self.areaNode)
 
-        self.exitStation.setH(-90)
-        self.exitStation.setPos(self.exitPos)
+        # Fix heading of exitStation and set its position
+        #self.exitStation.setH(-90)
+        #self.exitStation.setPos(self.exitPos)
 
-        self.exitStationAnimation = self.exitStation.getAnimNames()
+        # Disable collisions with visual geometry
+        #self.exitStation.setCollideMask(BitMask32.allOff())
+
+        # Locate exit station within areaModel
+        self.exitStation = self.areaModel.find('**/exitStation')
+        #self.exitStation.setCollideMask(BitMask32.allOff())
+
+        # Make collision object collidable
+        self.exitStation.find('**/ground').setCollideMask(BitMask32.bit(1))
+        #self.exitStation.find('**/collider').setCollideMask(BitMask32.bit(2))
+
+        # Save the exitStation animation name
+        #self.exitStationAnimation = self.exitStation.getAnimNames()
 
         # Locate and save enemy spawn points 
         self.spawnPointsDict = {}
@@ -101,7 +116,7 @@ class Map:
              # Load player reference
             self._playerRef = self._mainRef.player
 
-        spawnRadius = 40
+        spawnRadius = 75
 
         playerPos = self._playerRef.playerNode.getPos()
 
@@ -130,7 +145,7 @@ class Map:
 
         if utils.getIsInRange(playerPos, self.exitPos, exitRadius):
             print('At exit!')
-            self.exitStation.play(self.exitStationAnimation, fromFrame=0, toFrame=12)
+            #self.exitStation.play(self.exitStationAnimation, fromFrame=0, toFrame=12)
 
             taskMgr.doMethodLater(2, self.unloadArea, 'unloadAreaTask')
             return task.done
@@ -153,9 +168,11 @@ class Map:
         # Remove walls model
         self.walls.remove()
 
-        # Cleanup and remove exitStation model
-        self.exitStation.cleanup()
-        self.exitStation.delete()
+        # Cleanup and remove exitStation Actor
+        #self.exitStation.cleanup() 
+        #self.exitStation.delete()
+        # Cleanup and remove exitStation Mesh (model)
+        self.exitStation.remove()
 
         # Remove spawn task
         self.enemySpawnTask.remove()

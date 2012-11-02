@@ -53,7 +53,7 @@ class World(ShowBase):
             self.accept('shift-o', self.gui.toggleOverlayFrame)
             self.accept('1', self.damagePlayer)
             self.accept('2', self.killEnemy)
-            self.accept('3', self.changeToGodCamera)
+            self.accept('3', self.zoomOut)
             self.accept('4', self.outputTime)
             self.accept('5', self.addEnemy)
             self.accept('6', self.levelPlayerUp)
@@ -71,7 +71,7 @@ class World(ShowBase):
     def killEnemy(self): # key 2
         self.enemy.onDeath()
 
-    def changeToGodCamera(self): # key 3
+    def zoomOut(self): # key 3
         if self.player.stopCamera:
             self.player.stopCamera = False
 

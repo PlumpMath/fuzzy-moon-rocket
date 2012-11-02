@@ -64,6 +64,8 @@ class Enemy(FSM, Unit):
         self.enemyModel = Actor(modelPrefix + modelName + '-model.egg', {
                 'walk':modelPrefix+modelName+'-walk.egg',
                 'attack':modelPrefix+modelName+'-attack.egg',
+                'idle':modelPrefix+modelName+'-idle.egg',
+                'awake':modelPrefix+modelName+'-awake.egg',
                 'death1':modelPrefix+modelName+'-death1.egg',
                 'death2':modelPrefix+modelName+'-death2.egg'
             })
@@ -210,6 +212,28 @@ class Enemy(FSM, Unit):
 
         return task.cont
 
+    def pursuePlayer(self, task):
+        self.enemyAIBehaviors.pursue(self._playerRef.playerNode)
+        self.enemyModel.loop('walk', fromFrame=0, toFrame=12)
+
+        return task.done
+
+    def enterIdle(self):
+        #print('enemy enterIdle')
+        self.enemyModel.pose('idle', 0) # Hold first frame
+
+    def exitIdle(self):
+        #print('enemy exitIdle')
+        self.enemyModel.play('awake')
+
+    def enterPursue(self):
+        #print('enemy enterPursue')
+        taskMgr.doMethodLater(1, self.pursuePlayer, 'pursuePlayerTask')
+
+    def exitPursue(self):
+        #print('enemy exitPursue')
+        self.enemyAIBehaviors.removeAi('pursue')
+
     def enterCombat(self):
         #print('enemy enterCombat')
         self.enemyModel.stop()
@@ -247,25 +271,6 @@ class Enemy(FSM, Unit):
         randomDeathAnim = 'death' + str(utils.getD2())
         self.enemyModel.play(randomDeathAnim)
 
-    def enterPursue(self):
-        #print('enemy enterPursue')
-        self.enemyAIBehaviors.pursue(self._playerRef.playerNode)
-        self.enemyModel.loop('walk', fromFrame=0, toFrame=12)
-
-    def exitPursue(self):
-        #print('enemy exitPursue')
-        self.enemyAIBehaviors.removeAi('pursue')
-
-    def enterIdle(self):
-        #print('enemy enterIdle')
-        self.enemyAIBehaviors.removeAi('pursue')
-        self.enemyAIBehaviors.wander(2.5, 0, 5)
-
-        self.enemyModel.loop('walk', fromFrame=0, toFrame=12)
-
-    def exitIdle(self):
-        #print('enemy exitIdle')
-        self.enemyAIBehaviors.removeAi('wander')
 
 
     def attackPlayer(self, attackSequence):
