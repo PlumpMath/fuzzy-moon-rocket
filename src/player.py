@@ -19,6 +19,7 @@ class Player(FSM, Unit):
         Unit.__init__(self)
         FSM.__init__(self, 'playerFSM')
 
+        self._stateHandlerRef = mainRef.stateHandler
         self._AIworldRef = mainRef.AIworld
         
         self.playerNode = mainRef.mainNode.attachNewNode('playerNode')
@@ -164,9 +165,13 @@ class Player(FSM, Unit):
             self.selector.detachNode()
 
     def setPlayerDestination(self, position):
+        if self._stateHandlerRef.state == self._stateHandlerRef.PAUSE:
+            # Do not do anything when paused
+            return 
+
         if self.getIsDead():
             return
-        #print('setPlayerPosition: ' + str(position))
+
         self.destination = position
         pitchRoll = self.playerNode.getP(), self.playerNode.getR()
 
@@ -183,6 +188,10 @@ class Player(FSM, Unit):
             self.request('Run')
 
     def attackEnemy(self, enemy):
+        if self._stateHandlerRef.state == self._stateHandlerRef.PAUSE:
+            # Do not do anything when paused
+            return 
+
         if self.getIsDead():
             if self.state != 'Death':
                 self.request('Death')
@@ -269,9 +278,18 @@ class Player(FSM, Unit):
                 self.request('Idle')
 
     def playerUpdate(self, task):
+        if self._stateHandlerRef.state == self._stateHandlerRef.PAUSE:
+            self.playerModel.stop()
+            # Do not do anything when paused
+            return task.cont
+
+        self.checkGroundCollisions()
+        self.updatePlayerTarget()
+
         if self.getIsDead():
             if self.state != 'Death':
                 self.request('Death')
+
             return task.cont
 
         # Don't run if we're taking too long
@@ -282,8 +300,6 @@ class Player(FSM, Unit):
             return task.cont
 
         self.updatePlayerPosition(deltaTime)
-        self.checkGroundCollisions()
-        self.updatePlayerTarget()
 
         base.camera.setPos(self.playerNode.getX(),
                        self.playerNode.getY() + self._cameraYModifier,

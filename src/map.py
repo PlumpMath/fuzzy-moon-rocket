@@ -1,5 +1,5 @@
 from panda3d.core import *
-from direct.actor.Actor import Actor
+#from direct.actor.Actor import Actor
 
 from collections import namedtuple
 

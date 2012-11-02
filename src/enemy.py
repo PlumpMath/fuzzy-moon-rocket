@@ -41,6 +41,7 @@ class Enemy(FSM, Unit):
         self._playerRef = mainRef.player
         self._AIworldRef = mainRef.AIworld
         self._enemyListRef = mainRef.enemyList
+        self._stateHandlerRef = mainRef.stateHandler
 
         self.topEnemyNode = mainRef.mainNode.attachNewNode('topEnemyNode')
 
@@ -171,6 +172,11 @@ class Enemy(FSM, Unit):
                 self.enemyNode.setZ(zModifier + newZ)
 
     def enemyUpdater(self, task):
+        if self._stateHandlerRef.state == self._stateHandlerRef.PAUSE:
+            self.enemyModel.stop()
+            # Do not do anything when paused
+            return task.cont
+
         self.checkGroundCollisions()
 
         if self.getIsDead():
@@ -274,6 +280,10 @@ class Enemy(FSM, Unit):
 
 
     def attackPlayer(self, attackSequence):
+        if self._stateHandlerRef.state == self._stateHandlerRef.PAUSE:
+            # Do not do anything when paused
+            return 
+
         playerPos = self._playerRef.playerNode.getPos()
         enemyPos = self.enemyNode.getPos()
 

@@ -6,7 +6,7 @@ from direct.task import Task
 from panda3d.ai import *
 import sys
 
-from src import utils, player, enemy, gui, hud, map, quest
+from src import utils, player, enemy, gui, hud, map, quest, states
 
 class World(ShowBase):
 
@@ -36,6 +36,8 @@ class World(ShowBase):
         self.initAI()
 
         # Instantiate other classes
+        self.stateHandler = states.StateHandler()
+
         self.mapHandler = map.Map(self)
 
         self.player = player.Player(self)
@@ -43,10 +45,13 @@ class World(ShowBase):
         self.gui = gui.GUI()
         self.hud = hud.HUD(self.player)
 
-        self.accept('escape', self.endGame)
 
         self.mapHandler.startArea()
         self.player.initStartPositions(self.mapHandler.startPos, self.mapHandler.exitPos)
+
+        # Add keyboard commands
+        self.accept('escape', self.endGame)
+        self.accept('pause', self.pauseGame)
 
         # For debugging
         if debug:
@@ -134,6 +139,9 @@ class World(ShowBase):
         AiUpdateTask.last = 0
 
     def AiUpdate(self, task):
+        if self.stateHandler.state == self.stateHandler.PAUSE:
+            return task.cont
+
         # Make sure we're not taking too long
         deltaTime = task.time - task.last
         task.last = task.time
@@ -145,6 +153,14 @@ class World(ShowBase):
         self.AIworld.update()
 
         return task.cont
+
+    def pauseGame(self):
+        #if self.stateHandler.state == self.stateHandler.PLAY:
+        #    self.stateHandler.request(self.stateHandler.PAUSE)
+        if self.stateHandler.state == self.stateHandler.PAUSE:
+            self.stateHandler.request(self.stateHandler.PLAY)
+        else:
+            self.stateHandler.request(self.stateHandler.PAUSE)
 
     def endGame(self):
         sys.exit()
