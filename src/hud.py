@@ -23,8 +23,6 @@ class HUD:
         self.initTargetBar()
         self.createStatsButton()
 
-        taskMgr.add(self.removeTitle, 'RemoveTitleTask')
-
         taskMgr.add(self.updateBars, 'UpdateBarsTask')
     
     def initTargetBar(self):
@@ -44,14 +42,6 @@ class HUD:
         else:
             # Hide bar
             self.targetBar.hide()
-
-    def removeTitle(self, task):
-        if task.time > 3:
-            self.gameText.destroy()
-            self.createExitButton()
-            return task.done
-
-        return task.cont
 
     def createStatsButton(self):
         self.statsButton = DirectButton(
@@ -91,17 +81,7 @@ class HUD:
         self.stat1.destroy()
         self.stat2.destroy()
         self.stat3.destroy()
-
-    def createExitButton(self):
-        self.exitButton = DirectButton(
-                                    text="Exit",
-                                    pos=(1.2, 0, 0.9),
-                                    scale=0.1,
-                                    command=self.exitGame)
-
-    def exitGame(self):
-        sys.exit()
-
+        
     def initHealthBar(self):
         self.healthBar = DirectWaitBar(
                                     text="Health", 

@@ -61,7 +61,7 @@ class Map:
         i = 1
         spawnPoint = self.areaModel.find('**/enemySpawnPoint'+str(i))
         while spawnPoint.getErrorType() == 0: # While Spawn Point is found OK
-            print('located spawn point: ', spawnPoint)
+            #print('located spawn point: ', spawnPoint)
             self.spawnPointsDict[spawnPoint] = 1 # Activate spawn point
 
             i += 1
@@ -75,7 +75,7 @@ class Map:
         self.initWalls(self.areaNode)
 
         # Initialize the task to handle enemy spawns
-        enemeySpawnTask = taskMgr.doMethodLater(1.5, self.enemySpawnUpdater, 'enemySpawnTask')
+        enemySpawnTask = taskMgr.doMethodLater(1.5, self.enemySpawnUpdater, 'enemySpawnTask')
 
     def enemySpawnUpdater(self, task):
         if self._playerRef is None:
@@ -116,7 +116,7 @@ class Map:
         self.walls.delete()
 
         # Remove spawn task
-        enemeySpawnTask.remove()
+        enemySpawnTask.remove()
 
         # Remove nodes
         self.areaNode.removeNode()
