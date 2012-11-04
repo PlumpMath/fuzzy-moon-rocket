@@ -165,6 +165,6 @@ class World(ShowBase):
     def endGame(self):
         sys.exit()
 
-#cvMgr.listVariables()
+#PStatClient.connect()
 World()
 run()
