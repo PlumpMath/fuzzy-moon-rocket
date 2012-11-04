@@ -122,7 +122,8 @@ class Map:
         for enemyType, enemyAmount in self._areaRef.enemies.iteritems():
             for i in range(enemyAmount):
                 newEnemy = enemy.Enemy(self._mainRef, enemyType)
-                newEnemy.moveEnemy(spawnPos.getX(), spawnPos.getY())
+                randomPos = spawnPos.getX() + (utils.getD10()-5), spawnPos.getY() + (utils.getD10()-5)
+                newEnemy.moveEnemy(*randomPos)
 
     def exitArea(self, task):
         if self._playerRef is not None:
