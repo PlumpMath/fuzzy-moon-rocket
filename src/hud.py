@@ -1,6 +1,6 @@
-from direct.gui.DirectGui import DirectButton, DirectWaitBar
+from direct.gui.DirectGui import DirectButton, DirectWaitBar, DirectFrame
 from direct.gui.OnscreenText import OnscreenText
-from direct.gui.DirectGui import DirectFrame
+from panda3d.core import TextNode
 from direct.task import Task
 import sys
 
@@ -72,14 +72,22 @@ class HUD:
             #                    command=self.exitStats)
 
             def addStats(pos, text):
-                    return OnscreenText(text=text,
-                                        pos=(0, pos),
-                                        scale=0.05,
-                                        parent=self.myFrame,
-                                        mayChange=1)  
-            self.stat1 = addStats(0.35, 'Strength: ' + str(self._playerRef.strength))
-            self.stat2 = addStats(0.25, 'Constitution: ' + str(self._playerRef.constitution))
-            self.stat3 = addStats(0.15, 'Dexterity: ' + str(self._playerRef.dexterity))
+                return OnscreenText(text=text,
+                                    pos=(-0.4, pos),
+                                    scale=0.05,
+                                    parent=self.myFrame,
+                                    align=TextNode.ALeft)  
+
+            addStats(0.4, 'Strength: ' + str(self._playerRef.strength))
+            addStats(0.3, 'Constitution: ' + str(self._playerRef.constitution))
+            addStats(0.2, 'Dexterity: ' + str(self._playerRef.dexterity))
+
+            addStats(0.05, 'Attack Bonus: ' + str(self._playerRef.attackBonus))
+            addStats(-0.05, 'Damage Bonus: ' + str(self._playerRef.damageBonus))
+            addStats(-0.15, 'Armor Class: ' + str(self._playerRef.armorClass))
+
+            addStats(-0.30, 'Current Health Points: ' + str(self._playerRef.currentHealthPoints))
+            addStats(-0.40, 'Max Health Points: ' + str(self._playerRef.maxHealthPoints))
         else:
             self._showingStats = False
 
@@ -88,10 +96,6 @@ class HUD:
 
     def exitStats(self):
         self.myFrame.destroy()
-        #self.statsButton.destroy()
-        self.stat1.destroy()
-        self.stat2.destroy()
-        self.stat3.destroy()
         
     def initHealthBar(self):
         self.healthBar = DirectWaitBar(
