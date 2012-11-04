@@ -123,11 +123,12 @@ class Enemy(FSM, Unit):
 
     def initEnemyCollisionSolids(self):
         pickerSphereCollNode = CollisionNode(self.enemyNode.getName())
-        pickerSphereNodePath = self.enemyNode.attachNewNode(pickerSphereCollNode)
         pickerCollSphere = CollisionSphere(0, 0, 1, 6)
         pickerSphereCollNode.addSolid(pickerCollSphere)
         pickerSphereCollNode.setFromCollideMask(BitMask32.allOff())
         pickerSphereCollNode.setIntoCollideMask(BitMask32.bit(1))
+
+        self.pickerNode = self.enemyNode.attachNewNode(pickerSphereCollNode)
         #sphereNodePath.show()
 
         collSphereNode = CollisionNode('enemyCollSphere')
@@ -319,6 +320,8 @@ class Enemy(FSM, Unit):
 
         # Remove enemy collision sphere (pusher)
         self.sphereNode.removeNode()
+        # Remove enemy picker sphere (handlerQueue)
+        self.pickerNode.removeNode()
 
         # Stop the collision pusher
         self.collPusher = None
@@ -350,6 +353,9 @@ class Enemy(FSM, Unit):
         if self.getIsDead():
             # Award the player exp
             self._playerRef.receiveEXP(self.expAward)
+
+            # Remove enemy picker sphere (handlerQueue)
+            self.pickerNode.removeNode()
 
             # Change state
             self.request('Death')
