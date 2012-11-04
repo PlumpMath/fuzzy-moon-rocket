@@ -49,10 +49,14 @@ class HUD:
                                 text = ("Stats"),
                                 pos=(1.2, 0, -0.9), 
                                 scale=.05, 
-                                command=self.showStats)
+                                command=self.toggleStats)
 
-    
-    def showStats(self):
+        self._showingStats = False
+
+    def toggleStats(self):
+        if not self._showingStats:
+            self._showingStats = True
+
             self.myFrame = DirectFrame(
                                 frameColor=(1, 1, 1, 1),
                                 frameSize=(-0.5, 0.5, -0.5, 0.5),
@@ -60,25 +64,31 @@ class HUD:
                                 )
             
 
-            self.statsButton = DirectButton(
-                                text = ("close"),
-                                pos=(1.0, 0.30, -0.45), 
-                                scale=.05, 
-                                command=self.exitStats)
+            #self.statsButton = DirectButton(
+            #                    text = ("close"),
+            #                    pos=(1.0, 0.30, -0.45), 
+            #                    scale=.05, 
+            #                    parent=self.myFrame,
+            #                    command=self.exitStats)
 
             def addStats(pos, text):
                     return OnscreenText(text=text,
-                                        pos=(1.0, pos),
+                                        pos=(0, pos),
                                         scale=0.05,
+                                        parent=self.myFrame,
                                         mayChange=1)  
             self.stat1 = addStats(0.35, 'Strength: ' + str(self._playerRef.strength))
             self.stat2 = addStats(0.25, 'Constitution: ' + str(self._playerRef.constitution))
             self.stat3 = addStats(0.15, 'Dexterity: ' + str(self._playerRef.dexterity))
+        else:
+            self._showingStats = False
+
+            self.exitStats()
 
 
     def exitStats(self):
         self.myFrame.destroy()
-        self.statsButton.destroy()
+        #self.statsButton.destroy()
         self.stat1.destroy()
         self.stat2.destroy()
         self.stat3.destroy()

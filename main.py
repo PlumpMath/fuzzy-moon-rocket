@@ -25,6 +25,8 @@ class World(ShowBase):
 
         # Set background color
         base.setBackgroundColor(0.1, 0.1, 0.1, 1)
+        base.camLens.setNearFar(50, 200)
+        base.camLens.setFov(40)
 
         # Main game node
         self.mainNode = render.attachNewNode('mainNode')
@@ -83,13 +85,13 @@ class World(ShowBase):
         if self.player.stopCamera:
             self.player.stopCamera = False
 
-            self.player._cameraYModifier /= 4
-            self.player._cameraZModifier /= 4
+            self.player._cameraYModifier /= 2
+            self.player._cameraZModifier /= 2
         else:
             self.player.stopCamera = True
 
-            self.player._cameraYModifier *= 4
-            self.player._cameraZModifier *= 4
+            self.player._cameraYModifier *= 2
+            self.player._cameraZModifier *= 2
 
     def outputTime(self): # key 4
         print(str(globalClock.getFrameTime()))
