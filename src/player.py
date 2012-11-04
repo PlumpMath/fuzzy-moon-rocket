@@ -37,7 +37,6 @@ class Player(FSM, Unit):
 
         # Start player update task
         playerUpdateTask = taskMgr.add(self.playerUpdate, 'playerUpdateTask')
-        playerUpdateTask.last = 0
 
         # Initialize player FSM state
         self.request('Idle')
@@ -250,7 +249,7 @@ class Player(FSM, Unit):
         self.playerNode.setFluidPos(newX, newY, newZ)
 
         self.velocity = self.destination - self.playerNode.getPos()
-        if self.velocity.lengthSquared() < 5:
+        if self.velocity.lengthSquared() < 10:
             self.velocity = Vec3.zero()
             #print('destination reached')
             if self.state == 'Run':
@@ -282,14 +281,7 @@ class Player(FSM, Unit):
 
             return task.cont
 
-        # Don't run if we're taking too long
-        deltaTime = task.time - task.last
-        task.last = task.time
-
-        if deltaTime > .2: 
-            return task.cont
-
-        self.updatePlayerPosition(deltaTime)
+        self.updatePlayerPosition(globalClock.getDt())
 
         base.camera.setPos(self.playerNode.getX(),
                        self.playerNode.getY() + self._cameraYModifier,
@@ -339,6 +331,7 @@ class Player(FSM, Unit):
         
     def playIdleAnimation(self, task):
         if self.state == 'Idle':
+            self.playerModel.stop()
             self.playerModel.loop('idle', fromFrame=0, toFrame=50)
 
         return task.done
@@ -360,7 +353,7 @@ class Player(FSM, Unit):
         self.playerModel.stop()
         self.playerModel.play('stop')
 
-        taskMgr.doMethodLater(3, self.playIdleAnimation, 'idleAnimationTask')
+        taskMgr.doMethodLater(1.5, self.playIdleAnimation, 'idleAnimationTask')
 
     def exitIdle(self):
         self.playerModel.stop()

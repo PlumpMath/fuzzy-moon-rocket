@@ -23,7 +23,8 @@ class HUD:
         self.initTargetBar()
         self.createStatsButton()
 
-        taskMgr.add(self.updateBars, 'UpdateBarsTask')
+        #taskMgr.add(self.updateBars, 'UpdateBarsTask')
+        taskMgr.doMethodLater(1, self.updateBars, 'UpdateBarsTask')
     
     def initTargetBar(self):
         self.targetBar = DirectWaitBar(
@@ -93,8 +94,9 @@ class HUD:
         self.healthBar['value'] = self._playerRef.getCurrentHealthPointsAsPercentage()
         self.updateEXPBar()
         self.updateTargetBar()
-        # Continue calling task in next frame
-        return task.cont
+
+        # Continue calling task again after initial delay
+        return task.again
 
     def initEXPBar(self):
         self.expBar = DirectWaitBar(text='',

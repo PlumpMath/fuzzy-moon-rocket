@@ -9,7 +9,7 @@ import enemy
 Area = namedtuple('Area', ['modelName', 'enemies'] )
 
 farmArea = Area(modelName='area_1', enemies={enemy.koboldMinion:1})
-cornFieldArea = Area(modelName='area_2', enemies={enemy.koboldMinion:2, enemy.koboldSkirmisher:1})
+cornFieldArea = Area(modelName='area_2', enemies={enemy.koboldMinion:3})
 
 class Map:
 
@@ -31,13 +31,12 @@ class Map:
     def startArea(self):
         self.areaNode.reparentTo(self._mainRef.mainNode)
 
-        #self._playerRef.initStartPositions(self.startPos, self.exitPos)
-
         # Initialize the task to handle enemy spawns
         self.enemySpawnTask = taskMgr.doMethodLater(1.5, self.enemySpawnUpdater, 'enemySpawnTask')
 
         # Change state to play
-        self._stateHandlerRef.request(self._stateHandlerRef.PLAY)
+        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
+            self._stateHandlerRef.request(self._stateHandlerRef.PLAY)
 
         # Exit area task
         self.exitAreaTask = taskMgr.doMethodLater(1.5, self.exitArea, 'exitAreaTask')
@@ -74,28 +73,11 @@ class Map:
         self.startPos = self.areaModel.find('**/startPos').getPos()
         self.exitPos = self.areaModel.find('**/exitPos').getPos()
 
-        # Load the exit station model
-        #self.exitStation = Actor('models/exitStation.egg')
-        #self.exitStation = loader.loadModel('models/exitStation.egg')
-        #self.exitStation.reparentTo(self.areaNode)
-
-        # Fix heading of exitStation and set its position
-        #self.exitStation.setH(-90)
-        #self.exitStation.setPos(self.exitPos)
-
-        # Disable collisions with visual geometry
-        #self.exitStation.setCollideMask(BitMask32.allOff())
-
         # Locate exit station within areaModel
         self.exitStation = self.areaModel.find('**/exitStation')
-        #self.exitStation.setCollideMask(BitMask32.allOff())
 
         # Make collision object collidable
         self.exitStation.find('**/ground').setCollideMask(BitMask32.bit(1))
-        #self.exitStation.find('**/collider').setCollideMask(BitMask32.bit(2))
-
-        # Save the exitStation animation name
-        #self.exitStationAnimation = self.exitStation.getAnimNames()
 
         # Locate and save enemy spawn points 
         self.spawnPointsDict = {}
@@ -143,16 +125,17 @@ class Map:
                 newEnemy.moveEnemy(spawnPos.getX(), spawnPos.getY())
 
     def exitArea(self, task):
-        exitRadius = 17
+        if self._playerRef is not None:
+            exitRadius = 15
 
-        playerPos = self._playerRef.playerNode.getPos()
+            playerPos = self._playerRef.playerNode.getPos()
 
-        if utils.getIsInRange(playerPos, self.exitPos, exitRadius):
-            print('At exit!')
-            #self.exitStation.play(self.exitStationAnimation, fromFrame=0, toFrame=12)
+            if utils.getIsInRange(playerPos, self.exitPos, exitRadius):
+                print('At exit!')
+                #self.exitStation.play(self.exitStationAnimation, fromFrame=0, toFrame=12)
 
-            taskMgr.doMethodLater(2, self.unloadArea, 'unloadAreaTask')
-            return task.done
+                taskMgr.doMethodLater(2, self.unloadArea, 'unloadAreaTask')
+                return task.done
 
         return task.again
 
@@ -172,12 +155,6 @@ class Map:
         # Remove walls model
         self.walls.remove()
 
-        # Cleanup and remove exitStation Actor
-        #self.exitStation.cleanup() 
-        #self.exitStation.delete()
-        # Cleanup and remove exitStation Mesh (model)
-        self.exitStation.remove()
-
         # Remove spawn task
         self.enemySpawnTask.remove()
         self.exitAreaTask.remove()
@@ -185,8 +162,13 @@ class Map:
         # Remove nodes
         self.areaNode.removeNode()
 
-        #taskMgr.doMethodLater(2, self.loadArea, 'loadAreaTask', extraArgs=[cornFieldArea])
-        #taskMgr.doMethodLater(3, self.startArea, 'startAreaTask', extraArgs=[])
+        #taskMgr.doMethodLater(0.1, self.loadNextArea, 'loadNextAreaTask')
+
+        return task.done
+
+    def loadNextArea(self, task):
+        self.loadArea(cornFieldArea)
+        taskMgr.doMethodLater(0.5, self.startArea, 'startAreaTask', extraArgs=[])
 
         return task.done
 
@@ -194,11 +176,14 @@ class Map:
         self.walls = loader.loadModel('models/walls.egg')
         self.walls.reparentTo(areaNode)
 
+        # Set walls Z-position
+        self.walls.setZ(-2)
+
         # Visual geometry should be non-collidable
         self.walls.setCollideMask(BitMask32.allOff())
 
         # Find collision geometry and make it collidable with pushers
-        collisionWalls = self.walls.find('**/collisionWalls')
+        collisionWalls = self.walls.find('**/colliders')
         collisionWalls.setCollideMask(BitMask32.bit(2))
 
     def initSun(self, areaNode):
@@ -208,6 +193,5 @@ class Map:
 
         self.sunNode = areaNode.attachNewNode(sun)
         self.sunNode.setP(-150)
-        #self.sunNode.lookAt(0, 0, 1)
 
         areaNode.setLight(self.sunNode)

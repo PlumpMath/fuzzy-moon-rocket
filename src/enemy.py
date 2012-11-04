@@ -44,10 +44,7 @@ class Enemy(FSM, Unit):
         self._stateHandlerRef = mainRef.stateHandler
 
         self.topEnemyNode = mainRef.mainNode.attachNewNode('topEnemyNode')
-
-        enemyName = 'enemy' + str(len(self._enemyListRef))
-        self.enemyNode = self.topEnemyNode.attachNewNode(enemyName)
-        self._enemyListRef.append(self)
+        self.initEnemyNode()
 
         utils.enemyDictionary[self.enemyNode.getName()] = self
 
@@ -59,6 +56,11 @@ class Enemy(FSM, Unit):
         self.initEnemyCollisionSolids()
 
         self.request('Idle')
+
+    def initEnemyNode(self):
+        enemyName = 'enemy' + str(len(self._enemyListRef))
+        self.enemyNode = self.topEnemyNode.attachNewNode(enemyName)
+        self._enemyListRef.append(self)
 
     def loadEnemyModel(self, modelName):
         modelPrefix = 'models/'
@@ -114,8 +116,6 @@ class Enemy(FSM, Unit):
         #self.enemyAIBehaviors.obstacleAvoidance(1.0)
 
         self.enemyUpdater = taskMgr.add(self.enemyUpdater, 'enemyUpdaterTask')
-
-        self.request('Idle')
 
     def initEnemyCollisionHandlers(self):
         self.groundHandler = CollisionHandlerQueue()
@@ -202,18 +202,9 @@ class Enemy(FSM, Unit):
                 if utils.getIsInRange(playerPos, enemyPos, self.combatRange):
                     # Go to combat
                     self.request('Combat')
-
-            # If already in combat, attack!
-            elif self.state == 'Combat':
-                pass # Combat is now handled in attackPlayer method and enterCombat
-                #print('in combat')
         # If player is not within perception range
         else:
-            # if in combat
-            if self.state == 'Combat':
-                pass # Combat is now handled in attackPlayer method and enterCombat
-
-            elif self.state != 'Idle':
+            if self.state != 'Idle':
                 self.request('Idle')
 
         return task.cont
@@ -308,7 +299,7 @@ class Enemy(FSM, Unit):
             self.enemyModel.play('attack', fromFrame=0, toFrame=12)
 
             # Make sure enemy is facing player when attacking
-            pitchRoll = (self.enemyNode.getP(), self.enemyNode.getR())
+            pitchRoll = self.enemyNode.getP(), self.enemyNode.getR()
             self.enemyNode.lookAt(self._playerRef.playerNode)
             self.enemyNode.setHpr(self.enemyNode.getH()-180, *pitchRoll)
 
@@ -352,6 +343,9 @@ class Enemy(FSM, Unit):
         # Remove enemy updater task
         self.enemyUpdater.remove()
 
+        # Remove reference to main
+        self._worldRef = None
+
     def onDeath(self):
         if self.getIsDead():
             # Award the player exp
@@ -360,18 +354,18 @@ class Enemy(FSM, Unit):
             # Change state
             self.request('Death')
 
-            # Remove enemy collision sphere (pusher)
-            self.sphereNode.removeNode()
-
-            # Stop the collision pusher
-            self.collPusher = None
-
             # Remove enemy
             taskMgr.doMethodLater(self._removeCorpseDelay,
                              self.removeCorpse,
                             'RemoveCorpseTask')
 
     def removeCorpse(self, task):
+        # Remove enemy collision sphere (pusher)
+        self.sphereNode.removeNode()
+
+        # Stop the collision pusher
+        self.collPusher = None
+
         # Remove enemy from enemyList
         self._enemyListRef.remove(self)
 

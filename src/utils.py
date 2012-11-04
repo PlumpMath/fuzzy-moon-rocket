@@ -4,11 +4,10 @@ import random
 
 enemyDictionary = {}
 
-def getIsInRange(pos1, pos2, threshold=10):
-    xDiff = abs(pos1.getX() - pos2.getX())
-    yDiff = abs(pos1.getY() - pos2.getY())
-    if xDiff < threshold and yDiff < threshold:
-        return True 
+def getIsInRange(pos1, pos2, threshold):
+    vector = Vec3(pos2 - pos1)
+    if vector.lengthSquared() < (threshold * threshold):
+        return True
 
     return False
 

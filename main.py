@@ -8,6 +8,8 @@ import sys
 
 from src import utils, player, enemy, gui, hud, map, quest, states
 
+#loadPrcFile('config/Config.prc')
+
 class World(ShowBase):
 
     # Global debug setting
@@ -163,5 +165,6 @@ class World(ShowBase):
     def endGame(self):
         sys.exit()
 
+#cvMgr.listVariables()
 World()
 run()
