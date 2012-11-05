@@ -68,12 +68,12 @@ class Player(FSM, Unit):
     def initPlayerModel(self):
         # Initialize the player model (Actor)
         modelPrefix = 'models/player-'
-        self.playerModel = Actor(modelPrefix + 'model.egg', {
-            'run':modelPrefix+'run.egg',
-            'attack':modelPrefix+'attack.egg',
-            'stop':modelPrefix+'stop.egg',
-            'death':modelPrefix+'death.egg',
-            'idle':modelPrefix+'idle.egg'
+        self.playerModel = Actor(modelPrefix + 'model', {
+            'run':modelPrefix+'run',
+            'attack':modelPrefix+'attack',
+            'stop':modelPrefix+'stop',
+            'death':modelPrefix+'death',
+            'idle':modelPrefix+'idle'
             })
 
         self.playerModel.reparentTo(self.playerNode)
@@ -139,7 +139,7 @@ class Player(FSM, Unit):
         self.collPusher.addCollider(sphereNode, self.playerNode)
 
     def initSelector(self):
-        self.selector = Actor('models/selector.egg')
+        self.selector = Actor('models/selector')
         self.selector.setCollideMask(BitMask32.allOff())
 
         self.selectorAnimName = self.selector.getAnimNames()

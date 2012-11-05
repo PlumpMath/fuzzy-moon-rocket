@@ -60,7 +60,7 @@ class Map:
         # Setup environment (plane)
         self.areaNode = NodePath(area.modelName+'Node')
 
-        self.areaModel = loader.loadModel('models/'+area.modelName+'.egg')
+        self.areaModel = loader.loadModel('models/'+area.modelName)
         self.areaModel.reparentTo(self.areaNode)
 
         # Make sure area is centered in world
@@ -163,7 +163,7 @@ class Map:
 #======== EXIT GATE ==========================================
     def initExitGate(self):
         self.exitGate = self.exitStation.find('**/exitGate')
-        self.animatedExitGate = Actor('models/exitGate.egg')
+        self.animatedExitGate = Actor('models/exitGate')
         self.gateAnimation = self.animatedExitGate.getAnimNames()
         self.animatedExitGate.reparentTo(self.areaNode)
 
@@ -265,7 +265,7 @@ class Map:
         self.highlightTextNode.removeNode()
 
     def initWalls(self, areaNode):
-        self.walls = loader.loadModel('models/walls.egg')
+        self.walls = loader.loadModel('models/walls')
         self.walls.reparentTo(areaNode)
 
         # Set walls Z-position

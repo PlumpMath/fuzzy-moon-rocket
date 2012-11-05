@@ -66,13 +66,13 @@ class Enemy(FSM, Unit):
 
     def loadEnemyModel(self, modelName):
         modelPrefix = 'models/'
-        self.enemyModel = Actor(modelPrefix + modelName + '-model.egg', {
-                'walk':modelPrefix+modelName+'-walk.egg',
-                'attack':modelPrefix+modelName+'-attack.egg',
-                'idle':modelPrefix+modelName+'-idle.egg',
-                'awake':modelPrefix+modelName+'-awake.egg',
-                'death1':modelPrefix+modelName+'-death1.egg',
-                'death2':modelPrefix+modelName+'-death2.egg'
+        self.enemyModel = Actor(modelPrefix + modelName + '-model', {
+                'walk':modelPrefix+modelName+'-walk',
+                'attack':modelPrefix+modelName+'-attack',
+                'idle':modelPrefix+modelName+'-idle',
+                'awake':modelPrefix+modelName+'-awake',
+                'death1':modelPrefix+modelName+'-death1',
+                'death2':modelPrefix+modelName+'-death2'
             })
         self.enemyModel.reparentTo(self.enemyNode)
 
