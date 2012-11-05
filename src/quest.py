@@ -1,9 +1,11 @@
 from direct.gui.DirectGui import *
 from direct.gui.OnscreenText import OnscreenText
+from panda3d.core import TextNode
 
 #from panda3d.core import TextNode
 class Quest():
-	font = loader.loadFont("cmss12")
+	#font = loader.loadFont("cmss12")
+	font = TextNode.getDefaultFont()
 
 	#def addQuest(pos, msg):
 	
