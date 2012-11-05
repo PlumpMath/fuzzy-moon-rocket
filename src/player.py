@@ -19,6 +19,7 @@ class Player(FSM, Unit):
         FSM.__init__(self, 'playerFSM')
 
         self._mainRef = mainRef
+        self._ddaHandlerRef = mainRef.DDAHandler
         self._stateHandlerRef = mainRef.stateHandler
         
         self.playerNode = mainRef.mainNode.attachNewNode('playerNode')
@@ -295,7 +296,7 @@ class Player(FSM, Unit):
         return self._prevEXP + (self.level * 1000)
 
     def receiveEXP(self, value):
-        self.experience += value
+        self.experience += (value * self._ddaHandlerRef.EXPFactor)
         if self.experience >= self.getEXPToNextLevel():
             self.increaseLevel()
 

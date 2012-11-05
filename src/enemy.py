@@ -42,6 +42,7 @@ class Enemy(FSM, Unit):
         self._playerRef = mainRef.player
         self._AIworldRef = mainRef.AIworld
         self._enemyListRef = mainRef.enemyList
+        self._ddaHandlerRef = mainRef.DDAHandler
         self._stateHandlerRef = mainRef.stateHandler
 
         self.topEnemyNode = mainRef.mainNode.attachNewNode('topEnemyNode')
@@ -87,7 +88,7 @@ class Enemy(FSM, Unit):
         self.dexterity = attributes.dexterity
 
         self.mass = attributes.mass
-        self.movementSpeed = speedMultiplier * attributes.movementSpeed
+        self.movementSpeed = self._ddaHandlerRef.SpeedFactor * speedMultiplier * attributes.movementSpeed
         self.perceptionRange = perceptionRangeMultiplier * rangeMultiplier * attributes.perceptionRange
         self.combatRange = rangeMultiplier * attributes.combatRange
         self.attackBonus = attributes.attackBonus

@@ -1,10 +1,7 @@
-
 class DDA():
 
-    enemySpeedFactor = 1.0
+    SpeedFactor = 1.0
+    EXPFactor = 10.0
 
-    def __init__(self, enemyListRef, playerRef):
+    def __init__(self):
         print("DDA class instantiated")
-
-        self._playerRef = playerRef
-        self._enemyListRef = enemyListRef
