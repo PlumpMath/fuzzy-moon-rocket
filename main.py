@@ -51,7 +51,7 @@ class World(ShowBase):
 
         # Start game
         self.mapHandler.startArea()
-        self.player.initStartPositions(self.mapHandler.startPos, self.mapHandler.exitPos)
+        #self.player.initStartPositions(self.mapHandler.startPos, self.mapHandler.exitPos)
 
         # Add keyboard commands
         self.accept('escape', self.endGame)

@@ -18,6 +18,7 @@ class Player(FSM, Unit):
         Unit.__init__(self)
         FSM.__init__(self, 'playerFSM')
 
+        self._mainRef = mainRef
         self._stateHandlerRef = mainRef.stateHandler
         
         self.playerNode = mainRef.mainNode.attachNewNode('playerNode')
@@ -236,7 +237,7 @@ class Player(FSM, Unit):
             entries.sort(lambda x,y: cmp(y.getSurfacePoint(render).getZ(),
                                         x.getSurfacePoint(render).getZ()))
 
-            if (len(entries) > 0) and (entries[0].getIntoNode().getName() == 'ground'):
+            if (len(entries) > 0) and (entries[0].getIntoNode().getName()[:6] == 'ground'):
                 newZ = entries[0].getSurfacePoint(base.render).getZ()
                 self.playerNode.setZ(newZ)
 

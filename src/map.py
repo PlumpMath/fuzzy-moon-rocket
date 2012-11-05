@@ -1,5 +1,6 @@
 from panda3d.core import *
-#from direct.actor.Actor import Actor
+from direct.actor.Actor import Actor
+from direct.interval.IntervalGlobal import *
 
 from collections import namedtuple
 
@@ -29,6 +30,13 @@ class Map:
         self.loadArea(farmArea)
 
     def startArea(self):
+        if self._playerRef is None:
+             # Load player reference
+            self._playerRef = self._mainRef.player
+
+
+        self._playerRef.initStartPositions(self.startPos, self.exitPos)
+
         self.areaNode.reparentTo(self._mainRef.mainNode)
 
         # Initialize the task to handle enemy spawns
@@ -39,7 +47,7 @@ class Map:
             self._stateHandlerRef.request(self._stateHandlerRef.PLAY)
 
         # Exit area task
-        self.exitAreaTask = taskMgr.doMethodLater(1.5, self.exitArea, 'exitAreaTask')
+        #self.exitAreaTask = taskMgr.doMethodLater(1.5, self.exitArea, 'exitAreaTask')
 
     def loadArea(self, area):
         print('loadArea: ', area.modelName)
@@ -74,10 +82,20 @@ class Map:
         self.exitPos = self.areaModel.find('**/exitPos').getPos()
 
         # Locate exit station within areaModel
-        self.exitStation = self.areaModel.find('**/exitStation')
+        #self.exitStation = self.areaModel.find('**/exitStation')
+        self.exitStation = loader.loadModel('models/exitStation')
+        self.exitStation.setCollideMask(BitMask32.allOff())
+        self.exitStation.reparentTo(self.areaNode)
+
+        if area.modelName == 'area_1':
+            self.exitStation.setH(-90)
+        elif area.modelName == 'area_2':
+            self.exitStation.setH(90)
+
+        self.exitStation.setPos(self.exitPos)
 
         # Make collision object collidable
-        self.exitStation.find('**/ground').setCollideMask(BitMask32.bit(1))
+        self.exitStation.find('**/ground*').setCollideMask(BitMask32.bit(1))
 
         # Locate and save enemy spawn points 
         self.spawnPointsDict = {}
@@ -97,6 +115,9 @@ class Map:
         # Initialize walls
         self.initWalls(self.areaNode)
 
+        # Initialize Exit gate
+        taskMgr.doMethodLater(0.5, self.initExitGate, 'initExitGateTask', extraArgs=[])
+
     def enemySpawnUpdater(self, task):
         if self._playerRef is None:
              # Load player reference
@@ -114,7 +135,6 @@ class Map:
 
                     self.spawnEnemies(spawnPos)
 
-
         # Call again after initial delay to reduce overhead
         return task.again
 
@@ -125,22 +145,70 @@ class Map:
                 randomPos = spawnPos.getX() + (utils.getD10()-5), spawnPos.getY() + (utils.getD10()-5)
                 newEnemy.moveEnemy(*randomPos)
 
-    def exitArea(self, task):
-        if self._playerRef is not None:
-            exitRadius = 15
+    def initExitGate(self):
+        self.exitGate = self.exitStation.find('**/exitGate')
+        self.animatedExitGate = Actor('models/exitGate.egg')
+        self.gateAnimation = self.animatedExitGate.getAnimNames()
+        self.animatedExitGate.reparentTo(self.areaNode)
 
-            playerPos = self._playerRef.playerNode.getPos()
+        if self._areaRef.modelName == 'area_1':
+            self.animatedExitGate.setH(-90)
+        elif self._areaRef.modelName == 'area_2':
+            self.animatedExitGate.setH(90)
 
-            if utils.getIsInRange(playerPos, self.exitPos, exitRadius):
-                print('At exit!')
-                #self.exitStation.play(self.exitStationAnimation, fromFrame=0, toFrame=12)
+        self.animatedExitGate.setZ(-0.5)
 
-                taskMgr.doMethodLater(2, self.unloadArea, 'unloadAreaTask')
-                return task.done
+        self.animatedExitGate.setPos(self.exitPos)
 
-        return task.again
+        self.animatedExitGate.hide()
+        self.exitGateIsHidden = True
 
-    def unloadArea(self, task):
+        pickerTube = self.exitStation.find('**/collider')
+        pickerTube.setCollideMask(BitMask32.bit(1))
+        pickerTube.setName('exitGate')
+        pickerTube.setZ(pickerTube.getZ()+1)
+
+    def setGateIsNotHidden(self):
+        self.exitGateIsHidden = True
+
+    def playExitGateCloseAnimation(self):
+        self.animatedExitGate.play(self.gateAnimation, fromFrame=13, toFrame=25)
+
+    def showExitGate(self):
+        self.exitGate.show()
+
+    def hideAnimatedExitGate(self):
+        self.animatedExitGate.hide()
+
+    def highlightExitGate(self, highlightExitGate):
+        if not self.areaNode.isEmpty():
+            if highlightExitGate and self.exitGateIsHidden:
+                self.exitGateIsHidden = False
+
+                self.animatedExitGate.show()
+                self.exitGate.hide()
+
+                self.animatedExitGate.play(self.gateAnimation, fromFrame=0, toFrame=12)
+                print('highlight gate')
+            elif not highlightExitGate and not self.exitGateIsHidden:
+                Sequence(
+                    Func(self.playExitGateCloseAnimation),
+                    Wait(0.5),
+                    Parallel(Func(self.setGateIsNotHidden), Func(self.showExitGate), Func(self.hideAnimatedExitGate))
+                ).start()
+
+                print('hide gate')
+
+    def clickExitGate(self):
+        print('gate clicked')
+        self.unloadArea()
+        taskMgr.doMethodLater(0.5, self.loadNextArea, 'loadNextAreaTask', extraArgs=[])
+
+    def loadNextArea(self):
+        self.loadArea(cornFieldArea)
+        taskMgr.doMethodLater(0.5, self.startArea, 'startAreaTask', extraArgs=[])
+
+    def unloadArea(self):
         print('unloadArea')
 
         # Loop through all enemies and clean them up by killing them
@@ -158,20 +226,11 @@ class Map:
 
         # Remove spawn task
         self.enemySpawnTask.remove()
-        self.exitAreaTask.remove()
+        #self.exitAreaTask.remove()
 
         # Remove nodes
         self.areaNode.removeNode()
 
-        #taskMgr.doMethodLater(0.1, self.loadNextArea, 'loadNextAreaTask')
-
-        return task.done
-
-    def loadNextArea(self, task):
-        self.loadArea(cornFieldArea)
-        taskMgr.doMethodLater(0.5, self.startArea, 'startAreaTask', extraArgs=[])
-
-        return task.done
 
     def initWalls(self, areaNode):
         self.walls = loader.loadModel('models/walls.egg')

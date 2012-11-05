@@ -36,6 +36,8 @@ class MouseHandler():
     def __init__(self, playerRef):
         print('MouseHandler class instantiated')
         self._playerRef = playerRef
+        self._mapHandlerRef = playerRef._mainRef.mapHandler
+
         self.setupMouseCollision()
 
     def setupMouseCollision(self):
@@ -56,6 +58,7 @@ class MouseHandler():
         base.cTrav.addCollider(self.pickerNodePath, self.collisionHandler)
 
         taskMgr.add(self.moveTask, 'moveTask')
+        taskMgr.doMethodLater(0.5, self.highlightExitGate, 'highlightExitGateTask')
 
     def moveTask(self, task):
         if base.mouseWatcherNode.hasMouse():
@@ -75,6 +78,28 @@ class MouseHandler():
 
         return task.cont
 
+    def highlightExitGate(self, task):
+        if base.mouseWatcherNode.hasMouse():
+            if not self._mouseDown:
+                highlightGate = False
+
+                mousePos = base.mouseWatcherNode.getMouse()
+                self.pickerRay.setFromLens(base.camNode, mousePos.getX(), mousePos.getY())
+
+                if self.collisionHandler.getNumEntries() > 0:
+                    self.collisionHandler.sortEntries()
+                    for i in range(self.collisionHandler.getNumEntries()):
+                        entry = self.collisionHandler.getEntry(i).getIntoNodePath()
+                        entryName = entry.getName()
+     
+                        if entryName == 'exitGate' and not entry.isEmpty():
+                            highlightGate = True
+                            break;
+
+                self._mapHandlerRef.highlightExitGate(highlightGate)
+
+        return task.again
+
     def onClick(self):
         #print('click')
         if base.mouseWatcherNode.hasMouse():
@@ -93,6 +118,11 @@ class MouseHandler():
                         enemy = enemyDictionary[entryName]
                         self._playerRef.setCurrentTarget(enemy)
                         break;
+
+                    elif entryName == 'exitGate' and not entry.isEmpty():
+                        self._mapHandlerRef.clickExitGate()
+                        break;
+
 
     def onMouseUp(self):
         #print('mouseUp')
