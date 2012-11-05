@@ -18,7 +18,7 @@ class Unit(object):
     _isDead = False
 
     def __init__(self):
-        print("Unit class instantiated")
+        #print("Unit class instantiated")
         self.initUnitAttributes()
         self.initLevel()
 

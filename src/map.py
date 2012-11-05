@@ -264,7 +264,6 @@ class Map:
         self.areaNode.removeNode()
         self.highlightTextNode.removeNode()
 
-
     def initWalls(self, areaNode):
         self.walls = loader.loadModel('models/walls.egg')
         self.walls.reparentTo(areaNode)

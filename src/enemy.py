@@ -116,7 +116,7 @@ class Enemy(FSM, Unit):
         self.enemyAIBehaviors = self.enemyAI.getAiBehaviors()
         #self.enemyAIBehaviors.obstacleAvoidance(1.0)
 
-        self.enemyUpdater = taskMgr.add(self.enemyUpdater, 'enemyUpdaterTask')
+        self.enemyUpdaterTask = taskMgr.add(self.enemyUpdater, 'enemyUpdaterTask')
 
     def initEnemyCollisionHandlers(self):
         self.groundHandler = CollisionHandlerQueue()
@@ -172,6 +172,15 @@ class Enemy(FSM, Unit):
             if (len(entries) > 0) and (entries[0].getIntoNode().getName()[:6] == 'ground'):
                 newZ = entries[0].getSurfacePoint(base.render).getZ()
                 self.enemyNode.setZ(zModifier + newZ)
+
+    def enemyQuickUpdater(self, task):
+        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY or not self._enemyActive:
+            self.enemyModel.stop()
+            # Do not do anything when paused
+            return task.cont
+
+        self.checkGroundCollisions()
+        return task.cont
 
     def enemyUpdater(self, task):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY or not self._enemyActive:
@@ -316,39 +325,14 @@ class Enemy(FSM, Unit):
         self.enemyNode.setPos(x, y, 1)
 
     def suicide(self):
+        print('suicide: ', self)
         # Remove AI behavior
         self.enemyAIBehaviors.removeAi('all')
 
-        # Remove enemy collision sphere (pusher)
-        self.sphereNode.removeNode()
         # Remove enemy picker sphere (handlerQueue)
         self.pickerNode.removeNode()
 
-        # Stop the collision pusher
-        self.collPusher = None
-
-        # Remove enemy from enemyList
-        self._enemyListRef.remove(self)
-
-        # Cleanup the enemy model
-        self.enemyModel.cleanup()
-        self.enemyModel.delete()
-
-        # Cleanup FSM
-        self.cleanup()
-
-        # Cleanup attack sequence
-        self.attackSequence = None
-
-        # Remove the enemy node
-        self.enemyNode.removeNode()
-        self.topEnemyNode.removeNode()
-
-        # Remove enemy updater task
-        self.enemyUpdater.remove()
-
-        # Remove reference to main
-        self._worldRef = None
+        taskMgr.add(self.removeCorpse, 'removeCorpseTask')
 
     def onDeath(self):
         if self.getIsDead():
@@ -390,7 +374,14 @@ class Enemy(FSM, Unit):
         self.enemyNode.removeNode()
         self.topEnemyNode.removeNode()
 
-        # Remove enemy updater task
-        self.enemyUpdater.remove()
+        # Remove enemy updater tasks
+        self.enemyUpdaterTask.remove()
+
+        # Remove references
+        self._worldRef = None
+        self._playerRef = None
+        self._AIworldRef = None
+        self._enemyListRef = None
+        self._stateHandlerRef = None
 
         return task.done
