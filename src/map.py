@@ -163,7 +163,7 @@ class Map:
         # Remove nodes
         self.areaNode.removeNode()
 
-        taskMgr.doMethodLater(0.1, self.loadNextArea, 'loadNextAreaTask')
+        #taskMgr.doMethodLater(0.1, self.loadNextArea, 'loadNextAreaTask')
 
         return task.done
 
@@ -187,12 +187,12 @@ class Map:
         collisionWalls = self.walls.find('**/colliders')
         collisionWalls.setCollideMask(BitMask32.bit(2))
 
-    def initSun(self, areaNode):
+    def initSun(self, parentNode):
         # Setup directional light
         sun = DirectionalLight('sun')
         sun.setColor(VBase4(1, 0.75, 0.5, 1))
 
-        self.sunNode = areaNode.attachNewNode(sun)
+        self.sunNode = parentNode.attachNewNode(sun)
         self.sunNode.setP(-150)
 
-        areaNode.setLight(self.sunNode)
+        parentNode.setLight(self.sunNode)

@@ -70,6 +70,12 @@ class HUD:
             #                    scale=.05, 
             #                    parent=self.myFrame,
             #                    command=self.exitStats)
+            self.closeButton = DirectButton(
+                                 text='x',
+                                 pos=(.3, 0, .45),
+                                 scale=.05,
+                                 parent=self.myFrame,
+                                 command=self.exitStats)
 
             def addStats(pos, text):
                 return OnscreenText(text=text,
