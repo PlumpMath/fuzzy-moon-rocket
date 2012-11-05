@@ -80,23 +80,22 @@ class MouseHandler():
 
     def highlightExitGate(self, task):
         if base.mouseWatcherNode.hasMouse():
-            if not self._mouseDown:
-                highlightGate = False
+            highlightGate = False
 
-                mousePos = base.mouseWatcherNode.getMouse()
-                self.pickerRay.setFromLens(base.camNode, mousePos.getX(), mousePos.getY())
+            mousePos = base.mouseWatcherNode.getMouse()
+            self.pickerRay.setFromLens(base.camNode, mousePos.getX(), mousePos.getY())
 
-                if self.collisionHandler.getNumEntries() > 0:
-                    self.collisionHandler.sortEntries()
-                    for i in range(self.collisionHandler.getNumEntries()):
-                        entry = self.collisionHandler.getEntry(i).getIntoNodePath()
-                        entryName = entry.getName()
-     
-                        if entryName == 'exitGate' and not entry.isEmpty():
-                            highlightGate = True
-                            break;
+            if self.collisionHandler.getNumEntries() > 0:
+                self.collisionHandler.sortEntries()
+                for i in range(self.collisionHandler.getNumEntries()):
+                    entry = self.collisionHandler.getEntry(i).getIntoNodePath()
+                    entryName = entry.getName()
+ 
+                    if entryName == 'exitGate' and not entry.isEmpty():
+                        highlightGate = True
+                        break;
 
-                self._mapHandlerRef.highlightExitGate(highlightGate)
+            self._mapHandlerRef.highlightExitGate(highlightGate)
 
         return task.again
 

@@ -155,7 +155,7 @@ class Player(FSM, Unit):
             self.selector.stop()
             self.selector.detachNode()
 
-    def setPlayerDestination(self, position):
+    def setPlayerDestination(self, destination):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             # Do not do anything when paused
             return 
@@ -163,7 +163,8 @@ class Player(FSM, Unit):
         if self.getIsDead():
             return
 
-        self.destination = position
+        #if Vec3(self.destination - self.playerNode.getPos()).lengthSquared() > 2*2:
+        self.destination = destination
         pitchRoll = self.playerNode.getP(), self.playerNode.getR()
 
         self.playerNode.lookAt(self.destination)
@@ -174,9 +175,6 @@ class Player(FSM, Unit):
 
         self.velocity.normalize()
         self.velocity *= self.movementSpeed
-
-        if self.state != 'Run':
-            self.request('Run')
 
     def attackEnemy(self, enemy):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
@@ -251,14 +249,18 @@ class Player(FSM, Unit):
         self.playerNode.setFluidPos(newX, newY, newZ)
 
         self.velocity = self.destination - self.playerNode.getPos()
-        if self.velocity.lengthSquared() < 10:
+        #print('distance to dest: ', self.velocity.lengthSquared())
+        if self.velocity.lengthSquared() < 4*4:
             self.velocity = Vec3.zero()
-            #print('destination reached')
+
             if self.state == 'Run':
                 self.request('Idle')
         else:
             self.velocity.normalize()
             self.velocity *= self.movementSpeed
+
+            if self.state != 'Run':
+                self.request('Run')
 
     def updatePlayerTarget(self):
         enemy = self.getCurrentTarget()

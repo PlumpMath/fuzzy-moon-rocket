@@ -284,6 +284,6 @@ class Map:
         sun.setColor(VBase4(1, 0.75, 0.5, 1))
 
         self.sunNode = parentNode.attachNewNode(sun)
-        self.sunNode.setP(-150)
+        self.sunNode.setP(-130)
 
         parentNode.setLight(self.sunNode)
