@@ -184,6 +184,17 @@ class Map:
         pickerTube.setName('exitGate')
         pickerTube.setZ(pickerTube.getZ()+1)
 
+        highlightText = TextNode('exitGateHighlightText')
+        highlightText.setText('Click to exit area')
+        highlightText.setAlign(TextNode.ACenter)
+        #self.highlightTextNode = self.exitGate.attachNewNode(highlightText)
+        self.highlightTextNode = aspect2d.attachNewNode(highlightText)
+        self.highlightTextNode.setScale(0.1)
+        #self.highlightTextNode.setZ(self.exitGate.getZ() + 1)
+        self.highlightTextNode.setPos(0, 0, 0.5)
+
+        self.highlightTextNode.hide()
+
     def setGateIsNotHidden(self):
         self.exitGateIsHidden = True
 
@@ -196,6 +207,9 @@ class Map:
     def hideAnimatedExitGate(self):
         self.animatedExitGate.hide()
 
+    def hideHighlightTextNode(self):
+        self.highlightTextNode.hide()
+
     def highlightExitGate(self, highlightExitGate):
         if not self.areaNode.isEmpty():
             if highlightExitGate and self.exitGateIsHidden:
@@ -203,6 +217,7 @@ class Map:
 
                 self.animatedExitGate.show()
                 self.exitGate.hide()
+                self.highlightTextNode.show()
 
                 self.animatedExitGate.play(self.gateAnimation, fromFrame=0, toFrame=12)
                 print('highlight gate')
@@ -210,6 +225,7 @@ class Map:
                 Sequence(
                     Func(self.playExitGateCloseAnimation),
                     Wait(0.5),
+                    Func(self.hideHighlightTextNode),
                     Parallel(Func(self.setGateIsNotHidden), Func(self.showExitGate), Func(self.hideAnimatedExitGate))
                 ).start()
 
@@ -246,6 +262,7 @@ class Map:
 
         # Remove nodes
         self.areaNode.removeNode()
+        self.highlightTextNode.removeNode()
 
 
     def initWalls(self, areaNode):
