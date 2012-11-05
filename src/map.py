@@ -40,7 +40,7 @@ class Map:
         self.areaNode.reparentTo(self._mainRef.mainNode)
 
         # Initialize the task to handle enemy spawns
-        self.enemySpawnTask = taskMgr.doMethodLater(1.5, self.enemySpawnUpdater, 'enemySpawnTask')
+        self.enemySpawnTask = taskMgr.doMethodLater(1.5, self.enemySpawnActivator, 'enemySpawnActivatorTask')
 
         # Change state to play
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
@@ -116,27 +116,20 @@ class Map:
         self.initWalls(self.areaNode)
 
         # Initialize Exit gate
-        taskMgr.doMethodLater(0.5, self.initExitGate, 'initExitGateTask', extraArgs=[])
+        taskMgr.doMethodLater(0.25, self.initExitGate, 'initExitGateTask', extraArgs=[])
 
-    def enemySpawnUpdater(self, task):
-        if self._playerRef is None:
-             # Load player reference
-            self._playerRef = self._mainRef.player
+        # Initialize enemies
+        taskMgr.doMethodLater(0.5, self.initEnemies, 'initEnemiesTask', extraArgs=[])
 
-        spawnRadius = 75
-
-        playerPos = self._playerRef.playerNode.getPos()
-
+#=============================================================
+#========== ENEMY SPAWNING ===================================
+    def initEnemies(self):
         for spawnPoint, active in self.spawnPointsDict.iteritems():
             if active == 1:
                 spawnPos = spawnPoint.getPos()
-                if utils.getIsInRange(playerPos, spawnPos, spawnRadius):
-                    self.spawnPointsDict[spawnPoint] = 0
 
-                    self.spawnEnemies(spawnPos)
-
-        # Call again after initial delay to reduce overhead
-        return task.again
+                self.spawnPointsDict[spawnPoint] = 0
+                self.spawnEnemies(spawnPos)
 
     def spawnEnemies(self, spawnPos):
         for enemyType, enemyAmount in self._areaRef.enemies.iteritems():
@@ -145,6 +138,29 @@ class Map:
                 randomPos = spawnPos.getX() + (utils.getD10()-5), spawnPos.getY() + (utils.getD10()-5)
                 newEnemy.moveEnemy(*randomPos)
 
+                newEnemy.enemyNode.hide()
+
+    def enemySpawnActivator(self, task):
+        if self._playerRef is None:
+             # Load player reference
+            self._playerRef = self._mainRef.player
+
+        spawnRadius = 75
+
+        playerPos = self._playerRef.playerNode.getPos()
+
+        for enemy in self._enemyListRef:
+            if not enemy._enemyActive:
+                node = enemy.enemyNode
+                if utils.getIsInRange(playerPos, node.getPos(), spawnRadius):
+                    node.show()
+                    enemy._enemyActive = True
+
+        # Call again after initial delay to reduce overhead
+        return task.again
+
+#=============================================================
+#======== EXIT GATE ==========================================
     def initExitGate(self):
         self.exitGate = self.exitStation.find('**/exitGate')
         self.animatedExitGate = Actor('models/exitGate.egg')

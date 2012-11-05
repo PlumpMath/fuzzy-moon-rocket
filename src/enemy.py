@@ -30,7 +30,8 @@ koboldWyrmpriest = Attributes(modelName='probe', strength=9, constitution=12, de
 class Enemy(FSM, Unit):
 
     # Declare private variables
-    _removeCorpseDelay = 3 # seconds before corpse is cleaned
+    _enemyActive = False
+    _removeCorpseDelay = 2 # seconds before corpse is cleaned
 
     def __init__(self, mainRef, attributes):
         print("Enemy class instantiated")
@@ -173,7 +174,7 @@ class Enemy(FSM, Unit):
                 self.enemyNode.setZ(zModifier + newZ)
 
     def enemyUpdater(self, task):
-        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
+        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY or not self._enemyActive:
             self.enemyModel.stop()
             # Do not do anything when paused
             return task.cont
@@ -272,7 +273,7 @@ class Enemy(FSM, Unit):
 
 
     def attackPlayer(self, attackSequence):
-        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
+        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY or not self._enemyActive:
             # Do not do anything when paused
             return 
 
