@@ -1,10 +1,10 @@
 <CoordinateSystem> { Z-Up }
 
 <Comment> {
-  "maya2egg2012 -p -keep-uvs -round-uvs -tbnall -a model -pd 'C:/Users/Rami Ahmed Bock/Desktop' -cs z-up -uo cm -trans all -o 'C:/Users/Rami Ahmed Bock/Desktop/probe-model.egg' 'C:/Users/Rami Ahmed Bock/Documents/maya/projects/default/scenes/probe_model_temp.mb'"
+  "maya2egg2012 -p -bface -keep-uvs -round-uvs -tbnall -a model -pd 'C:/Users/Rami Ahmed Bock/Desktop' -cs z-up -uo cm -trans all -o 'C:/Users/Rami Ahmed Bock/Desktop/probe-model.egg' 'C:/Users/Rami Ahmed Bock/Documents/maya/projects/default/scenes/probe_model_temp.mb'"
 }
 <Texture> phong1SG {
-  "./stone_texture.jpg"
+  "./models/stone_texture.jpg"
   <Scalar> format { rgb }
   <Scalar> wrapu { repeat }
   <Scalar> wrapv { repeat }
@@ -23732,2514 +23732,3024 @@
       }
       <Polygon> {
         <Normal> { -0.644005 0.625862 0.439948 }
+        <BFace> { 1 }
         <VertexRef> { 597 524 535 595 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.67941 -0.645991 0.347991 }
+        <BFace> { 1 }
         <VertexRef> { 435 475 456 442 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.996785 -0.000601465 0.0801267 }
+        <BFace> { 1 }
         <VertexRef> { 432 434 440 436 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.792561 0.555558 0.251402 }
+        <BFace> { 1 }
         <VertexRef> { 477 433 438 460 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.461297 0.644899 0.609353 }
+        <BFace> { 1 }
         <VertexRef> { 505 478 463 491 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.829132 -0.00306923 0.559045 }
+        <BFace> { 1 }
         <VertexRef> { 503 506 492 488 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.274836 -0.726311 0.63003 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 476 502 487 459 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.584797 -0.251016 0.771365 }
+        <BFace> { 1 }
         <VertexRef> { 443 457 450 448 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.842499 -0.000508231 0.538697 }
+        <BFace> { 1 }
         <VertexRef> { 437 441 447 444 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.656293 0.24826 0.712493 }
+        <BFace> { 1 }
         <VertexRef> { 461 439 445 453 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.129217 0.228902 0.964835 }
+        <BFace> { 1 }
         <VertexRef> { 489 462 455 483 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.0698921 -0.000257782 0.997555 }
+        <BFace> { 1 }
         <VertexRef> { 486 490 484 481 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.204931 -0.23632 0.949819 }
+        <BFace> { 1 }
         <VertexRef> { 458 485 480 452 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.407444 0.000208387 0.91323 }
+        <BFace> { 1 }
         <VertexRef> { 449 451 479 482 454 446 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.164789 0.000139251 0.986329 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 504 501 516 514 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.0406088 0.000166386 0.999175 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 532 525 515 517 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.658485 -0.615694 0.432803 }
+        <BFace> { 1 }
         <VertexRef> { 531 590 591 538 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.968629 -0.0100416 0.248307 }
+        <BFace> { 1 }
         <VertexRef> { 533 523 530 537 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.6536 -0.00642313 0.756813 }
+        <BFace> { 1 }
         <VertexRef> { 541 534 539 544 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.318817 0.271672 0.908047 }
+        <BFace> { 1 }
         <VertexRef> { 593 596 536 542 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.327338 -0.27035 0.905406 }
+        <BFace> { 1 }
         <VertexRef> { 598 545 540 592 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.644019 0.625713 0.440139 }
+        <BFace> { 1 }
         <VertexRef> { 1891 1890 1916 1923 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.679407 -0.645994 0.347991 }
+        <BFace> { 1 }
         <VertexRef> { 1979 1972 1958 1952 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.996785 -0.00060148 0.0801226 }
+        <BFace> { 1 }
         <VertexRef> { 1982 1978 1974 1980 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.792559 0.555559 0.251404 }
+        <BFace> { 1 }
         <VertexRef> { 1954 1962 1976 1981 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.461298 0.644899 0.609351 }
+        <BFace> { 1 }
         <VertexRef> { 1933 1939 1959 1953 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.829132 -0.00306898 0.559045 }
+        <BFace> { 1 }
         <VertexRef> { 1935 1942 1938 1932 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.274836 -0.726313 0.630028 }
+        <BFace> { 1 }
         <VertexRef> { 1951 1955 1943 1936 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.584796 -0.251015 0.771365 }
+        <BFace> { 1 }
         <VertexRef> { 1971 1967 1964 1957 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.842492 -0.00050861 0.538709 }
+        <BFace> { 1 }
         <VertexRef> { 1977 1970 1968 1973 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.656292 0.248262 0.712493 }
+        <BFace> { 1 }
         <VertexRef> { 1961 1966 1969 1975 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.129217 0.228901 0.964835 }
+        <BFace> { 1 }
         <VertexRef> { 1941 1947 1965 1960 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.069892 -0.000258191 0.997555 }
+        <BFace> { 1 }
         <VertexRef> { 1944 1948 1946 1940 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.204931 -0.236319 0.949819 }
+        <BFace> { 1 }
         <VertexRef> { 1956 1963 1949 1945 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.407445 0.000209012 0.91323 }
+        <BFace> { 1 }
         <VertexRef> { 784 785 783 722 723 782 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.164789 0.000138371 0.986329 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1934 1929 1927 1937 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.0406088 0.000166406 0.999175 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1919 1926 1928 1922 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.658485 -0.615694 0.432803 }
+        <BFace> { 1 }
         <VertexRef> { 1920 1913 1887 1885 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.96861 -0.0100276 0.248384 }
+        <BFace> { 1 }
         <VertexRef> { 1918 1914 1921 1924 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.653722 -0.00639508 0.756708 }
+        <BFace> { 1 }
         <VertexRef> { 1910 1908 1912 1917 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.319036 0.271735 0.907952 }
+        <BFace> { 1 }
         <VertexRef> { 1888 1909 1915 1889 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0 -0.00223258 0.999998 }
+        <BFace> { 1 }
         <VertexRef> { 599 614 615 594 543 546 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.32734 -0.270346 0.905407 }
+        <BFace> { 1 }
         <VertexRef> { 1892 1886 1911 1907 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.0740066 0.503178 -0.861008 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1898 1906 1848 1837 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.308852 0.521197 -0.79559 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1838 1849 1790 1774 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.361084 0.519181 -0.774642 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1775 1792 1729 1716 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.815811 0.561234 -0.139533 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1609 1652 1648 1578 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.601833 -0.578159 0.550936 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1605 1649 1727 1711 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.0593943 0.72454 -0.686668 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1905 1902 1847 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.322631 0.740177 -0.589955 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1850 1903 1843 1791 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.435531 0.761994 -0.479248 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1793 1845 1796 1730 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.758321 0.651253 -0.0286065 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1651 1783 1647 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.563688 -0.762877 0.316663 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1650 1781 1794 1728 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.335672 0.875989 -0.346363 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1904 1900 1844 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.522565 0.814938 -0.250602 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1846 1901 1797 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.514321 -0.817661 0.258659 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1782 1899 1795 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.0758937 0.502391 -0.861303 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 608 646 635 606 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.308535 0.513561 -0.800663 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 645 725 701 634 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.361141 0.510139 -0.780599 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 724 828 800 699 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.824951 0.545323 -0.14859 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1061 1144 950 922 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.605765 -0.564849 0.560352 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1065 833 802 925 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.0593941 0.72454 -0.686668 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 607 636 605 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.322631 0.740177 -0.589955 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 633 700 640 604 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.435531 0.761993 -0.479248 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 698 799 692 638 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.758321 0.651253 -0.0286075 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 923 951 716 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.563687 -0.762877 0.316663 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 924 801 694 718 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.335672 0.875989 -0.346363 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 603 639 601 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.522565 0.814938 -0.250602 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 637 691 600 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.514321 -0.817661 0.258659 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 717 693 602 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.874345 -0.481222 -0.0628182 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1155 1149 958 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.882274 0.470436 0.0167875 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1150 1138 952 956 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.847491 -0.45819 -0.267995 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1011 1143 955 921 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.413562 0.255502 0.873891 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1007 834 780 918 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.766494 0.642251 0.000817679 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 957 953 719 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.789201 -0.599761 -0.132096 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 920 954 721 715 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.379045 0.259047 0.88838 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 919 781 643 712 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.628818 -0.777532 -0.00555371 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 714 720 613 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.321478 0.517641 0.792906 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 713 644 612 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.0313202 0.932172 0.360658 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 768 774 898 906 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.272282 -7.44396e-006 0.962217 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 770 775 690 685 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 5.01877e-007 -0.99961 -0.0279161 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 663 564 566 668 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -1.16082e-006 0.998135 -0.0610448 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 912 1239 1206 903 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.0137218 0.983938 0.177981 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 899 1084 1211 909 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.00171117 0.999117 0.0419766 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1210 1238 911 908 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -1.51915e-007 -1.05109e-006 1 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 684 688 588 1810 509 1807 586 681 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 4.92072e-007 -0.993286 0.115683 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 565 562 657 667 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.00103688 -0.9932 0.116412 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 655 745 752 666 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0 -0.99961 -0.0279161 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 753 749 663 668 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.0120769 0.999888 -0.00884678 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 910 902 765 669 582 580 671 769 907 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.0747049 0.882467 0.464405 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 687 773 767 670 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -1.52273e-007 0.221214 -0.975225 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 889 576 578 664 764 894 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.985085 -0.000289228 -0.172068 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1346 1380 1376 1342 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.669235 -0.00130968 -0.74305 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1261 1345 1341 1259 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.939566 -0.000786484 -0.342366 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1176 1168 1016 1020 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999762 -5.03714e-005 -0.0218357 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1221 1169 1177 1223 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999047 3.50944e-005 0.0436563 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1171 1220 1222 1174 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.930569 5.89789e-007 0.366116 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1179 1076 1074 1173 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999044 9.05371e-008 0.0437048 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1225 1180 1174 1222 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999762 -1.48488e-008 -0.0218011 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1182 1226 1224 1178 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.939321 0 -0.343039 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1022 1181 1175 1019 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.44937 -3.18951e-007 -0.893346 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 884 1021 1018 880 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999083 -0.000362388 0.0428236 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1236 1240 1213 1205 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.916372 0.0395715 -0.398367 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1199 1032 1036 1208 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999762 0 -0.021801 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1209 1241 1237 1201 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.927694 -0.00321717 0.373328 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1202 1212 1086 1082 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.545357 5.66251e-007 0.838204 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1081 1085 901 893 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.313388 -2.62637e-006 0.949625 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 892 900 776 772 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.293156 -3.60779e-007 0.956065 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 763 886 891 771 686 683 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.545357 0 0.838204 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1081 893 887 1077 1079 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.545357 0 0.838204 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1077 887 883 1072 1075 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.449369 2.44384e-007 -0.893346 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1025 1023 884 885 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.939321 2.29004e-007 -0.343039 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1187 1183 1024 1026 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999762 1.09832e-008 -0.021801 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1228 1184 1188 1230 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999044 -5.9645e-008 0.043705 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1186 1227 1229 1190 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.93057 -4.1229e-007 0.366115 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1078 1076 1185 1189 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.930569 4.86119e-007 0.366116 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1191 1080 1078 1189 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999044 7.44723e-008 0.0437051 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1231 1192 1190 1229 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999762 -1.26683e-008 -0.021801 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1194 1232 1230 1188 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.939321 -2.65782e-007 -0.343039 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1028 1193 1187 1026 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.449369 -2.76569e-007 -0.893346 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 888 1027 1025 885 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.939321 1.94861e-007 -0.343039 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1195 1030 1033 1200 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999762 9.24643e-009 -0.0218012 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1234 1196 1201 1237 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999044 -4.82773e-008 0.0437052 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1198 1233 1235 1204 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.930569 -3.48458e-007 0.366115 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1080 1197 1203 1083 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.602525 0.791146 0.105126 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1301 1315 1379 1343 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.602676 -0.790991 0.105423 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1314 1300 1339 1375 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.498998 0.656013 0.566257 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1989 1303 1344 2006 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.506571 -0.663986 0.550008 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1302 1988 2005 1340 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0 -0.00352513 -0.999994 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1242 1260 1258 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.64377 -0.604321 0.469422 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1997 2011 2040 2034 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.495002 -0.695589 -0.5207 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 2012 2053 2041 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999966 -1.38702e-005 -0.00825227 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1381 1412 1408 1377 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.92997 0.000916857 0.367633 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1365 1336 1363 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.605967 0.795489 0.000157603 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1378 1312 1324 1409 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.605946 -0.795445 0.00982301 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1325 1313 1374 1405 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.459933 -0.767575 -0.446419 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 2013 2030 2055 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.63777 0.604552 0.477249 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 2042 2015 1998 2035 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.480922 0.696075 -0.533099 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 2058 2016 2043 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999052 4.83721e-005 0.0435421 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1390 1366 1364 2056 1407 1411 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.48143 0.638078 -0.600901 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1327 1995 1283 2057 1410 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.487503 -0.64335 -0.590289 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 2029 1994 1326 1406 2054 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.437329 0.780746 -0.446294 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 2027 2017 2059 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.222777 0.542957 0.809671 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1251 1276 1096 1046 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.220063 -0.558463 0.799807 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1271 1250 1045 1089 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.128237 0.875406 -0.466069 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1275 1285 1112 1095 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.225451 0.406259 -0.885509 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1284 1245 1037 1111 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.129154 -0.873487 -0.469403 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1290 1270 1087 1120 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.221307 -0.4421 -0.869236 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1246 1289 1119 1038 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.607828 0.389253 0.692118 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1047 1098 984 1004 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.692451 -0.294308 0.658707 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1090 1048 1006 1002 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.252428 0.874273 -0.414642 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1097 1114 961 983 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.209317 0.258834 -0.942969 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1113 1040 929 960 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.152209 -0.848444 -0.506927 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1121 1088 999 939 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.18817 -0.204514 -0.960607 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1039 1122 940 928 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.985085 -0.000289229 -0.172069 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1354 1388 1384 1350 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.669235 -0.00130968 -0.74305 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1265 1353 1349 1263 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.602525 0.791146 0.105126 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1305 1319 1387 1351 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.602676 -0.790992 0.105423 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1318 1304 1347 1383 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.498998 0.656013 0.566258 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1991 1307 1352 2008 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.50657 -0.663986 0.550008 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1306 1990 2007 1348 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0 -0.00352514 -0.999994 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1243 1264 1262 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.64377 -0.604321 0.469422 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1999 2014 2044 2036 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.99997 -0.00321166 -0.00711509 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1389 1416 1404 1385 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.92997 0.000916857 0.367633 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1369 1337 1368 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.605548 0.795809 1.86075e-007 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1386 1317 1329 1413 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.607418 -0.794322 0.00976069 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1328 1316 1382 1400 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.63777 0.604552 0.477248 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 2046 2018 2000 2037 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.480922 0.696074 -0.533099 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 2061 2019 2047 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.481309 0.6391 -0.59991 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1331 1996 1286 2060 1414 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.437328 0.780747 -0.446294 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 2028 2020 2062 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.222777 0.542957 0.809671 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1253 1278 1100 1050 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.220062 -0.558463 0.799807 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1274 1252 1049 1092 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.128237 0.875406 -0.466068 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1277 1288 1116 1099 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.225451 0.406259 -0.885509 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1287 1248 1041 1115 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.129154 -0.873487 -0.469404 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1294 1273 1091 1124 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.221308 -0.4421 -0.869236 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1249 1293 1123 1042 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.559492 0.387215 0.732826 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1052 1102 989 996 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.55636 -0.439871 0.704967 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1094 1051 995 973 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.254572 0.872244 -0.417592 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1101 1118 965 987 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.209317 0.258834 -0.942969 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1117 1044 933 964 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.224529 -0.779736 -0.584464 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1126 1093 971 944 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.188169 -0.204514 -0.960607 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1043 1125 943 932 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.985497 -0.000167187 -0.169694 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1362 1398 1394 1358 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.669235 -0.00130968 -0.74305 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1269 1361 1357 1267 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.603552 0.790924 0.100815 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1308 1322 1397 1359 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.601536 -0.791476 0.10826 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1323 1309 1355 1393 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.498998 0.656014 0.566257 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1993 1311 1360 2010 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.506571 -0.663987 0.550007 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1310 1992 2009 1356 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0 -0.00352514 -0.999994 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1244 1268 1266 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.64377 -0.604321 0.469422 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 2003 2021 2049 2038 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.495002 -0.69559 -0.520699 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 2022 2063 2050 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.929971 0.000916858 0.367632 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1372 1338 1370 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.606319 0.795214 0.00345442 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1396 1320 1332 1422 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.459933 -0.767575 -0.44642 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 2023 2033 2065 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.637769 0.604552 0.47725 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 2051 2024 2004 2039 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.480923 0.696074 -0.533098 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 2068 2025 2052 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999052 4.86191e-005 0.0435422 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1417 1373 1371 2066 1420 1424 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.48143 0.638078 -0.6009 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1335 2002 1295 2067 1423 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.487503 -0.64335 -0.59029 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 2032 2001 1334 1419 2064 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.437329 0.780747 -0.446294 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 2031 2026 2069 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.222777 0.542958 0.809671 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1257 1282 1108 1058 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.220063 -0.55846 0.799809 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1280 1256 1057 1105 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.128236 0.875406 -0.466068 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1281 1297 1131 1107 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.225451 0.406257 -0.88551 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1296 1254 1053 1130 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.129154 -0.873487 -0.469404 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1299 1279 1103 1135 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.221308 -0.4421 -0.869236 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1255 1298 1134 1054 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.304038 0.55908 0.771356 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1060 1109 991 980 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.297077 -0.55669 0.775785 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1106 1059 979 976 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.316259 0.80503 -0.501904 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1110 1133 969 992 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.209317 0.258836 -0.942969 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1132 1056 937 968 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.199507 -0.805318 -0.558265 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1137 1104 975 948 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.18817 -0.204511 -0.960608 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1055 1136 947 936 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.449369 0 -0.893346 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1029 888 890 1031 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.440418 0.198605 -0.87555 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 897 1035 1987 1986 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.618205 0.102795 0.779266 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1005 985 915 854 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.581049 -0.134517 0.802675 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1001 1003 852 863 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.6206 0.678996 -0.3922 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 986 962 824 916 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.514471 0.0788209 -0.853878 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 959 927 810 821 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.28844 -0.886661 -0.361433 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 941 1000 862 805 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.564705 -0.051015 -0.823714 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 926 938 803 809 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.599757 0.151388 0.785731 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 997 990 841 855 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.665697 -0.154646 0.730022 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 974 998 857 850 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.274601 0.927931 -0.252066 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 988 966 819 840 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.521749 0.136896 -0.842044 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 963 931 807 817 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.530917 -0.709219 -0.463827 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 945 972 847 815 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.562968 -0.0378113 -0.825613 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 930 942 812 806 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.697739 0.0978498 0.709638 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 981 994 851 859 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.72292 -0.149903 0.674475 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 978 982 860 917 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.584768 0.688904 -0.428319 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 993 970 816 848 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.513775 0.073923 -0.854734 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 967 935 826 813 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.49218 -0.756626 -0.430436 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 949 977 913 823 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.564228 -0.0473099 -0.824262 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 934 946 820 825 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.60263 -7.66257e-005 0.798021 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 585 548 864 853 914 858 849 856 842 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.178944 -0.98377 -0.0132644 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 804 861 547 567 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.178751 0.983803 -0.0134364 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 839 818 574 584 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -3.25117e-006 0 -1 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 561 656 651 552 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.00702347 6.83876e-005 -0.999975 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 658 746 778 654 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.00297808 -0.00165927 -0.999994 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 553 652 641 551 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.00694088 -0.00387047 -0.999968 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 653 777 642 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 1.64672e-007 -0.99127 -0.13185 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 660 555 563 662 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0 -0.99127 -0.13185 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 660 662 750 742 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.545357 0 0.838204 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 883 868 1067 1069 1072 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.930405 0.000251657 0.366532 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1073 1071 1170 1172 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.0197875 -0.8547 -0.518745 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 647 609 554 659 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.00822533 -0.850049 -0.526639 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 727 649 661 743 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.447214 -0.00218813 -0.894424 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 879 1017 1015 878 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.0259099 -0.988339 -0.150051 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 740 748 869 844 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.289356 -0.94615 -0.145163 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1147 1154 1215 1156 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.212729 -0.975846 -0.049715 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 832 1063 1127 1066 866 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.929333 0.00034318 0.369244 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1164 1070 1068 1129 1158 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999061 4.68945e-005 0.0433242 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1216 1218 1165 1159 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.0138079 -0.871041 -0.491015 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 830 726 741 845 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.347301 -0.936192 -0.0540933 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1064 1148 1157 1128 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.0619599 -0.941395 -0.331566 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1145 1062 829 843 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.0125275 -0.98593 -0.16669 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1152 1146 846 871 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0 -0.99961 -0.0279161 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 753 875 872 749 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.233632 -0.971792 -0.032204 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1153 1141 1160 1214 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999759 -4.5263e-005 -0.0219505 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1163 1167 1219 1217 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.94036 -0.000703526 -0.34018 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1014 1166 1162 1012 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.00834416 -0.992367 0.123039 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 751 744 835 874 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.234988 -0.970826 -0.0477129 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1142 1009 1161 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.0112876 0.000220567 -0.999936 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 747 836 779 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.0148086 -0.999505 -0.0277551 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1139 1151 870 873 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.432564 -0.00626102 -0.901581 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1013 1010 838 877 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.0508372 -0.9957 0.0774381 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 837 1008 1140 876 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.0547052 4.22465e-006 0.998503 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 571 629 631 550 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.020445 -0.0125219 0.999713 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 623 559 611 617 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.293156 2.07454e-007 0.956065 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 760 1983 882 886 763 683 680 1931 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.364439 -0.0142619 0.931118 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 758 795 798 762 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.153183 -0.976904 -0.148972 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 831 865 796 731 729 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.134165 -0.97153 -0.195269 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 675 650 728 730 695 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.234875 0 0.972026 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 679 676 696 709 704 697 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 4.39568e-008 0.000106799 1 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 549 1925 677 682 587 1808 1801 518 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.303409 -0.0551794 0.951261 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 737 709 696 732 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.261298 -2.06305e-007 0.965258 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 798 795 790 797 867 881 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.0568462 4.86882e-007 0.998383 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 674 678 632 630 624 618 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.00673841 -0.991293 -0.131503 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 610 648 673 616 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.330753 0.100217 0.938381 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 790 738 733 797 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.308093 0.00959179 0.951308 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 704 757 761 697 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.71783 0.696218 0 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 558 622 620 556 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999945 0.0105202 0 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 621 627 625 619 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.703721 -0.710477 0 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 628 570 568 626 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.615073 0.78847 0 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 736 789 787 734 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -1 0.000602848 0 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 788 793 791 786 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.767903 -0.640567 0 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 794 756 754 792 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.735354 -0.677683 0 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 759 705 702 755 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999993 0.00370169 0 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 706 711 708 703 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.584954 0.811067 0 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 710 739 735 707 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.0313166 0.932174 0.360654 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1766 1687 1683 1764 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.272282 8.9972e-007 0.962218 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1769 1814 1809 1763 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -5.01877e-007 -0.99961 -0.0279161 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1823 1815 1874 1872 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 1.51265e-006 0.998135 -0.0610455 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1688 1695 1562 1509 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.0137227 0.983938 0.177981 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1682 1684 1565 1602 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.00171117 0.999117 0.0419766 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1566 1685 1689 1510 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.0120767 0.999888 -0.00884697 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 379 1686 470 512 1880 1882 511 473 1696 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -4.92071e-007 -0.993286 0.115683 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1873 1816 1830 1870 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.00103684 -0.9932 0.116412 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1832 1817 1758 1752 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0 -0.99961 -0.0279161 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1757 1815 1823 1754 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.0763723 0.923781 -0.375228 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1561 1693 1654 1639 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -9.96316e-005 0.952376 -0.304927 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 472 510 1881 1879 513 469 1655 1694 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 1.20152e-006 0.863071 0.505082 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 581 1818 1811 589 689 672 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.074706 0.882469 0.464399 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1812 1819 1767 1765 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.985787 -0.000282424 -0.167998 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1469 1467 1446 1448 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.939566 -0.000786484 -0.342366 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1535 1620 1618 1529 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999762 -5.03714e-005 -0.0218356 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1491 1494 1534 1528 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999047 3.74578e-005 0.0436536 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1512 1530 1495 1492 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.930569 2.94895e-007 0.366116 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1515 1531 1593 1596 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999045 -4.0742e-007 0.0437044 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1497 1495 1530 1514 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999762 -1.48488e-008 -0.021801 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1537 1533 1493 1496 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.939321 0 -0.343039 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1624 1621 1536 1538 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.449369 -3.1895e-007 -0.893346 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1676 1674 1622 1625 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999083 -0.000362388 0.042824 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1506 1557 1563 1508 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.916372 0.0395714 -0.398366 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1556 1560 1637 1635 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999762 0 -0.021801 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1559 1554 1505 1507 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.927694 -0.00321706 0.373328 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1558 1598 1600 1564 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.545358 1.41562e-006 0.838203 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1599 1690 1680 1601 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.313382 1.98967e-006 0.949627 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1691 1768 1762 1681 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.54536 6.95588e-007 0.838202 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1599 269 1604 1697 1690 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.545359 -1.39993e-006 0.838203 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1604 268 1595 1671 1697 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.449369 2.44384e-007 -0.893346 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1629 1677 1676 1627 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.939321 0 -0.343039 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1544 1628 1626 1540 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999762 2.19665e-008 -0.0218012 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1498 1500 1543 1539 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999044 -5.9645e-008 0.0437059 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1541 1545 1501 1499 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.930569 -5.27489e-007 0.366115 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1603 1546 1542 1596 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.930569 4.85949e-007 0.366116 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1548 1546 1603 1597 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999044 7.44724e-008 0.0437052 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1503 1501 1545 1547 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999762 -2.53365e-008 -0.021801 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1549 1543 1500 1502 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.939321 -2.65782e-007 -0.343039 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1630 1628 1544 1550 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.449369 0 -0.893346 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1679 1677 1629 1631 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.939321 1.94861e-007 -0.343039 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1552 1555 1634 1632 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999763 -5.05976e-005 -0.0217595 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1511 1504 1553 1551 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.602912 0.791645 0.0989721 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 108 66 39 94 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.602608 -0.790899 0.1065 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 93 37 64 107 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.498998 0.656013 0.566257 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 206 173 65 105 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.64377 -0.60432 0.469423 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 189 74 50 158 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.495002 -0.695589 -0.520701 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 157 49 32 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999966 -1.38702e-005 -0.00825184 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1447 1445 1430 1432 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.929971 0.000916857 0.367632 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1460 1458 1476 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.605968 0.795489 0.000157656 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 40 11 84 96 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.605947 -0.795445 0.0098228 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 83 9 38 95 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.459933 -0.767576 -0.446418 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 156 30 122 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.637771 0.604552 0.477248 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 52 73 188 148 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.480922 0.696075 -0.533098 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 24 51 147 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999052 4.86165e-005 0.0435425 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1443 1433 1431 29 1457 1459 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.48143 0.638077 -0.600902 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 81 10 25 1479 196 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.487503 -0.64335 -0.590289 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 123 31 8 82 197 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.437329 0.780746 -0.446294 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 130 23 146 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.222777 0.542958 0.809671 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 186 284 253 144 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.220063 -0.558463 0.799807 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 154 260 285 187 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.128237 0.875406 -0.466069 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 145 254 237 128 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.225451 0.406259 -0.885509 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 129 238 293 195 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.129154 -0.873488 -0.469403 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 120 229 262 155 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.221307 -0.4421 -0.869236 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 194 292 230 121 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.607799 0.389284 0.692126 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 283 301 317 251 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.69245 -0.294307 0.658708 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 259 303 299 282 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.252682 0.874265 -0.414503 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 252 318 340 235 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.209715 0.258235 -0.943045 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 236 341 363 290 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.152395 -0.848464 -0.506837 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 228 353 306 261 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.18867 -0.20377 -0.960667 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 291 364 352 227 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.985085 -0.000289229 -0.172069 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1473 1471 1450 1452 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.669235 -0.00130968 -0.74305 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1484 1483 1472 1474 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.602525 0.791146 0.105126 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 111 70 43 97 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.602676 -0.790992 0.105423 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 98 41 68 112 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.498998 0.656013 0.566258 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 209 177 69 109 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.50657 -0.663987 0.550007 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 110 67 175 210 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0 -0.00352516 -0.999994 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 208 174 176 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.64377 -0.604321 0.469422 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 193 76 54 163 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.495002 -0.695589 -0.520701 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 162 53 36 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999966 -1.38702e-005 -0.00825169 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1451 1449 1434 1436 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.929971 0.000916857 0.367632 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1464 1462 1477 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.605968 0.795489 0.000157443 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 44 15 88 100 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.605946 -0.795445 0.00982301 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 87 13 42 99 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.459933 -0.767576 -0.446418 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 161 34 126 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.637771 0.604551 0.477249 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 56 75 192 153 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.480922 0.696074 -0.533099 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 27 55 152 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999052 4.86165e-005 0.0435435 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1444 1437 1435 33 1461 1463 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.48143 0.638077 -0.600901 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 85 14 28 1480 200 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.487503 -0.64335 -0.590289 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 127 35 12 86 201 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.437329 0.780747 -0.446294 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 133 26 151 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.222777 0.542958 0.809671 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 190 288 257 149 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.220063 -0.558463 0.799807 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 159 265 289 191 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.128237 0.875406 -0.466068 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 150 258 241 131 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.22545 0.406259 -0.885509 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 132 242 297 199 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.129154 -0.873487 -0.469403 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 124 233 266 160 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.221308 -0.4421 -0.869235 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 198 296 234 125 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.559491 0.387215 0.732826 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 286 309 320 255 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.556855 -0.4393 0.704931 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 263 332 310 287 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.254571 0.872244 -0.417594 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 256 322 344 239 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.209309 0.258829 -0.942973 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 240 345 367 294 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.224102 -0.780173 -0.584045 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 231 356 334 264 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.188146 -0.204562 -0.960601 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 295 368 357 232 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.985077 0.00865325 -0.171898 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1466 1465 1440 1442 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.67194 0.00359003 -0.740597 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1482 1481 1468 1470 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.607556 0.785567 0.117307 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 104 62 21 91 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.597635 -0.796353 0.0930296 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 89 19 59 103 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.501718 0.647519 0.573584 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 203 169 61 101 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.506397 -0.664733 0.549265 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 106 63 171 207 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.00500938 0.0206958 -0.999773 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 202 165 168 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.639923 -0.615134 0.460553 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 180 71 46 138 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.490189 -0.689655 -0.533002 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 137 45 7 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999946 0.00647871 -0.0080947 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1441 1439 1426 1428 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.929932 0.0011052 0.36773 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1456 1454 1475 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.61102 0.791518 0.0124187 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 22 3 80 92 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.600871 -0.799342 -0.00262787 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 79 1 20 90 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.454016 -0.763821 -0.458744 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 136 5 115 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.643614 0.592429 0.48455 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 48 72 181 143 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.487694 0.700082 -0.521575 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 18 47 142 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999016 0.00556482 0.0440071 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1438 1429 1427 4 1453 1455 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.487443 0.642518 -0.591245 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 78 2 17 1478 185 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.481246 -0.638708 -0.600378 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 116 6 0 77 184 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.442895 0.787226 -0.429092 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 119 16 141 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.218329 0.538625 0.813766 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 179 277 249 139 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.224147 -0.565111 0.793982 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 134 244 276 178 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.134465 0.880291 -0.45498 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 140 250 225 117 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.229149 0.408805 -0.883385 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 118 226 281 183 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.121865 -0.869825 -0.478072 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 113 221 246 135 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.216844 -0.440509 -0.871166 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 182 280 222 114 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.303759 0.558924 0.771579 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 274 325 314 248 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.298054 -0.557117 0.775103 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 243 329 326 275 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.315382 0.806241 -0.500509 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 247 313 336 223 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.209272 0.2601 -0.942631 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 224 337 359 278 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.200413 -0.80411 -0.559681 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 219 348 330 245 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.188444 -0.203007 -0.960873 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 279 360 349 220 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.449604 -0.000164359 -0.893228 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1633 1636 1656 1678 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.44105 0.198389 -0.875281 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1653 372 298 1638 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.618216 0.102805 0.779256 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 300 386 376 316 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.58105 -0.134517 0.802675 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 304 381 388 302 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.620624 0.679057 -0.392055 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 315 375 402 339 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.51466 0.0787859 -0.853767 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 342 405 416 365 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.288442 -0.886695 -0.361349 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 351 420 382 305 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.564877 -0.050951 -0.8236 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 366 417 421 354 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.599757 0.151388 0.785731 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 308 391 397 319 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.665495 -0.154428 0.730253 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 331 393 389 307 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.274601 0.927931 -0.252067 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 321 398 407 343 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.521748 0.136893 -0.842045 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 346 409 418 369 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.531331 -0.709077 -0.46357 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 355 411 396 333 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.56296 -0.0378145 -0.825619 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 370 419 414 358 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.697725 0.0978369 0.709653 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 324 384 392 311 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.722925 -0.14991 0.674467 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 327 374 383 323 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.584801 0.688893 -0.428292 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 312 395 410 335 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.513769 0.0739278 -0.854738 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 338 413 400 361 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.492157 -0.756629 -0.430459 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 347 403 378 328 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.564232 -0.0473043 -0.82426 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 362 401 406 350 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.602631 -7.57864e-005 0.79802 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1883 1704 390 394 385 377 387 380 1860 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.178944 -0.98377 -0.0132653 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1723 1875 1861 1699 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.178751 0.983803 -0.0134364 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1705 1884 1878 1721 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 3.25117e-006 0 -1 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1869 1865 1828 1831 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.00702347 6.83876e-005 -0.999975 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1829 1825 1734 1751 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.00297808 -0.00165898 -0.999994 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1864 1863 1840 1827 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.00694089 -0.00387041 -0.999968 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1826 1839 1735 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -1.64672e-007 -0.99127 -0.13185 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1821 1824 1871 1866 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0 -0.99127 -0.13185 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1821 1747 1755 1824 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.545357 0 0.838204 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1671 1595 267 1589 1657 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.930406 0.00025123 0.366531 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1594 1532 1513 1591 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.0193957 -0.854545 -0.519015 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1836 1822 1867 1897 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.00822539 -0.850049 -0.526639 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1772 1746 1820 1834 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.447214 -0.00218813 -0.894425 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1675 1669 1619 1623 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.0259099 -0.988339 -0.150051 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1749 1702 1664 1756 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.27447 -0.950398 -0.14632 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1575 1519 1487 1568 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.212727 -0.975846 -0.0497159 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1712 1659 1590 1587 1607 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.929332 0.00034318 0.369244 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1525 1517 1585 1588 1592 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999061 4.68945e-005 0.0433241 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1486 1516 1524 1490 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.0138078 -0.871042 -0.491015 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1714 1701 1748 1773 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.33737 -0.939464 -0.0599004 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1606 1586 1518 1574 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.061934 -0.941465 -0.331372 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1577 1703 1715 1608 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.0125677 -0.985929 -0.16669 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1570 1662 1700 1576 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -6.36559e-008 -0.99961 -0.0279161 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1757 1754 1661 1666 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.222663 -0.974369 -0.0320382 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1569 1488 1523 1581 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999759 -4.5263e-005 -0.0219507 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1520 1485 1489 1526 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.94036 -0.000703526 -0.34018 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1616 1610 1521 1527 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.0063646 -0.992554 0.121642 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1759 1667 1709 1753 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.223927 -0.973629 -0.0436197 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1580 1522 1613 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.0160987 0.000315115 -0.99987 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1750 1733 1708 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.0148563 -0.999504 -0.0277547 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1583 1668 1663 1571 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.430631 -0.00728161 -0.902499 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1617 1670 1706 1612 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.0490488 -0.995896 0.0760571 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1707 1665 1582 1614 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.293154 9.01942e-007 0.956065 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 474 1806 1813 471 1692 1698 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.0547019 3.83643e-006 0.998503 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1877 1862 1852 1854 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.0192237 -0.0129725 0.999731 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1856 1858 1895 1868 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.364439 -0.0142615 0.931118 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1760 1738 1725 1731 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.153183 -0.976905 -0.148972 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1713 1770 1742 423 1660 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.293154 -2.17829e-006 0.956065 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 464 507 1798 1806 474 1698 1672 422 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.134165 -0.971529 -0.19527 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1803 508 1743 1771 1833 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.234875 1.38223e-007 0.972026 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1799 1788 500 495 1789 1802 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.303409 -0.0551794 0.951261 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1745 1741 1789 1776 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.261297 -5.15763e-008 0.965258 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1725 1673 1658 1726 430 426 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.0568469 -1.1103e-007 0.998383 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1804 1857 1855 1853 1851 1800 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.00638011 -0.991662 -0.128705 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1896 1859 1805 1835 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.330753 0.100216 0.938381 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1732 1726 1740 1744 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.308095 0.00959264 0.951307 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1780 1788 1739 1761 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.71783 0.696218 0 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 560 557 526 528 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999945 0.0105262 -0.00010792 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 529 527 520 522 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.703743 -0.710455 0.000304095 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 521 519 569 572 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 1 0.000602848 0 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 431 429 425 428 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.767903 -0.640567 0 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 427 424 466 468 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.73535 -0.677687 0 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 467 465 497 499 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999993 0.00370169 0 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 498 496 493 494 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.865917 -0.495892 -0.0654133 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1567 1640 1573 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.873106 0.487147 0.0193145 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1572 1642 1646 1584 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.83611 -0.479388 -0.26666 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1611 1717 1643 1579 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.411637 0.273669 0.869287 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1615 1720 1737 1710 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.769148 0.639042 0.00600528 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1641 1779 1645 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.789146 -0.597097 -0.143956 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1718 1784 1777 1644 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.380013 0.259157 0.887935 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1719 1787 1842 1736 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.632034 -0.774729 -0.0181097 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1785 1893 1778 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.325022 0.51196 0.795146 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1786 1894 1841 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 1.7014e-008 0.952401 -0.304847 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1930 766 904 895 1950 665 579 583 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.0765572 0.923835 -0.375058 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 896 905 1207 1034 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0 0 0 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 271 214 215 272 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 4.3363e-009 0.000388336 -1 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> {
           822 811 1984 1876 1724 415 404 399 412 1722 408 573 1985 808
           814 827
@@ -26249,56 +26759,67 @@
       <Polygon> {
         <Normal> { -2.32356e-005 0.221267 -0.975213 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 577 575 373 371 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.502541 -0.676902 0.537825 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 102 58 166 204 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.669109 0.0168262 -0.742974 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 57 60 167 164 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.00471012 0.00265774 -0.999985 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 172 205 170 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.929685 -0.00116692 -0.368354 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 216 273 270 218 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.999054 3.26246e-005 0.0434849 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 213 211 212 217 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999949 -0.000586057 -0.010097 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1425 1421 1395 1399 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.604993 -0.796193 0.00779243 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1418 1333 1321 1392 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.504452 -0.596757 -0.624027 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1291 1247 1330 1401 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { -0.481434 -0.716921 -0.504228 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1272 1292 1402 1367 <Ref> { probeShape.verts } }
       }
       <Polygon> {
         <Normal> { 0.999145 -0.00154092 0.0413034 }
         <TRef> { phong1SG }
+        <BFace> { 1 }
         <VertexRef> { 1403 1415 1391 2048 2045 <Ref> { probeShape.verts } }
       }
     }

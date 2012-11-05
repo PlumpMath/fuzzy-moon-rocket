@@ -163,7 +163,7 @@ class Map:
         # Remove nodes
         self.areaNode.removeNode()
 
-        #taskMgr.doMethodLater(0.1, self.loadNextArea, 'loadNextAreaTask')
+        taskMgr.doMethodLater(0.1, self.loadNextArea, 'loadNextAreaTask')
 
         return task.done
 
