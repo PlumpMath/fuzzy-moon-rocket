@@ -279,11 +279,20 @@ class Map:
         collisionWalls.setCollideMask(BitMask32.bit(2))
 
     def initSun(self, parentNode):
-        # Setup directional light
+        # Setup directional light (a yellowish sun)
         sun = DirectionalLight('sun')
-        sun.setColor(VBase4(1, 0.75, 0.5, 1))
+        sun.setColor(VBase4(0.75, 0.75, 0.25, 1))
 
         self.sunNode = parentNode.attachNewNode(sun)
         self.sunNode.setP(-130)
+        #self.sunNode.lookAt(0, 0, 0)
 
         parentNode.setLight(self.sunNode)
+
+        # Setup ambient light (a grey/blueish secondary sun color)
+        ambientLight = AmbientLight('alight')
+        ambientLight.setColor(VBase4(0.1, 0.1, 0.2, 1))
+
+        ambientLightNode = parentNode.attachNewNode(ambientLight)
+
+        parentNode.setLight(ambientLightNode)
