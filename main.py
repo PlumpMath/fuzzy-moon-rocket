@@ -25,11 +25,14 @@ class World(ShowBase):
 
         # Set background color
         base.setBackgroundColor(0.1, 0.1, 0.1, 1)
-        base.camLens.setNearFar(50, 200)
-        base.camLens.setFov(40)
+        base.camLens.setNearFar(50, 300)
+        base.camLens.setFov(45)
 
         # Main game node
         self.mainNode = render.attachNewNode('mainNode')
+
+        # Enable automatic shaders on everything (allows glow map, gloss maps, shadows etc.)
+        self.mainNode.setShaderAuto()
 
         # Create the main traverser
         base.cTrav = CollisionTraverser()
@@ -53,13 +56,15 @@ class World(ShowBase):
 
         # Start game
         self.mapHandler.startArea()
-        #self.player.initStartPositions(self.mapHandler.startPos, self.mapHandler.exitPos)
 
         # Add keyboard commands
         self.accept('escape', self.endGame)
         self.accept('pause', self.pauseGame)
+        self.accept('p', self.pauseGame)
 
-        # For debugging
+    #------------------------------------------------------------------------------------
+    # Start of debugging implementation
+
         if debug:
             self.accept('shift-o', self.gui.toggleOverlayFrame)
             self.accept('1', self.damagePlayer)
@@ -75,8 +80,6 @@ class World(ShowBase):
 
             self.showCollisions = False
 
-    #------------------------------------------------------------------------------------
-    # Start of debugging methods implementation
     def damagePlayer(self): # key 1
         self.player.receiveDamage(self.player.maxHealthPoints - utils.getD8())
 

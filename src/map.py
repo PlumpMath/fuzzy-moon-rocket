@@ -29,6 +29,13 @@ class Map:
 
         self.loadArea(farmArea)
 
+#===============================================================================
+#========================== AREA LOADING AND UNLOADING =========================
+
+    def loadNextArea(self):
+        self.loadArea(cornFieldArea)
+        taskMgr.doMethodLater(0.5, self.startArea, 'startAreaTask', extraArgs=[])
+
     def startArea(self):
         if self._playerRef is None:
              # Load player reference
@@ -45,9 +52,6 @@ class Map:
         # Change state to play
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             self._stateHandlerRef.request(self._stateHandlerRef.PLAY)
-
-        # Exit area task
-        #self.exitAreaTask = taskMgr.doMethodLater(1.5, self.exitArea, 'exitAreaTask')
 
     def loadArea(self, area):
         print('loadArea: ', area.modelName)
@@ -120,6 +124,30 @@ class Map:
 
         # Initialize enemies
         taskMgr.doMethodLater(0.5, self.initEnemies, 'initEnemiesTask', extraArgs=[])
+
+    def unloadArea(self):
+        print('unloadArea')
+
+        # Loop through all enemies and clean them up by killing them
+        for enemy in self._enemyListRef:
+            enemy.suicide()
+
+        # Empty dict of enemy spawn points
+        self.spawnPointsDict.clear()
+
+        # Remove area model
+        self.areaModel.remove()
+
+        # Remove walls model
+        self.walls.remove()
+
+        # Remove spawn task
+        self.enemySpawnTask.remove()
+        #self.exitAreaTask.remove()
+
+        # Remove nodes
+        self.areaNode.removeNode()
+        self.highlightTextNode.removeNode()
 
 #=============================================================
 #========== ENEMY SPAWNING ===================================
@@ -236,37 +264,14 @@ class Map:
         self.unloadArea()
         taskMgr.doMethodLater(0.5, self.loadNextArea, 'loadNextAreaTask', extraArgs=[])
 
-    def loadNextArea(self):
-        self.loadArea(cornFieldArea)
-        taskMgr.doMethodLater(0.5, self.startArea, 'startAreaTask', extraArgs=[])
-
-    def unloadArea(self):
-        print('unloadArea')
-
-        # Loop through all enemies and clean them up by killing them
-        for enemy in self._enemyListRef:
-            enemy.suicide()
-
-        # Empty dict of enemy spawn points
-        self.spawnPointsDict.clear()
-
-        # Remove area model
-        self.areaModel.remove()
-
-        # Remove walls model
-        self.walls.remove()
-
-        # Remove spawn task
-        self.enemySpawnTask.remove()
-        #self.exitAreaTask.remove()
-
-        # Remove nodes
-        self.areaNode.removeNode()
-        self.highlightTextNode.removeNode()
-
+#==================================================================================
+#================= Misc. Initialization ===========================================
     def initWalls(self, areaNode):
         self.walls = loader.loadModel('models/walls')
         self.walls.reparentTo(areaNode)
+
+        # Fix self-shadowing for thin objects
+        self.walls.setDepthOffset(1)
 
         # Set walls Z-position
         self.walls.setZ(-2)
@@ -282,6 +287,9 @@ class Map:
         # Setup directional light (a yellowish sun)
         sun = DirectionalLight('sun')
         sun.setColor(VBase4(0.75, 0.75, 0.25, 1))
+        #sun.getLens().setNearFar(1, 1000)
+        #sun.getLens().setFilmSize(24, 36)
+        #sun.setShadowCaster(True, 1024, 1024) # Enable these shadows when the scene is scaled down (if)
 
         self.sunNode = parentNode.attachNewNode(sun)
         self.sunNode.setP(-130)
