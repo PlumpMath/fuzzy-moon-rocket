@@ -45,23 +45,26 @@ class Enemy(FSM, Unit):
         self._ddaHandlerRef = mainRef.DDAHandler
         self._stateHandlerRef = mainRef.stateHandler
 
-        self.topEnemyNode = mainRef.mainNode.attachNewNode('topEnemyNode')
-        self.initEnemyNode()
+        #self.topEnemyNode = mainRef.mainNode.attachNewNode('topEnemyNode')
+        self.initEnemyNode(mainRef.mainNode)
 
         utils.enemyDictionary[self.enemyNode.getName()] = self
 
         self.loadEnemyModel(attributes.modelName)
         self.initAttributes(attributes)
         self.initEnemyAi()
-        
+
         self.initEnemyCollisionHandlers()
         self.initEnemyCollisionSolids()
 
         self.request('Idle')
 
-    def initEnemyNode(self):
+        # Start enemy updater task
+        self.enemyUpdaterTask = taskMgr.add(self.enemyUpdater, 'enemyUpdaterTask')
+
+    def initEnemyNode(self, parentNode):
         enemyName = 'enemy' + str(len(self._enemyListRef))
-        self.enemyNode = self.topEnemyNode.attachNewNode(enemyName)
+        self.enemyNode = parentNode.attachNewNode(enemyName)
         self._enemyListRef.append(self)
 
     def loadEnemyModel(self, modelName):
@@ -75,13 +78,14 @@ class Enemy(FSM, Unit):
                 'death2':modelPrefix+modelName+'-death2'
             })
         self.enemyModel.reparentTo(self.enemyNode)
+        #self.enemyModel.setH(-180)
 
         self.enemyNode.setPos(Point3.zero())
 
     def initAttributes(self, attributes):
         perceptionRangeMultiplier = 2
         rangeMultiplier = 8
-        speedMultiplier = 3
+        speedMultiplier = 3 # 0.05 - suitable for own position updating
 
         self.strength = attributes.strength
         self.constitution = attributes.constitution
@@ -117,8 +121,6 @@ class Enemy(FSM, Unit):
         self.enemyAIBehaviors = self.enemyAI.getAiBehaviors()
         #self.enemyAIBehaviors.obstacleAvoidance(1.0)
 
-        self.enemyUpdaterTask = taskMgr.add(self.enemyUpdater, 'enemyUpdaterTask')
-
     def initEnemyCollisionHandlers(self):
         self.groundHandler = CollisionHandlerQueue()
         self.collPusher = CollisionHandlerPusher()
@@ -134,7 +136,7 @@ class Enemy(FSM, Unit):
         #sphereNodePath.show()
 
         collSphereNode = CollisionNode('enemyCollSphere')
-        collSphere = CollisionSphere(0, 0, 1, 3)
+        collSphere = CollisionSphere(0, 0, 2.5, 3)
         collSphereNode.addSolid(collSphere)
 
         collSphereNode.setIntoCollideMask(BitMask32.allOff())
@@ -147,11 +149,11 @@ class Enemy(FSM, Unit):
         self.collPusher.addCollider(self.sphereNode, self.enemyNode)
 
         groundRay = CollisionRay(0, 0, 10, 0, 0, -1)
-        groundColl = CollisionNode('groundRay')
+        groundColl = CollisionNode('enemyGroundRay')
         groundColl.addSolid(groundRay)
         groundColl.setIntoCollideMask(BitMask32.allOff())
         groundColl.setFromCollideMask(BitMask32.bit(1))
-        self.groundRayNode = self.topEnemyNode.attachNewNode(groundColl)
+        self.groundRayNode = self.enemyNode.attachNewNode(groundColl)
         #self.groundRayNode.show()
 
         base.cTrav.addCollider(self.groundRayNode, self.groundHandler)
@@ -173,15 +175,6 @@ class Enemy(FSM, Unit):
             if (len(entries) > 0) and (entries[0].getIntoNode().getName()[:6] == 'ground'):
                 newZ = entries[0].getSurfacePoint(base.render).getZ()
                 self.enemyNode.setZ(zModifier + newZ)
-
-    def enemyQuickUpdater(self, task):
-        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY or not self._enemyActive:
-            self.enemyModel.stop()
-            # Do not do anything when paused
-            return task.cont
-
-        self.checkGroundCollisions()
-        return task.cont
 
     def enemyUpdater(self, task):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY or not self._enemyActive:
@@ -222,8 +215,12 @@ class Enemy(FSM, Unit):
         return task.cont
 
     def pursuePlayer(self, task):
+#        if self.state != 'Pursue':
+#            return task.done
+
         self.enemyAIBehaviors.pursue(self._playerRef.playerNode)
-        self.enemyModel.loop('walk', fromFrame=0, toFrame=12)
+        #self.enemyNode.lookAt(self._playerRef.playerNode)
+        #self.enemyNode.setFluidY(self.enemyNode, self.movementSpeed)
 
         return task.done
 
@@ -238,6 +235,7 @@ class Enemy(FSM, Unit):
     def enterPursue(self):
         #print('enemy enterPursue')
         taskMgr.doMethodLater(1, self.pursuePlayer, 'pursuePlayerTask')
+        self.enemyModel.loop('walk', fromFrame=0, toFrame=12)
 
     def exitPursue(self):
         #print('enemy exitPursue')
@@ -276,7 +274,6 @@ class Enemy(FSM, Unit):
     def enterDeath(self):
         #print('enemy enterDeath')
         self.enemyAIBehaviors.removeAi('all')
-
         randomDeathAnim = 'death' + str(utils.getD2())
         self.enemyModel.play(randomDeathAnim)
 
@@ -373,7 +370,7 @@ class Enemy(FSM, Unit):
 
         # Remove the enemy node
         self.enemyNode.removeNode()
-        self.topEnemyNode.removeNode()
+        #self.topEnemyNode.removeNode()
 
         # Remove enemy updater tasks
         self.enemyUpdaterTask.remove()
