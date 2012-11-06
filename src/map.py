@@ -208,7 +208,7 @@ class Map:
         self.exitGateIsHidden = True
 
         pickerTube = self.exitStation.find('**/collider')
-        pickerTube.setCollideMask(BitMask32.bit(1))
+        pickerTube.setCollideMask(BitMask32.bit(1) | BitMask32.bit(2))
         pickerTube.setName('exitGate')
         pickerTube.setZ(pickerTube.getZ()+1)
 
@@ -287,8 +287,9 @@ class Map:
         # Setup directional light (a yellowish sun)
         sun = DirectionalLight('sun')
         sun.setColor(VBase4(0.75, 0.75, 0.25, 1))
-        #sun.getLens().setNearFar(1, 1000)
+        #sun.getLens().setNearFar(1, 500)
         #sun.getLens().setFilmSize(24, 36)
+        #sun.showFrustum()
         #sun.setShadowCaster(True, 1024, 1024) # Enable these shadows when the scene is scaled down (if)
 
         self.sunNode = parentNode.attachNewNode(sun)
