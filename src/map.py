@@ -76,6 +76,7 @@ class Map:
         # The ground is the walk plane, it collides with mouse ray and player- and enemies ground rays
         self.ground = self.areaModel.find('**/ground')
         self.ground.setCollideMask(BitMask32.bit(1))
+        print('groundType: ', type(self.ground))
 
         # Colliders are obstacles in areas, they collide with enemies and the player
         self.collidersGroup = self.areaModel.find('**/colliders')

@@ -219,7 +219,7 @@ class Enemy(FSM, Unit):
 #            return task.done
 
         self.enemyAIBehaviors.pursue(self._playerRef.playerNode)
-        #self.enemyNode.lookAt(self._playerRef.playerNode)
+        #self.enemyNode.headsUp(self._playerRef.playerNode)
         #self.enemyNode.setFluidY(self.enemyNode, self.movementSpeed)
 
         return task.done
@@ -309,7 +309,7 @@ class Enemy(FSM, Unit):
 
             # Make sure enemy is facing player when attacking
             pitchRoll = self.enemyNode.getP(), self.enemyNode.getR()
-            self.enemyNode.lookAt(self._playerRef.playerNode)
+            self.enemyNode.headsUp(self._playerRef.playerNode)
             self.enemyNode.setHpr(self.enemyNode.getH()-180, *pitchRoll)
 
             if self._playerRef.getArmorClass() <= self.getAttackBonus():

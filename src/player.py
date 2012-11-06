@@ -28,7 +28,6 @@ class Player(FSM, Unit):
         self.initPlayerModel()
         self.initPlayerCamera()
 
-        #self.initPlayerMovement()
         self.initPlayerCollisionHandlers()
         self.initPlayerCollisionSolids()
 
@@ -83,9 +82,6 @@ class Player(FSM, Unit):
         # Model is backwards, fix by changing the heading
         self.playerModel.setH(180)
 
-        # Initialize selector variable
-        self.selector = None
-
     def initPlayerCamera(self): 
         # Initialize the camera
         base.disableMouse()
@@ -108,7 +104,7 @@ class Player(FSM, Unit):
         self.destination = Point3(self.startPos)
         self.velocity = Vec3.zero()
 
-        self.playerNode.lookAt(self.exitPos)
+        self.playerNode.headsUp(self.exitPos)
 
     def initPlayerCollisionHandlers(self):
         self.groundHandler = CollisionHandlerQueue()
@@ -146,14 +142,12 @@ class Player(FSM, Unit):
 
 
     def addSelectorToEnemy(self, enemyTarget):
-        if enemyTarget is not None:
-            self.selector.reparentTo(enemyTarget.enemyNode)
-            self.selector.loop(self.selectorAnimName[0], fromFrame=0, toFrame=12)
+        self.selector.reparentTo(enemyTarget.enemyNode)
+        self.selector.loop(self.selectorAnimName[0], fromFrame=0, toFrame=12)
 
     def removeSelectorFromEnemy(self):
-        if self.selector is not None:
-            self.selector.stop()
-            self.selector.detachNode()
+        self.selector.stop()
+        self.selector.detachNode()
 
     def setPlayerDestination(self, destination):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
@@ -163,18 +157,19 @@ class Player(FSM, Unit):
         if self.getIsDead():
             return
 
-        #if Vec3(self.destination - self.playerNode.getPos()).lengthSquared() > 2*2:
-        self.destination = destination
-        pitchRoll = self.playerNode.getP(), self.playerNode.getR()
+        distance = abs(self.playerNode.getX() - destination.getX()) + abs(self.playerNode.getY() - destination.getY())
+        if distance > 6.0:
+            self.destination = destination
+            pitchRoll = self.playerNode.getP(), self.playerNode.getR()
 
-        self.playerNode.lookAt(self.destination)
+            self.playerNode.headsUp(self.destination)
 
-        self.playerNode.setHpr(self.playerNode.getH(), *pitchRoll)
+            self.playerNode.setHpr(self.playerNode.getH(), *pitchRoll)
 
-        self.velocity = self.destination - self.playerNode.getPos()
+            self.velocity = self.destination - self.playerNode.getPos()
 
-        self.velocity.normalize()
-        self.velocity *= self.movementSpeed
+            self.velocity.normalize()
+            self.velocity *= self.movementSpeed
 
     def attackEnemy(self, enemy):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
@@ -210,7 +205,7 @@ class Player(FSM, Unit):
             print('Attack enemy!')
             # Make the player look at the enemy
             pitchRoll = (self.playerNode.getP(), self.playerNode.getR())
-            self.playerNode.lookAt(enemy.enemyNode)
+            self.playerNode.headsUp(enemy.enemyNode)
             self.playerNode.setHpr(self.playerNode.getH(), *pitchRoll)
 
             if self.state != 'Combat':
