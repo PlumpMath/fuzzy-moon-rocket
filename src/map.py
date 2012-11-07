@@ -1,6 +1,7 @@
 from panda3d.core import *
 from direct.actor.Actor import Actor
 from direct.interval.IntervalGlobal import *
+from direct.filter.CommonFilters import CommonFilters
 
 from collections import namedtuple
 
@@ -26,6 +27,8 @@ class Map:
 
         # Initialze sun
         self.initSun(main.mainNode)
+
+        self.initFilters()
 
         self.loadArea(farmArea)
 
@@ -306,3 +309,22 @@ class Map:
         ambientLightNode = parentNode.attachNewNode(ambientLight)
 
         parentNode.setLight(ambientLightNode)
+
+    def initFilters(self):
+        # Initialize filters
+        #self.filters = CommonFilters(base.win, base.cam)
+
+        # Cannot get the bloom filter to work
+        #self.filters.setBloom(mintrigger=0.5, intensity=100.0, size='large')
+
+        # Cartoon ink could maybe be nice, with a thin line?
+        #self.filters.setCartoonInk(separation=0.5)
+
+        # Nice sun ray effect, although it sets a special mood
+        #self.filters.setVolumetricLighting(caster=self.sunNode, numsamples=100, density=1.0, decay=0.98, exposure=0.05)
+
+        # Maybe use a little blur, might be nice? (can also sharpen with values over 1, i.e. blur: 0-1, sharpen:1-2)
+        #self.filters.setBlurSharpen(amount=0.8)
+
+        # Could not see an effect
+        #self.filters.setAmbientOcclusion()
