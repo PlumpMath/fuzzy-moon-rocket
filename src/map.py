@@ -105,7 +105,7 @@ class Map:
         # Make collision object collidable
         self.exitStation.find('**/ground*').setCollideMask(BitMask32.bit(1))
 
-        # Locate and save enemy spawn points 
+        # Locate and save enemy spawn points
         self.spawnPointsDict = {}
         i = 1
         spawnPoint = self.areaModel.find('**/enemySpawnPoint'+str(i))
@@ -311,6 +311,7 @@ class Map:
         parentNode.setLight(ambientLightNode)
 
     def initFilters(self):
+        pass
         # Initialize filters
         #self.filters = CommonFilters(base.win, base.cam)
 
