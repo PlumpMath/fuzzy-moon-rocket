@@ -2,8 +2,9 @@ import time
 from direct.gui.DirectGui import DirectFrame, DirectButton, DirectLabel, DirectRadioButton
 
 class GUI(object):
-    _LABELS = ["Strongly do not want to continue", "Do not want to continue",
-              "Neither", "Want to continue", "Strongly want to continue"]
+    _CHOICES = {0: 'Disagree strongly', 1: 'Disagree moderately', 2: 'Disagree a little',
+               3: 'Neither agree nor disagree', 4: 'Agree a little', 5: 'Agree moderately',
+               6: 'Agree strongly'}
     _rButtonValue = [0]
     _overlayFrame = None
     _overlayVisible = False
@@ -41,12 +42,12 @@ class GUI(object):
 
     def setupButtons(self):
         self._buttons = []
-        for i, label in enumerate(self._LABELS):
+        for i, question in self._CHOICES.iteritems():
             xOffset = ((i * 15) / 100.0)
-            xPos = len(label) / 100.0 + 0.02 + xOffset
-            yPos = len(label)/100.0+0.07
+            xPos = len(question) / 100.0 + 0.02 + xOffset
+            yPos = len(question)/100.0+0.07
             self._buttonLabels.append(DirectLabel(parent=self._rButtonFrame,
-                                                  text=label, scale=0.07,
+                                                  text=question, scale=0.07,
                                                   hpr=(0, 0, -45.0),
                                                   pos=(xPos, 0, yPos),
                                                   frameColor=(0, 0, 0, 0)))
