@@ -1,3 +1,10 @@
+from panda3d.core import loadPrcFileData
+
+#loadPrcFileData('', 'fullscreen 1')
+loadPrcFileData('', 'win-size 1200 700')
+loadPrcFileData('', 'window-title Fuzzy Moon Rocket')
+#loadPrcFileData('', 'undecorated 1')
+
 import direct.directbase.DirectStart
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import *
@@ -7,8 +14,6 @@ from panda3d.ai import *
 import sys
 
 from src import utils, player, enemy, gui, hud, map, quest, states, dda
-
-#loadPrcFile('config/Config.prc')
 
 class World(ShowBase):
 

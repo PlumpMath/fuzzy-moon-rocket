@@ -52,6 +52,9 @@ class Map:
         # Initialize the task to handle enemy spawns
         self.enemySpawnTask = taskMgr.doMethodLater(1.5, self.enemySpawnActivator, 'enemySpawnActivatorTask')
 
+        # Update sun position
+        self.sunNode.setPos(self.startPos.getX(), self.startPos.getY(), self.startPos.getZ() + 100)
+
         # Change state to play
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             self._stateHandlerRef.request(self._stateHandlerRef.PLAY)
@@ -122,6 +125,9 @@ class Map:
 
         # Initialize walls
         self.initWalls(self.areaNode)
+
+        # Initialize sun
+        #self.initSun(self.areaNode)
 
         # Initialize Exit gate
         taskMgr.doMethodLater(0.25, self.initExitGate, 'initExitGateTask', extraArgs=[])
@@ -291,13 +297,14 @@ class Map:
         # Setup directional light (a yellowish sun)
         sun = DirectionalLight('sun')
         sun.setColor(VBase4(0.75, 0.75, 0.25, 1))
-        #sun.getLens().setNearFar(1, 500)
-        #sun.getLens().setFilmSize(24, 36)
+        sun.getLens().setNearFar(1, 500)
+        sun.getLens().setFilmSize(24, 36)
         #sun.showFrustum()
-        #sun.setShadowCaster(True, 1024, 1024) # Enable these shadows when the scene is scaled down (if)
+        sun.setShadowCaster(True, 1024, 1024) # Enable these shadows when the scene is scaled down (if)
 
         self.sunNode = parentNode.attachNewNode(sun)
         self.sunNode.setP(-130)
+        #self.sunNode.setPos(self.startPos.getX(), self.startPos.getY(), 10)
         #self.sunNode.lookAt(0, 0, 0)
 
         parentNode.setLight(self.sunNode)
@@ -313,7 +320,7 @@ class Map:
     def initFilters(self):
         pass
         # Initialize filters
-        #self.filters = CommonFilters(base.win, base.cam)
+        self.filters = CommonFilters(base.win, base.cam)
 
         # Cannot get the bloom filter to work
         #self.filters.setBloom(mintrigger=0.5, intensity=100.0, size='large')
