@@ -92,7 +92,7 @@ class Player(FSM, Unit):
 
         self.stopCamera = False
 
-    def initStartPositions(self, playerStartPos, playerExitPos):
+    def initStartPosition(self, playerStartPos, playerExitPos):
         self.exitPos = playerExitPos
         self.startPos = playerStartPos
 
@@ -111,7 +111,7 @@ class Player(FSM, Unit):
         self.collPusher = CollisionHandlerPusher()
 
     def initPlayerCollisionSolids(self):
-        groundRay = CollisionRay(0, 0, 10, 0, 0, -1)
+        groundRay = CollisionRay(0, 0, 5, 0, 0, -1)
         groundColl = CollisionNode('groundRay')
         groundColl.addSolid(groundRay)
         groundColl.setIntoCollideMask(BitMask32.allOff())
@@ -122,11 +122,12 @@ class Player(FSM, Unit):
         base.cTrav.addCollider(self.groundRayNode, self.groundHandler)
 
         collSphereNode = CollisionNode('playerCollSphere')
-        collSphere = CollisionSphere(0, 0, 3, 4)
+        collSphere = CollisionSphere(0, 0, 1, 3)
         collSphereNode.addSolid(collSphere)
 
-        collSphereNode.setIntoCollideMask(BitMask32.bit(2))
-        collSphereNode.setFromCollideMask(BitMask32.bit(2))
+        collSphereNode.setCollideMask(BitMask32.bit(2))
+        #collSphereNode.setIntoCollideMask(BitMask32.bit(2))
+        #collSphereNode.setFromCollideMask(BitMask32.bit(2))
         
         sphereNode = self.playerNode.attachNewNode(collSphereNode)
         #sphereNode.show()
@@ -245,7 +246,7 @@ class Player(FSM, Unit):
 
         self.velocity = self.destination - self.playerNode.getPos()
         #print('distance to dest: ', self.velocity.lengthSquared())
-        if self.velocity.lengthSquared() < 4*4:
+        if self.velocity.lengthSquared() < 10:
             self.velocity = Vec3.zero()
 
             if self.state == 'Run':

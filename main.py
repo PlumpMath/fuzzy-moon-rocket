@@ -1,7 +1,7 @@
 from panda3d.core import loadPrcFileData
 
 #loadPrcFileData('', 'fullscreen 1')
-loadPrcFileData('', 'win-size 1200 700')
+loadPrcFileData('', 'win-size 1000 600')
 loadPrcFileData('', 'window-title Fuzzy Moon Rocket')
 #loadPrcFileData('', 'undecorated 1')
 

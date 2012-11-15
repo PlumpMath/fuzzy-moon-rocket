@@ -44,9 +44,7 @@ class Map:
              # Load player reference
             self._playerRef = self._mainRef.player
 
-
-        self._playerRef.initStartPositions(self.startPos, self.exitPos)
-
+        # Reparent areaNode to mainNode
         self.areaNode.reparentTo(self._mainRef.mainNode)
 
         # Initialize the task to handle enemy spawns
@@ -58,6 +56,9 @@ class Map:
         # Change state to play
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             self._stateHandlerRef.request(self._stateHandlerRef.PLAY)
+
+        # Initialize the player position
+        self._playerRef.initStartPosition(self.startPos, self.exitPos)
 
     def loadArea(self, area):
         print('loadArea: ', area.modelName)
