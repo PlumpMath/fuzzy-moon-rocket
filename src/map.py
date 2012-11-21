@@ -123,6 +123,16 @@ class Map:
             if i >= self.maxSpawnPointsPerArea:
                 break
 
+        # Initialize inverted sphere
+        self.invertedSphere = self.areaNode.attachNewNode(CollisionNode('worldSphere'))
+        self.invertedSphere.node().addSolid(CollisionInvSphere(0.0, 0.0, 1.0, 25)) # Adjust when new areas come
+
+        self.invertedSphere.node().setFromCollideMask(BitMask32.bit(0))
+        self.invertedSphere.node().setIntoCollideMask(BitMask32.bit(2))
+
+        #self.invertedSphere.show()
+
+
         # Initialize walls
         #self.initWalls(self.areaNode)
 
@@ -153,8 +163,11 @@ class Map:
         #self.exitAreaTask.remove()
 
         # Remove nodes
-        self.areaNode.removeNode()
+        self.invertedSphere.removeNode()
         self.highlightTextNode.removeNode()
+        self.walls.removeNode()
+        self.exitStation.removeNode()
+        self.areaNode.removeNode()
 
 #=============================================================
 #========== ENEMY SPAWNING ===================================
