@@ -70,8 +70,7 @@ class Unit(object):
         if self.fixedHealthPoints == 0:
             self.fighterHealthPointsPerLevel = 8
             self.maxHealthPoints =  (self.level * 
-                                    (self.fighterHealthPointsPerLevel + 
-                                     self.getConstitutionModifier()))
+                                    (self.fighterHealthPointsPerLevel + self.getConstitutionModifier()))
         else:
             self.maxHealthPoints = self.fixedHealthPoints
 
@@ -130,7 +129,12 @@ class Unit(object):
                     self.maxHealthPoints) * 100.0)
 
     def attack(self, other):
-        if self.getAttackBonus() >= other.getArmorClass():
-            dmg = self.getDamageBonus()
-            print(self, ' damaged ', other, ' for ', dmg, ' damage')
-            other.receiveDamage(dmg)
+        if not self.getIsDead() and not other.getIsDead():
+            if self.getAttackBonus() >= other.getArmorClass():
+                dmg = self.getDamageBonus()
+                #print(self.getName(), ' damaged ', other.getName(), ' for ', dmg, ' damage')
+                other.receiveDamage(dmg)
+
+            return True
+
+        return False

@@ -29,6 +29,12 @@ def getD10():
 def getD20():
     return random.randint(1, 20)
 
+def getScaledValue(value, targetMin, targetMax, valueMin, valueMax):
+    print 'value:', value, ' targetMin:', targetMin, ' targetMax:', targetMax, ' valueMin:', valueMin, ' valueMax:', valueMax
+    result = (((targetMax - targetMin) * (value - valueMin))/(valueMax - valueMin)) + targetMin
+    print 'result:', result
+    return result
+
 class MouseHandler():
 
     _mouseDown = False
@@ -58,6 +64,7 @@ class MouseHandler():
         base.cTrav.addCollider(self.pickerNodePath, self.collisionHandler)
 
         taskMgr.add(self.moveTask, 'moveTask')
+        taskMgr.add(self.attackTask, 'attackTask')
         #taskMgr.doMethodLater(0.5, self.highlightExitGate, 'highlightExitGateTask')
 
     def moveTask(self, task):
@@ -75,6 +82,30 @@ class MouseHandler():
                             base.render.getRelativePoint(camera, farPoint)):
                     #print('Mouse ray intersects ground at ', pos3d)
                     self._playerRef.setPlayerDestination(pos3d)
+
+        return task.cont
+
+    def attackTask(self, task):
+        if base.mouseWatcherNode.hasMouse():
+            if self._mouseDown:
+
+                mousePos = base.mouseWatcherNode.getMouse()
+                self.pickerRay.setFromLens(base.camNode, mousePos.getX(), mousePos.getY())
+
+                bAttack = False
+
+                if self.collisionHandler.getNumEntries() > 0:
+                    for i in range(self.collisionHandler.getNumEntries()):
+                        entry = self.collisionHandler.getEntry(i).getIntoNodePath()
+                        entryName = entry.getName()
+
+                        if entryName[:5] == 'enemy' and not entry.isEmpty():
+                            bAttack = True
+                            break;
+
+                if bAttack:
+                    if self._playerRef.state != 'Combat':
+                        self._playerRef.request('Combat')
 
         return task.cont
 
@@ -107,20 +138,15 @@ class MouseHandler():
             mousePos = base.mouseWatcherNode.getMouse()
             self.pickerRay.setFromLens(base.camNode, mousePos.getX(), mousePos.getY())
 
-            if self.collisionHandler.getNumEntries() > 0:
-                self.collisionHandler.sortEntries()
-                for i in range(self.collisionHandler.getNumEntries()):
-                    entry = self.collisionHandler.getEntry(i).getIntoNodePath()
-                    entryName = entry.getName()
- 
-                    if entryName[:5] == 'enemy' and not entry.isEmpty():
-                        enemy = enemyDictionary[entryName]
-                        self._playerRef.setCurrentTarget(enemy)
-                        break;
+            #if self.collisionHandler.getNumEntries() > 0:
+            #    self.collisionHandler.sortEntries()
+            #    for i in range(self.collisionHandler.getNumEntries()):
+            #        entry = self.collisionHandler.getEntry(i).getIntoNodePath()
+            #        entryName = entry.getName()
 
-                    elif entryName == 'exitGate' and not entry.isEmpty():
-                        self._mapHandlerRef.clickExitGate()
-                        break;
+            #        if entryName == 'exitGate' and not entry.isEmpty():
+            #            self._mapHandlerRef.clickExitGate()
+            #            break;
 
 
     def onMouseUp(self):

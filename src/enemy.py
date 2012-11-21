@@ -130,25 +130,20 @@ class Enemy(FSM, Unit):
         self.collPusher = CollisionHandlerPusher()
 
     def initEnemyCollisionSolids(self):
+        # Enemy ground ray
         groundRay = CollisionRay(0, 0, 2, 0, 0, -1)
         groundColl = CollisionNode('enemyGroundRay')
         groundColl.addSolid(groundRay)
+
         groundColl.setIntoCollideMask(BitMask32.allOff())
         groundColl.setFromCollideMask(BitMask32.bit(1))
+
         self.groundRayNode = self.enemyNode.attachNewNode(groundColl)
         #self.groundRayNode.show()
 
         base.cTrav.addCollider(self.groundRayNode, self.groundHandler)
 
-        pickerSphereCollNode = CollisionNode(self.enemyNode.getName())
-        pickerCollSphere = CollisionSphere(0, 0, 0, 0.5)
-        pickerSphereCollNode.addSolid(pickerCollSphere)
-        pickerSphereCollNode.setFromCollideMask(BitMask32.allOff())
-        pickerSphereCollNode.setIntoCollideMask(BitMask32.bit(1))
-
-        self.pickerNode = self.enemyNode.attachNewNode(pickerSphereCollNode)
-        #sphereNodePath.show()
-
+        # Enemy collision sphere
         collSphereNode = CollisionNode('enemyCollSphere')
         collSphere = CollisionSphere(0, 0, 0.1, 0.2)
         collSphereNode.addSolid(collSphere)
@@ -161,6 +156,28 @@ class Enemy(FSM, Unit):
 
         base.cTrav.addCollider(self.sphereNode, self.collPusher)
         self.collPusher.addCollider(self.sphereNode, self.enemyNode)
+
+        # Enemy picker collision sphere
+        pickerSphereCollNode = CollisionNode(self.enemyNode.getName())
+        pickerCollSphere = CollisionSphere(0, 0, 0, 0.5)
+        pickerSphereCollNode.addSolid(pickerCollSphere)
+
+        pickerSphereCollNode.setFromCollideMask(BitMask32.allOff())
+        pickerSphereCollNode.setIntoCollideMask(BitMask32.bit(1))
+
+        self.pickerNode = self.enemyNode.attachNewNode(pickerSphereCollNode)
+        #sphereNodePath.show()
+
+        # Enemy attack collision sphere
+        attackCollSphereNode = CollisionNode(self.enemyNode.getName()+'atkSph')
+        attackCollSphere = CollisionSphere(0, 0, 0.1, 0.15)
+        attackCollSphereNode.addSolid(attackCollSphere)
+
+        attackCollSphereNode.setIntoCollideMask(BitMask32.bit(3))
+        attackCollSphereNode.setFromCollideMask(BitMask32.allOff())
+
+        attackSphereNode = self.enemyNode.attachNewNode(attackCollSphereNode)
+        #attackSphereNode.show()
 
     def checkGroundCollisions(self):
         if self.groundHandler.getNumEntries() > 0:
@@ -293,7 +310,7 @@ class Enemy(FSM, Unit):
             self.request('Idle')
 
         else:
-            print('Attack player!')
+            #print('Attack player!')
             # Make sure enemy is facing player when attacking
             pitchRoll = self.enemyNode.getP(), self.enemyNode.getR()
             self.enemyNode.headsUp(self._playerRef.playerNode)

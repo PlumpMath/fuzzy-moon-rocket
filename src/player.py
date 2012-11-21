@@ -32,10 +32,8 @@ class Player(FSM, Unit):
         self.initPlayerCollisionHandlers()
         self.initPlayerCollisionSolids()
 
-        self.initSelector()
-
         # Start mouse picking and movement
-        utils.MouseHandler(self)
+        self.mouseHandler = utils.MouseHandler(self)
 
         # Start player update task
         playerUpdateTask = taskMgr.add(self.playerUpdate, 'playerUpdateTask')
@@ -110,8 +108,10 @@ class Player(FSM, Unit):
     def initPlayerCollisionHandlers(self):
         self.groundHandler = CollisionHandlerQueue()
         self.collPusher = CollisionHandlerPusher()
+        self.attackCollisionHandler = CollisionHandlerQueue()
 
     def initPlayerCollisionSolids(self):
+        # Player ground ray #
         groundRay = CollisionRay(0, 0, 1, 0, 0, -1)
         groundColl = CollisionNode('playerGroundRay')
 
@@ -123,6 +123,7 @@ class Player(FSM, Unit):
 
         base.cTrav.addCollider(self.groundRayNode, self.groundHandler)
 
+        # Player collision sphere #
         collSphereNode = CollisionNode('playerCollSphere')
 
         collSphere = CollisionSphere(0, 0, 0.1, 0.2)
@@ -138,22 +139,31 @@ class Player(FSM, Unit):
         base.cTrav.addCollider(sphereNode, self.collPusher)
         self.collPusher.addCollider(sphereNode, self.playerNode)
 
-    def initSelector(self):
-        self.selector = Actor('models/selector')
-        self.selector.setCollideMask(BitMask32.allOff())
+        # Player attack collision sphere # 
+        attackCollSphereNode = CollisionNode('playerAttackCollSphere')
 
-        self.selector.setDepthOffset(1)
+        attackCollSphere = CollisionSphere(0, 0.3, 0.1, 0.2)
+        attackCollSphereNode.addSolid(attackCollSphere)
 
-        self.selectorAnimName = self.selector.getAnimNames()
+        attackCollSphereNode.setIntoCollideMask(BitMask32.allOff())
+        attackCollSphereNode.setFromCollideMask(BitMask32.bit(3))
+
+        attackSphereNode = self.playerNode.attachNewNode(attackCollSphereNode)
+        #attackSphereNode.show()
+
+        base.cTrav.addCollider(attackSphereNode, self.attackCollisionHandler)
 
 
-    def addSelectorToEnemy(self, enemyTarget):
-        self.selector.reparentTo(enemyTarget.enemyNode)
-        self.selector.loop(self.selectorAnimName[0], fromFrame=0, toFrame=12)
+    def getEXPToNextLevel(self):
+        return self._prevEXP + (self.level * 1000)
 
-    def removeSelectorFromEnemy(self):
-        self.selector.stop()
-        self.selector.detachNode()
+    def receiveEXP(self, value):
+        self.experience += (value * self._ddaHandlerRef.EXPFactor)
+        if self.experience >= self.getEXPToNextLevel():
+            self.increaseLevel()
+
+    def getEXPToNextLevelInPercentage(self):
+        return int((float(self.experience) - self._prevEXP) / (self.level * 1000.0) * 100.0)
 
     def setPlayerDestination(self, destination):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
@@ -177,47 +187,14 @@ class Player(FSM, Unit):
             self.velocity.normalize()
             self.velocity *= self.movementSpeed
 
-    def attackEnemy(self, enemy):
-        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
-            # Do not do anything when paused
-            return 
+    def setCurrentTarget(self, target):
+        self._currentTarget = target
 
-        if self.getIsDead():
-            if self.state != 'Death':
-                self.request('Death')
-            return
+    def getCurrentTarget(self):
+        return self._currentTarget
 
-        if self.getCurrentTarget() != enemy:
-            return
-
-        playerPos = self.playerNode.getPos()
-        enemyPos = enemy.enemyNode.getPos()
-
-        if enemy.getIsDead():
-            #print('enemy is already dead')
-            if self.state != 'Idle':
-                self.request('Idle')
-
-            enemy = None
-
-        elif not utils.getIsInRange(playerPos, enemyPos, self.combatRange):
-            print('Enemy fled away from combat range')
-            if self.state == 'Combat':
-                self.request('Idle')
-
-        else:
-            print('Attack enemy!')
-            # Make the player look at the enemy
-            pitchRoll = (self.playerNode.getP(), self.playerNode.getR())
-            self.playerNode.headsUp(enemy.enemyNode)
-            self.playerNode.setHpr(self.playerNode.getH(), *pitchRoll)
-
-            #if self.state != 'Combat':
-            #    self.request('Combat')
-
-            self.playerModel.play('attack', fromFrame=0, toFrame=12)
-
-            self.attack(enemy)
+    def removeCurrentTarget(self):
+        self.setCurrentTarget(None)
 
 
     def checkGroundCollisions(self):
@@ -258,20 +235,6 @@ class Player(FSM, Unit):
             if self.state != 'Run':
                 self.request('Run')
 
-    def updatePlayerTarget(self):
-        enemy = self.getCurrentTarget()
-
-        if enemy is not None and enemy.getIsDead():
-            self.setCurrentTarget(None)
-            self.removeSelectorFromEnemy()
-            if self.state != 'Run':
-                self.request('Idle')
-
-        elif enemy is not None and not enemy.getIsDead():
-            if self.state != 'Combat':
-                self.request('Combat')
-            #self.attackEnemy(enemy)
-
     def playerUpdate(self, task):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             self.playerModel.stop()
@@ -279,7 +242,6 @@ class Player(FSM, Unit):
             return task.cont
 
         self.checkGroundCollisions()
-        self.updatePlayerTarget()
 
         if self.getIsDead():
             if self.state != 'Death':
@@ -296,27 +258,74 @@ class Player(FSM, Unit):
         return task.cont
 
 
-    def getEXPToNextLevel(self):
-        return self._prevEXP + (self.level * 1000)
+    def attackEnemies(self, task):
+        attackSpeed = utils.getScaledValue(self.getInitiativeRoll(), 0.5, 2.0, 5.0, 30.0) 
+        if task.delayTime != attackSpeed:
+            task.delayTime = attackSpeed
 
-    def receiveEXP(self, value):
-        self.experience += (value * self._ddaHandlerRef.EXPFactor)
-        if self.experience >= self.getEXPToNextLevel():
-            self.increaseLevel()
+        numEnemies = self.attackCollisionHandler.getNumEntries()
+        if numEnemies > 0 and self.mouseHandler._mouseDown:
+            print('attackEnemies')
+            bAttacked = False
 
-    def getEXPToNextLevelInPercentage(self):
-        return ((float(self.experience) - self._prevEXP) / (self.level * 1000.0) * 100.0)
+            for i in range(numEnemies):
+                entry = self.attackCollisionHandler.getEntry(i).getIntoNode()
+                entryName = entry.getName()[:-6]
+                #print('entryFound:', entryName)
 
-    def setCurrentTarget(self, enemyTarget):
-        #print('setCurrentTarget: ' + str(enemyTarget))
-        self._currentTarget = enemyTarget
+                enemy = utils.enemyDictionary[entryName]
+                bAttacked = self.attack(enemy)
 
-        if enemyTarget is not None:
-            if not enemyTarget.getIsDead():
-                self.addSelectorToEnemy(enemyTarget)
+            if bAttacked:
+                self.setCurrentTarget(enemy)
+                self.playerModel.play('attack', fromFrame=0, toFrame=12)
 
-    def getCurrentTarget(self):
-        return self._currentTarget
+        else:
+            #print('go to idle')
+            self.removeCurrentTarget()
+
+            if self.state == 'Combat':
+                self.request('Idle')
+
+            return task.done
+
+        return task.again
+
+
+    def enterRun(self):
+        self.playerModel.loop('run', fromFrame=0, toFrame=12)
+
+    def exitRun(self):
+        pass
+
+    def enterCombat(self):
+        print('enterCombat')
+        self.playerModel.stop()
+        self.destination = self.playerNode.getPos()
+
+        self.combatTask = taskMgr.add(self.attackEnemies, 'combatTask')
+
+    def exitCombat(self):
+        #print('exitCombat')
+        self.combatTask.remove()
+
+    def enterIdle(self):
+        stopPlayer = self.playerModel.actorInterval('stop', loop=0)
+        idlePlayer = Func(self.playerModel.loop, 'idle', fromFrame=0, toFrame=50)
+
+        self.stopMovingSequence = Sequence(stopPlayer, idlePlayer)
+        self.stopMovingSequence.start()
+
+    def exitIdle(self):
+        self.stopMovingSequence.finish()
+
+    def enterDeath(self):
+        self.playerModel.play('death')
+
+        taskMgr.doMethodLater(3, self.respawn, 'respawnTask')
+
+    def exitDeath(self):
+        pass
 
     def respawn(self, task):
         # Move player back to start pos
@@ -333,45 +342,3 @@ class Player(FSM, Unit):
         self.request('Idle')
 
         return task.done
-
-    def enterRun(self):
-        self.playerModel.loop('run', fromFrame=0, toFrame=12)
-
-    def exitRun(self):
-        #self.playerModel.stop()
-        pass
-
-    def enterCombat(self):
-        self.playerModel.stop()
-        self.destination = self.playerNode.getPos()
-
-        attackEnemy = Func(self.attackEnemy, self.getCurrentTarget())
-        delay = Wait(1 * self._ddaHandlerRef.SpeedFactor)
-
-        self.attackSequence = Sequence(attackEnemy, delay)
-        self.attackSequence.loop()
-
-    def exitCombat(self):
-        #self.playerModel.stop()
-        self.attackSequence.finish()
-
-    def enterIdle(self):
-        #quitAnimations = Func(self.playerModel.stop)
-        stopPlayer = self.playerModel.actorInterval('stop', loop=0)
-        idlePlayer = Func(self.playerModel.loop, 'idle', fromFrame=0, toFrame=50)
-
-        self.stopMovingSequence = Sequence(stopPlayer, idlePlayer)
-        self.stopMovingSequence.start()
-
-    def exitIdle(self):
-        #self.playerModel.stop()
-        self.stopMovingSequence.finish()
-
-    def enterDeath(self):
-        self.playerModel.play('death')
-
-        taskMgr.doMethodLater(3, self.respawn, 'respawnTask')
-
-    def exitDeath(self):
-        #self.playerModel.stop()
-        pass

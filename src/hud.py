@@ -140,9 +140,9 @@ class HUD:
     def updateEXPBar(self):
         self.expBar['value'] = self._playerRef.getEXPToNextLevelInPercentage()
         
-        self._newEXPBarText = (str(self._playerRef.experience) + 
+        self._newEXPBarText = (str(int(self._playerRef.experience)) + 
                                 ' / ' + 
-                                str(self._playerRef.getEXPToNextLevel()) + 
+                                str(int(self._playerRef.getEXPToNextLevel())) + 
                                 ' experience points')
 
         self.expBarText.setText(self._newEXPBarText)
