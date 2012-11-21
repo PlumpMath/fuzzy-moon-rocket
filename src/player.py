@@ -334,18 +334,11 @@ class Player(FSM, Unit):
 
         return task.done
 
-        
-    def playIdleAnimation(self, task):
-        if self.state == 'Idle':
-            self.playerModel.stop()
-            self.playerModel.loop('idle', fromFrame=0, toFrame=50)
-
-        return task.done
-
     def enterRun(self):
         self.playerModel.loop('run', fromFrame=0, toFrame=12)
 
     def exitRun(self):
+        #self.playerModel.stop()
         pass
 
     def enterCombat(self):
@@ -359,18 +352,20 @@ class Player(FSM, Unit):
         self.attackSequence.loop()
 
     def exitCombat(self):
-        self.playerModel.stop()
-
+        #self.playerModel.stop()
         self.attackSequence.finish()
 
     def enterIdle(self):
-        self.playerModel.stop()
-        self.playerModel.play('stop')
+        #quitAnimations = Func(self.playerModel.stop)
+        stopPlayer = self.playerModel.actorInterval('stop', loop=0)
+        idlePlayer = Func(self.playerModel.loop, 'idle', fromFrame=0, toFrame=50)
 
-        taskMgr.doMethodLater(1.5, self.playIdleAnimation, 'idleAnimationTask')
+        self.stopMovingSequence = Sequence(stopPlayer, idlePlayer)
+        self.stopMovingSequence.start()
 
     def exitIdle(self):
-        self.playerModel.stop()
+        #self.playerModel.stop()
+        self.stopMovingSequence.finish()
 
     def enterDeath(self):
         self.playerModel.play('death')
@@ -378,7 +373,5 @@ class Player(FSM, Unit):
         taskMgr.doMethodLater(3, self.respawn, 'respawnTask')
 
     def exitDeath(self):
-        self.playerModel.stop()
-
-
-
+        #self.playerModel.stop()
+        pass

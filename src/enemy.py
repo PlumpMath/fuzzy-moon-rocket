@@ -130,7 +130,7 @@ class Enemy(FSM, Unit):
         self.collPusher = CollisionHandlerPusher()
 
     def initEnemyCollisionSolids(self):
-        groundRay = CollisionRay(0, 0, 1, 0, 0, -1)
+        groundRay = CollisionRay(0, 0, 2, 0, 0, -1)
         groundColl = CollisionNode('enemyGroundRay')
         groundColl.addSolid(groundRay)
         groundColl.setIntoCollideMask(BitMask32.allOff())
