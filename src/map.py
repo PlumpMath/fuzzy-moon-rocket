@@ -51,7 +51,7 @@ class Map:
         self.enemySpawnTask = taskMgr.doMethodLater(1.5, self.enemySpawnActivator, 'enemySpawnActivatorTask')
 
         # Update sun position
-        self.sunNode.setPos(self.startPos.getX(), self.startPos.getY(), self.startPos.getZ() + 100)
+        self.sunNode.setPos(self.startPos.getX(), self.startPos.getY(), self.startPos.getZ() + 10)
 
         # Change state to play
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
@@ -83,7 +83,6 @@ class Map:
         # The ground is the walk plane, it collides with mouse ray and player- and enemies ground rays
         self.ground = self.areaModel.find('**/ground')
         self.ground.setCollideMask(BitMask32.bit(1))
-        print('groundType: ', type(self.ground))
 
         # Colliders are obstacles in areas, they collide with enemies and the player
         self.collidersGroup = self.areaModel.find('**/colliders')
@@ -112,26 +111,23 @@ class Map:
         # Locate and save enemy spawn points
         self.spawnPointsDict = {}
         i = 1
-        spawnPoint = self.areaModel.find('**/enemySpawnPoint'+str(i))
+        spawnPoint = self.areaModel.find('**/spawnPoint'+str(i))
         while spawnPoint.getErrorType() == 0: # While Spawn Point is found OK
             #print('located spawn point: ', spawnPoint)
             self.spawnPointsDict[spawnPoint] = 1 # Activate spawn point
 
             i += 1
-            spawnPoint = self.areaModel.find('**/enemySpawnPoint'+str(i))
+            spawnPoint = self.areaModel.find('**/spawnPoint'+str(i))
 
             # Implement failsafe in case of errors to avoid infinite loop
             if i >= self.maxSpawnPointsPerArea:
                 break
 
         # Initialize walls
-        self.initWalls(self.areaNode)
-
-        # Initialize sun
-        #self.initSun(self.areaNode)
+        #self.initWalls(self.areaNode)
 
         # Initialize Exit gate
-        taskMgr.doMethodLater(0.25, self.initExitGate, 'initExitGateTask', extraArgs=[])
+        #taskMgr.doMethodLater(0.25, self.initExitGate, 'initExitGateTask', extraArgs=[])
 
         # Initialize enemies
         taskMgr.doMethodLater(0.5, self.initEnemies, 'initEnemiesTask', extraArgs=[])
@@ -174,7 +170,7 @@ class Map:
         for enemyType, enemyAmount in self._areaRef.enemies.iteritems():
             for i in range(enemyAmount):
                 newEnemy = enemy.Enemy(self._mainRef, enemyType)
-                randomPos = spawnPos.getX() + (utils.getD10()-5), spawnPos.getY() + (utils.getD10()-5)
+                randomPos = spawnPos.getX() + (utils.getD10()-5)*.1, spawnPos.getY() + (utils.getD10()-5)*.1
                 newEnemy.moveEnemy(*randomPos)
 
                 newEnemy.enemyNode.hide()
@@ -184,16 +180,17 @@ class Map:
              # Load player reference
             self._playerRef = self._mainRef.player
 
-        spawnRadius = 75
+        #spawnRadius = 15
 
         playerPos = self._playerRef.playerNode.getPos()
 
         for enemy in self._enemyListRef:
             if not enemy._enemyActive:
                 node = enemy.enemyNode
-                if utils.getIsInRange(playerPos, node.getPos(), spawnRadius):
+                if utils.getIsInRange(playerPos, node.getPos(), enemy.perceptionRange * 2):
                     node.show()
                     enemy._enemyActive = True
+                    print('activate enemy')
 
         # Call again after initial delay to reduce overhead
         return task.again
@@ -298,10 +295,10 @@ class Map:
         # Setup directional light (a yellowish sun)
         sun = DirectionalLight('sun')
         sun.setColor(VBase4(0.75, 0.75, 0.25, 1))
-        sun.getLens().setNearFar(1, 500)
+        sun.getLens().setNearFar(5, 1000)
         sun.getLens().setFilmSize(24, 36)
         #sun.showFrustum()
-        sun.setShadowCaster(True, 1024, 1024) # Enable these shadows when the scene is scaled down (if)
+        sun.setShadowCaster(True, 4096, 4096) # Enable these shadows when the scene is scaled down (if)
 
         self.sunNode = parentNode.attachNewNode(sun)
         self.sunNode.setP(-130)

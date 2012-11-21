@@ -74,6 +74,8 @@ class Enemy(FSM, Unit):
                 'attack':modelPrefix+modelName+'-attack',
                 'idle':modelPrefix+modelName+'-idle',
                 'awake':modelPrefix+modelName+'-awake',
+                'stop':modelPrefix+modelName+'-stop',
+                'hit':modelPrefix+modelName+'-hit',
                 'death1':modelPrefix+modelName+'-death1',
                 'death2':modelPrefix+modelName+'-death2'
             })
@@ -82,10 +84,12 @@ class Enemy(FSM, Unit):
 
         self.enemyNode.setPos(Point3.zero())
 
+        self.enemyNode.setDepthOffset(-1)
+
     def initAttributes(self, attributes):
-        perceptionRangeMultiplier = 2
-        rangeMultiplier = 8
-        speedMultiplier = 3 # 0.05 - suitable for own position updating
+        perceptionRangeMultiplier = 1.5
+        combatRangeMultiplier = .75
+        speedMultiplier = .1 
 
         self.strength = attributes.strength
         self.constitution = attributes.constitution
@@ -93,8 +97,8 @@ class Enemy(FSM, Unit):
 
         self.mass = attributes.mass
         self.movementSpeed = self._ddaHandlerRef.SpeedFactor * speedMultiplier * attributes.movementSpeed
-        self.perceptionRange = perceptionRangeMultiplier * rangeMultiplier * attributes.perceptionRange
-        self.combatRange = rangeMultiplier * attributes.combatRange
+        self.perceptionRange = perceptionRangeMultiplier * attributes.perceptionRange
+        self.combatRange = combatRangeMultiplier * attributes.combatRange
         self.attackBonus = attributes.attackBonus
         self.damageBonus = attributes.damageBonus
         self.damageRange = attributes.damageRange
@@ -126,8 +130,18 @@ class Enemy(FSM, Unit):
         self.collPusher = CollisionHandlerPusher()
 
     def initEnemyCollisionSolids(self):
+        groundRay = CollisionRay(0, 0, 1, 0, 0, -1)
+        groundColl = CollisionNode('enemyGroundRay')
+        groundColl.addSolid(groundRay)
+        groundColl.setIntoCollideMask(BitMask32.allOff())
+        groundColl.setFromCollideMask(BitMask32.bit(1))
+        self.groundRayNode = self.enemyNode.attachNewNode(groundColl)
+        #self.groundRayNode.show()
+
+        base.cTrav.addCollider(self.groundRayNode, self.groundHandler)
+
         pickerSphereCollNode = CollisionNode(self.enemyNode.getName())
-        pickerCollSphere = CollisionSphere(0, 0, 1, 6)
+        pickerCollSphere = CollisionSphere(0, 0, 0, 0.5)
         pickerSphereCollNode.addSolid(pickerCollSphere)
         pickerSphereCollNode.setFromCollideMask(BitMask32.allOff())
         pickerSphereCollNode.setIntoCollideMask(BitMask32.bit(1))
@@ -136,7 +150,7 @@ class Enemy(FSM, Unit):
         #sphereNodePath.show()
 
         collSphereNode = CollisionNode('enemyCollSphere')
-        collSphere = CollisionSphere(0, 0, 2.5, 3)
+        collSphere = CollisionSphere(0, 0, 0.1, 0.2)
         collSphereNode.addSolid(collSphere)
 
         collSphereNode.setIntoCollideMask(BitMask32.allOff())
@@ -148,33 +162,25 @@ class Enemy(FSM, Unit):
         base.cTrav.addCollider(self.sphereNode, self.collPusher)
         self.collPusher.addCollider(self.sphereNode, self.enemyNode)
 
-        groundRay = CollisionRay(0, 0, 10, 0, 0, -1)
-        groundColl = CollisionNode('enemyGroundRay')
-        groundColl.addSolid(groundRay)
-        groundColl.setIntoCollideMask(BitMask32.allOff())
-        groundColl.setFromCollideMask(BitMask32.bit(1))
-        self.groundRayNode = self.enemyNode.attachNewNode(groundColl)
-        #self.groundRayNode.show()
-
-        base.cTrav.addCollider(self.groundRayNode, self.groundHandler)
-
-
     def checkGroundCollisions(self):
-        zModifier = .5
-
         if self.groundHandler.getNumEntries() > 0:
             self.groundHandler.sortEntries()
             entries = []
             for i in range(self.groundHandler.getNumEntries()):
                 entry = self.groundHandler.getEntry(i)
+                #print('entry:', entry)
                 entries.append(entry)
 
             entries.sort(lambda x,y: cmp(y.getSurfacePoint(render).getZ(),
-                                        x.getSurfacePoint(render).getZ()))
+                                         x.getSurfacePoint(render).getZ()))
 
-            if (len(entries) > 0) and (entries[0].getIntoNode().getName()[:6] == 'ground'):
-                newZ = entries[0].getSurfacePoint(base.render).getZ()
-                self.enemyNode.setZ(zModifier + newZ)
+            for i in range(len(entries)):
+                if entries[i].getIntoNode().getName()[:6] == 'ground':
+                    #print('entryFound:', entries[0])
+                    newZ = entries[i].getSurfacePoint(base.render).getZ()
+                    self.enemyNode.setZ(newZ)
+                    #print('enemyZ:', newZ)
+                    break;
 
     def enemyUpdater(self, task):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY or not self._enemyActive:
@@ -214,57 +220,40 @@ class Enemy(FSM, Unit):
 
         return task.cont
 
-    def pursuePlayer(self, task):
-#        if self.state != 'Pursue':
-#            return task.done
-
-        self.enemyAIBehaviors.pursue(self._playerRef.playerNode)
-        #self.enemyNode.headsUp(self._playerRef.playerNode)
-        #self.enemyNode.setFluidY(self.enemyNode, self.movementSpeed)
-
-        return task.done
 
     def enterIdle(self):
         #print('enemy enterIdle')
-        self.enemyModel.pose('idle', 0) # Hold first frame
+        stopEnemy = self.enemyModel.actorInterval('stop', loop=0)
+        idleEnemy = self.enemyModel.actorInterval('idle', startFrame=0, endFrame=0, loop=0)
+
+        self.stopSequence = Sequence(stopEnemy, idleEnemy)
+        self.stopSequence.start()
 
     def exitIdle(self):
         #print('enemy exitIdle')
-        self.enemyModel.play('awake')
+        self.stopSequence.finish()
 
     def enterPursue(self):
         #print('enemy enterPursue')
-        taskMgr.doMethodLater(1, self.pursuePlayer, 'pursuePlayerTask')
-        self.enemyModel.loop('walk', fromFrame=0, toFrame=12)
+        awakeEnemy = self.enemyModel.actorInterval('awake', loop=0)
+        loopWalkEnemy = Func(self.enemyModel.loop, 'walk', fromFrame=0, toFrame=12)
+        pursuePlayer = Func(self.enemyAIBehaviors.pursue, self._playerRef.playerNode)
+
+        self.awakeSequence = Sequence(awakeEnemy, loopWalkEnemy, pursuePlayer)
+        self.awakeSequence.start()
 
     def exitPursue(self):
         #print('enemy exitPursue')
+        self.awakeSequence.finish()
         self.enemyAIBehaviors.removeAi('pursue')
 
     def enterCombat(self):
         #print('enemy enterCombat')
         self.enemyModel.stop()
 
-        delay = Wait(1.5)
-        
-        self.attackSequence = Sequence()
+        delay = Wait(1.0 * self._ddaHandlerRef.SpeedFactor)
 
-        attackPlayer = Func(self.attackPlayer, self.attackSequence)
-        attackEnemy = Func(self._playerRef.attackEnemy, self)
-
-        if self.getInitiativeRoll() > self._playerRef.getInitiativeRoll():
-            # Enemy wins initiative roll
-            self.attackSequence.append(attackPlayer)
-            self.attackSequence.append(delay)
-            self.attackSequence.append(attackEnemy)
-            self.attackSequence.append(delay)
-        else:
-            # Player wins initiative roll
-            self.attackSequence.append(attackEnemy)
-            self.attackSequence.append(delay)
-            self.attackSequence.append(attackPlayer)
-            self.attackSequence.append(delay)
-
+        self.attackSequence = Sequence(Func(self.attackPlayer), delay)
         self.attackSequence.loop()
 
     def exitCombat(self):
@@ -279,7 +268,7 @@ class Enemy(FSM, Unit):
 
 
 
-    def attackPlayer(self, attackSequence):
+    def attackPlayer(self):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY or not self._enemyActive:
             # Do not do anything when paused
             return 
@@ -295,32 +284,26 @@ class Enemy(FSM, Unit):
             print('player is already dead')
             self.request('Idle')
 
-        elif utils.getIsInRange(playerPos, enemyPos, self.combatRange) == False:
+        elif not utils.getIsInRange(playerPos, enemyPos, self.combatRange):
             print('player fled away from combat range')
             self.request('Pursue')
 
-        elif utils.getIsInRange(playerPos, enemyPos, self.perceptionRange) == False:
+        elif not utils.getIsInRange(playerPos, enemyPos, self.perceptionRange):
             print('player fled away from perception range')
             self.request('Idle')
 
         else:
             print('Attack player!')
-            self.enemyModel.play('attack', fromFrame=0, toFrame=12)
-
             # Make sure enemy is facing player when attacking
             pitchRoll = self.enemyNode.getP(), self.enemyNode.getR()
             self.enemyNode.headsUp(self._playerRef.playerNode)
             self.enemyNode.setHpr(self.enemyNode.getH()-180, *pitchRoll)
 
-            if self._playerRef.getArmorClass() <= self.getAttackBonus():
-                dmg = self.getDamageBonus()
-                print('Enemy hit the player for ' + str(dmg) + ' damage')
-                self._playerRef.receiveDamage(dmg)
-            else:
-                print('Enemy missed the player')
+            self.enemyModel.play('attack', fromFrame=0, toFrame=12)
+            self.attack(self._playerRef)
 
     def moveEnemy(self, x, y):
-        self.enemyNode.setPos(x, y, 1)
+        self.enemyNode.setPos(x, y, .01)
 
     def suicide(self):
         print('suicide: ', self)

@@ -1,6 +1,7 @@
 from panda3d.core import *
 from direct.actor.Actor import Actor
 from direct.fsm.FSM import FSM
+from direct.interval.IntervalGlobal import *
 
 import utils
 from unit import Unit
@@ -8,8 +9,8 @@ from unit import Unit
 class Player(FSM, Unit):
 
     # Declare private variables
-    _cameraYModifier = -75 # Relative to player Y position
-    _cameraZModifier = 60 # Relative to player Z position
+    _cameraYModifier = -6 # Relative to player Y position
+    _cameraZModifier = 4.5 # Relative to player Z position
 
     _currentTarget = None
 
@@ -49,7 +50,7 @@ class Player(FSM, Unit):
         self.dexterity = 10
 
         self.combatRange = 10 # Melee
-        self.movementSpeed = 20 # ?
+        self.movementSpeed = 1 # ?
         self.attackBonus = 6 # ?
         self.damageBonus = 0 # ?
         self.damageRange = 8 # = Longsword
@@ -111,8 +112,9 @@ class Player(FSM, Unit):
         self.collPusher = CollisionHandlerPusher()
 
     def initPlayerCollisionSolids(self):
-        groundRay = CollisionRay(0, 0, 5, 0, 0, -1)
-        groundColl = CollisionNode('groundRay')
+        groundRay = CollisionRay(0, 0, 1, 0, 0, -1)
+        groundColl = CollisionNode('playerGroundRay')
+
         groundColl.addSolid(groundRay)
         groundColl.setIntoCollideMask(BitMask32.allOff())
         groundColl.setFromCollideMask(BitMask32.bit(1))
@@ -122,12 +124,13 @@ class Player(FSM, Unit):
         base.cTrav.addCollider(self.groundRayNode, self.groundHandler)
 
         collSphereNode = CollisionNode('playerCollSphere')
-        collSphere = CollisionSphere(0, 0, 1, 3)
+
+        collSphere = CollisionSphere(0, 0, 0.1, 0.2)
         collSphereNode.addSolid(collSphere)
 
-        collSphereNode.setCollideMask(BitMask32.bit(2))
-        #collSphereNode.setIntoCollideMask(BitMask32.bit(2))
-        #collSphereNode.setFromCollideMask(BitMask32.bit(2))
+        #collSphereNode.setCollideMask(BitMask32.bit(2))
+        collSphereNode.setIntoCollideMask(BitMask32.allOff())
+        collSphereNode.setFromCollideMask(BitMask32.bit(2))
         
         sphereNode = self.playerNode.attachNewNode(collSphereNode)
         #sphereNode.show()
@@ -138,6 +141,8 @@ class Player(FSM, Unit):
     def initSelector(self):
         self.selector = Actor('models/selector')
         self.selector.setCollideMask(BitMask32.allOff())
+
+        self.selector.setDepthOffset(1)
 
         self.selectorAnimName = self.selector.getAnimNames()
 
@@ -159,7 +164,7 @@ class Player(FSM, Unit):
             return
 
         distance = abs(self.playerNode.getX() - destination.getX()) + abs(self.playerNode.getY() - destination.getY())
-        if distance > 6.0:
+        if distance > .5:
             self.destination = destination
             pitchRoll = self.playerNode.getP(), self.playerNode.getR()
 
@@ -188,19 +193,17 @@ class Player(FSM, Unit):
         playerPos = self.playerNode.getPos()
         enemyPos = enemy.enemyNode.getPos()
 
-        if self.getIsDead():
-            print('player is already dead')
-            self.request('Death')
-
-        elif enemy.getIsDead():
+        if enemy.getIsDead():
             #print('enemy is already dead')
-            self.request('Idle')
+            if self.state != 'Idle':
+                self.request('Idle')
+
             enemy = None
 
         elif not utils.getIsInRange(playerPos, enemyPos, self.combatRange):
             print('Enemy fled away from combat range')
-            #if self.state == 'Combat':
-            #    self.request('Idle')
+            if self.state == 'Combat':
+                self.request('Idle')
 
         else:
             print('Attack enemy!')
@@ -209,16 +212,12 @@ class Player(FSM, Unit):
             self.playerNode.headsUp(enemy.enemyNode)
             self.playerNode.setHpr(self.playerNode.getH(), *pitchRoll)
 
-            if self.state != 'Combat':
-                self.request('Combat')
+            #if self.state != 'Combat':
+            #    self.request('Combat')
 
             self.playerModel.play('attack', fromFrame=0, toFrame=12)
 
-            if enemy.getArmorClass() <= self.getAttackBonus():
-                dmg = self.getDamageBonus()
-                print('Player hit the enemy for: ' + str(dmg) + ' damage')
-                # We hit the enemy
-                taskMgr.doMethodLater(0.5, enemy.receiveDamage, 'receiveDamageTask', extraArgs=[dmg])
+            self.attack(enemy)
 
 
     def checkGroundCollisions(self):
@@ -246,7 +245,8 @@ class Player(FSM, Unit):
 
         self.velocity = self.destination - self.playerNode.getPos()
         #print('distance to dest: ', self.velocity.lengthSquared())
-        if self.velocity.lengthSquared() < 10:
+
+        if self.velocity.lengthSquared() < .1:
             self.velocity = Vec3.zero()
 
             if self.state == 'Run':
@@ -263,8 +263,14 @@ class Player(FSM, Unit):
 
         if enemy is not None and enemy.getIsDead():
             self.setCurrentTarget(None)
+            self.removeSelectorFromEnemy()
             if self.state != 'Run':
                 self.request('Idle')
+
+        elif enemy is not None and not enemy.getIsDead():
+            if self.state != 'Combat':
+                self.request('Combat')
+            #self.attackEnemy(enemy)
 
     def playerUpdate(self, task):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
@@ -343,11 +349,19 @@ class Player(FSM, Unit):
         pass
 
     def enterCombat(self):
-        # Attacks are handled by attackEnemy
+        self.playerModel.stop()
         self.destination = self.playerNode.getPos()
+
+        attackEnemy = Func(self.attackEnemy, self.getCurrentTarget())
+        delay = Wait(1 * self._ddaHandlerRef.SpeedFactor)
+
+        self.attackSequence = Sequence(attackEnemy, delay)
+        self.attackSequence.loop()
 
     def exitCombat(self):
         self.playerModel.stop()
+
+        self.attackSequence.finish()
 
     def enterIdle(self):
         self.playerModel.stop()

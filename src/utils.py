@@ -58,7 +58,7 @@ class MouseHandler():
         base.cTrav.addCollider(self.pickerNodePath, self.collisionHandler)
 
         taskMgr.add(self.moveTask, 'moveTask')
-        taskMgr.doMethodLater(0.5, self.highlightExitGate, 'highlightExitGateTask')
+        #taskMgr.doMethodLater(0.5, self.highlightExitGate, 'highlightExitGateTask')
 
     def moveTask(self, task):
         if base.mouseWatcherNode.hasMouse():

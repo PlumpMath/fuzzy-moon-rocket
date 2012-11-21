@@ -1,7 +1,7 @@
 from panda3d.core import loadPrcFileData
 
 #loadPrcFileData('', 'fullscreen 1')
-loadPrcFileData('', 'win-size 1000 600')
+loadPrcFileData('', 'win-size 1200 650')
 loadPrcFileData('', 'window-title Fuzzy Moon Rocket')
 #loadPrcFileData('', 'undecorated 1')
 
@@ -30,7 +30,7 @@ class World(ShowBase):
 
         # Set background color
         base.setBackgroundColor(0.1, 0.1, 0.1, 1)
-        base.camLens.setNearFar(50, 300)
+        base.camLens.setNearFar(2, 500)
         base.camLens.setFov(45)
 
         # Main game node

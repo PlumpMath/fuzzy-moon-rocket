@@ -128,3 +128,9 @@ class Unit(object):
     def getCurrentHealthPointsAsPercentage(self):
         return ((float(self.currentHealthPoints) / 
                     self.maxHealthPoints) * 100.0)
+
+    def attack(self, other):
+        if self.getAttackBonus() >= other.getArmorClass():
+            dmg = self.getDamageBonus()
+            print(self, ' damaged ', other, ' for ', dmg, ' damage')
+            other.receiveDamage(dmg)
