@@ -30,9 +30,14 @@ def getD20():
     return random.randint(1, 20)
 
 def getScaledValue(value, targetMin, targetMax, valueMin, valueMax):
-    print 'value:', value, ' targetMin:', targetMin, ' targetMax:', targetMax, ' valueMin:', valueMin, ' valueMax:', valueMax
+    #print 'value:', value, ' targetMin:', targetMin, ' targetMax:', targetMax, ' valueMin:', valueMin, ' valueMax:', valueMax
     result = (((targetMax - targetMin) * (value - valueMin))/(valueMax - valueMin)) + targetMin
-    print 'result:', result
+    #print 'result:', result
+    if result < targetMin:
+        result = targetMin
+    elif result > targetMax:
+        result = targetMax
+
     return result
 
 class MouseHandler():
