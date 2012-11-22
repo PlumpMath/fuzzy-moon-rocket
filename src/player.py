@@ -17,7 +17,7 @@ class Player(FSM, Unit):
 
 #------------------- CONSTRUCTOR ----------------------#
     def __init__(self, mainRef):
-        print("Player class instantiated")
+        print("Player instantiated")
         Unit.__init__(self)
         FSM.__init__(self, 'playerFSM')
 

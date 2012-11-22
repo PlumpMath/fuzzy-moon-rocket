@@ -34,7 +34,7 @@ class Enemy(FSM, Unit):
     _removeCorpseDelay = 2 # seconds before corpse is cleaned
 
     def __init__(self, mainRef, attributes):
-        print("Enemy class instantiated")
+        print("Enemy instantiated")
         Unit.__init__(self)
         FSM.__init__(self, 'playerFSM')
 
@@ -266,9 +266,23 @@ class Enemy(FSM, Unit):
 
         return task.cont
 
+    def pursuePlayer(self):
+        taskMgr.add(self.pursue, 'pursueTask')
+
+    def pursue(self, task):
+        if self.state == 'Pursue':
+            pitchRoll = self.enemyNode.getP(), self.enemyNode.getR()
+            self.enemyNode.headsUp(self._playerRef.playerNode)
+            self.enemyNode.setHpr(self.enemyNode.getH()-180, *pitchRoll)
+
+            self.enemyNode.setFluidPos(self.enemyNode, 0, -self.movementSpeed*0.01, 0)
+
+            return task.cont
+        else:
+            task.done
 
     def enterIdle(self):
-        print 'enemy enterIdle'
+        #print 'enemy enterIdle'
         stopEnemy = self.enemyModel.actorInterval('stop', loop=0)
         idleEnemy = self.enemyModel.actorInterval('idle', startFrame=0, endFrame=1, loop=0)
 
@@ -284,23 +298,21 @@ class Enemy(FSM, Unit):
     def enterPursue(self):
         #print('enemy enterPursue')
         loopWalkEnemy = Func(self.enemyModel.loop, 'walk', fromFrame=0, toFrame=12)
-        pursuePlayer = Func(self.enemyAIBehaviors.pursue, self._playerRef.playerNode)
 
         # Only awake enemy if it comes from idle
         if self.isSleeping: 
             self.isSleeping = False
 
             awakeEnemy = self.enemyModel.actorInterval('awake', loop=0)
-            self.awakeSequence = Sequence(awakeEnemy, loopWalkEnemy, pursuePlayer)
+            self.awakeSequence = Sequence(awakeEnemy, loopWalkEnemy, Func(self.pursuePlayer))
         else:
-            self.awakeSequence = Sequence(loopWalkEnemy, pursuePlayer)
+            self.awakeSequence = Sequence(loopWalkEnemy, Func(self.pursuePlayer))
 
         self.awakeSequence.start()
 
     def exitPursue(self):
         #print('enemy exitPursue')
         self.awakeSequence.finish()
-        self.enemyAIBehaviors.removeAi('all')
 
     def enterCombat(self):
         #print('enemy enterCombat')
@@ -309,10 +321,12 @@ class Enemy(FSM, Unit):
         self.attackTask = taskMgr.doMethodLater(0.1, self.attackPlayer, 'attackPlayerTask')
 
     def enterDisabled(self):
-        print 'enterDisable'
+        #print 'enterDisable'
+        pass
 
     def exitDisabled(self):
-        print 'exitDisable'
+        #print 'exitDisable'
+        pass
 
     def exitCombat(self):
         #print('enemy exitCombat')
