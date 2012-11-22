@@ -8,6 +8,7 @@ from direct.interval.IntervalGlobal import *
 from collections import namedtuple
 
 import utils
+from elements import HealthGoblet
 from unit import Unit
 
 Attributes = namedtuple('Attributes', ['modelName', 'strength', 'constitution', 'dexterity', 'expAward', 'perceptionRange', 'combatRange', 'movementSpeed', 'mass', 'initiativeBonus', 'fixedHealthPoints', 'armorClass', 'startLevel', 'damageBonus', 'damageRange', 'attackBonus'])
@@ -27,6 +28,10 @@ koboldSlinger = Attributes(modelName='probe', strength=9, constitution=12, dexte
 # Enemy unit automatically levels up to startLevel
 koboldWyrmpriest = Attributes(modelName='probe', strength=9, constitution=12, dexterity=16, initiativeBonus=4, fixedHealthPoints=36, armorClass=17, movementSpeed=6, combatRange=1, perceptionRange=5, mass=70, expAward=150, startLevel=3, damageRange=8, damageBonus=0, attackBonus=7)
 
+dropChanceFactor = 5
+maxDropChance = 50
+dropChance = 0
+
 class Enemy(FSM, Unit):
 
     # Declare private variables
@@ -38,7 +43,7 @@ class Enemy(FSM, Unit):
         Unit.__init__(self)
         FSM.__init__(self, 'playerFSM')
 
-        self._worldRef = mainRef
+        self._mainRef = mainRef
         self._playerRef = mainRef.player
         self._AIworldRef = mainRef.AIworld
         self._enemyListRef = mainRef.enemyList
@@ -88,7 +93,7 @@ class Enemy(FSM, Unit):
 
     def initAttributes(self, attributes):
         perceptionRangeMultiplier = 1.2
-        combatRangeMultiplier = .6
+        combatRangeMultiplier = .3
         speedMultiplier = .2
 
         self.strength = attributes.strength
@@ -369,6 +374,20 @@ class Enemy(FSM, Unit):
     def moveEnemy(self, x, y):
         self.enemyNode.setPos(x, y, .01)
 
+    def handleHealthGlobe(self):
+        global dropChanceFactor
+        global dropChance
+        global maxDropChance
+
+        # if we drop, create health goblet
+        if utils.getD100() <= dropChance + dropChanceFactor:
+            HealthGoblet(self._mainRef, self)
+            print 'dropping health globe'
+        # Otherwise, increase dropChance
+        else:
+            if dropChance+dropChanceFactor <= maxDropChance:
+                dropChance += dropChanceFactor
+
     def suicide(self):
         print('suicide: ', self)
         # Remove AI behavior
@@ -392,6 +411,9 @@ class Enemy(FSM, Unit):
 
             # Change state
             self.request('Death')
+
+            # Handle health globe
+            self.handleHealthGlobe()
 
             # Remove enemy
             taskMgr.doMethodLater(self._removeCorpseDelay, self.removeCorpse, 'removeCorpseTask')
@@ -427,7 +449,7 @@ class Enemy(FSM, Unit):
         self.removePassiveRegeneration()
 
         # Remove references
-        self._worldRef = None
+        self._mainRef = None
         self._playerRef = None
         self._AIworldRef = None
         self._enemyListRef = None

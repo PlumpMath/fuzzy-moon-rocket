@@ -29,6 +29,15 @@ def getD10():
 def getD20():
     return random.randint(1, 20)
 
+def getD100():
+    return random.randint(1, 100)
+
+def getDX(x):
+    return random.randint(1, x)
+
+def getDXY(x, y):
+    return random.randint(x, y)
+
 def getScaledValue(value, targetMin, targetMax, valueMin, valueMax):
     #print 'value:', value, ' targetMin:', targetMin, ' targetMax:', targetMax, ' valueMin:', valueMin, ' valueMax:', valueMax
     result = (((targetMax - targetMin) * (value - valueMin))/(valueMax - valueMin)) + targetMin
