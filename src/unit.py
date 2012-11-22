@@ -85,12 +85,25 @@ class Unit(object):
 
     def heal(self, healAmount):
         if not self.getIsDead():
+            tempHp = self.currentHealthPoints - self.maxHealthPoints
+
             self.currentHealthPoints += healAmount
             if self.currentHealthPoints > self.maxHealthPoints:
                 self.currentHealthPoints = self.maxHealthPoints
 
+            if tempHp > 0:
+                self.currentHealthPoints += tempHp
+
     def fullHeal(self):
         self.currentHealthPoints = self.maxHealthPoints
+
+    def receiveTemporaryHealth(self, amount):
+        if not self.getIsDead():
+            self.currentHealthPoints += amount
+
+    def removeTemporaryHealth(self):
+        if self.currentHealthPoints > self.maxHealthPoints:
+            self.currentHealthPoints = self.maxHealthPoints
 
     def getIsDead(self):
         if self._isDead or self.currentHealthPoints <= 0:

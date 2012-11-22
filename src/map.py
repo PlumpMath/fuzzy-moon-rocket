@@ -203,7 +203,7 @@ class Map:
                 if utils.getIsInRange(playerPos, node.getPos(), enemy.perceptionRange * 2):
                     node.show()
                     enemy._enemyActive = True
-                    print('activate enemy')
+                    #print('activate enemy')
 
         # Call again after initial delay to reduce overhead
         return task.again

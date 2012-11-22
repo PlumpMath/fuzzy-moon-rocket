@@ -1,3 +1,4 @@
+from direct.showbase.DirectObject import DirectObject
 from panda3d.core import *
 from direct.actor.Actor import Actor
 from direct.fsm.FSM import FSM
@@ -28,6 +29,7 @@ class Player(FSM, Unit):
         self.initPlayerAttributes()
         self.initPlayerModel()
         self.initPlayerCamera()
+        self.initPlayerAbilities()
 
         self.initPlayerCollisionHandlers()
         self.initPlayerCollisionSolids()
@@ -105,6 +107,13 @@ class Player(FSM, Unit):
 
         self.playerNode.headsUp(self.exitPos)
 
+    def initPlayerAbilities(self):
+        DO = DirectObject()
+        DO.accept('1', self.fireAbility, [1])
+        DO.accept('2', self.fireAbility, [2])
+        DO.accept('3', self.fireAbility, [3])
+        DO.accept('4', self.fireAbility, [4])
+
     def initPlayerCollisionHandlers(self):
         self.groundHandler = CollisionHandlerQueue()
         self.collPusher = CollisionHandlerPusher()
@@ -163,7 +172,11 @@ class Player(FSM, Unit):
             self.increaseLevel()
 
     def getEXPToNextLevelInPercentage(self):
-        return int((float(self.experience) - self._prevEXP) / (self.level * 1000.0) * 100.0)
+        result = int((float(self.experience) - self._prevEXP) / (self.level * 1000.0) * 100.0)
+        if result > 100:
+            result = 100
+
+        return result
 
     def setPlayerDestination(self, destination):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
@@ -196,6 +209,56 @@ class Player(FSM, Unit):
     def removeCurrentTarget(self):
         self.setCurrentTarget(None)
 
+    def fireAbility(self, ability):
+        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
+            # Do not do anything when paused
+            return 
+
+        # Offensive ability - Bull Rush
+        if ability == 1:
+            self.bullRush()
+
+        # Defensive - Unstoppable
+        elif ability == 2:
+            self.unstoppable()
+
+        # Evasive - Thicket of Blades
+        elif ability == 3:
+            pass
+
+        # Area of Effect - Shift the Battlefield
+        elif ability == 4:
+            pass
+
+    def bullRush(self):
+        enemy = self.getCurrentTarget()
+        if enemy is not None and not enemy.getIsDead():
+            if self.state == 'Combat':
+                node = enemy.enemyNode
+                print 'Bull rush:', node
+
+                enemy.enemyAIBehaviors.flee(self.playerNode)
+                taskMgr.doMethodLater(1.5, self.removeEnemyFlee, 'removeEnemyFleeTask', extraArgs=[enemy], appendTask=True)
+
+                self.playerModel.play('attack')
+                enemy.enemyModel.play('hit')
+
+    def removeEnemyFlee(self, enemy, task):
+        enemy.enemyAIBehaviors.removeAi('flee')
+        return task.done
+
+    def unstoppable(self):
+        tempHp = utils.getD6() + utils.getD6() + self.getConstitutionModifier()
+        self.receiveTemporaryHealth(tempHp)
+        print 'unstoppable:', tempHp
+
+        duration = 30.0 # Half a minute (30 seconds) duration of temp hp
+        taskMgr.doMethodLater(duration, self.removeTempHp, 'removeTempHpTask')
+
+    def removeTempHp(self, task):
+        print 'removeTempHp'
+        self.removeTemporaryHealth()
+        return task.done
 
     def checkGroundCollisions(self):
         if self.groundHandler.getNumEntries() > 0:
@@ -281,7 +344,7 @@ class Player(FSM, Unit):
                     enemy.enemyModel.play('hit')
 
             if bAttacked != 0:
-                print('attackEnemies')
+                #print('attackEnemies')
 
                 self.playerNode.headsUp(enemy.enemyNode)
 

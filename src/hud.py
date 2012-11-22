@@ -37,10 +37,9 @@ class HUD:
 
     def updateTargetBar(self):
         currentTarget = self._playerRef.getCurrentTarget()
-        if not currentTarget is None:
-            if not currentTarget.getIsDead():
-                self.targetBar.show()
-                self.targetBar['value'] = currentTarget.getCurrentHealthPointsAsPercentage()
+        if not currentTarget is None and not currentTarget.getIsDead():
+            self.targetBar.show()
+            self.targetBar['value'] = currentTarget.getCurrentHealthPointsAsPercentage()
         else:
             # Hide bar
             self.targetBar.hide()
@@ -142,27 +141,34 @@ class HUD:
         self.expBarLvlText.setText('Level ' + str(self._playerRef.level))
 
     def initPlayerAbilityBar(self):
-        self.abilityBar = DirectFrame(#frameSize=(-0.5, 0.5, -0.5, -1.0),
-                                      frameColor=(0.2, 0.2, 0.8, 1.0),
+        self.abilityBar = DirectFrame(frameColor=(0.2, 0.2, 0.8, 1.0),
                                       pos=(0, 0, -0.95),
                                       pad=(0.4, 0.075))
-
-        self.defensiveAbilityButton = DirectButton(text=('Def'),
-                                                   parent=self.abilityBar,
-                                                   scale=0.075,
-                                                   pos=(-0.3, 0, -0.01))
 
         self.offensiveAbilityButton = DirectButton(text=('Off'),
                                                    parent=self.abilityBar,
                                                    scale=0.075,
-                                                   pos=(-0.1, 0, -0.01))
+                                                   pos=(-0.3, 0, -0.01),
+                                                   command=self._playerRef.fireAbility,
+                                                   extraArgs=[1])
+
+        self.defensiveAbilityButton = DirectButton(text=('Def'),
+                                                   parent=self.abilityBar,
+                                                   scale=0.075,
+                                                   pos=(-0.1, 0, -0.01),
+                                                   command=self._playerRef.fireAbility,
+                                                   extraArgs=[2])
 
         self.evasiveAbilityButton = DirectButton(text=('Eva'),
                                                  parent=self.abilityBar,
                                                  scale=0.075,
-                                                 pos=(0.1, 0, -0.01))
+                                                 pos=(0.1, 0, -0.01),
+                                                 command=self._playerRef.fireAbility,
+                                                 extraArgs=[3])
 
         self.aoeAbilityButton = DirectButton(text=('AoE'),
                                              parent=self.abilityBar,
                                              scale=0.075,
-                                             pos=(0.3, 0, -0.01))
+                                             pos=(0.3, 0, -0.01),
+                                             command=self._playerRef.fireAbility,
+                                             extraArgs=[4])

@@ -229,7 +229,7 @@ class Enemy(FSM, Unit):
             elif self.state == 'Pursue':
                 # If player is within combat range
                 if utils.getIsInRange(playerPos, enemyPos, self.combatRange):
-                    print 'enemy go to combat'
+                    #print 'enemy go to combat'
                     # Go to combat
                     if self.state != 'Combat':
                         self.request('Combat')
@@ -283,7 +283,7 @@ class Enemy(FSM, Unit):
     def exitPursue(self):
         #print('enemy exitPursue')
         self.awakeSequence.finish()
-        self.enemyAIBehaviors.removeAi('pursue')
+        self.enemyAIBehaviors.removeAi('all')
 
     def enterCombat(self):
         #print('enemy enterCombat')
