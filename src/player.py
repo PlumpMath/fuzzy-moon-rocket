@@ -237,7 +237,6 @@ class Player(FSM, Unit):
 
     def playerUpdate(self, task):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
-            self.playerModel.stop()
             # Do not do anything when paused
             return task.cont
 
@@ -251,7 +250,7 @@ class Player(FSM, Unit):
 
         self.updatePlayerPosition(globalClock.getDt())
 
-        base.camera.setPos(self.playerNode.getX(),
+        base.camera.setFluidPos(self.playerNode.getX(),
                        self.playerNode.getY() + self._cameraYModifier,
                        self.playerNode.getZ() + self._cameraZModifier)
 
@@ -262,7 +261,7 @@ class Player(FSM, Unit):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             return task.done
 
-        attackSpeed = utils.getScaledValue(self.getInitiativeRoll(), 0.5, 2.0, 5.0, 30.0)
+        attackSpeed = utils.getScaledValue(self.getInitiativeRoll(), 0.75, 2.0, 2.0, 30.0)
         if task.delayTime != attackSpeed:
             task.delayTime = attackSpeed
 
@@ -302,14 +301,14 @@ class Player(FSM, Unit):
         self.playerModel.stop()
 
     def enterCombat(self):
-        print('enterCombat')
+        #print('enterCombat')
         self.playerModel.stop()
         self.destination = self.playerNode.getPos()
 
         self.combatTask = taskMgr.add(self.attackEnemies, 'combatTask')
 
     def exitCombat(self):
-        print('exitCombat')
+        #print('exitCombat')
         self.combatTask.remove()
 
     def enterIdle(self):
@@ -328,7 +327,7 @@ class Player(FSM, Unit):
         taskMgr.doMethodLater(3, self.respawn, 'respawnTask')
 
     def exitDeath(self):
-        pass
+        print('exitDeath')
 
     def respawn(self, task):
         # Move player back to start pos

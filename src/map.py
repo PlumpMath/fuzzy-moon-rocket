@@ -11,7 +11,6 @@ import enemy
 Area = namedtuple('Area', ['modelName', 'enemies'] )
 
 farmArea = Area(modelName='area_1', enemies={enemy.koboldMinion:1})
-cornFieldArea = Area(modelName='area_2', enemies={enemy.koboldMinion:3})
 
 class Map:
 
