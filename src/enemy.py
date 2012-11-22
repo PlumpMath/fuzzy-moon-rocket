@@ -88,7 +88,7 @@ class Enemy(FSM, Unit):
 
     def initAttributes(self, attributes):
         perceptionRangeMultiplier = 1.5
-        combatRangeMultiplier = .75
+        combatRangeMultiplier = .6
         speedMultiplier = .1 
 
         self.strength = attributes.strength

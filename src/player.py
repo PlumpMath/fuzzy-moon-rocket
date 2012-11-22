@@ -47,7 +47,7 @@ class Player(FSM, Unit):
         self.constitution = 14
         self.dexterity = 10
 
-        self.combatRange = 10 # Melee
+        self.combatRange = 0.75 # Melee
         self.movementSpeed = 1 # ?
         self.attackBonus = 6 # ?
         self.damageBonus = 0 # ?
@@ -259,7 +259,10 @@ class Player(FSM, Unit):
 
 
     def attackEnemies(self, task):
-        attackSpeed = utils.getScaledValue(self.getInitiativeRoll(), 0.5, 2.0, 5.0, 30.0) 
+        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
+            return task.done
+
+        attackSpeed = utils.getScaledValue(self.getInitiativeRoll(), 0.5, 2.0, 5.0, 30.0)
         if task.delayTime != attackSpeed:
             task.delayTime = attackSpeed
 
@@ -296,7 +299,7 @@ class Player(FSM, Unit):
         self.playerModel.loop('run', fromFrame=0, toFrame=12)
 
     def exitRun(self):
-        pass
+        self.playerModel.stop()
 
     def enterCombat(self):
         print('enterCombat')
@@ -306,7 +309,7 @@ class Player(FSM, Unit):
         self.combatTask = taskMgr.add(self.attackEnemies, 'combatTask')
 
     def exitCombat(self):
-        #print('exitCombat')
+        print('exitCombat')
         self.combatTask.remove()
 
     def enterIdle(self):

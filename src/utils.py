@@ -105,8 +105,13 @@ class MouseHandler():
                         entryName = entry.getName()
 
                         if entryName[:5] == 'enemy' and not entry.isEmpty():
-                            bAttack = True
-                            break;
+                            playerPos = self._playerRef.playerNode.getPos()
+                            enemy = enemyDictionary[entryName]
+                            enemyPos = enemy.enemyNode.getPos()
+                            #print 'playerPos:', playerPos, ', enemyPos:', enemyPos
+                            if getIsInRange(playerPos, enemyPos, self._playerRef.combatRange):
+                                bAttack = True
+                                break;
 
                 if bAttack:
                     if self._playerRef.state != 'Combat':

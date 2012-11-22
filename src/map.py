@@ -125,9 +125,9 @@ class Map:
 
         # Initialize inverted sphere
         self.invertedSphere = self.areaNode.attachNewNode(CollisionNode('worldSphere'))
-        self.invertedSphere.node().addSolid(CollisionInvSphere(0.0, 0.0, 1.0, 25)) # Adjust when new areas come
+        self.invertedSphere.node().addSolid(CollisionInvSphere(0.0, 0.0, 1.0, 13)) # Adjust when new areas come
 
-        self.invertedSphere.node().setFromCollideMask(BitMask32.bit(0))
+        self.invertedSphere.node().setFromCollideMask(BitMask32.allOff())
         self.invertedSphere.node().setIntoCollideMask(BitMask32.bit(2))
 
         #self.invertedSphere.show()

@@ -179,6 +179,5 @@ class World(ShowBase):
     def endGame(self):
         sys.exit()
 
-#PStatClient.connect()
 World()
 run()
