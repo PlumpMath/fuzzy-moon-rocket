@@ -368,28 +368,36 @@ class Player(FSM, Unit):
             task.delayTime = attackDelay
 
         numEntries = self.attackCollisionHandler.getNumEntries()
-        if numEntries > 0 and self.mouseHandler._mouseDown:
-            bAttacked = 0
+        if numEntries > 0:
+            if self.mouseHandler._mouseDown:
+                self.attackCollisionHandler.sortEntries()
+                bAttacked = 0
 
-            for i in range(numEntries):
-                entry = self.attackCollisionHandler.getEntry(i).getIntoNode()
-                entryName = entry.getName()[:-6]
-                #print('entryFound:', entryName)
+                for i in range(numEntries):
+                    entry = self.attackCollisionHandler.getEntry(i).getIntoNode()
+                    entryName = entry.getName()[:-6]
+                    #print('entryFound:', entryName)
 
-                enemy = utils.enemyDictionary[entryName]
-                if utils.getIsInRange(self.playerNode.getPos(), enemy.enemyNode.getPos(), self.combatRange):
-                    bAttacked = self.attack(enemy)
+                    enemy = utils.enemyDictionary[entryName]
+                    if utils.getIsInRange(self.playerNode.getPos(), enemy.enemyNode.getPos(), self.combatRange):
+                        bAttacked = self.attack(enemy)
 
-                    if bAttacked == 2:
-                        enemy.enemyModel.play('hit')
+                        if bAttacked == 2:
+                            enemy.enemyModel.play('hit')
 
-            if bAttacked != 0:
-                #print('attackEnemies')
+                if bAttacked != 0:
+                    #print('attackEnemies')
+                    self.playerModel.play('attack')
 
-                self.playerNode.headsUp(enemy.enemyNode)
+                    for i in range(numEntries):
+                        enemyTargetName = self.attackCollisionHandler.getEntry(i).getIntoNode().getName()[:-6]
+                        enemyTarget = utils.enemyDictionary[enemyTargetName]
 
-                self.setCurrentTarget(enemy)
-                self.playerModel.play('attack', fromFrame=0, toFrame=12)
+                        if enemyTarget is not None and not enemyTarget.getIsDead():
+                            self.setCurrentTarget(enemyTarget)
+                            break;
+
+            return task.again
 
         else:
             #print('go to idle')
@@ -400,7 +408,6 @@ class Player(FSM, Unit):
 
             return task.done
 
-        return task.again
 
 #----------------------- PLAYER STATES --------------------------------------#
     def enterRun(self):
