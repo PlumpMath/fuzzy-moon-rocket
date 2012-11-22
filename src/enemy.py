@@ -179,6 +179,22 @@ class Enemy(FSM, Unit):
         attackSphereNode = self.enemyNode.attachNewNode(attackCollSphereNode)
         #attackSphereNode.show()
 
+    def slowMovementByPercentage(self, percentage=30, slowDuration=30):
+        #print self.enemyNode.getName(), ' slowed by ', percentage, ' %'
+        oldForce = self.enemyAI.getMaxForce()
+        newForce = ((100.0 - percentage) / 100.0) * oldForce
+
+        if newForce < 0.15:
+            newForce = 0.15
+
+        self.enemyAI.setMaxForce(newForce)
+
+        taskMgr.doMethodLater(slowDuration, self.removeSlowMovement, 'removeSlowMovementTask', extraArgs=[oldForce], appendTask=True)
+
+    def removeSlowMovement(self, oldForce, task):
+        self.enemyAI.setMaxForce(oldForce)
+        return task.done
+
     def checkGroundCollisions(self):
         if self.groundHandler.getNumEntries() > 0:
             self.groundHandler.sortEntries()
@@ -208,6 +224,7 @@ class Enemy(FSM, Unit):
         self.checkGroundCollisions()
 
         if self.getIsDead():
+            self.onDeath()
             return task.done
 
         if self._playerRef.getIsDead():
@@ -251,7 +268,7 @@ class Enemy(FSM, Unit):
 
 
     def enterIdle(self):
-        #print('enemy enterIdle')
+        print 'enemy enterIdle'
         stopEnemy = self.enemyModel.actorInterval('stop', loop=0)
         idleEnemy = self.enemyModel.actorInterval('idle', startFrame=0, endFrame=1, loop=0)
 
@@ -291,6 +308,12 @@ class Enemy(FSM, Unit):
 
         self.attackTask = taskMgr.doMethodLater(0.1, self.attackPlayer, 'attackPlayerTask')
 
+    def enterDisabled(self):
+        print 'enterDisable'
+
+    def exitDisabled(self):
+        print 'exitDisable'
+
     def exitCombat(self):
         #print('enemy exitCombat')
         taskMgr.remove(self.attackTask)
@@ -312,12 +335,7 @@ class Enemy(FSM, Unit):
         if task.delayTime != attackDelay:
             task.delayTime = attackDelay
 
-        if self.getIsDead():
-            #print('enemy(self) is already dead')
-            self.onDeath()
-            return task.done
-
-        elif self._playerRef.getIsDead():
+        if self._playerRef.getIsDead():
             print('player is already dead')
             self.request('Idle')
             return task.done
@@ -349,6 +367,9 @@ class Enemy(FSM, Unit):
 
     def onDeath(self):
         if self.getIsDead():
+            # Remove AI behavior
+            self.enemyAIBehaviors.removeAi('all')
+
             # Award the player exp
             self._playerRef.receiveEXP(self.expAward)
 
@@ -359,9 +380,7 @@ class Enemy(FSM, Unit):
             self.request('Death')
 
             # Remove enemy
-            taskMgr.doMethodLater(self._removeCorpseDelay,
-                             self.removeCorpse,
-                            'RemoveCorpseTask')
+            taskMgr.doMethodLater(self._removeCorpseDelay, self.removeCorpse, 'removeCorpseTask')
 
     def removeCorpse(self, task):
         # Remove enemy collision sphere (pusher)
@@ -388,7 +407,6 @@ class Enemy(FSM, Unit):
         #self.topEnemyNode.removeNode()
 
         # Remove enemy updater tasks
-        #self.enemyUpdaterTask.remove()
         taskMgr.remove(self.enemyUpdaterTask)
 
         # Remove the passive regeneration task (from Unit class)

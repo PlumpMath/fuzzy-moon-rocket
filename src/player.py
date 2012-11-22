@@ -15,15 +15,17 @@ class Player(FSM, Unit):
 
     _currentTarget = None
 
+#------------------- CONSTRUCTOR ----------------------#
     def __init__(self, mainRef):
         print("Player class instantiated")
         Unit.__init__(self)
         FSM.__init__(self, 'playerFSM')
 
         self._mainRef = mainRef
+        self._enemyListRef = mainRef.enemyList
         self._ddaHandlerRef = mainRef.DDAHandler
         self._stateHandlerRef = mainRef.stateHandler
-        
+
         self.playerNode = mainRef.mainNode.attachNewNode('playerNode')
 
         self.initPlayerAttributes()
@@ -43,6 +45,7 @@ class Player(FSM, Unit):
         # Initialize player FSM state
         self.request('Idle')
 
+#----------------------------- INITIALIZATION ---------------------------------#
     def initPlayerAttributes(self):
         # Initialize player attributes
         self.strength = 16
@@ -114,6 +117,7 @@ class Player(FSM, Unit):
         DO.accept('3', self.fireAbility, [3])
         DO.accept('4', self.fireAbility, [4])
 
+#-------------------- COLLISION INITIALIZATION ---------------------------#
     def initPlayerCollisionHandlers(self):
         self.groundHandler = CollisionHandlerQueue()
         self.collPusher = CollisionHandlerPusher()
@@ -162,7 +166,7 @@ class Player(FSM, Unit):
 
         base.cTrav.addCollider(attackSphereNode, self.attackCollisionHandler)
 
-
+#---------------------------- EXPERIENCE ----------------------------------------#
     def getEXPToNextLevel(self):
         return self._prevEXP + (self.level * 1000)
 
@@ -178,6 +182,7 @@ class Player(FSM, Unit):
 
         return result
 
+#-------------------------- PLAYER MOVEMENT -------------------------------------#
     def setPlayerDestination(self, destination):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             # Do not do anything when paused
@@ -200,6 +205,7 @@ class Player(FSM, Unit):
             self.velocity.normalize()
             self.velocity *= self.movementSpeed
 
+#-------------------- PLAYER TARGET ------------------------------------#
     def setCurrentTarget(self, target):
         self._currentTarget = target
 
@@ -209,6 +215,7 @@ class Player(FSM, Unit):
     def removeCurrentTarget(self):
         self.setCurrentTarget(None)
 
+#-------------------- PLAYER ABILITIES ----------------------------------#
     def fireAbility(self, ability):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             # Do not do anything when paused
@@ -224,11 +231,11 @@ class Player(FSM, Unit):
 
         # Evasive - Thicket of Blades
         elif ability == 3:
-            pass
+            self.thicketOfBlades()
 
         # Area of Effect - Shift the Battlefield
         elif ability == 4:
-            pass
+            self.shiftTheBattlefield()
 
     def bullRush(self):
         enemy = self.getCurrentTarget()
@@ -237,15 +244,11 @@ class Player(FSM, Unit):
                 node = enemy.enemyNode
                 print 'Bull rush:', node
 
-                enemy.enemyAIBehaviors.flee(self.playerNode)
+                self.enemyFleeFromPlayer(enemy)
                 taskMgr.doMethodLater(1.5, self.removeEnemyFlee, 'removeEnemyFleeTask', extraArgs=[enemy], appendTask=True)
 
                 self.playerModel.play('attack')
                 enemy.enemyModel.play('hit')
-
-    def removeEnemyFlee(self, enemy, task):
-        enemy.enemyAIBehaviors.removeAi('flee')
-        return task.done
 
     def unstoppable(self):
         tempHp = utils.getD6() + utils.getD6() + self.getConstitutionModifier()
@@ -260,6 +263,42 @@ class Player(FSM, Unit):
         self.removeTemporaryHealth()
         return task.done
 
+    def thicketOfBlades(self):
+        playerPos = self.playerNode.getPos()
+        for enemy in self._enemyListRef:
+            if not enemy.getIsDead():
+                enemyPos = enemy.enemyNode.getPos()
+                if utils.getIsInRange(playerPos, enemyPos, self.combatRange):
+                    enemy.slowMovementByPercentage(25, 10) # slow by 25 % in 10 seconds, automatically removes it again
+
+                    # Play animation
+
+    def shiftTheBattlefield(self):
+        playerPos = self.playerNode.getPos()
+        for enemy in self._enemyListRef:
+            enemyPos = enemy.enemyNode.getPos()
+            if utils.getIsInRange(playerPos, enemyPos, self.combatRange):
+                self.enemyFleeFromPlayer(enemy)
+                taskMgr.doMethodLater(1.5, self.removeEnemyFlee, 'removeEnemyFleeTask', extraArgs=[enemy], appendTask=True)
+
+                enemy.receiveDamage(self.getStrengthModifier())
+
+    def enemyFleeFromPlayer(self, enemy):
+        if enemy.state != 'Disabled':
+            enemy.enemyAIBehaviors.removeAi('all')
+            enemy.enemyAIBehaviors.flee(self.playerNode)
+
+            enemy.enemyModel.loop('walk', fromFrame=0, toFrame=12)
+            enemy.request('Disabled')
+
+    def removeEnemyFlee(self, enemy, task):
+        if enemy.state == 'Disabled':
+            enemy.enemyModel.stop()
+            enemy.enemyAIBehaviors.removeAi('flee')
+            enemy.request('Idle')
+        return task.done
+
+#------------------ UPDATE FUNCTIONS ---------------------------------#
     def checkGroundCollisions(self):
         if self.groundHandler.getNumEntries() > 0:
             self.groundHandler.sortEntries()
@@ -319,7 +358,7 @@ class Player(FSM, Unit):
 
         return task.cont
 
-
+#------------------------------- COMBAT ------------------------------#
     def attackEnemies(self, task):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             return task.done
@@ -338,10 +377,11 @@ class Player(FSM, Unit):
                 #print('entryFound:', entryName)
 
                 enemy = utils.enemyDictionary[entryName]
-                bAttacked = self.attack(enemy)
+                if utils.getIsInRange(self.playerNode.getPos(), enemy.enemyNode.getPos(), self.combatRange):
+                    bAttacked = self.attack(enemy)
 
-                if bAttacked == 2:
-                    enemy.enemyModel.play('hit')
+                    if bAttacked == 2:
+                        enemy.enemyModel.play('hit')
 
             if bAttacked != 0:
                 #print('attackEnemies')
@@ -362,7 +402,7 @@ class Player(FSM, Unit):
 
         return task.again
 
-
+#----------------------- PLAYER STATES --------------------------------------#
     def enterRun(self):
         self.playerModel.loop('run', fromFrame=0, toFrame=12)
 
@@ -398,6 +438,7 @@ class Player(FSM, Unit):
     def exitDeath(self):
         print('exitDeath')
 
+#--------------------- PLAYER DEATH ---------------------------#
     def respawn(self, task):
         # Move player back to start pos
         self.destination = self.startPos
