@@ -72,16 +72,16 @@ class World(ShowBase):
 
         if debug:
             self.accept('shift-o', self.gui.toggleOverlayFrame)
-            self.accept('1', self.damagePlayer)
-            self.accept('2', self.killEnemy)
-            self.accept('3', self.zoomOut)
-            self.accept('4', self.outputTime)
-            self.accept('5', self.addEnemy)
-            self.accept('6', self.levelPlayerUp)
-            self.accept('7', self.healPlayer)
-            self.accept('8', self.showAllCollisions)
-            self.accept('9', self.printStats)
-            self.accept('0', self.showFPS)
+            self.accept('shift-1', self.damagePlayer)
+            self.accept('shift-2', self.killEnemy)
+            self.accept('shift-3', self.zoomOut)
+            self.accept('shift-4', self.outputTime)
+            self.accept('shift-5', self.addEnemy)
+            self.accept('shift-6', self.levelPlayerUp)
+            self.accept('shift-7', self.healPlayer)
+            self.accept('shift-8', self.showAllCollisions)
+            self.accept('shift-9', self.printStats)
+            self.accept('shift-0', self.showFPS)
 
             self.showCollisions = False
 
