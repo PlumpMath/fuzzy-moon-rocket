@@ -98,14 +98,15 @@ class MouseHandler():
                 self.pickerRay.setFromLens(base.camNode, mousePos.getX(), mousePos.getY())
 
                 bAttack = False
+                playerPos = self._playerRef.playerNode.getPos()
 
                 if self.collisionHandler.getNumEntries() > 0:
+                    self.collisionHandler.sortEntries()
                     for i in range(self.collisionHandler.getNumEntries()):
                         entry = self.collisionHandler.getEntry(i).getIntoNodePath()
                         entryName = entry.getName()
 
                         if entryName[:5] == 'enemy' and not entry.isEmpty():
-                            playerPos = self._playerRef.playerNode.getPos()
                             enemy = enemyDictionary[entryName]
                             enemyPos = enemy.enemyNode.getPos()
                             #print 'playerPos:', playerPos, ', enemyPos:', enemyPos

@@ -158,8 +158,9 @@ class Map:
         self.walls.remove()
 
         # Remove spawn task
-        self.enemySpawnTask.remove()
+        #self.enemySpawnTask.remove()
         #self.exitAreaTask.remove()
+        taskMgr.remove(self.enemySpawnTask)
 
         # Remove nodes
         self.invertedSphere.removeNode()

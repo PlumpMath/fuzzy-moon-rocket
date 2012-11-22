@@ -294,7 +294,7 @@ class Enemy(FSM, Unit):
         enemyPos = self.enemyNode.getPos()
 
         if self.getIsDead():
-            print('enemy is already dead')
+            #print('enemy(self) is already dead')
             self.onDeath()
 
         elif self._playerRef.getIsDead():
@@ -373,7 +373,11 @@ class Enemy(FSM, Unit):
         #self.topEnemyNode.removeNode()
 
         # Remove enemy updater tasks
-        self.enemyUpdaterTask.remove()
+        #self.enemyUpdaterTask.remove()
+        taskMgr.remove(self.enemyUpdaterTask)
+
+        # Remove the passive regeneration task (from Unit class)
+        self.removePassiveRegeneration()
 
         # Remove references
         self._worldRef = None

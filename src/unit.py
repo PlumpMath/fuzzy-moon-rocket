@@ -34,6 +34,9 @@ class Unit(object):
         # Initialize currentHealthPoints at Max HP
         self.initHealth()
 
+        # Regenerate once per second
+        self.regenTask = taskMgr.doMethodLater(2.0, self.passiveRegeneration, 'passiveRegenerationTask')
+
     def initLevel(self):
         self.level = 1
         self.experience = 0
@@ -135,6 +138,24 @@ class Unit(object):
                 #print(self.getName(), ' damaged ', other.getName(), ' for ', dmg, ' damage')
                 other.receiveDamage(dmg)
 
-            return True
+                return 2 # Returns 2 when self damages other
 
-        return False
+            return 1 # Returns 1 when self attacks other
+
+        return 0 # Returns 0 when either self or other is dead
+
+    def passiveRegeneration(self, task):
+        if self.getIsDead():
+            # Do not regenerate dead objects
+            return task.again
+
+        hp = self.maxHealthPoints / 100.0
+        if hp >= 0.1:
+            self.heal(hp)
+            #print 'regenerated ' + str(hp)
+
+        return task.again
+
+    def removePassiveRegeneration(self):
+        #self.regenTask.remove()
+        taskMgr.remove(self.regenTask)

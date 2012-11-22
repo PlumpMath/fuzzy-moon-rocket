@@ -265,12 +265,12 @@ class Player(FSM, Unit):
         if task.delayTime != attackSpeed:
             task.delayTime = attackSpeed
 
-        numEnemies = self.attackCollisionHandler.getNumEntries()
-        if numEnemies > 0 and self.mouseHandler._mouseDown:
+        numEntries = self.attackCollisionHandler.getNumEntries()
+        if numEntries > 0 and self.mouseHandler._mouseDown:
             print('attackEnemies')
-            bAttacked = False
+            bAttacked = 0
 
-            for i in range(numEnemies):
+            for i in range(numEntries):
                 entry = self.attackCollisionHandler.getEntry(i).getIntoNode()
                 entryName = entry.getName()[:-6]
                 #print('entryFound:', entryName)
@@ -278,7 +278,12 @@ class Player(FSM, Unit):
                 enemy = utils.enemyDictionary[entryName]
                 bAttacked = self.attack(enemy)
 
-            if bAttacked:
+                if bAttacked == 2:
+                    enemy.enemyModel.play('hit')
+
+            if bAttacked != 0:
+                self.playerNode.headsUp(enemy.enemyNode)
+
                 self.setCurrentTarget(enemy)
                 self.playerModel.play('attack', fromFrame=0, toFrame=12)
 
@@ -305,7 +310,7 @@ class Player(FSM, Unit):
         self.playerModel.stop()
         self.destination = self.playerNode.getPos()
 
-        self.combatTask = taskMgr.add(self.attackEnemies, 'combatTask')
+        self.combatTask = taskMgr.doMethodLater(0.1, self.attackEnemies, 'combatTask')
 
     def exitCombat(self):
         #print('exitCombat')
