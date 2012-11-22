@@ -87,9 +87,9 @@ class Enemy(FSM, Unit):
         self.enemyNode.setDepthOffset(-1)
 
     def initAttributes(self, attributes):
-        perceptionRangeMultiplier = 1.5
+        perceptionRangeMultiplier = 1.2
         combatRangeMultiplier = .6
-        speedMultiplier = .1 
+        speedMultiplier = .2
 
         self.strength = attributes.strength
         self.constitution = attributes.constitution
@@ -218,18 +218,30 @@ class Enemy(FSM, Unit):
 
         # If player is within enemy perception range
         if utils.getIsInRange(playerPos, enemyPos, self.perceptionRange):
-            #print('player in range')
+
             # If enemy is not doing anything
             if self.state == 'Idle':
                 # Start pursuing
-                self.request('Pursue')
+                if self.state != 'Pursue':
+                    self.request('Pursue')
 
             # If enemy is already pursueing
             elif self.state == 'Pursue':
                 # If player is within combat range
                 if utils.getIsInRange(playerPos, enemyPos, self.combatRange):
+                    print 'enemy go to combat'
                     # Go to combat
-                    self.request('Combat')
+                    if self.state != 'Combat':
+                        self.request('Combat')
+
+            # If enemy is already in combat
+            elif self.state == 'Combat':
+                # If player has moved out of combat range
+                if not utils.getIsInRange(playerPos, enemyPos, self.combatRange):
+                    # Start pursuing
+                    if self.state != 'Pursue':
+                        self.request('Pursue')
+
         # If player is not within perception range
         else:
             if self.state != 'Idle':
@@ -241,10 +253,12 @@ class Enemy(FSM, Unit):
     def enterIdle(self):
         #print('enemy enterIdle')
         stopEnemy = self.enemyModel.actorInterval('stop', loop=0)
-        idleEnemy = self.enemyModel.actorInterval('idle', startFrame=0, endFrame=0, loop=0)
+        idleEnemy = self.enemyModel.actorInterval('idle', startFrame=0, endFrame=1, loop=0)
 
         self.stopSequence = Sequence(stopEnemy, idleEnemy)
         self.stopSequence.start()
+
+        self.isSleeping = True
 
     def exitIdle(self):
         #print('enemy exitIdle')
@@ -252,11 +266,18 @@ class Enemy(FSM, Unit):
 
     def enterPursue(self):
         #print('enemy enterPursue')
-        awakeEnemy = self.enemyModel.actorInterval('awake', loop=0)
         loopWalkEnemy = Func(self.enemyModel.loop, 'walk', fromFrame=0, toFrame=12)
         pursuePlayer = Func(self.enemyAIBehaviors.pursue, self._playerRef.playerNode)
 
-        self.awakeSequence = Sequence(awakeEnemy, loopWalkEnemy, pursuePlayer)
+        # Only awake enemy if it comes from idle
+        if self.isSleeping: 
+            self.isSleeping = False
+
+            awakeEnemy = self.enemyModel.actorInterval('awake', loop=0)
+            self.awakeSequence = Sequence(awakeEnemy, loopWalkEnemy, pursuePlayer)
+        else:
+            self.awakeSequence = Sequence(loopWalkEnemy, pursuePlayer)
+
         self.awakeSequence.start()
 
     def exitPursue(self):
@@ -268,14 +289,11 @@ class Enemy(FSM, Unit):
         #print('enemy enterCombat')
         self.enemyModel.stop()
 
-        delay = Wait(1.0 * self._ddaHandlerRef.SpeedFactor)
-
-        self.attackSequence = Sequence(Func(self.attackPlayer), delay)
-        self.attackSequence.loop()
+        self.attackTask = taskMgr.doMethodLater(0.1, self.attackPlayer, 'attackPlayerTask')
 
     def exitCombat(self):
         #print('enemy exitCombat')
-        self.attackSequence.finish()
+        taskMgr.remove(self.attackTask)
 
     def enterDeath(self):
         #print('enemy enterDeath')
@@ -285,29 +303,24 @@ class Enemy(FSM, Unit):
 
 
 
-    def attackPlayer(self):
+    def attackPlayer(self, task):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY or not self._enemyActive:
             # Do not do anything when paused
-            return 
+            return task.again
 
-        playerPos = self._playerRef.playerNode.getPos()
-        enemyPos = self.enemyNode.getPos()
+        attackDelay = utils.getScaledValue(self.getInitiativeRoll(), 0.75, 2.0, 2.0, 30.0)
+        if task.delayTime != attackDelay:
+            task.delayTime = attackDelay
 
         if self.getIsDead():
             #print('enemy(self) is already dead')
             self.onDeath()
+            return task.done
 
         elif self._playerRef.getIsDead():
             print('player is already dead')
             self.request('Idle')
-
-        elif not utils.getIsInRange(playerPos, enemyPos, self.combatRange):
-            print('player fled away from combat range')
-            self.request('Pursue')
-
-        elif not utils.getIsInRange(playerPos, enemyPos, self.perceptionRange):
-            print('player fled away from perception range')
-            self.request('Idle')
+            return task.done
 
         else:
             #print('Attack player!')
@@ -318,6 +331,8 @@ class Enemy(FSM, Unit):
 
             self.enemyModel.play('attack', fromFrame=0, toFrame=12)
             self.attack(self._playerRef)
+
+            return task.again
 
     def moveEnemy(self, x, y):
         self.enemyNode.setPos(x, y, .01)

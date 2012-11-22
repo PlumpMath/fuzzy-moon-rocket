@@ -261,13 +261,12 @@ class Player(FSM, Unit):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             return task.done
 
-        attackSpeed = utils.getScaledValue(self.getInitiativeRoll(), 0.75, 2.0, 2.0, 30.0)
-        if task.delayTime != attackSpeed:
-            task.delayTime = attackSpeed
+        attackDelay = utils.getScaledValue(self.getInitiativeRoll(), 0.75, 2.0, 2.0, 30.0)
+        if task.delayTime != attackDelay:
+            task.delayTime = attackDelay
 
         numEntries = self.attackCollisionHandler.getNumEntries()
         if numEntries > 0 and self.mouseHandler._mouseDown:
-            print('attackEnemies')
             bAttacked = 0
 
             for i in range(numEntries):
@@ -282,6 +281,8 @@ class Player(FSM, Unit):
                     enemy.enemyModel.play('hit')
 
             if bAttacked != 0:
+                print('attackEnemies')
+
                 self.playerNode.headsUp(enemy.enemyNode)
 
                 self.setCurrentTarget(enemy)
@@ -314,7 +315,7 @@ class Player(FSM, Unit):
 
     def exitCombat(self):
         #print('exitCombat')
-        self.combatTask.remove()
+        taskMgr.remove(self.combatTask)
 
     def enterIdle(self):
         stopPlayer = self.playerModel.actorInterval('stop', loop=0)
