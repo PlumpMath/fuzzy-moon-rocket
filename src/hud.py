@@ -15,20 +15,21 @@ class HUD:
 
         self.gameText = OnscreenText(
                     text="Fuzzy Moon Rocket",
-                    pos=(1, 0.9), 
+                    pos=(1.5, 0.9), 
                     bg=(0.25, 0.25, 0.25, 1))
 
         self.initHealthBar()
         self.initEXPBar()
         self.initTargetBar()
-        self.createStatsButton()
+        self.initStatsButton()
+        self.initPlayerAbilityBar()
 
         #taskMgr.add(self.updateBars, 'UpdateBarsTask')
         taskMgr.doMethodLater(1, self.updateBars, 'UpdateBarsTask')
     
     def initTargetBar(self):
         self.targetBar = DirectWaitBar(
-                                    text="Target health",
+                                    text='Target health',
                                     value=1,
                                     pos=(0.1, 0, 0.9),
                                     scale = 0.5)
@@ -44,7 +45,7 @@ class HUD:
             # Hide bar
             self.targetBar.hide()
 
-    def createStatsButton(self):
+    def initStatsButton(self):
         self.statsButton = DirectButton(
                                 text = ("Stats"),
                                 pos=(1.2, 0, -0.9), 
@@ -62,14 +63,7 @@ class HUD:
                                 frameSize=(-0.5, 0.5, -0.5, 0.5),
                                 pos=(1.0, -0.5, 0.0)
                                 )
-            
 
-            #self.statsButton = DirectButton(
-            #                    text = ("close"),
-            #                    pos=(1.0, 0.30, -0.45), 
-            #                    scale=.05, 
-            #                    parent=self.myFrame,
-            #                    command=self.exitStats)
             self.closeButton = DirectButton(
                                  text='x',
                                  pos=(.3, 0, .45),
@@ -99,7 +93,6 @@ class HUD:
 
             self.exitStats()
 
-
     def exitStats(self):
         self.myFrame.destroy()
         
@@ -107,7 +100,7 @@ class HUD:
         self.healthBar = DirectWaitBar(
                                     text="Health", 
                                     value=100, 
-                                    pos=(0, 0, -0.9),
+                                    pos=(0, 0, -0.8),
                                     scale=0.75)
 
     def updateBars(self, task):
@@ -121,7 +114,7 @@ class HUD:
     def initEXPBar(self):
         self.expBar = DirectWaitBar(text='',
                                     value=0,
-                                    pos=(0, 0, -0.79),
+                                    pos=(0, 0, -0.69),
                                     scale=0.5,
                                     barColor=(0, 1, 0, 0.5))
         
@@ -147,3 +140,29 @@ class HUD:
 
         self.expBarText.setText(self._newEXPBarText)
         self.expBarLvlText.setText('Level ' + str(self._playerRef.level))
+
+    def initPlayerAbilityBar(self):
+        self.abilityBar = DirectFrame(#frameSize=(-0.5, 0.5, -0.5, -1.0),
+                                      frameColor=(0.2, 0.2, 0.8, 1.0),
+                                      pos=(0, 0, -0.95),
+                                      pad=(0.4, 0.075))
+
+        self.defensiveAbilityButton = DirectButton(text=('Def'),
+                                                   parent=self.abilityBar,
+                                                   scale=0.075,
+                                                   pos=(-0.3, 0, -0.01))
+
+        self.offensiveAbilityButton = DirectButton(text=('Off'),
+                                                   parent=self.abilityBar,
+                                                   scale=0.075,
+                                                   pos=(-0.1, 0, -0.01))
+
+        self.evasiveAbilityButton = DirectButton(text=('Eva'),
+                                                 parent=self.abilityBar,
+                                                 scale=0.075,
+                                                 pos=(0.1, 0, -0.01))
+
+        self.aoeAbilityButton = DirectButton(text=('AoE'),
+                                             parent=self.abilityBar,
+                                             scale=0.075,
+                                             pos=(0.3, 0, -0.01))
