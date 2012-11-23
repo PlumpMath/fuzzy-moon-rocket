@@ -244,11 +244,12 @@ class Player(FSM, Unit):
                 node = enemy.enemyNode
                 print 'Bull rush:', node
 
-                self.enemyFleeFromPlayer(enemy)
-                taskMgr.doMethodLater(1.5, self.removeEnemyFlee, 'removeEnemyFleeTask', extraArgs=[enemy], appendTask=True)
+                if self.getStrengthModifier() + utils.getD20() > enemy.armorClass:
+                    self.enemyFleeFromPlayer(enemy)
+                    taskMgr.doMethodLater(1.5, self.removeEnemyFlee, 'removeEnemyFleeTask', extraArgs=[enemy], appendTask=True)
 
-                self.playerModel.play('attack')
-                enemy.enemyModel.play('hit')
+                    self.playerModel.play('attack')
+                    enemy.enemyModel.play('hit')
 
     def unstoppable(self):
         tempHp = utils.getD6() + utils.getD6() + self.getConstitutionModifier()
@@ -269,8 +270,9 @@ class Player(FSM, Unit):
             if not enemy.getIsDead():
                 enemyPos = enemy.enemyNode.getPos()
                 if utils.getIsInRange(playerPos, enemyPos, self.combatRange):
-                    enemy.slowMovementByPercentage(25, 10) # slow by 25 % in 10 seconds, automatically removes it again
-
+                    if self.getStrengthModifier() + utils.getD20() > enemy.armorClass:
+                        enemy.slowMovementByPercentage(25, 10) # slow by 25 % in 10 seconds, automatically removes it again
+                        enemy.enemyModel.play('hit')
                     # Play animation
 
     def shiftTheBattlefield(self):
@@ -278,10 +280,19 @@ class Player(FSM, Unit):
         for enemy in self._enemyListRef:
             enemyPos = enemy.enemyNode.getPos()
             if utils.getIsInRange(playerPos, enemyPos, self.combatRange):
-                self.enemyFleeFromPlayer(enemy)
-                taskMgr.doMethodLater(1.5, self.removeEnemyFlee, 'removeEnemyFleeTask', extraArgs=[enemy], appendTask=True)
+                if self.getStrengthModifier() + utils.getD20() > enemy.armorClass:
+                    self.enemyFleeFromPlayer(enemy)
+                    taskMgr.doMethodLater(1.5, self.removeEnemyFlee, 'removeEnemyFleeTask', extraArgs=[enemy], appendTask=True)
 
-                enemy.receiveDamage(self.getStrengthModifier())
+                    dmg = 2 * utils.getD8() + self.getStrengthModifier()
+                    enemy.receiveDamage(dmg)
+
+                    enemy.enemyModel.play('hit')
+                else:
+                    dmg = (2 * utils.getD8() + self.getStrengthModifier()) / 2
+                    enemy.receiveDamage(dmg)
+
+                    enemy.enemyModel.play('hit')
 
     def enemyFleeFromPlayer(self, enemy):
         if enemy.state != 'Disabled':
