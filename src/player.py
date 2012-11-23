@@ -117,6 +117,8 @@ class Player(FSM, Unit):
         DO.accept('3', self.fireAbility, [3])
         DO.accept('4', self.fireAbility, [4])
 
+        self.abilityDict = {'offensive':1, 'defensive':1, 'evasive':1, 'area':1}
+
 #-------------------- COLLISION INITIALIZATION ---------------------------#
     def initPlayerCollisionHandlers(self):
         self.groundHandler = CollisionHandlerQueue()
@@ -216,26 +218,57 @@ class Player(FSM, Unit):
         self.setCurrentTarget(None)
 
 #-------------------- PLAYER ABILITIES ----------------------------------#
+    def startCooldown(self, ability, cooldown, task):
+        if task.time >= cooldown:
+            self.abilityDict[ability] = 1
+            return task.done
+        else:
+            return task.again
+
     def fireAbility(self, ability):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             # Do not do anything when paused
             return 
 
-        # Offensive ability - Bull Rush
+        # Offensive ability - Bull Rush 10 sec cd
         if ability == 1:
-            self.bullRush()
+            if self.abilityDict['offensive'] == 1:
+                self.bullRush()
+                
+                self.abilityDict['offensive'] = 0
+                taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=['offensive', 10], appendTask=True)
+            else:
+                print 'Bull Rush in cd'
 
-        # Defensive - Unstoppable
+        # Defensive - Unstoppable 10 sec cd
         elif ability == 2:
-            self.unstoppable()
+            if self.abilityDict['defensive'] == 1:
+                self.unstoppable()
 
-        # Evasive - Thicket of Blades
+                self.abilityDict['defensive'] = 0
+                taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=['defensive', 10], appendTask=True)
+            else:
+                print 'Unstoppable in cd'
+
+        # Evasive - Thicket of Blades 20 sec cd
         elif ability == 3:
-            self.thicketOfBlades()
+            if self.abilityDict['evasive'] == 1:
+                self.thicketOfBlades()
 
-        # Area of Effect - Shift the Battlefield
+                self.abilityDict['evasive'] = 0
+                taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=['evasive', 20], appendTask=True)
+            else:
+                print 'Thicket of Blades in cd'
+
+        # Area of Effect - Shift the Battlefield 30 sec cd
         elif ability == 4:
-            self.shiftTheBattlefield()
+            if self.abilityDict['area'] == 1:
+                self.shiftTheBattlefield()
+
+                self.abilityDict['area'] = 0
+                taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=['area', 30], appendTask=True)
+            else:
+                print 'Shift the Battlefield in cd'
 
     def bullRush(self):
         enemy = self.getCurrentTarget()
@@ -273,7 +306,6 @@ class Player(FSM, Unit):
                     if self.getStrengthModifier() + utils.getD20() > enemy.armorClass:
                         enemy.slowMovementByPercentage(25, 10) # slow by 25 % in 10 seconds, automatically removes it again
                         enemy.enemyModel.play('hit')
-                    # Play animation
 
     def shiftTheBattlefield(self):
         playerPos = self.playerNode.getPos()
