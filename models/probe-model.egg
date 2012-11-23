@@ -4,7 +4,7 @@
   "maya2egg2012 -p -bface -keep-uvs -round-uvs -tbnall -a model -pd 'C:/Users/Rami Ahmed Bock/Desktop' -cs z-up -uo cm -trans all -o 'C:/Users/Rami Ahmed Bock/Desktop/probe-model.egg' 'C:/Users/Rami Ahmed Bock/Documents/maya/projects/default/scenes/probe_model_temp.mb'"
 }
 <Texture> phong1SG {
-  stone_texture.jpg
+  "probe_tex.png"
   <Scalar> format { rgb }
   <Scalar> wrapu { repeat }
   <Scalar> wrapv { repeat }
