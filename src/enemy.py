@@ -264,6 +264,11 @@ class Enemy(FSM, Unit):
                     if self.state != 'Pursue':
                         self.request('Pursue')
 
+            # If enemy is disabled
+            elif self.state == 'Disabled':
+                if self.enemyAIBehaviors.getMaxForce() != self.movementSpeed:
+                    self.enemyAIBehaviors.setMaxForce(self.movementSpeed)
+
         # If player is not within perception range
         else:
             if self.state != 'Idle':
