@@ -424,33 +424,33 @@ class Player(FSM, Unit):
 
         numEntries = self.attackCollisionHandler.getNumEntries()
         if numEntries > 0:
-            if self.mouseHandler._mouseDown:
-                self.attackCollisionHandler.sortEntries()
-                bAttacked = 0
+            self.attackCollisionHandler.sortEntries()
+            bAttacked = 0
+
+            for i in range(numEntries):
+                entry = self.attackCollisionHandler.getEntry(i).getIntoNode()
+                entryName = entry.getName()[:-6]
+                #print('entryFound:', entryName)
+
+                enemy = utils.enemyDictionary[entryName]
+                if utils.getIsInRange(self.playerNode.getPos(), enemy.enemyNode.getPos(), self.combatRange):
+                    bAttacked = self.attack(enemy) # Returns 1 if player attacked but did not hit, returns 2 on hit
+
+                    if bAttacked == 2:
+                        enemy.enemyModel.play('hit')
+
+            # Only play animations if player actually attacked
+            if bAttacked != 0:
+                #print('attackEnemies')
+                self.playerModel.play('attack')
 
                 for i in range(numEntries):
-                    entry = self.attackCollisionHandler.getEntry(i).getIntoNode()
-                    entryName = entry.getName()[:-6]
-                    #print('entryFound:', entryName)
+                    enemyTargetName = self.attackCollisionHandler.getEntry(i).getIntoNode().getName()[:-6]
+                    enemyTarget = utils.enemyDictionary[enemyTargetName]
 
-                    enemy = utils.enemyDictionary[entryName]
-                    if utils.getIsInRange(self.playerNode.getPos(), enemy.enemyNode.getPos(), self.combatRange):
-                        bAttacked = self.attack(enemy)
-
-                        if bAttacked == 2:
-                            enemy.enemyModel.play('hit')
-
-                if bAttacked != 0:
-                    #print('attackEnemies')
-                    self.playerModel.play('attack')
-
-                    for i in range(numEntries):
-                        enemyTargetName = self.attackCollisionHandler.getEntry(i).getIntoNode().getName()[:-6]
-                        enemyTarget = utils.enemyDictionary[enemyTargetName]
-
-                        if enemyTarget is not None and not enemyTarget.getIsDead():
-                            self.setCurrentTarget(enemyTarget)
-                            break;
+                    if enemyTarget is not None and not enemyTarget.getIsDead():
+                        self.setCurrentTarget(enemyTarget)
+                        break;
 
             return task.again
 

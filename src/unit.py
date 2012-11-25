@@ -154,7 +154,7 @@ class Unit(object):
 
                 return 2 # Returns 2 when self damages other
 
-            return 1 # Returns 1 when self attacks other
+            return 1 # Returns 1 when self attacks other, but misses
 
         return 0 # Returns 0 when either self or other is dead
 
