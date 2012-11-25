@@ -193,14 +193,13 @@ class Player(FSM, Unit):
         if self.getIsDead():
             return
 
+        pitchRoll = self.playerNode.getP(), self.playerNode.getR()
+        self.playerNode.headsUp(destination)
+        self.playerNode.setHpr(self.playerNode.getH(), *pitchRoll)
+
         distance = abs(self.playerNode.getX() - destination.getX()) + abs(self.playerNode.getY() - destination.getY())
         if distance > .5:
             self.destination = destination
-            pitchRoll = self.playerNode.getP(), self.playerNode.getR()
-
-            self.playerNode.headsUp(self.destination)
-
-            self.playerNode.setHpr(self.playerNode.getH(), *pitchRoll)
 
             self.velocity = self.destination - self.playerNode.getPos()
 
