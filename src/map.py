@@ -95,19 +95,19 @@ class Map:
 
         # Locate exit station within areaModel
         #self.exitStation = self.areaModel.find('**/exitStation')
-        self.exitStation = loader.loadModel('models/exitStation')
-        self.exitStation.setCollideMask(BitMask32.allOff())
-        self.exitStation.reparentTo(self.areaNode)
+        #self.exitStation = loader.loadModel('models/exitStation')
+        #self.exitStation.setCollideMask(BitMask32.allOff())
+        #self.exitStation.reparentTo(self.areaNode)
 
-        if area.modelName == 'area_1':
-            self.exitStation.setH(-90)
-        elif area.modelName == 'area_2':
-            self.exitStation.setH(90)
+        #if area.modelName == 'area_1':
+        #    self.exitStation.setH(-90)
+        #elif area.modelName == 'area_2':
+        #    self.exitStation.setH(90)
 
-        self.exitStation.setPos(self.exitPos)
+        #self.exitStation.setPos(self.exitPos)
 
         # Make collision object collidable
-        self.exitStation.find('**/ground*').setCollideMask(BitMask32.bit(1))
+        #self.exitStation.find('**/ground*').setCollideMask(BitMask32.bit(1))
 
         # Locate and save enemy spawn points
         self.spawnPointsDict = {}
@@ -164,7 +164,7 @@ class Map:
         self.invertedSphere.removeNode()
         self.highlightTextNode.removeNode()
         self.walls.removeNode()
-        self.exitStation.removeNode()
+        #self.exitStation.removeNode()
         self.areaNode.removeNode()
 
 #=============================================================
