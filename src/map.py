@@ -27,8 +27,10 @@ class Map:
         # Initialze sun
         self.initSun(main.mainNode)
 
-        self.initFilters()
+        # Initialize image processing filters
+        #self.initFilters()
 
+        # Load the first area
         self.loadArea(farmArea)
 
 #===============================================================================
@@ -130,10 +132,6 @@ class Map:
         self.invertedSphere.node().setIntoCollideMask(BitMask32.bit(2))
 
         #self.invertedSphere.show()
-
-
-        # Initialize walls
-        #self.initWalls(self.areaNode)
 
         # Initialize Exit gate
         #taskMgr.doMethodLater(0.25, self.initExitGate, 'initExitGateTask', extraArgs=[])
@@ -287,22 +285,6 @@ class Map:
 
 #==================================================================================
 #================= Misc. Initialization ===========================================
-    def initWalls(self, areaNode):
-        self.walls = loader.loadModel('models/walls')
-        self.walls.reparentTo(areaNode)
-
-        # Fix self-shadowing for thin objects
-        self.walls.setDepthOffset(1)
-
-        # Set walls Z-position
-        self.walls.setZ(-2)
-
-        # Visual geometry should be non-collidable
-        self.walls.setCollideMask(BitMask32.allOff())
-
-        # Find collision geometry and make it collidable with pushers
-        collisionWalls = self.walls.find('**/colliders')
-        collisionWalls.setCollideMask(BitMask32.bit(2))
 
     def initSun(self, parentNode):
         # Setup directional light (a yellowish sun)
@@ -329,7 +311,6 @@ class Map:
         parentNode.setLight(ambientLightNode)
 
     def initFilters(self):
-        pass
         # Initialize filters
         self.filters = CommonFilters(base.win, base.cam)
 
@@ -340,7 +321,7 @@ class Map:
         #self.filters.setCartoonInk(separation=0.5)
 
         # Nice sun ray effect, although it sets a special mood
-        #self.filters.setVolumetricLighting(caster=self.sunNode, numsamples=100, density=1.0, decay=0.98, exposure=0.05)
+        self.filters.setVolumetricLighting(caster=self.sunNode, numsamples=100, density=1.0, decay=0.98, exposure=0.05)
 
         # Maybe use a little blur, might be nice? (can also sharpen with values over 1, i.e. blur: 0-1, sharpen:1-2)
         #self.filters.setBlurSharpen(amount=0.8)

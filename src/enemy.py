@@ -94,14 +94,14 @@ class Enemy(FSM, Unit):
     def initAttributes(self, attributes):
         perceptionRangeMultiplier = 1.2
         combatRangeMultiplier = .3
-        speedMultiplier = .2
+        #speedMultiplier = 1
 
         self.strength = attributes.strength
         self.constitution = attributes.constitution
         self.dexterity = attributes.dexterity
 
         self.mass = attributes.mass
-        self.movementSpeed = self._ddaHandlerRef.SpeedFactor * speedMultiplier * attributes.movementSpeed
+        self.movementSpeed = self._ddaHandlerRef.SpeedFactor * attributes.movementSpeed
         self.perceptionRange = perceptionRangeMultiplier * attributes.perceptionRange
         self.combatRange = combatRangeMultiplier * attributes.combatRange
         self.attackBonus = attributes.attackBonus
@@ -184,20 +184,20 @@ class Enemy(FSM, Unit):
         attackSphereNode = self.enemyNode.attachNewNode(attackCollSphereNode)
         #attackSphereNode.show()
 
-    def slowMovementByPercentage(self, percentage=30, slowDuration=30):
+    def slowMovementByPercentage(self, percentage=30, slowDuration=20):
         #print self.enemyNode.getName(), ' slowed by ', percentage, ' %'
-        oldForce = self.enemyAI.getMaxForce()
-        newForce = ((100.0 - percentage) / 100.0) * oldForce
+        oldSpeed = self.movementSpeed
+        newSpeed = ((100.0 - percentage) / 100.0) * oldSpeed
 
-        if newForce < 0.15:
-            newForce = 0.15
+        if newSpeed < 1.0:
+            newSpeed = 1.0
 
-        self.enemyAI.setMaxForce(newForce)
+        self.movementSpeed = newSpeed
 
-        taskMgr.doMethodLater(slowDuration, self.removeSlowMovement, 'removeSlowMovementTask', extraArgs=[oldForce], appendTask=True)
+        taskMgr.doMethodLater(slowDuration, self.removeSlowMovement, 'removeSlowMovementTask', extraArgs=[oldSpeed], appendTask=True)
 
-    def removeSlowMovement(self, oldForce, task):
-        self.enemyAI.setMaxForce(oldForce)
+    def removeSlowMovement(self, oldSpeed, task):
+        self.movementSpeed = oldSpeed
         return task.done
 
     def checkGroundCollisions(self):
@@ -280,7 +280,8 @@ class Enemy(FSM, Unit):
             self.enemyNode.headsUp(self._playerRef.playerNode)
             self.enemyNode.setHpr(self.enemyNode.getH()-180, *pitchRoll)
 
-            self.enemyNode.setFluidPos(self.enemyNode, 0, -self.movementSpeed*0.01, 0)
+            speed = -self.movementSpeed * globalClock.getDt() * 0.1
+            self.enemyNode.setFluidPos(self.enemyNode, 0, speed, 0)
 
             return task.cont
         else:
@@ -323,7 +324,8 @@ class Enemy(FSM, Unit):
         #print('enemy enterCombat')
         self.enemyModel.stop()
 
-        self.attackTask = taskMgr.doMethodLater(0.1, self.attackPlayer, 'attackPlayerTask')
+        attackDelay = utils.getScaledValue(self.getInitiativeRoll(), 0.75, 2.0, 2.0, 30.0)
+        self.attackTask = taskMgr.doMethodLater(attackDelay, self.attackPlayer, 'attackPlayerTask')
 
     def enterDisabled(self):
         #print 'enterDisable'
@@ -349,10 +351,6 @@ class Enemy(FSM, Unit):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY or not self._enemyActive:
             # Do not do anything when paused
             return task.again
-
-        attackDelay = utils.getScaledValue(self.getInitiativeRoll(), 0.75, 2.0, 2.0, 30.0)
-        if task.delayTime != attackDelay:
-            task.delayTime = attackDelay
 
         if self._playerRef.getIsDead():
             print('player is already dead')
@@ -382,7 +380,7 @@ class Enemy(FSM, Unit):
         # if we drop, create health goblet
         if utils.getD100() <= dropChance + dropChanceFactor:
             HealthGoblet(self._mainRef, self)
-            print 'dropping health globe'
+            print 'dropping health goblet'
         # Otherwise, increase dropChance
         else:
             if dropChance+dropChanceFactor <= maxDropChance:

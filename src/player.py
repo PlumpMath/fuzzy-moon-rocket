@@ -232,50 +232,53 @@ class Player(FSM, Unit):
 
         # Offensive ability - Bull Rush 10 sec cd
         if ability == 1:
-            if self.abilityDict['offensive'] == 1:
-                self.bullRush()
-                
-                self.abilityDict['offensive'] = 0
-                taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=['offensive', 10], appendTask=True)
+            off = 'offensive'
+            if self.abilityDict[off] == 1:
+                if self.bullRush():
+                    self.abilityDict[off] = 0
+                    taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[off, 10], appendTask=True)
             else:
                 print 'Bull Rush in cd'
 
         # Defensive - Unstoppable 10 sec cd
         elif ability == 2:
-            if self.abilityDict['defensive'] == 1:
-                self.unstoppable()
-
-                self.abilityDict['defensive'] = 0
-                taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=['defensive', 10], appendTask=True)
+            defe = 'defensive'
+            if self.abilityDict[defe] == 1:
+                if self.unstoppable():
+                    self.abilityDict[defe] = 0
+                    taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[defe, 10], appendTask=True)
             else:
                 print 'Unstoppable in cd'
 
         # Evasive - Thicket of Blades 20 sec cd
         elif ability == 3:
-            if self.abilityDict['evasive'] == 1:
-                self.thicketOfBlades()
-
-                self.abilityDict['evasive'] = 0
-                taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=['evasive', 20], appendTask=True)
+            eva = 'evasive'
+            if self.abilityDict[eva] == 1:
+                if self.thicketOfBlades():
+                    self.abilityDict[eva] = 0
+                    taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[eva, 20], appendTask=True)
             else:
                 print 'Thicket of Blades in cd'
 
         # Area of Effect - Shift the Battlefield 30 sec cd
         elif ability == 4:
-            if self.abilityDict['area'] == 1:
-                self.shiftTheBattlefield()
-
-                self.abilityDict['area'] = 0
-                taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=['area', 30], appendTask=True)
+            aoe = 'area'
+            if self.abilityDict[aoe] == 1:
+                if self.shiftTheBattlefield():
+                    self.abilityDict[aoe] = 0
+                    taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[aoe, 30], appendTask=True)
             else:
                 print 'Shift the Battlefield in cd'
 
     def bullRush(self):
+        bSuccess = False
+
         enemy = self.getCurrentTarget()
         if enemy is not None and not enemy.getIsDead():
             if self.state == 'Combat':
                 node = enemy.enemyNode
                 print 'Bull rush:', node
+                bSuccess = True
 
                 if self.getStrengthModifier() + utils.getD20() > enemy.armorClass:
                     self.enemyFleeFromPlayer(enemy)
@@ -283,6 +286,8 @@ class Player(FSM, Unit):
 
                     self.playerModel.play('attack')
                     enemy.enemyModel.play('hit')
+
+        return bSuccess
 
     def unstoppable(self):
         tempHp = utils.getD6() + utils.getD6() + self.getConstitutionModifier()
@@ -292,30 +297,41 @@ class Player(FSM, Unit):
         duration = 30.0 # Half a minute (30 seconds) duration of temp hp
         taskMgr.doMethodLater(duration, self.removeTempHp, 'removeTempHpTask')
 
+        return True
+
     def removeTempHp(self, task):
         print 'removeTempHp'
         self.removeTemporaryHealth()
         return task.done
 
     def thicketOfBlades(self):
+        bSuccess = False
+
         playerPos = self.playerNode.getPos()
         for enemy in self._enemyListRef:
             if not enemy.getIsDead():
                 enemyPos = enemy.enemyNode.getPos()
                 if utils.getIsInRange(playerPos, enemyPos, self.combatRange):
+                    bSuccess  = True
                     if self.getStrengthModifier() + utils.getD20() > enemy.armorClass:
                         enemy.slowMovementByPercentage(25, 10) # slow by 25 % in 10 seconds, automatically removes it again
                         enemy.enemyModel.play('hit')
 
+        return bSuccess
+
     def shiftTheBattlefield(self):
+        bSuccess = False
+
         playerPos = self.playerNode.getPos()
         for enemy in self._enemyListRef:
             enemyPos = enemy.enemyNode.getPos()
             if utils.getIsInRange(playerPos, enemyPos, self.combatRange):
+                bSuccess = True
                 if self.getStrengthModifier() + utils.getD20() > enemy.armorClass:
                     self.enemyFleeFromPlayer(enemy)
                     taskMgr.doMethodLater(1.5, self.removeEnemyFlee, 'removeEnemyFleeTask', extraArgs=[enemy], appendTask=True)
 
+                    # Might want to replace the getD8 to depend on the player's weapon
                     dmg = 2 * utils.getD8() + self.getStrengthModifier()
                     enemy.receiveDamage(dmg)
 
@@ -325,6 +341,8 @@ class Player(FSM, Unit):
                     enemy.receiveDamage(dmg)
 
                     enemy.enemyModel.play('hit')
+
+        return bSuccess
 
     def enemyFleeFromPlayer(self, enemy):
         if enemy.state != 'Disabled':
@@ -406,10 +424,6 @@ class Player(FSM, Unit):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             return task.done
 
-        attackDelay = utils.getScaledValue(self.getInitiativeRoll(), 0.75, 2.0, 2.0, 30.0)
-        if task.delayTime != attackDelay:
-            task.delayTime = attackDelay
-
         numEntries = self.attackCollisionHandler.getNumEntries()
         if numEntries > 0:
             if self.mouseHandler._mouseDown:
@@ -464,7 +478,8 @@ class Player(FSM, Unit):
         self.playerModel.stop()
         self.destination = self.playerNode.getPos()
 
-        self.combatTask = taskMgr.doMethodLater(0.1, self.attackEnemies, 'combatTask')
+        attackDelay = utils.getScaledValue(self.getInitiativeRoll(), 0.75, 2.0, 2.0, 30.0)
+        self.combatTask = taskMgr.doMethodLater(attackDelay, self.attackEnemies, 'combatTask')
 
     def exitCombat(self):
         #print('exitCombat')

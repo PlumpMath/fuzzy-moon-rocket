@@ -1,17 +1,6 @@
 import utils
 
 class Unit(object):
-    # Declare class variables
-    strength = 0
-    constitution = 0
-    dexterity = 0
-
-    maxHealthPoints = 0
-    
-    movementSpeed = 0
-
-    level = 0
-    experience = 0
 
     # Declare private variables
     _prevEXP = 0
@@ -23,6 +12,17 @@ class Unit(object):
         self.initLevel()
 
     def initUnitAttributes(self):
+        # Declare unit variables
+        self.strength = 0
+        self.constitution = 0
+        self.dexterity = 0
+
+        self.maxHealthPoints = 0
+        self.movementSpeed = 0
+
+        self.level = 0
+        self.experience = 0
+
         self.initiativeBonus = 0
 
         self.attackBonus = 0

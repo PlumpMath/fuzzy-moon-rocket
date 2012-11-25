@@ -158,17 +158,6 @@ class MouseHandler():
             mousePos = base.mouseWatcherNode.getMouse()
             self.pickerRay.setFromLens(base.camNode, mousePos.getX(), mousePos.getY())
 
-            #if self.collisionHandler.getNumEntries() > 0:
-            #    self.collisionHandler.sortEntries()
-            #    for i in range(self.collisionHandler.getNumEntries()):
-            #        entry = self.collisionHandler.getEntry(i).getIntoNodePath()
-            #        entryName = entry.getName()
-
-            #        if entryName == 'exitGate' and not entry.isEmpty():
-            #            self._mapHandlerRef.clickExitGate()
-            #            break;
-
-
     def onMouseUp(self):
         #print('mouseUp')
         self._mouseDown = False
