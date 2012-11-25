@@ -324,7 +324,7 @@ class Enemy(FSM, Unit):
         #print('enemy enterCombat')
         self.enemyModel.stop()
 
-        attackDelay = utils.getScaledValue(self.getInitiativeRoll(), 0.75, 2.0, 2.0, 30.0)
+        attackDelay = self.getInitiativeRoll()
         self.attackTask = taskMgr.doMethodLater(attackDelay, self.attackPlayer, 'attackPlayerTask')
 
     def enterDisabled(self):

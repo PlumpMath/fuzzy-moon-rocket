@@ -200,7 +200,6 @@ class Player(FSM, Unit):
         distance = abs(self.playerNode.getX() - destination.getX()) + abs(self.playerNode.getY() - destination.getY())
         if distance > .5:
             self.destination = destination
-
             self.velocity = self.destination - self.playerNode.getPos()
 
             self.velocity.normalize()
@@ -477,7 +476,7 @@ class Player(FSM, Unit):
         self.playerModel.stop()
         self.destination = self.playerNode.getPos()
 
-        attackDelay = utils.getScaledValue(self.getInitiativeRoll(), 0.75, 2.0, 2.0, 30.0)
+        attackDelay = self.getInitiativeRoll()
         self.combatTask = taskMgr.doMethodLater(attackDelay, self.attackEnemies, 'combatTask')
 
     def exitCombat(self):

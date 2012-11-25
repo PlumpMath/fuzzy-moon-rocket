@@ -118,7 +118,8 @@ class Unit(object):
                 self.currentHealthPoints = 1
 
     def getInitiativeRoll(self):
-        return self.initiativeBonus + (self.level / 2) + self.getDexterityModifier() #+ utils.getD20()
+        initative = self.initiativeBonus + (self.level / 2) + self.getDexterityModifier() #+ utils.getD20()
+        return utils.getScaledValue(initative, 0.75, 2.0, 1.0, 10.0)
 
     def getAttackBonus(self):
         modifier = self.getStrengthModifier() if self.getStrengthModifier() > self.getDexterityModifier() else self.getDexterityModifier()
