@@ -94,14 +94,14 @@ class Enemy(FSM, Unit):
     def initAttributes(self, attributes):
         perceptionRangeMultiplier = 1.2
         combatRangeMultiplier = .3
-        #speedMultiplier = 1
+        speedMultiplier = .1
 
         self.strength = attributes.strength
         self.constitution = attributes.constitution
         self.dexterity = attributes.dexterity
 
         self.mass = attributes.mass
-        self.movementSpeed = self._ddaHandlerRef.SpeedFactor * attributes.movementSpeed
+        self.movementSpeed = self._ddaHandlerRef.SpeedFactor * speedMultiplier * attributes.movementSpeed
         self.perceptionRange = perceptionRangeMultiplier * attributes.perceptionRange
         self.combatRange = combatRangeMultiplier * attributes.combatRange
         self.attackBonus = attributes.attackBonus
@@ -280,12 +280,12 @@ class Enemy(FSM, Unit):
         taskMgr.add(self.pursue, 'pursueTask')
 
     def pursue(self, task):
-        if self.state == 'Pursue':
+        if self.state == 'Pursue' and not self.getIsDead():
             pitchRoll = self.enemyNode.getP(), self.enemyNode.getR()
             self.enemyNode.headsUp(self._playerRef.playerNode)
             self.enemyNode.setHpr(self.enemyNode.getH()-180, *pitchRoll)
 
-            speed = -self.movementSpeed * globalClock.getDt() * 0.1
+            speed = -self.movementSpeed * globalClock.getDt()
             self.enemyNode.setFluidPos(self.enemyNode, 0, speed, 0)
 
             return task.cont
@@ -362,6 +362,9 @@ class Enemy(FSM, Unit):
             self.request('Idle')
             return task.done
 
+        elif self.getIsDead():
+            return task.done
+
         else:
             #print('Attack player!')
             # Make sure enemy is facing player when attacking
@@ -418,7 +421,7 @@ class Enemy(FSM, Unit):
             # Handle health globe
             self.handleHealthGlobe()
 
-            # Remove enemy
+            # Remove enemy corpse and clean up
             taskMgr.doMethodLater(self._removeCorpseDelay, self.removeCorpse, 'removeCorpseTask')
 
     def removeCorpse(self, task):
@@ -437,9 +440,6 @@ class Enemy(FSM, Unit):
 
         # Cleanup FSM
         self.cleanup()
-
-        # Cleanup attack sequence
-        self.attackSequence = None
 
         # Remove the enemy node
         self.enemyNode.removeNode()
