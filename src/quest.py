@@ -1,6 +1,4 @@
 from direct.gui.DirectGui import *
-<<<<<<< HEAD
-from direct.gui.OnscreenText import OnscreenText
 from direct.gui.OnscreenText import *
 from panda3d.core import *
 
