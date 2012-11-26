@@ -107,36 +107,10 @@ class Map:
 
         #self.exitStation.setPos(self.exitPos)
 
-        # Make collision object collidable
-        #self.exitStation.find('**/ground*').setCollideMask(BitMask32.bit(1))
-
         # Locate and save enemy spawn points
         self.spawnPointsDict = {}
-        i = 1
-        spawnPoint = self.areaModel.find('**/spawnPoint'+str(i))
-        while spawnPoint.getErrorType() == 0: # While Spawn Point is found OK
-            #print('located spawn point: ', spawnPoint)
+        for spawnPoint in self.areaModel.findAllMatches('**/spawnPoint*'):
             self.spawnPointsDict[spawnPoint] = 1 # Activate spawn point
-
-            i += 1
-            spawnPoint = self.areaModel.find('**/spawnPoint'+str(i))
-
-            # Implement failsafe in case of errors to avoid infinite loop
-            if i >= self.maxSpawnPointsPerArea:
-                break
-
-        # self.pointLightList = []
-        # j = 1
-        # pointLight = self.areaModel.find('**/pLight'+str(j))
-        # while pointLight.getErrorType() == 0:
-        #     print 'found plight:', pointLight
-        #     self.pointLightList.append(pointLight)
-
-        #     j += 1
-        #     pointLight = self.areaModel.find('**/pLight'+str(j))
-
-        #     if j >= self.maxPointLightsPerArea:
-        #         break
 
         # Initialize inverted sphere
         self.invertedSphere = self.areaNode.attachNewNode(CollisionNode('worldSphere'))
@@ -207,8 +181,6 @@ class Map:
         if self._playerRef is None:
              # Load player reference
             self._playerRef = self._mainRef.player
-
-        #spawnRadius = 15
 
         playerPos = self._playerRef.playerNode.getPos()
 
@@ -315,6 +287,8 @@ class Map:
                 newPLightNode = self.areaNode.attachNewNode(newPLight)
                 newPLightNode.setPos(plightPos)
 
+                self.areaModel.find('**/ground').setLight(newPLightNode)
+
                 self.pointLightList.append(newPLightNode)
 
                 for obj in self.areaModel.find('**/geometry').getChildren():
@@ -342,10 +316,11 @@ class Map:
         if len(self.pointLightList) > 0:
             # Make point lights light up player as well
             for plight in self.pointLightList:
-                if utils.getIsInRange(plight.getPos(render), playerNode.getPos(render), 3):
+                if utils.getIsInRange(plight.getPos(render), playerNode.getPos(render), 2):
                     playerNode.setLight(plight)
                 else:
-                    playerNode.clearLight(plight)
+                    if playerNode.hasLight(plight):
+                        playerNode.clearLight(plight)
 
         return task.cont
 
@@ -378,7 +353,7 @@ class Map:
         self.filters = CommonFilters(base.win, base.cam)
 
         # Cannot get the bloom filter to work
-        self.filters.setBloom(mintrigger=.3, maxtrigger=1.0, intensity=.98, size='small')
+        self.filters.setBloom(mintrigger=.5, maxtrigger=1.0, intensity=.98, size='small')
 
         # Cartoon ink could maybe be nice, with a thin line?
         #self.filters.setCartoonInk(separation=0.5)
