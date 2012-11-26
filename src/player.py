@@ -370,19 +370,23 @@ class Player(FSM, Unit):
 
 #------------------ UPDATE FUNCTIONS ---------------------------------#
     def checkGroundCollisions(self):
-        if self.groundHandler.getNumEntries() > 0:
+        numEntries = self.groundHandler.getNumEntries()
+        if numEntries > 0:
             self.groundHandler.sortEntries()
             entries = []
-            for i in range(self.groundHandler.getNumEntries()):
+            for i in range(numEntries):
                 entry = self.groundHandler.getEntry(i)
                 entries.append(entry)
 
             entries.sort(lambda x,y: cmp(y.getSurfacePoint(render).getZ(),
                                         x.getSurfacePoint(render).getZ()))
 
-            if (len(entries) > 0) and (entries[0].getIntoNode().getName()[:6] == 'ground'):
-                newZ = entries[0].getSurfacePoint(base.render).getZ()
-                self.playerNode.setZ(newZ)
+            for i in range (numEntries):
+                entry = entries[i]
+                if entry.getIntoNode().getName()[:6] == 'ground':
+                    newZ = entry.getSurfacePoint(base.render).getZ()
+                    self.playerNode.setZ(newZ)
+                    break;
 
     def updatePlayerPosition(self, deltaTime):
         #print('updatePlayerPosition')

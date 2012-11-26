@@ -15,6 +15,7 @@ farmArea = Area(modelName='area_1', enemies={enemy.koboldMinion:2})
 class Map:
 
     maxSpawnPointsPerArea = 20
+    maxPointLightsPerArea = 10
 
     def __init__(self, main):
         print("Map class instantiated")
@@ -28,7 +29,7 @@ class Map:
         self.initSun(main.mainNode)
 
         # Initialize image processing filters
-        #self.initFilters()
+        self.initFilters()
 
         # Load the first area
         self.loadArea(farmArea)
@@ -82,8 +83,8 @@ class Map:
         self.areaModel.setCollideMask(BitMask32.allOff())
 
         # The ground is the walk plane, it collides with mouse ray and player- and enemies ground rays
-        self.ground = self.areaModel.find('**/ground')
-        self.ground.setCollideMask(BitMask32.bit(1))
+        for ground in self.areaModel.findAllMatches('**/ground*'):
+            ground.setCollideMask(BitMask32.bit(1))
 
         # Colliders are obstacles in areas, they collide with enemies and the player
         self.collidersGroup = self.areaModel.find('**/colliders')
@@ -124,6 +125,19 @@ class Map:
             if i >= self.maxSpawnPointsPerArea:
                 break
 
+        # self.pointLightList = []
+        # j = 1
+        # pointLight = self.areaModel.find('**/pLight'+str(j))
+        # while pointLight.getErrorType() == 0:
+        #     print 'found plight:', pointLight
+        #     self.pointLightList.append(pointLight)
+
+        #     j += 1
+        #     pointLight = self.areaModel.find('**/pLight'+str(j))
+
+        #     if j >= self.maxPointLightsPerArea:
+        #         break
+
         # Initialize inverted sphere
         self.invertedSphere = self.areaNode.attachNewNode(CollisionNode('worldSphere'))
         self.invertedSphere.node().addSolid(CollisionInvSphere(0.0, 0.0, 1.0, 13)) # Adjust when new areas come
@@ -138,6 +152,9 @@ class Map:
 
         # Initialize enemies
         taskMgr.doMethodLater(0.5, self.initEnemies, 'initEnemiesTask', extraArgs=[])
+
+        # Load in point lights
+        self.initLights()
 
     def unloadArea(self):
         print('unloadArea')
@@ -285,19 +302,65 @@ class Map:
 
 #==================================================================================
 #================= Misc. Initialization ===========================================
+    def initLights(self):
+        self.pointLightList = []
+
+        pointLightList = self.areaModel.findAllMatches('**/pLight*')
+        if len(pointLightList) > 0:
+            for i, plight in enumerate(pointLightList):
+                plightPos = plight.getPos()
+
+                newPLight = PointLight('plight' + str(i))
+                newPLight.setColor(VBase4(0.5, 0.5, 0.1, 1))
+                newPLightNode = self.areaNode.attachNewNode(newPLight)
+                newPLightNode.setPos(plightPos)
+
+                self.pointLightList.append(newPLightNode)
+
+                for obj in self.areaModel.find('**/geometry').getChildren():
+                    self.applyPointLightToObj(newPLightNode, obj)
+
+        taskMgr.doMethodLater(1, self.updatePlayerLights, 'updatePlayerLightsTask')
+
+    def applyPointLightToObj(self, newPLightNode, obj):
+        if len(obj.getChildren()) > 1:
+            #print 'apply light to the children of:', obj
+            for newObj in obj.getChildren():
+                self.applyPointLightToObj(newPLightNode, newObj)
+        else:
+            if utils.getIsInRange(obj.getPos(render), newPLightNode.getPos(render), 2.5):
+                #print 'apply light from ', newPLightNode, ' to ', obj
+                obj.setLight(newPLightNode)
+
+    def updatePlayerLights(self, task):
+        # If time between frames is way too much, stop the task here
+        if globalClock.getDt() > .5:
+            return task.again
+
+        playerNode = self._playerRef.playerNode
+
+        if len(self.pointLightList) > 0:
+            # Make point lights light up player as well
+            for plight in self.pointLightList:
+                if utils.getIsInRange(plight.getPos(render), playerNode.getPos(render), 3):
+                    playerNode.setLight(plight)
+                else:
+                    playerNode.clearLight(plight)
+
+        return task.cont
 
     def initSun(self, parentNode):
         # Setup directional light (a yellowish sun)
         sun = DirectionalLight('sun')
-        sun.setColor(VBase4(0.75, 0.75, 0.25, 1))
-        sun.getLens().setNearFar(5, 1000)
+        sun.setColor(VBase4(0.25, 0.25, 0, 1))
+        sun.getLens().setNearFar(5.5, 500)
         sun.getLens().setFilmSize(24, 36)
         #sun.showFrustum()
-        sun.setShadowCaster(True, 4096, 4096) # Enable these shadows when the scene is scaled down (if)
+        sun.setShadowCaster(True, 4096, 4096) 
 
         self.sunNode = parentNode.attachNewNode(sun)
         self.sunNode.setP(-130)
-        #self.sunNode.setPos(self.startPos.getX(), self.startPos.getY(), 10)
+        #self.sunNode.setPos(0, 0, 10)
         #self.sunNode.lookAt(0, 0, 0)
 
         parentNode.setLight(self.sunNode)
@@ -315,13 +378,13 @@ class Map:
         self.filters = CommonFilters(base.win, base.cam)
 
         # Cannot get the bloom filter to work
-        #self.filters.setBloom(mintrigger=0.5, intensity=100.0, size='large')
+        self.filters.setBloom(mintrigger=.3, maxtrigger=1.0, intensity=.98, size='small')
 
         # Cartoon ink could maybe be nice, with a thin line?
         #self.filters.setCartoonInk(separation=0.5)
 
         # Nice sun ray effect, although it sets a special mood
-        self.filters.setVolumetricLighting(caster=self.sunNode, numsamples=100, density=1.0, decay=0.98, exposure=0.05)
+        #self.filters.setVolumetricLighting(caster=self.sunNode, numsamples=100, density=1.0, decay=0.98, exposure=0.05)
 
         # Maybe use a little blur, might be nice? (can also sharpen with values over 1, i.e. blur: 0-1, sharpen:1-2)
         #self.filters.setBlurSharpen(amount=0.8)
