@@ -1,0 +1,74 @@
+<CoordinateSystem> { Z-Up }
+
+<Comment> {
+  "maya2egg2012 -p -keep-uvs -round-uvs -tbnall -a chan -pd 'C:/Users/PhyreZtorm/Desktop/Egg files' -cs z-up -uo cm -trans all -o 'C:/Users/PhyreZtorm/Desktop/Egg files/HealthGoblet_v2_animation.egg' C:/Users/PhyreZtorm/Desktop/health_goblet_small_v2_temp.mb"
+}
+<Table> {
+  <Bundle> health_goblet_small_v2_temp {
+    <Table> "<skeleton>" {
+      <Table> group1 {
+        <Xfm$Anim_S$> xform {
+          <Scalar> fps { 24 }
+          <Char*> order { srpht }
+          <S$Anim> i { <V> { 0.0864565 } }
+          <S$Anim> j { <V> { 0.0864565 } }
+          <S$Anim> k { <V> { 0.0864565 } }
+          <S$Anim> x { <V> { -0.0187947 } }
+          <S$Anim> y { <V> { 0.0100034 } }
+          <S$Anim> z {
+            <V> {
+              0.0135661 0.0162636 0.0237213 0.0349872 0.0491093
+              0.0651355 0.0821137 0.0990919 0.115118 0.12924 0.140506
+              0.147964 0.150661 0.147972 0.140538 0.129308 0.115231
+              0.0992551 0.0823306 0.0654062 0.0494307 0.0353533
+              0.0241231 0.0166889 0.014
+            }
+          }
+        }
+        <Table> nurbsTorus2 {
+          <Xfm$Anim_S$> xform {
+            <Scalar> fps { 24 }
+            <Char*> order { srpht }
+            <S$Anim> x { <V> { 0.215212 } }
+            <S$Anim> y { <V> { -0.110311 } }
+            <S$Anim> z {
+              <V> {
+                3.65165 3.63238 3.5791 3.49862 3.39773 3.28324 3.16195
+                3.04066 2.92617 2.82529 2.7448 2.69153 2.67226 2.69153
+                2.7448 2.82529 2.92617 3.04066 3.16195 3.28324 3.39773
+                3.49862 3.5791 3.63238 3.65165
+              }
+            }
+          }
+        }
+        <Table> nurbsSphere1 {
+          <Xfm$Anim_S$> xform {
+            <Scalar> fps { 24 }
+            <Char*> order { srpht }
+            <S$Anim> x { <V> { 0.215 } }
+            <S$Anim> y { <V> { -0.11 } }
+            <S$Anim> z { <V> { 2.4982 } }
+          }
+        }
+        <Table> nurbsTorus1 {
+          <Xfm$Anim_S$> xform {
+            <Scalar> fps { 24 }
+            <Char*> order { srpht }
+            <S$Anim> x { <V> { 0.215212 } }
+            <S$Anim> y { <V> { -0.110311 } }
+            <S$Anim> z {
+              <V> {
+                1.36459 1.38352 1.43585 1.51491 1.61401 1.72648 1.84562
+                1.96477 2.07723 2.17633 2.25539 2.30772 2.32665 2.30755
+                2.25475 2.17498 2.07498 1.96151 1.84129 1.72107 1.60759
+                1.5076 1.42783 1.37502 1.35592
+              }
+            }
+          }
+        }
+      }
+    }
+    <Table> morph {
+    }
+  }
+}
