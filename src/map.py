@@ -10,7 +10,7 @@ import enemy
 
 Area = namedtuple('Area', ['modelName', 'enemies'] )
 
-farmArea = Area(modelName='area_1', enemies={enemy.koboldMinion:1})
+farmArea = Area(modelName='area_1', enemies={enemy.koboldMinion:2})
 
 class Map:
 
