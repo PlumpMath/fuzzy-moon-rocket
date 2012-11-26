@@ -302,7 +302,7 @@ class Map:
             for newObj in obj.getChildren():
                 self.applyPointLightToObj(newPLightNode, newObj)
         else:
-            if utils.getIsInRange(obj.getPos(render), newPLightNode.getPos(render), 2.5):
+            if utils.getIsInRange(obj.getPos(render), newPLightNode.getPos(render), 2):
                 #print 'apply light from ', newPLightNode, ' to ', obj
                 obj.setLight(newPLightNode)
 
@@ -353,7 +353,7 @@ class Map:
         self.filters = CommonFilters(base.win, base.cam)
 
         # Cannot get the bloom filter to work
-        self.filters.setBloom(mintrigger=.5, maxtrigger=1.0, intensity=.98, size='small')
+        #self.filters.setBloom(desat=-0.5, intensity=3.0, size='large')
 
         # Cartoon ink could maybe be nice, with a thin line?
         #self.filters.setCartoonInk(separation=0.5)

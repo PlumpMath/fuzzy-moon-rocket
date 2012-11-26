@@ -57,7 +57,10 @@ class Unit(object):
     def increaseLevel(self):
         self._prevEXP += (self.level * 1000) # increment prevExp
         self.level += 1 # increment level
-        
+
+        if self.experience < self.level * 1000:
+            self.experience = self.level * 1000
+
         # Make sure the player's health is updated
         self.updateMaxHealthPoints() 
 

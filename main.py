@@ -177,7 +177,7 @@ class World(ShowBase):
             self.stateHandler.request(self.stateHandler.PAUSE)
 
     def endGame(self):
-        sys.exit()
+        sys.exit(0)
 
 World()
 run()

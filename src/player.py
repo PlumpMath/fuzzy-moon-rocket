@@ -180,9 +180,12 @@ class Player(FSM, Unit):
             self.increaseLevel()
 
     def getEXPToNextLevelInPercentage(self):
-        result = int((float(self.experience) - self._prevEXP) / (self.level * 1000.0) * 100.0)
-        if result > 100:
-            result = 100
+        currentEXP = self.experience - self._prevEXP
+        expToNextLevel = self.level * 1000.0
+        #print 'currentEXP:', currentEXP
+        #print 'expToNextLevel:', expToNextLevel
+
+        result = int(currentEXP / expToNextLevel * 100.0)
 
         return result
 
