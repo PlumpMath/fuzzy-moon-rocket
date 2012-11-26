@@ -1,10 +1,10 @@
 <CoordinateSystem> { Z-Up }
 
 <Comment> {
-  "maya2egg2012 -p -a chan -pd 'C:/Users/Rami Ahmed Bock/Desktop' -cs z-up -uo cm -trans all -o 'C:/Users/Rami Ahmed Bock/Desktop/player-death.egg' 'C:/Users/Rami Ahmed Bock/Documents/maya/projects/default/scenes/player_death_small_temp.mb'"
+  "maya2egg2012 -p -a chan -pd 'C:/Users/Rami Ahmed Bock/Desktop' -cs z-up -uo cm -trans all -o 'C:/Users/Rami Ahmed Bock/Desktop/player-death.egg' 'C:/Users/Rami Ahmed Bock/Documents/maya/projects/default/scenes/character_death_temp.mb'"
 }
 <Table> {
-  <Bundle> player_death_small_temp {
+  <Bundle> character_death_temp {
     <Table> "<skeleton>" {
       <Table> spaceFarmer {
         <Xfm$Anim_S$> xform {
@@ -39,6 +39,253 @@
                 2.64557e-005 0.0137597 0.0421986 0.0699982 0.0818288
                 0.075476 0.0601207 0.0396914 0.0181163 0 0 0 0 0 0 0 0 0
                 0 0 0 0 0 0
+              }
+            }
+          }
+          <Table> FitSkeleton {
+            <Xfm$Anim_S$> xform {
+              <Scalar> fps { 25 }
+              <Char*> order { srpht }
+            }
+            <Table> FitSkeletonOffset {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+              }
+              <Table> Root {
+                <Xfm$Anim_S$> xform {
+                  <Scalar> fps { 25 }
+                  <Char*> order { srpht }
+                  <S$Anim> h { <V> { 180 } }
+                  <S$Anim> r { <V> { -90 } }
+                  <S$Anim> y { <V> { 0.157435 } }
+                  <S$Anim> z { <V> { 3.40002 } }
+                }
+                <Table> BackA {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> x { <V> { 0.790664 } }
+                  }
+                  <Table> BackB {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                      <S$Anim> x { <V> { 0.790664 } }
+                    }
+                    <Table> Chest {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                        <S$Anim> x { <V> { 0.688455 } }
+                      }
+                      <Table> Scapula {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> h { <V> { -90 } }
+                          <S$Anim> p { <V> { -43.6534 } }
+                          <S$Anim> r { <V> { 90 } }
+                          <S$Anim> x { <V> { 0.425191 } }
+                          <S$Anim> z { <V> { -0.815346 } }
+                        }
+                        <Table> Shoulder {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> h { <V> { 0.072673 } }
+                            <S$Anim> p { <V> { -2.93903 } }
+                            <S$Anim> r { <V> { -1.80162 } }
+                            <S$Anim> x { <V> { 0.709471 } }
+                          }
+                          <Table> Elbow {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                              <S$Anim> r { <V> { 8.7493 } }
+                              <S$Anim> x { <V> { 0.962059 } }
+                            }
+                            <Table> Elbow_twistLocator1 {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                                <S$Anim> x { <V> { 0.222815 } }
+                              }
+                            }
+                            <Table> Elbow_twistLocator2 {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                                <S$Anim> x { <V> { 0.445631 } }
+                              }
+                            }
+                            <Table> Elbow_twistLocator3 {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                                <S$Anim> x { <V> { 0.668446 } }
+                              }
+                            }
+                            <Table> Elbow_twistLocator4 {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                                <S$Anim> x { <V> { 0.891262 } }
+                              }
+                            }
+                            <Table> Elbow_twistLocator5 {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                                <S$Anim> x { <V> { 1.11408 } }
+                              }
+                            }
+                            <Table> Elbow_twistLocator6 {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                                <S$Anim> x { <V> { 1.33689 } }
+                              }
+                            }
+                            <Table> Elbow_twistLocator7 {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                                <S$Anim> x { <V> { 1.55971 } }
+                              }
+                            }
+                            <Table> Elbow_twistLocator8 {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                                <S$Anim> x { <V> { 1.78252 } }
+                              }
+                            }
+                            <Table> Elbow_twistLocator9 {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                                <S$Anim> x { <V> { 2.00534 } }
+                              }
+                            }
+                            <Table> Elbow_twistLocator10 {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                                <S$Anim> x { <V> { 2.22815 } }
+                              }
+                            }
+                            <Table> Wrist {
+                              <Xfm$Anim_S$> xform {
+                                <Scalar> fps { 25 }
+                                <Char*> order { srpht }
+                                <S$Anim> h { <V> { 0.0265098 } }
+                                <S$Anim> p { <V> { 2.95411 } }
+                                <S$Anim> r { <V> { -6.19185 } }
+                                <S$Anim> x { <V> { 1.11408 } }
+                              }
+                              <Table> Cup {
+                                <Xfm$Anim_S$> xform {
+                                  <Scalar> fps { 25 }
+                                  <Char*> order { srpht }
+                                  <S$Anim> h { <V> { -0.422206 } }
+                                  <S$Anim> p { <V> { 0.00782332 } }
+                                  <S$Anim> r { <V> { -5.38848 } }
+                                  <S$Anim> x { <V> { 0.149786 } }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                      <Table> Neck {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> x { <V> { 0.499933 } }
+                        }
+                        <Table> Head {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> x { <V> { 0.782706 } }
+                          }
+                          <Table> Hair {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                              <S$Anim> x { <V> { 0.871857 } }
+                            }
+                          }
+                          <Table> Nose {
+                            <Xfm$Anim_S$> xform {
+                              <Scalar> fps { 25 }
+                              <Char*> order { srpht }
+                              <S$Anim> y { <V> { 1 } }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                <Table> Hip {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 179.026 } }
+                    <S$Anim> x { <V> { -0.566686 } }
+                    <S$Anim> y { <V> { 0.18158 } }
+                    <S$Anim> z { <V> { -0.691062 } }
+                  }
+                  <Table> Knee {
+                    <Xfm$Anim_S$> xform {
+                      <Scalar> fps { 25 }
+                      <Char*> order { srpht }
+                      <S$Anim> h { <V> { 5.98761 } }
+                      <S$Anim> x { <V> { 1.0972 } }
+                    }
+                    <Table> Ankle {
+                      <Xfm$Anim_S$> xform {
+                        <Scalar> fps { 25 }
+                        <Char*> order { srpht }
+                        <S$Anim> h { <V> { -95.0133 } }
+                        <S$Anim> p { <V> { -88.92 } }
+                        <S$Anim> x { <V> { 1.18045 } }
+                      }
+                      <Table> MiddleToe1 {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> h { <V> { 87.4682 } }
+                          <S$Anim> p { <V> { 66.8887 } }
+                          <S$Anim> r { <V> { -87.2476 } }
+                          <S$Anim> x { <V> { 0.318249 } }
+                          <S$Anim> y { <V> { 0.00384258 } }
+                          <S$Anim> z { <V> { 0.203839 } }
+                        }
+                        <Table> MiddleToe2 {
+                          <Xfm$Anim_S$> xform {
+                            <Scalar> fps { 25 }
+                            <Char*> order { srpht }
+                            <S$Anim> x { <V> { 0.584037 } }
+                          }
+                        }
+                      }
+                      <Table> Heel {
+                        <Xfm$Anim_S$> xform {
+                          <Scalar> fps { 25 }
+                          <Char*> order { srpht }
+                          <S$Anim> h { <V> { 89.9809 } }
+                          <S$Anim> r { <V> { -91.08 } }
+                          <S$Anim> x { <V> { -0.424407 } }
+                          <S$Anim> y { <V> { 0.00816136 } }
+                          <S$Anim> z { <V> { 0.432939 } }
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           }
@@ -443,6 +690,9 @@
                                 <Xfm$Anim_S$> xform {
                                   <Scalar> fps { 25 }
                                   <Char*> order { srpht }
+                                  <S$Anim> i { <V> { 0.05 } }
+                                  <S$Anim> j { <V> { 0.05 } }
+                                  <S$Anim> k { <V> { 0.05 } }
                                 }
                                 <Table> FKXHair_M {
                                   <Xfm$Anim_S$> xform {
@@ -4217,6 +4467,15 @@
                     }
                   }
                 }
+                <Table> UnTwistIKRoot_M {
+                  <Xfm$Anim_S$> xform {
+                    <Scalar> fps { 25 }
+                    <Char*> order { srpht }
+                    <S$Anim> h { <V> { 180 } }
+                    <S$Anim> r { <V> { -90 } }
+                    <S$Anim> z { <V> { 2.26978 } }
+                  }
+                }
               }
             }
           }
@@ -4997,67 +5256,6 @@
               <S$Anim> j { <V> { 1.83834 } }
               <S$Anim> k { <V> { 1.83834 } }
             }
-            <Table> farmer_helmet {
-              <Xfm$Anim_S$> xform {
-                <Scalar> fps { 25 }
-                <Char*> order { srpht }
-                <S$Anim> i { <V> { 0.05 } }
-                <S$Anim> j { <V> { 0.05 } }
-                <S$Anim> k { <V> { 0.05 } }
-                <S$Anim> h {
-                  <V> {
-                    0.0130979 7.16781 25.2875 50.8815 68.5404 71.5598
-                    69.8566 70.6158 78.0151 90.6806 96.2629 104.716
-                    113.402 120.377 123.22 123.22 123.22 123.22 123.22
-                    123.22 123.22 123.22 123.22 123.22
-                  }
-                }
-                <S$Anim> p {
-                  <V> {
-                    -0.0151159 -7.94296 -23.2924 -32.9559 -32.9295
-                    -32.9962 -36.0712 -40.5438 -43.8249 -42.4528
-                    -37.7808 -27.4253 -13.515 -0.765281 4.50936 4.50936
-                    4.50936 4.50936 4.50936 4.50936 4.50936 4.50936
-                    4.50936 4.50936
-                  }
-                }
-                <S$Anim> r {
-                  <V> {
-                    0.0043248 2.93146 14.5429 36.8323 56.0716 63.5076
-                    64.328 63.4417 67.3618 79.2562 85.5519 96.9488
-                    107.603 114.194 116.21 116.21 116.21 116.21 116.21
-                    116.21 116.21 116.21 116.21 116.21
-                  }
-                }
-                <S$Anim> x {
-                  <V> {
-                    -9.61093e-007 3.20307e-005 0.00364044 0.0122148
-                    0.0185225 0.0182381 0.017448 0.0207695 0.0273702
-                    0.0328884 0.0340935 0.0371078 0.0453826 0.0553462
-                    0.0597042 0.0597042 0.0597042 0.0597042 0.0597042
-                    0.0597042 0.0597042 0.0597042 0.0597042 0.0597042
-                  }
-                }
-                <S$Anim> y {
-                  <V> {
-                    2.46176e-005 0.013632 0.0468747 0.0935326 0.140108
-                    0.179273 0.214543 0.244673 0.269803 0.29052 0.291224
-                    0.294276 0.302191 0.31266 0.317737 0.317737 0.317737
-                    0.317737 0.317737 0.317737 0.317737 0.317737
-                    0.317737 0.317737
-                  }
-                }
-                <S$Anim> z {
-                  <V> {
-                    0.0911204 0.102261 0.125814 0.146891 0.150325
-                    0.13457 0.107007 0.0748972 0.0454393 0.0235019
-                    0.0292105 0.0414485 0.0542315 0.0613486 0.062908
-                    0.062908 0.062908 0.062908 0.062908 0.062908
-                    0.062908 0.062908 0.062908 0.062908
-                  }
-                }
-              }
-            }
             <Table> pitchFork1 {
               <Xfm$Anim_S$> xform {
                 <Scalar> fps { 25 }
@@ -5117,6 +5315,67 @@
                     0.0134562 0.0170561 0.0170134 0.0154623 0.0145437
                     0.0145437 0.0145437 0.0145437 0.0145437 0.0145437
                     0.0145437 0.0145437 0.0145437 0.0145437
+                  }
+                }
+              }
+            }
+            <Table> farmer_helmet {
+              <Xfm$Anim_S$> xform {
+                <Scalar> fps { 25 }
+                <Char*> order { srpht }
+                <S$Anim> i { <V> { 0.05 } }
+                <S$Anim> j { <V> { 0.05 } }
+                <S$Anim> k { <V> { 0.05 } }
+                <S$Anim> h {
+                  <V> {
+                    0.0130979 7.16781 25.2875 50.8815 68.5404 71.5598
+                    69.8566 70.6158 78.0151 90.6806 96.2629 104.716
+                    113.402 120.377 123.22 123.22 123.22 123.22 123.22
+                    123.22 123.22 123.22 123.22 123.22
+                  }
+                }
+                <S$Anim> p {
+                  <V> {
+                    -0.0151159 -7.94296 -23.2924 -32.9559 -32.9295
+                    -32.9962 -36.0712 -40.5438 -43.8249 -42.4528
+                    -37.7808 -27.4253 -13.515 -0.765281 4.50936 4.50936
+                    4.50936 4.50936 4.50936 4.50936 4.50936 4.50936
+                    4.50936 4.50936
+                  }
+                }
+                <S$Anim> r {
+                  <V> {
+                    0.0043248 2.93146 14.5429 36.8323 56.0716 63.5076
+                    64.328 63.4417 67.3618 79.2562 85.5519 96.9488
+                    107.603 114.194 116.21 116.21 116.21 116.21 116.21
+                    116.21 116.21 116.21 116.21 116.21
+                  }
+                }
+                <S$Anim> x {
+                  <V> {
+                    -2.51863e-006 -0.000805754 0.00100543 0.00788034
+                    0.0133372 0.0129387 0.0123817 0.0160093 0.0227366
+                    0.0280823 0.0289811 0.0315375 0.0396551 0.0498981
+                    0.0544829 0.0544829 0.0544829 0.0544829 0.0544829
+                    0.0544829 0.0544829 0.0544829 0.0544829 0.0544829
+                  }
+                }
+                <S$Anim> y {
+                  <V> {
+                    0.0066467 0.0200565 0.0521118 0.0966099 0.141629
+                    0.180494 0.215845 0.245798 0.270241 0.289894
+                    0.290082 0.292218 0.29911 0.308854 0.313697 0.313697
+                    0.313697 0.313697 0.313697 0.313697 0.313697
+                    0.313697 0.313697 0.313697
+                  }
+                }
+                <S$Anim> z {
+                  <V> {
+                    0.0905394 0.100773 0.122681 0.142899 0.146453
+                    0.130747 0.102905 0.0703958 0.0406928 0.0189523
+                    0.0251179 0.0384606 0.0528543 0.0614975 0.0636837
+                    0.0636837 0.0636837 0.0636837 0.0636837 0.0636837
+                    0.0636837 0.0636837 0.0636837 0.0636837
                   }
                 }
               }

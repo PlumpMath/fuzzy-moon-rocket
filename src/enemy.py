@@ -372,8 +372,11 @@ class Enemy(FSM, Unit):
             self.enemyNode.headsUp(self._playerRef.playerNode)
             self.enemyNode.setHpr(self.enemyNode.getH()-180, *pitchRoll)
 
-            self.enemyModel.play('attack', fromFrame=0, toFrame=12)
-            self.attack(self._playerRef)
+            attacked = self.attack(self._playerRef)
+            if attacked != 0:
+                self.enemyModel.play('attack', fromFrame=0, toFrame=12)
+                if attacked == 2:
+                    self._playerRef.playerModel.play('hit')
 
             return task.again
 

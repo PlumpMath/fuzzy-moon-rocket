@@ -75,6 +75,8 @@ class Player(FSM, Unit):
             'run':modelPrefix+'run',
             'attack':modelPrefix+'attack',
             'stop':modelPrefix+'stop',
+            'hit':modelPrefix+'hit',
+            'defense':modelPrefix+'defense',
             'death':modelPrefix+'death',
             'idle':modelPrefix+'idle'
             })
@@ -292,10 +294,19 @@ class Player(FSM, Unit):
         self.receiveTemporaryHealth(tempHp)
         print 'unstoppable:', tempHp
 
+        self.playerModel.play('defense')
+        taskMgr.doMethodLater(1.5, self.stopDefenseAnimation, 'stopDefenseAnimationTask')
+
         duration = 30.0 # Half a minute (30 seconds) duration of temp hp
         taskMgr.doMethodLater(duration, self.removeTempHp, 'removeTempHpTask')
 
         return True
+
+    def stopDefenseAnimation(self, task):
+        #print('stop defense animation')
+        self.playerModel.loop('idle')
+
+        return task.done
 
     def removeTempHp(self, task):
         print 'removeTempHp'
