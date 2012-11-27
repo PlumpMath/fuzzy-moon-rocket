@@ -24,6 +24,7 @@ class Player(FSM, Unit):
         self._mainRef = mainRef
         self._enemyListRef = mainRef.enemyList
         self._ddaHandlerRef = mainRef.DDAHandler
+        self._mapHandlerRef = mainRef.mapHandler
         self._stateHandlerRef = mainRef.stateHandler
 
         self.playerNode = mainRef.mainNode.attachNewNode('playerNode')

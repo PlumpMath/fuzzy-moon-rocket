@@ -59,9 +59,6 @@ class World(ShowBase):
         self.gui = gui.GUI()
         self.hud = hud.HUD(self.player)
 
-        # Start game
-        self.mapHandler.startArea()
-
         # Add keyboard commands
         self.accept('escape', self.endGame)
         self.accept('pause', self.pauseGame)

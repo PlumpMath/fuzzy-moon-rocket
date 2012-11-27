@@ -128,13 +128,16 @@ class HUD:
 
     def areaTransAnswer(self, arg):
         player = self._playerRef
+        mapRef = player._mapHandlerRef
 
         if self.showAreaTransDialog and player.areaTransitioning:
             if arg:
                 print 'Yes answered'
+                mapRef.loadNextArea()
             else:
                 print 'No answered'
 
+        player.areaTransitioning = False
         self.showAreaTransDialog = False
         self.areaTransDialog.cleanup()
 

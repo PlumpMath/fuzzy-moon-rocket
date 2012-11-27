@@ -23,6 +23,10 @@ class Map:
 
         self.mapNode = main.mainNode.attachNewNode('mapNode')
 
+        # Initialize area list and current area variable
+        self.areaList = [farmArea, secondArea]
+        self.currentArea = 0
+
         # Initialze sun
         self.initSun(main.mainNode)
 
@@ -30,16 +34,33 @@ class Map:
         self.initFilters()
 
         # Load the first area
-        self.loadArea(farmArea)
+        self.loadNextArea()
 
 #===============================================================================
 #========================== AREA LOADING AND UNLOADING =========================
 
     def loadNextArea(self):
-        self.loadArea(cornFieldArea)
-        taskMgr.doMethodLater(0.5, self.startArea, 'startAreaTask', extraArgs=[])
+        self.currentArea += 1
+        if self.currentArea > len(self.areaList):
+            print 'No next area to load'
+        else:
+            if self.currentArea > 1:
+                self.unloadArea()
+
+            taskMgr.doMethodLater(0.5, self.loadArea, 'loadAreaTask', extraArgs=[self.areaList[self.currentArea-1]])
+            taskMgr.doMethodLater(1.0, self.startArea, 'startAreaTask', extraArgs=[])
+
+    # def loadPreviousArea(self):
+    #     self.currentArea -= 1
+    #     if self.currentArea < 0:
+    #         print 'No previous area to load'
+    #     else:
+    #         self.unloadArea()
+    #         taskMgr.doMethodLater(1.0, self.loadArea, 'loadAreaTask', extraArgs=[self.areaList[self.currentArea-1]])
+    #         taskMgr.doMethodLater(2.0, self.startArea, 'startAreaTask', extraArgs=[])
 
     def startArea(self):
+        print 'startArea'
         if self._playerRef is None:
              # Load player reference
             self._playerRef = self._mainRef.player
@@ -122,25 +143,26 @@ class Map:
         for enemy in self._enemyListRef:
             enemy.suicide()
 
+        # Clear all the point lights
+        self.clearAllPointLights()
+
         # Empty dict of enemy spawn points
         self.spawnPointsDict.clear()
 
         # Remove area model
         self.areaModel.remove()
 
-        # Remove walls model
-        self.walls.remove()
-
         # Remove spawn task
-        #self.enemySpawnTask.remove()
-        #self.exitAreaTask.remove()
         taskMgr.remove(self.enemySpawnTask)
+        taskMgr.remove('areaTransitionCheckerTask')
+        taskMgr.remove('updatePlayerLightsTask')
+
+        # Removed animated models
+        self.oII.cleanup()
+        self.oII.delete()
 
         # Remove nodes
         self.invertedSphere.removeNode()
-        self.highlightTextNode.removeNode()
-        self.walls.removeNode()
-        #self.exitStation.removeNode()
         self.areaNode.removeNode()
 
 #=============================================================
@@ -204,13 +226,13 @@ class Map:
         # self.oII.loop(oIIAnim)
 
         self.oII.setPos(ground.getPos(render))
-        self.oII.setZ(self.oII, 0.3)
+        self.oII.setZ(self.oII, 0.15)
 
         self.oII.reparentTo(self.areaNode)
 
-        taskMgr.doMethodLater(1, self.areaTransition, 'areaTransitionTask')
+        taskMgr.doMethodLater(1, self.areaTransitionChecker, 'areaTransitionCheckerTask')
 
-    def areaTransition(self, task):
+    def areaTransitionChecker(self, task):
         player = self._playerRef
         playerNode = player.playerNode
 
@@ -227,7 +249,7 @@ class Map:
 
 
 #==================================================================================
-#================= Misc. Initialization ===========================================
+#================= Point Lights ===========================================
     def initLights(self):
         self.pointLightList = []
 
@@ -260,6 +282,21 @@ class Map:
                 #print 'apply light from ', newPLightNode, ' to ', obj
                 obj.setLight(newPLightNode)
 
+    def clearAllPointLights(self):
+        for pLight in self.pointLightList:
+            for obj in self.areaModel.find('**/geometry').getChildren():
+                self.removePointLightFromObj(pLight, obj)
+
+            pLight.removeNode()
+
+    def removePointLightFromObj(self, pLightNode, obj):
+        if len(obj.getChildren()) > 1:
+            for exObj in obj.getChildren():
+                self.removePointLightFromObj(pLightNode, exObj)
+        else:
+            if obj.hasLight(pLightNode):
+                obj.clearLight(pLightNode)
+
     def updatePlayerLights(self, task):
         # If time between frames is way too much, stop the task here
         if globalClock.getDt() > .5:
@@ -278,6 +315,8 @@ class Map:
 
         return task.cont
 
+#==================================================================================
+#================= Misc. Initialization ===========================================
     def initSun(self, parentNode):
         # Setup directional light (a yellowish sun)
         sun = DirectionalLight('sun')
