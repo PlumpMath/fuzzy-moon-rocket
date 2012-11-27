@@ -26,9 +26,8 @@ class HUD:
 
         self.showAreaTransDialog = False
 
-        #taskMgr.add(self.updateBars, 'UpdateBarsTask')
         taskMgr.doMethodLater(1, self.updateBars, 'UpdateBarsTask')
-    
+
     def initTargetBar(self):
         self.targetBar = DirectWaitBar(
                                     text='Target health',
@@ -95,14 +94,14 @@ class HUD:
             self.exitStats()
 
     def exitStats(self):
-            self.myFrame.destroy()
-            
+        self.myFrame.destroy()
+
     def initHealthBar(self):
-            self.healthBar = DirectWaitBar(
-                                        text="Health", 
-                                        value=100, 
-                                        pos=(0, 0, -0.8),
-                                        scale=0.75)
+        self.healthBar = DirectWaitBar(
+                                text="Health", 
+                                value=100, 
+                                pos=(0, 0, -0.8),
+                                scale=0.75)
 
     def updateBars(self, task):
         self.healthBar['value'] = self._playerRef.getCurrentHealthPointsAsPercentage()
