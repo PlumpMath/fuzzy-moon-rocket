@@ -238,11 +238,11 @@ class Map:
 
         if utils.getIsInRange(self.oII.getPos(render), playerNode.getPos(render), .5):
             if not player.areaTransitioning:
-                print 'fire up area transition dialog'
+                #print 'fire up area transition dialog'
                 player.areaTransitioning = True
         else:
             if player.areaTransitioning:
-                print 'close area transition dialog'
+                #print 'close area transition dialog'
                 player.areaTransitioning = False
 
         return task.again

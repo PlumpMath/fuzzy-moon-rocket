@@ -132,10 +132,11 @@ class HUD:
 
         if self.showAreaTransDialog and player.areaTransitioning:
             if arg:
-                print 'Yes answered'
+                #print 'Yes answered'
                 mapRef.loadNextArea()
             else:
-                print 'No answered'
+                #print 'No answered'
+                pass
 
         player.areaTransitioning = False
         self.showAreaTransDialog = False
