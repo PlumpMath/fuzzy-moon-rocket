@@ -68,6 +68,9 @@ class Player(FSM, Unit):
 
         self.initHealth()
 
+        # Used by area transition system
+        self.areaTransitioning = False
+
     def initPlayerModel(self):
         # Initialize the player model (Actor)
         modelPrefix = 'models/player-'
