@@ -11,11 +11,9 @@ import enemy
 Area = namedtuple('Area', ['modelName', 'enemies'] )
 
 farmArea = Area(modelName='area_1', enemies={enemy.koboldMinion:2})
+secondArea = Area(modelName='area_2', enemies={enemy.koboldSkirmisher:2, enemy.koboldMinion:1})
 
 class Map:
-
-    maxSpawnPointsPerArea = 20
-    maxPointLightsPerArea = 10
 
     def __init__(self, main):
         print("Map class instantiated")
@@ -94,19 +92,6 @@ class Map:
         self.startPos = self.areaModel.find('**/startPos').getPos()
         self.exitPos = self.areaModel.find('**/exitPos').getPos()
 
-        # Locate exit station within areaModel
-        #self.exitStation = self.areaModel.find('**/exitStation')
-        #self.exitStation = loader.loadModel('models/exitStation')
-        #self.exitStation.setCollideMask(BitMask32.allOff())
-        #self.exitStation.reparentTo(self.areaNode)
-
-        #if area.modelName == 'area_1':
-        #    self.exitStation.setH(-90)
-        #elif area.modelName == 'area_2':
-        #    self.exitStation.setH(90)
-
-        #self.exitStation.setPos(self.exitPos)
-
         # Locate and save enemy spawn points
         self.spawnPointsDict = {}
         for spawnPoint in self.areaModel.findAllMatches('**/spawnPoint*'):
@@ -114,21 +99,21 @@ class Map:
 
         # Initialize inverted sphere
         self.invertedSphere = self.areaNode.attachNewNode(CollisionNode('worldSphere'))
-        self.invertedSphere.node().addSolid(CollisionInvSphere(0.0, 0.0, 1.0, 13)) # Adjust when new areas come
+        self.invertedSphere.node().addSolid(CollisionInvSphere(0.0, 0.0, 1.0, 13)) 
 
         self.invertedSphere.node().setFromCollideMask(BitMask32.allOff())
         self.invertedSphere.node().setIntoCollideMask(BitMask32.bit(2))
 
         #self.invertedSphere.show()
 
+        # Load in point lights
+        taskMgr.doMethodLater(0.5, self.initLights, 'initLightsTask', extraArgs=[])
+
         # Initialize Exit gate
-        #taskMgr.doMethodLater(0.25, self.initExitGate, 'initExitGateTask', extraArgs=[])
+        taskMgr.doMethodLater(0.5, self.initExitGate, 'initExitGateTask', extraArgs=[])
 
         # Initialize enemies
         taskMgr.doMethodLater(0.5, self.initEnemies, 'initEnemiesTask', extraArgs=[])
-
-        # Load in point lights
-        self.initLights()
 
     def unloadArea(self):
         print('unloadArea')
@@ -198,79 +183,48 @@ class Map:
 #=============================================================
 #======== EXIT GATE ==========================================
     def initExitGate(self):
-        self.exitGate = self.exitStation.find('**/exitGate')
-        self.animatedExitGate = Actor('models/exitGate')
-        self.gateAnimation = self.animatedExitGate.getAnimNames()
-        self.animatedExitGate.reparentTo(self.areaNode)
+        station = self.areaModel.find('**/station')
+        exitGate = station.find('**/stationGate')
+        ground = station.find('**/ground*')
 
-        if self._areaRef.modelName == 'area_1':
-            self.animatedExitGate.setH(-90)
-        elif self._areaRef.modelName == 'area_2':
-            self.animatedExitGate.setH(90)
+        # self.exitGate = Actor('models/exitGate') # Exit gate seems to have issues
+        # self.exitGateAnim = self.exitGate.getAnimNames()
+        
+        # self.exitGate.setScale(render, exitGate.getScale(render))
+        # self.exitGate.setHpr(render, exitGate.getHpr(render))
+        # self.exitGate.setPos(render, exitGate.getPos(render))
 
-        self.animatedExitGate.setZ(-0.5)
+        # #self.exitGate.setZ(0)
 
-        self.animatedExitGate.setPos(self.exitPos)
+        # self.exitGate.reparentTo(self.areaNode)
 
-        self.animatedExitGate.hide()
-        self.exitGateIsHidden = True
+        self.oII = Actor('models/oii')
+        # oIIAnim = self.oII.getAnimNames() # No animation added yet
+        # print 'oII anim:', oIIAnim
+        # self.oII.loop(oIIAnim)
 
-        pickerTube = self.exitStation.find('**/collider')
-        pickerTube.setCollideMask(BitMask32.bit(1) | BitMask32.bit(2))
-        pickerTube.setName('exitGate')
-        pickerTube.setZ(pickerTube.getZ()+1)
+        self.oII.setPos(ground.getPos(render))
+        self.oII.setZ(self.oII, 0.3)
 
-        highlightText = TextNode('exitGateHighlightText')
-        highlightText.setText('Click to exit area')
-        highlightText.setAlign(TextNode.ACenter)
-        #self.highlightTextNode = self.exitGate.attachNewNode(highlightText)
-        self.highlightTextNode = aspect2d.attachNewNode(highlightText)
-        self.highlightTextNode.setScale(0.1)
-        #self.highlightTextNode.setZ(self.exitGate.getZ() + 1)
-        self.highlightTextNode.setPos(0, 0, 0.5)
+        self.oII.reparentTo(self.areaNode)
 
-        self.highlightTextNode.hide()
+        taskMgr.doMethodLater(1, self.areaTransition, 'areaTransitionTask')
 
-    def setGateIsNotHidden(self):
-        self.exitGateIsHidden = True
+    def areaTransition(self, task):
+        player = self._playerRef
+        playerNode = player.playerNode
 
-    def playExitGateCloseAnimation(self):
-        self.animatedExitGate.play(self.gateAnimation, fromFrame=13, toFrame=25)
+        if utils.getIsInRange(self.oII.getPos(render), playerNode.getPos(render), .5):
+            if not player.areaTransitioning:
+                print 'fire up area transition dialog'
+                player.areaTransitioning = True
+        else:
+            if player.areaTransitioning:
+                print 'close area transition dialog'
+                player.areaTransitioning = False
 
-    def showExitGate(self):
-        self.exitGate.show()
+        return task.again
 
-    def hideAnimatedExitGate(self):
-        self.animatedExitGate.hide()
-
-    def hideHighlightTextNode(self):
-        self.highlightTextNode.hide()
-
-    def highlightExitGate(self, highlightExitGate):
-        if not self.areaNode.isEmpty():
-            if highlightExitGate and self.exitGateIsHidden:
-                self.exitGateIsHidden = False
-
-                self.animatedExitGate.show()
-                self.exitGate.hide()
-                self.highlightTextNode.show()
-
-                self.animatedExitGate.play(self.gateAnimation, fromFrame=0, toFrame=12)
-                print('highlight gate')
-            elif not highlightExitGate and not self.exitGateIsHidden:
-                Sequence(
-                    Func(self.playExitGateCloseAnimation),
-                    Wait(0.5),
-                    Func(self.hideHighlightTextNode),
-                    Parallel(Func(self.setGateIsNotHidden), Func(self.showExitGate), Func(self.hideAnimatedExitGate))
-                ).start()
-
-                print('hide gate')
-
-    def clickExitGate(self):
-        print('gate clicked')
-        self.unloadArea()
-        taskMgr.doMethodLater(0.5, self.loadNextArea, 'loadNextAreaTask', extraArgs=[])
 
 #==================================================================================
 #================= Misc. Initialization ===========================================
