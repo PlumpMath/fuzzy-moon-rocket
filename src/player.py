@@ -64,7 +64,7 @@ class Player(FSM, Unit):
         self.armorClass = 10 + 8 # Base armor class + fullplate armor
         self.mass = 90
 
-        self.startLevel = 3
+        self.startLevel = 2
 
         for i in range(1, self.startLevel):
             self.increaseLevel()
@@ -135,7 +135,10 @@ class Player(FSM, Unit):
         self.damageReceived = 0
         self.deathCount = 0
 
-        taskMgr.doMethodLater(1, self.ddaMonitor, 'ddaMonitorTask')
+        self._ddaHandlerRef.initPlayerDDA(self)
+
+        ddaMonitorTask = taskMgr.doMethodLater(1, self.ddaMonitor, 'ddaMonitorTask')
+        ddaMonitorTask.count = 0
 
 #-------------------- COLLISION INITIALIZATION ---------------------------#
     def initPlayerCollisionHandlers(self):
@@ -236,7 +239,9 @@ class Player(FSM, Unit):
 
 #-------------------- PLAYER ABILITIES ----------------------------------#
     def startCooldown(self, ability, cooldown, task):
-        if task.time >= cooldown:
+        task.count += 1
+
+        if task.count >= cooldown:
             self.abilityDict[ability] = 1
             return task.done
         else:
@@ -253,7 +258,8 @@ class Player(FSM, Unit):
             if self.abilityDict[off] == 1:
                 if self.bullRush():
                     self.abilityDict[off] = 0
-                    taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[off, 10], appendTask=True)
+                    cd = taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[off, 10], appendTask=True)
+                    cd.count = 0
             else:
                 print 'Bull Rush in cd'
 
@@ -263,7 +269,8 @@ class Player(FSM, Unit):
             if self.abilityDict[defe] == 1:
                 if self.unstoppable():
                     self.abilityDict[defe] = 0
-                    taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[defe, 10], appendTask=True)
+                    cd = taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[defe, 10], appendTask=True)
+                    cd.count = 0
             else:
                 print 'Unstoppable in cd'
 
@@ -273,7 +280,8 @@ class Player(FSM, Unit):
             if self.abilityDict[eva] == 1:
                 if self.thicketOfBlades():
                     self.abilityDict[eva] = 0
-                    taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[eva, 20], appendTask=True)
+                    cd = taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[eva, 20], appendTask=True)
+                    cd.count = 0
             else:
                 print 'Thicket of Blades in cd'
 
@@ -283,7 +291,8 @@ class Player(FSM, Unit):
             if self.abilityDict[aoe] == 1:
                 if self.shiftTheBattlefield():
                     self.abilityDict[aoe] = 0
-                    taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[aoe, 30], appendTask=True)
+                    cd = taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[aoe, 30], appendTask=True)
+                    cd.count = 0
             else:
                 print 'Shift the Battlefield in cd'
 
@@ -450,16 +459,17 @@ class Player(FSM, Unit):
         return task.cont
 
     def ddaMonitor(self, task):
+        task.count += 1
         self.healthHistory.append(self.currentHealthPoints)
         self.damageHistory.append(self.damageReceived)
         self.damageReceived = 0
 
-        print self.healthHistory
-        print self.damageHistory
+        #print self.healthHistory
+        #print self.damageHistory
 
-        if task.time % 60 == 0:
-            self.deathHistory.append(deathCount)
-            deathCount = 0
+        if (task.count + 1) % 60 == 0:
+            self.deathHistory.append(self.deathCount)
+            self.deathCount = 0
 
             print self.deathHistory
 
@@ -485,11 +495,12 @@ class Player(FSM, Unit):
                 #print('entryFound:', entryName)
 
                 enemy = utils.enemyDictionary[entryName]
-                if utils.getIsInRange(self.playerNode.getPos(), enemy.enemyNode.getPos(), self.combatRange):
-                    bAttacked = self.attack(enemy) # Returns 1 if player attacked but did not hit, returns 2 on hit
+                if enemy is not None and not enemy.getIsDead():
+                    if utils.getIsInRange(self.playerNode.getPos(), enemy.enemyNode.getPos(), self.combatRange):
+                        bAttacked = self.attack(enemy) # Returns 1 if player attacked but did not hit, returns 2 on hit
 
-                    if bAttacked == 2:
-                        enemy.enemyModel.play('hit')
+                        if bAttacked == 2:
+                            enemy.enemyModel.play('hit')
 
             # Only play animations if player actually attacked
             if bAttacked != 0:

@@ -113,11 +113,22 @@ class Enemy(FSM, Unit):
 
         if attributes.startLevel > 1:
             for i in range(attributes.startLevel-1):
-                enemy.increaseLevel()
+                self.increaseLevel()
 
         self.expAward = attributes.expAward
 
         self.initHealth()
+
+        self.adjustEnemyPropertiesDDA()
+
+    def adjustEnemyPropertiesDDA(self):
+        self.maxLevelDifference = 1
+
+        # Level enemy up to player's level minus maxLevelDifference
+        levelDifference = self._playerRef.level - self.level
+        if levelDifference >= self.maxLevelDifference:
+            for i in range (levelDifference-self.maxLevelDifference):
+                self.increaseLevel()
 
     def initEnemyAi(self):
         self.enemyAI = AICharacter('enemy',
@@ -389,7 +400,7 @@ class Enemy(FSM, Unit):
         global maxDropChance
 
         # if we drop, create health goblet
-        if utils.getD100() <= dropChance + dropChanceFactor:
+        if utils.getD100() <= (dropChance + dropChanceFactor) * self._ddaHandlerRef.healthGobletModifier:
             HealthGoblet(self._mainRef, self)
             print 'dropping health goblet'
         # Otherwise, increase dropChance
@@ -420,6 +431,9 @@ class Enemy(FSM, Unit):
 
             # Change state
             self.request('Death')
+
+            # Increase DDA death count
+            self._ddaHandlerRef.enemyDeathCount += 1
 
             # Handle health globe
             self.handleHealthGlobe()

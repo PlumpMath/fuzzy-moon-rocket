@@ -48,7 +48,7 @@ class World(ShowBase):
         self.initAI()
 
         # Instantiate other classes
-        self.DDAHandler = dda.DDA()
+        self.DDAHandler = dda.DDA(self)
 
         self.stateHandler = states.StateHandler()
 

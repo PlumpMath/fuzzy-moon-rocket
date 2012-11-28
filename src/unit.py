@@ -71,12 +71,12 @@ class Unit(object):
     def initHealth(self):
         self.updateMaxHealthPoints()
         self.currentHealthPoints = self.maxHealthPoints
+        self.hpPerLevel = 8 + self.getConstitutionModifier()
 
     def updateMaxHealthPoints(self):
         if self.fixedHealthPoints == 0:
-            self.fighterHealthPointsPerLevel = 8
-            self.maxHealthPoints =  (self.level * 
-                                    (self.fighterHealthPointsPerLevel + self.getConstitutionModifier()))
+            self.hpPerLevel = 8 + self.getConstitutionModifier()
+            self.maxHealthPoints = self.level * self.hpPerLevel
         else:
             self.maxHealthPoints = self.fixedHealthPoints
 
