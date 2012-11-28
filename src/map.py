@@ -42,7 +42,8 @@ class Map:
     def loadNextArea(self):
         self.currentArea += 1
         if self.currentArea > len(self.areaList):
-            print 'No next area to load'
+            print 'No next area to load, loading previous instead'
+            self.loadPreviousArea()
         else:
             if self.currentArea > 1:
                 self.unloadArea()
@@ -50,14 +51,15 @@ class Map:
             taskMgr.doMethodLater(0.5, self.loadArea, 'loadAreaTask', extraArgs=[self.areaList[self.currentArea-1]])
             taskMgr.doMethodLater(1.0, self.startArea, 'startAreaTask', extraArgs=[])
 
-    # def loadPreviousArea(self):
-    #     self.currentArea -= 1
-    #     if self.currentArea < 0:
-    #         print 'No previous area to load'
-    #     else:
-    #         self.unloadArea()
-    #         taskMgr.doMethodLater(1.0, self.loadArea, 'loadAreaTask', extraArgs=[self.areaList[self.currentArea-1]])
-    #         taskMgr.doMethodLater(2.0, self.startArea, 'startAreaTask', extraArgs=[])
+    def loadPreviousArea(self):
+        self.currentArea -= 1
+        if self.currentArea < 0:
+            print 'No previous area to load, loading next instead'
+            self.loadNextArea()
+        else:
+            self.unloadArea()
+            taskMgr.doMethodLater(0.5, self.loadArea, 'loadAreaTask', extraArgs=[self.areaList[self.currentArea-1]])
+            taskMgr.doMethodLater(1.0, self.startArea, 'startAreaTask', extraArgs=[])
 
     def startArea(self):
         print 'startArea'

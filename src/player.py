@@ -37,6 +37,8 @@ class Player(FSM, Unit):
         self.initPlayerCollisionHandlers()
         self.initPlayerCollisionSolids()
 
+        self.initPlayerDDA()
+
         # Start mouse picking and movement
         self.mouseHandler = utils.MouseHandler(self)
 
@@ -124,6 +126,16 @@ class Player(FSM, Unit):
         DO.accept('4', self.fireAbility, [4])
 
         self.abilityDict = {'offensive':1, 'defensive':1, 'evasive':1, 'area':1}
+
+    def initPlayerDDA(self):
+        self.damageHistory = []
+        self.healthHistory = []
+        self.deathHistory = []
+
+        self.damageReceived = 0
+        self.deathCount = 0
+
+        taskMgr.doMethodLater(1, self.ddaMonitor, 'ddaMonitorTask')
 
 #-------------------- COLLISION INITIALIZATION ---------------------------#
     def initPlayerCollisionHandlers(self):
@@ -437,6 +449,26 @@ class Player(FSM, Unit):
 
         return task.cont
 
+    def ddaMonitor(self, task):
+        self.healthHistory.append(self.currentHealthPoints)
+        self.damageHistory.append(self.damageReceived)
+        self.damageReceived = 0
+
+        print self.healthHistory
+        print self.damageHistory
+
+        if task.time % 60 == 0:
+            self.deathHistory.append(deathCount)
+            deathCount = 0
+
+            print self.deathHistory
+
+        return task.again
+
+    def receiveDamage(self, damageAmount):
+        super(Player, self).receiveDamage(damageAmount)
+        self.damageReceived += damageAmount
+
 #------------------------------- COMBAT ------------------------------#
     def attackEnemies(self, task):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
@@ -515,6 +547,8 @@ class Player(FSM, Unit):
 
     def enterDeath(self):
         self.playerModel.play('death')
+
+        self.deathCount += 1
 
         taskMgr.doMethodLater(3, self.respawn, 'respawnTask')
 
