@@ -90,7 +90,7 @@ class World(ShowBase):
         self.enemy.onDeath()
 
     def zoomOut(self): # key 3
-        scale = 3
+        scale = 2
         
         if self.player.stopCamera:
             self.player.stopCamera = False
