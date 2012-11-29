@@ -13,6 +13,8 @@ class HUD:
 
         self._playerRef = playerRef
 
+       
+
         self.gameText = OnscreenText(
                                 text="Fuzzy Moon Rocket",
                                 pos=(1.5, 0.9), 
@@ -23,6 +25,7 @@ class HUD:
         self.initTargetBar()
         self.initStatsButton()
         self.initPlayerAbilityBar()
+        self.initQuestButton()
 
         self.showAreaTransDialog = False
 
@@ -203,3 +206,46 @@ class HUD:
                                              pos=(0.3, 0, -0.01),
                                              command=self._playerRef.fireAbility,
                                              extraArgs=[4])
+    def initQuestButton(self):
+        self.statsButton = DirectButton(
+                                text = ("Quest"),
+                                pos=(-1.2, 0, -0.9), 
+                                scale=.05, 
+                                command=self.toggleQuest)
+
+        self._showingQuest = False
+
+    def toggleQuest(self):
+        if not self._showingQuest:
+            self._showingQuest = True
+
+            self.myFrame2 = DirectFrame(
+                                frameColor=(1, 1, 1, 1),
+                                frameSize=(-0.2, 0.2, -0.2, 0.2),
+                                pos=(-1.5, -0.5, 0.0)
+                                )
+
+            self.closeButton = DirectButton(
+                                 text='x',
+                                 pos=(-.17, 0, .17),
+                                 scale=.05,
+                                 parent=self.myFrame2,
+                                 command=self.exitQuest)
+
+            def addQuest(text):
+                return OnscreenText(text=text,
+                                    pos=(-.2, 0, .45),
+                                    scale=0.05,
+                                    parent=self.myFrame2,
+                                    align=TextNode.ALeft)
+
+            addQuest('Get to the station')  
+
+            
+        else:
+            self._showingQuest = False
+
+            self.exitQuest()
+
+    def exitQuest(self):
+        self.myFrame2.destroy()
