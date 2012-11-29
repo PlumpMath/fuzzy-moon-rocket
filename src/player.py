@@ -97,9 +97,8 @@ class Player(FSM, Unit):
     def initPlayerCamera(self): 
         # Initialize the camera
         base.disableMouse()
-        base.camera.setPos(self.playerNode.getX(),
-                           self.playerNode.getY() + self._cameraYModifier, 
-                           self.playerNode.getZ() + self._cameraZModifier)
+
+        base.camera.setPos(self.playerNode, (0, self._cameraYModifier, self._cameraZModifier))
         base.camera.lookAt(self.playerNode)
 
         self.stopCamera = False
@@ -415,6 +414,9 @@ class Player(FSM, Unit):
                     self.playerNode.setZ(newZ)
                     break;
 
+    def updateCameraPosition(self):
+        base.camera.setPos(self.playerNode, (0, self._cameraYModifier, self._cameraZModifier))
+
     def updatePlayerPosition(self, deltaTime):
         #print('updatePlayerPosition')
         newX = self.playerNode.getX() + self.velocity.getX() * deltaTime
@@ -444,6 +446,7 @@ class Player(FSM, Unit):
             return task.cont
 
         self.checkGroundCollisions()
+        self.updateCameraPosition()
 
         if self.getIsDead():
             if self.state != 'Death':
