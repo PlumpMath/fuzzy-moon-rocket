@@ -58,7 +58,7 @@ class DDA():
                 #print 'healthGobletModifier:', self.healthGobletModifier
 
                 if len(player.damageHistory) > 1:
-                    lastTwelveSecondsDamage = self.getAverage(player.damageHistory[-12:])
+                    lastTwelveSecondsDamage = sum(player.damageHistory[-12:])
 
                     self.attackBonusModifier = (self.playerAverageHealthPerSecond - lastTwelveSecondsDamage) / 2
                     print 'attackBonusModifier:', self.attackBonusModifier
