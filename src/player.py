@@ -26,6 +26,7 @@ class Player(FSM, Unit):
         self._ddaHandlerRef = mainRef.DDAHandler
         self._mapHandlerRef = mainRef.mapHandler
         self._stateHandlerRef = mainRef.stateHandler
+        self._scenarioHandlerRef = mainRef.scenarioHandler
 
         self.playerNode = mainRef.mainNode.attachNewNode('playerNode')
 
@@ -127,17 +128,18 @@ class Player(FSM, Unit):
         self.abilityDict = {'offensive':1, 'defensive':1, 'evasive':1, 'area':1}
 
     def initPlayerDDA(self):
-        self.damageHistory = []
-        self.healthHistory = []
-        self.deathHistory = []
+        if self._scenarioHandlerRef.getHasDDA():
+            self.damageHistory = []
+            self.healthHistory = []
+            self.deathHistory = []
 
-        self.damageReceived = 0
-        self.deathCount = 0
+            self.damageReceived = 0
+            self.deathCount = 0
 
-        self._ddaHandlerRef.initPlayerDDA(self)
+            self._ddaHandlerRef.initPlayerDDA(self)
 
-        ddaMonitorTask = taskMgr.doMethodLater(1, self.ddaMonitor, 'ddaMonitorTask')
-        ddaMonitorTask.count = 0
+            ddaMonitorTask = taskMgr.doMethodLater(1, self.ddaMonitor, 'ddaMonitorTask')
+            ddaMonitorTask.count = 0
 
 #-------------------- COLLISION INITIALIZATION ---------------------------#
     def initPlayerCollisionHandlers(self):
@@ -481,7 +483,8 @@ class Player(FSM, Unit):
 
     def receiveDamage(self, damageAmount):
         super(Player, self).receiveDamage(damageAmount)
-        self.damageReceived += damageAmount
+        if self._scenarioHandlerRef.getHasDDA():
+            self.damageReceived += damageAmount
 
 #------------------------------- COMBAT ------------------------------#
     def attackEnemies(self, task):

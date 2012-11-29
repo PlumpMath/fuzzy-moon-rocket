@@ -49,6 +49,7 @@ class Enemy(FSM, Unit):
         self._enemyListRef = mainRef.enemyList
         self._ddaHandlerRef = mainRef.DDAHandler
         self._stateHandlerRef = mainRef.stateHandler
+        self._scenarioHandlerRef = mainRef.scenarioHandler
 
         #self.topEnemyNode = mainRef.mainNode.attachNewNode('topEnemyNode')
         self.initEnemyNode(mainRef.mainNode)
@@ -103,7 +104,7 @@ class Enemy(FSM, Unit):
         self.dexterity = attributes.dexterity
 
         self.mass = attributes.mass
-        self.movementSpeed = self._ddaHandlerRef.SpeedFactor * speedMultiplier * attributes.movementSpeed
+        self.movementSpeed = speedMultiplier * attributes.movementSpeed
         self.perceptionRange = perceptionRangeMultiplier * attributes.perceptionRange
         self.combatRange = combatRangeMultiplier * attributes.combatRange
         self.attackBonus = attributes.attackBonus
@@ -121,29 +122,28 @@ class Enemy(FSM, Unit):
 
         self.initHealth()
 
-        
-
     def initEnemyDDA(self):
-        self.adjustEnemyPropertiesOnceDDA()
+        if self._scenarioHandlerRef.getHasDDA():
+            maxLevelDifference = self._ddaHandlerRef.maxLevelDifference
 
-    def adjustEnemyPropertiesOnceDDA(self):
-        self.maxLevelDifference = 1
+            # Level enemy up to player's level minus maxLevelDifference
+            levelDifference = self._playerRef.level - self.level
+            if levelDifference >= maxLevelDifference:
+                for i in range (levelDifference-maxLevelDifference):
+                    self.increaseLevel()
 
-        # Level enemy up to player's level minus maxLevelDifference
-        levelDifference = self._playerRef.level - self.level
-        if levelDifference >= self.maxLevelDifference:
-            for i in range (levelDifference-self.maxLevelDifference):
-                self.increaseLevel()
+    def getAttackBonus(self):
+        modifier = self.getStrengthModifier() if self.getStrengthModifier() > self.getDexterityModifier() else self.getDexterityModifier()
+        ab = self.attackBonus + (self.level / 2) + modifier# + utils.getD20()
 
-    def adjustEnemyAttackBonusDDA(self, attackBonus):
-        attackBonusModifier = self._ddaHandlerRef.attackBonusModifier
-        if attackBonusModifier < 0:
-            result = attackBonus + attackBonusModifier
-            if result < 1:
-                result = 1
-            return result
-        else:
-            return attackBonus
+        if self._scenarioHandlerRef.getHasDDA():
+            attackBonusModifier = self._ddaHandlerRef.attackBonusModifier
+            if attackBonusModifier < 0:
+                ab -= attackBonusModifier
+                if ab < 1:
+                    ab = 1
+
+        return ab + utils.getD20()
 
     def initEnemyAi(self):
         self.enemyAI = AICharacter('enemy',
@@ -379,7 +379,7 @@ class Enemy(FSM, Unit):
 
     def attack(self, other):
         if not self.getIsDead() and not other.getIsDead():
-            if self.adjustEnemyAttackBonusDDA(self.getAttackBonus()) >= other.getArmorClass():
+            if self.getAttackBonus() >= other.getArmorClass():
                 dmg = self.getDamageBonus()
                 #print(self.getName(), ' damaged ', other.getName(), ' for ', dmg, ' damage')
                 other.receiveDamage(dmg)
@@ -427,7 +427,11 @@ class Enemy(FSM, Unit):
         global maxDropChance
 
         # if we drop, create health goblet
-        if utils.getD100() <= (dropChance + dropChanceFactor) * self._ddaHandlerRef.healthGobletModifier:
+        chance = dropChanceFactor + dropChance
+        if self._scenarioHandlerRef.getHasDDA():
+            chance *= self._ddaHandlerRef.healthGobletModifier
+
+        if utils.getD100() <= chance:
             HealthGoblet(self._mainRef, self)
             print 'dropping health goblet'
         # Otherwise, increase dropChance
@@ -460,7 +464,8 @@ class Enemy(FSM, Unit):
             self.request('Death')
 
             # Increase DDA death count
-            self._ddaHandlerRef.enemyDeathCount += 1
+            if self._scenarioHandlerRef.getHasDDA():
+                self._ddaHandlerRef.enemyDeathCount += 1
 
             # Handle health globe
             self.handleHealthGlobe()

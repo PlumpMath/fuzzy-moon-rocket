@@ -2,18 +2,19 @@ from panda3d.core import *
 
 class DDA():
 
-    SpeedFactor = 1.0
     EXPFactor = 20.0
+    maxLevelDifference = 1 # Maximum level difference between player and enemy before enemy levels up
 
     def __init__(self, mainRef):
         print("DDA class instantiated")
 
         self._enemyListRef = mainRef.enemyList
 
-        self.initEnemyDDA()
+        if mainRef.scenarioHandler.getHasDDA():
+            self.initEnemyDDA()
 
-        monitorDDATask = taskMgr.doMethodLater(1, self.monitorDDA, 'monitorDDATask')
-        monitorDDATask.count = 0
+            monitorDDATask = taskMgr.doMethodLater(1, self.monitorDDA, 'monitorDDATask')
+            monitorDDATask.count = 0
 
     def initEnemyDDA(self):
         self.enemyDeathHistory = []
@@ -29,12 +30,7 @@ class DDA():
         self.healthGobletModifier = 0.0
 
     def getAverage(self, nums):
-        # sum = 0
-        # for count, number in enumerate(numbers):
-        #     sum += number
-        #     yield sum/(count+1)
         avgList = [sum(nums[:count])/count for count in xrange(1, len(nums)+1)]
-        #print 'running_avg result:', result[len(result)-1]
         return avgList[len(avgList)-1]
 
     def monitorDDA(self, task):

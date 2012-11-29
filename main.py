@@ -14,7 +14,11 @@ from direct.task import Task
 from panda3d.ai import *
 import sys
 
+<<<<<<< HEAD
 from src import utils, player, enemy, gui, hud, map, states, dda
+=======
+from src import utils, player, enemy, gui, hud, map, quest, states, dda, scenario
+>>>>>>> Implemented scenario handler
 
 class World(ShowBase):
 
@@ -49,6 +53,8 @@ class World(ShowBase):
         self.initAI()
 
         # Instantiate other classes
+        self.scenarioHandler = scenario.ScenarioHandler()
+        
         self.DDAHandler = dda.DDA(self)
 
         self.stateHandler = states.StateHandler()
