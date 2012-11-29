@@ -190,22 +190,6 @@ class Player(FSM, Unit):
 
         base.cTrav.addCollider(attackSphereNode, self.attackCollisionHandler)
 
-        # Camera to player ray #
-        self.cameraToPCRay = CollisionRay()
-        #self.cameraToPCRay.setFromLens(base.camNode, self.playerNode.getX(), self.playerNode.getY())
-        self.cameraToPCRay.setOrigin(camera.getPos())
-        cameraToPCRayNode = CollisionNode('cameraToPCRay')
-
-        cameraToPCRayNode.addSolid(self.cameraToPCRay)
-        cameraToPCRayNode.setIntoCollideMask(BitMask32.allOff())
-        cameraToPCRayNode.setFromCollideMask(BitMask32.bit(3) | BitMask32.bit(4))
-
-        self.cameraRayNode = camera.attachNewNode(cameraToPCRayNode)
-
-        self.cameraRayNode.show()
-
-        base.cTrav.addCollider(self.cameraRayNode, self.cameraGroundHandler)
-
 #---------------------------- EXPERIENCE ----------------------------------------#
     def getEXPToNextLevel(self):
         return self._prevEXP + (self.level * 1000)
@@ -412,28 +396,6 @@ class Player(FSM, Unit):
         return task.done
 
 #------------------ UPDATE FUNCTIONS ---------------------------------#
-    def checkCameraPosition(self):
-        playerPos = self.playerNode.getPos()
-        #self.cameraToPCRay.setFromLens(base.camNode, playerPos.getX(), playerPos.getY())
-    
-        self.cameraToPCRay.setOrigin(camera.getPos())
-        self.cameraToPCRay.setDirection(Vec3(playerPos - camera.getPos()))
-        #direction = Vec3(playerPos - camera.getPos())
-        #self.cameraToPCRay.setDirection(direction)
-        #self.cameraToPCRay.setFromLens(base.camNode, direction.getX(), direction.getY())
-
-        print 'checkCameraPosition:', self.cameraToPCRay
-
-        numEntries = self.cameraGroundHandler.getNumEntries()
-        if numEntries > 0:
-            self.cameraGroundHandler.sortEntries()
-
-            for i in range(numEntries):
-                entry = self.cameraGroundHandler.getEntry(i)
-                entryName = entry.getIntoNode().getName()
-                if entryName[:6] != 'player':
-                    print 'Not hitting player:', entryName
-
     def checkGroundCollisions(self):
         numEntries = self.groundHandler.getNumEntries()
         if numEntries > 0:
@@ -482,7 +444,6 @@ class Player(FSM, Unit):
             return task.cont
 
         self.checkGroundCollisions()
-        #self.checkCameraPosition()
 
         if self.getIsDead():
             if self.state != 'Death':
