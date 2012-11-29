@@ -28,7 +28,7 @@ class DDA():
 
         self.healthGobletModifier = 0.0
 
-    def running_avg(self, nums):
+    def getAverage(self, nums):
         # sum = 0
         # for count, number in enumerate(numbers):
         #     sum += number
@@ -44,16 +44,23 @@ class DDA():
         self.enemyDeathCount = 0
         self.enemyDeathTotalCount += self.enemyDeathCount
 
-        player = self._playerRef
+        if task.count > 0:
+            player = self._playerRef
 
-        if len(player.healthHistory) > 1 and task.count > 0:
-            lastSixtySeconds = player.healthHistory[-60:]
-            #print 'lastSixtySeconds len:', len(lastSixtySeconds)
+            if len(player.healthHistory) > 1:
+                lastSixtySecondsHealth = player.healthHistory[-60:]
+                #print 'lastSixtySeconds len:', len(lastSixtySeconds)
 
-            self.playerAverageHealthPerSecond = self.running_avg(lastSixtySeconds)
-            #print 'playerAverageHealthPerSecond:', self.playerAverageHealthPerSecond
+                self.playerAverageHealthPerSecond = self.getAverage(lastSixtySecondsHealth)
+                #print 'playerAverageHealthPerSecond:', self.playerAverageHealthPerSecond
 
-            self.healthGobletModifier = 1 - (self.playerAverageHealthPerSecond / player.maxHealthPoints)
-            #print 'healthGobletModifier:', self.healthGobletModifier
+                self.healthGobletModifier = 1 - (self.playerAverageHealthPerSecond / player.maxHealthPoints)
+                #print 'healthGobletModifier:', self.healthGobletModifier
+
+                if len(player.damageHistory) > 1:
+                    lastTwelveSecondsDamage = self.getAverage(player.damageHistory[-12:])
+
+                    self.attackBonusModifier = (self.playerAverageHealthPerSecond - lastTwelveSecondsDamage) / 2
+                    print 'attackBonusModifier:', self.attackBonusModifier
 
         return task.again

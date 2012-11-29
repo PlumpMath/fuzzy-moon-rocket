@@ -59,6 +59,8 @@ class Enemy(FSM, Unit):
         self.initAttributes(attributes)
         self.initEnemyAi()
 
+        self.initEnemyDDA()
+
         self.initEnemyCollisionHandlers()
         self.initEnemyCollisionSolids()
 
@@ -119,9 +121,12 @@ class Enemy(FSM, Unit):
 
         self.initHealth()
 
-        self.adjustEnemyPropertiesDDA()
+        
 
-    def adjustEnemyPropertiesDDA(self):
+    def initEnemyDDA(self):
+        self.adjustEnemyPropertiesOnceDDA()
+
+    def adjustEnemyPropertiesOnceDDA(self):
         self.maxLevelDifference = 1
 
         # Level enemy up to player's level minus maxLevelDifference
@@ -129,6 +134,16 @@ class Enemy(FSM, Unit):
         if levelDifference >= self.maxLevelDifference:
             for i in range (levelDifference-self.maxLevelDifference):
                 self.increaseLevel()
+
+    def adjustEnemyAttackBonusDDA(self, attackBonus):
+        attackBonusModifier = self._ddaHandlerRef.attackBonusModifier
+        if attackBonusModifier < 0:
+            result = attackBonus + attackBonusModifier
+            if result < 1:
+                result = 1
+            return result
+        else:
+            return attackBonus
 
     def initEnemyAi(self):
         self.enemyAI = AICharacter('enemy',
@@ -362,6 +377,18 @@ class Enemy(FSM, Unit):
         self.enemyModel.play(randomDeathAnim)
 
 
+    def attack(self, other):
+        if not self.getIsDead() and not other.getIsDead():
+            if self.adjustEnemyAttackBonusDDA(self.getAttackBonus()) >= other.getArmorClass():
+                dmg = self.getDamageBonus()
+                #print(self.getName(), ' damaged ', other.getName(), ' for ', dmg, ' damage')
+                other.receiveDamage(dmg)
+
+                return 2 # Returns 2 when self damages other
+
+            return 1 # Returns 1 when self attacks other, but misses
+
+        return 0 # Returns 0 when either self or other is dead
 
     def attackPlayer(self, task):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY or not self._enemyActive:
