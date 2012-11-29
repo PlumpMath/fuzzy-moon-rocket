@@ -36,6 +36,8 @@ class Map:
         # Load the first area
         self.loadNextArea()
 
+        self.playerPlaced = False
+
 #===============================================================================
 #========================== AREA LOADING AND UNLOADING =========================
 
@@ -73,15 +75,19 @@ class Map:
         # Initialize the task to handle enemy spawns
         self.enemySpawnTask = taskMgr.doMethodLater(1.5, self.enemySpawnActivator, 'enemySpawnActivatorTask')
 
-        # Update sun position
+        # Update sun position - does not change the shadows
         self.sunNode.setPos(self.startPos.getX(), self.startPos.getY(), self.startPos.getZ() + 10)
 
         # Change state to play
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             self._stateHandlerRef.request(self._stateHandlerRef.PLAY)
 
-        # Initialize the player position
-        self._playerRef.initStartPosition(self.startPos, self.exitPos)
+        if not self.playerPlaced:
+            # Initialize the player position
+            self._playerRef.initStartPosition(self.startPos, self.exitPos)
+            self.playerPlaced = True
+        else:
+            self._playerRef.initStartPosition(self.arrivalPos, self.exitPos)
 
     def loadArea(self, area):
         print('loadArea: ', area.modelName)
@@ -103,6 +109,9 @@ class Map:
         # Everything should at default be non-collidable
         self.areaModel.setCollideMask(BitMask32.allOff())
 
+        # Make visual geometry collidable with certain objects (camera ray)
+        self.areaModel.find('**/geometry').setCollideMask(BitMask32.bit(4))
+
         # The ground is the walk plane, it collides with mouse ray and player- and enemies ground rays
         for ground in self.areaModel.findAllMatches('**/ground*'):
             ground.setCollideMask(BitMask32.bit(1))
@@ -114,6 +123,7 @@ class Map:
         # Locate starting and exiting positions
         self.startPos = self.areaModel.find('**/startPos').getPos()
         self.exitPos = self.areaModel.find('**/exitPos').getPos()
+        self.arrivalPos = self.areaModel.find('**/arrival').getPos()
 
         # Locate and save enemy spawn points
         self.spawnPointsDict = {}
@@ -213,7 +223,6 @@ class Map:
 
         self.exitGate = Actor('models/exitGate') 
         self.exitGateAnim = self.exitGate.getAnimNames()
-        print 'exitGateAnim:', self.exitGateAnim
         
         self.exitGate.setHpr(render, station.getHpr(render))
         self.exitGate.setPos(render, station.getPos(render))
