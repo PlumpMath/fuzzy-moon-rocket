@@ -52,7 +52,7 @@ class Map:
             taskMgr.doMethodLater(1.0, self.startArea, 'startAreaTask', extraArgs=[])
 
     def loadPreviousArea(self):
-        self.currentArea -= 1
+        self.currentArea -= 2
         if self.currentArea < 0:
             print 'No previous area to load, loading next instead'
             self.loadNextArea()
@@ -211,20 +211,19 @@ class Map:
         exitGate = station.find('**/stationGate')
         ground = station.find('**/ground*')
 
-        # self.exitGate = Actor('models/exitGate') # Exit gate seems to have issues
-        # self.exitGateAnim = self.exitGate.getAnimNames()
+        self.exitGate = Actor('models/exitGate') 
+        self.exitGateAnim = self.exitGate.getAnimNames()
+        print 'exitGateAnim:', self.exitGateAnim
         
-        # self.exitGate.setScale(render, exitGate.getScale(render))
-        # self.exitGate.setHpr(render, exitGate.getHpr(render))
-        # self.exitGate.setPos(render, exitGate.getPos(render))
+        self.exitGate.setHpr(render, station.getHpr(render))
+        self.exitGate.setPos(render, station.getPos(render))
 
-        # #self.exitGate.setZ(0)
-
-        # self.exitGate.reparentTo(self.areaNode)
+        self.exitGate.reparentTo(self.areaNode)
 
         self.oII = Actor('models/oii')
         oIIAnim = self.oII.getAnimNames() # No animation added yet
         # print 'oII anim:', oIIAnim
+        self.oII.setPlayRate(0.5, oIIAnim)
         self.oII.loop(oIIAnim, fromFrame=0, toFrame=12)
 
         self.oII.setPos(ground.getPos(render))
@@ -242,10 +241,14 @@ class Map:
             if not player.areaTransitioning:
                 #print 'fire up area transition dialog'
                 player.areaTransitioning = True
+
+                self.exitGate.play(self.exitGateAnim, fromFrame=0, toFrame=12)
         else:
             if player.areaTransitioning:
                 #print 'close area transition dialog'
                 player.areaTransitioning = False
+
+                self.exitGate.play(self.exitGateAnim, fromFrame=13, toFrame=25)
 
         return task.again
 

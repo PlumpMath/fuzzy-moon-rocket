@@ -61,6 +61,6 @@ class DDA():
                     lastTwelveSecondsDamage = sum(player.damageHistory[-12:])
 
                     self.attackBonusModifier = (self.playerAverageHealthPerSecond - lastTwelveSecondsDamage) / 2
-                    print 'attackBonusModifier:', self.attackBonusModifier
+                    #print 'attackBonusModifier:', self.attackBonusModifier
 
         return task.again
