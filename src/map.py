@@ -173,6 +173,9 @@ class Map:
         self.oII.cleanup()
         self.oII.delete()
 
+        self.exitGate.cleanup()
+        self.exitGate.delete()
+
         # Remove nodes
         self.invertedSphere.removeNode()
         self.areaNode.removeNode()
