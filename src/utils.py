@@ -64,22 +64,21 @@ class MouseHandler():
         self.plane = Plane(Vec3(0, 0, 1), Point3(0, 0, 0))
 
         DO = DirectObject()
-        DO.accept('mouse1', self.onClick)
+        DO.accept('mouse1', self.onMouseDown)
         DO.accept('mouse1-up', self.onMouseUp)
 
         self.collisionHandler = CollisionHandlerQueue()
 
         self.pickerCollNode = CollisionNode('mouseRay')
         self.pickerNodePath = camera.attachNewNode(self.pickerCollNode)
-        self.pickerCollNode.setFromCollideMask(BitMask32.bit(1))
         self.pickerCollNode.setIntoCollideMask(BitMask32.allOff())
+        self.pickerCollNode.setFromCollideMask(BitMask32.bit(1))
         self.pickerRay = CollisionRay()
         self.pickerCollNode.addSolid(self.pickerRay)
         base.cTrav.addCollider(self.pickerNodePath, self.collisionHandler)
 
         taskMgr.add(self.moveTask, 'moveTask')
         taskMgr.add(self.attackTask, 'attackTask')
-        #taskMgr.doMethodLater(0.5, self.highlightExitGate, 'highlightExitGateTask')
 
     def moveTask(self, task):
         if base.mouseWatcherNode.hasMouse():
@@ -129,28 +128,7 @@ class MouseHandler():
 
         return task.cont
 
-    def highlightExitGate(self, task):
-        if base.mouseWatcherNode.hasMouse():
-            highlightGate = False
-
-            mousePos = base.mouseWatcherNode.getMouse()
-            self.pickerRay.setFromLens(base.camNode, mousePos.getX(), mousePos.getY())
-
-            if self.collisionHandler.getNumEntries() > 0:
-                self.collisionHandler.sortEntries()
-                for i in range(self.collisionHandler.getNumEntries()):
-                    entry = self.collisionHandler.getEntry(i).getIntoNodePath()
-                    entryName = entry.getName()
- 
-                    if entryName == 'exitGate' and not entry.isEmpty():
-                        highlightGate = True
-                        break;
-
-            self._mapHandlerRef.highlightExitGate(highlightGate)
-
-        return task.again
-
-    def onClick(self):
+    def onMouseDown(self):
         #print('click')
         if base.mouseWatcherNode.hasMouse():
             self._mouseDown = True
