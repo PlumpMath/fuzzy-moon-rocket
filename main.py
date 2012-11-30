@@ -1,6 +1,7 @@
 from panda3d.core import loadPrcFileData
 
 #loadPrcFileData('', 'fullscreen 1')
+loadPrcFileData('', 'compressed-textures 1')
 loadPrcFileData('', 'basic-shaders-only #f')
 loadPrcFileData('', 'win-size 1200 650')
 loadPrcFileData('', 'window-title Fuzzy Moon Rocket')
