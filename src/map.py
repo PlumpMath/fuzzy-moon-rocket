@@ -89,6 +89,9 @@ class Map:
         else:
             self._playerRef.initStartPosition(self.arrivalPos, self.exitPos)
 
+        # Debug
+        #self.areaModel.analyze()
+
     def loadArea(self, area):
         print('loadArea: ', area.modelName)
         # Save area attributes
@@ -109,25 +112,26 @@ class Map:
         # Everything should at default be non-collidable
         self.areaModel.setCollideMask(BitMask32.allOff())
 
-        # Make visual geometry collidable with certain objects (camera ray)
-        self.areaModel.find('**/geometry').setCollideMask(BitMask32.bit(4))
-
-        # The ground is the walk plane, it collides with mouse ray and player- and enemies ground rays
-        for ground in self.areaModel.findAllMatches('**/ground*'):
-            ground.setCollideMask(BitMask32.bit(1))
+        # Find the groups that we need and save a reference for quicker look up
+        self.areaGeometry = self.areaModel.find('**/geometry')
+        self.areaGameObjects = self.areaModel.find('**/game')
 
         # Colliders are obstacles in areas, they collide with enemies and the player
         self.collidersGroup = self.areaModel.find('**/colliders')
         self.collidersGroup.setCollideMask(BitMask32.bit(2))
 
+        # The ground is the walk plane, it collides with mouse ray and player- and enemies' ground rays
+        for ground in self.areaGeometry.findAllMatches('**/ground*'):
+            ground.setCollideMask(BitMask32.bit(1))
+
         # Locate starting and exiting positions
-        self.startPos = self.areaModel.find('**/startPos').getPos()
-        self.exitPos = self.areaModel.find('**/exitPos').getPos()
-        self.arrivalPos = self.areaModel.find('**/arrival').getPos()
+        self.startPos = self.areaGameObjects.find('**/startPos').getPos()
+        self.exitPos = self.areaGameObjects.find('**/exitPos').getPos()
+        self.arrivalPos = self.areaGameObjects.find('**/arrival').getPos()
 
         # Locate and save enemy spawn points
         self.spawnPointsDict = {}
-        for spawnPoint in self.areaModel.findAllMatches('**/spawnPoint*'):
+        for spawnPoint in self.areaGameObjects.findAllMatches('**/spawnPoint*'):
             self.spawnPointsDict[spawnPoint] = 1 # Activate spawn point
 
         # Initialize inverted sphere
@@ -220,7 +224,7 @@ class Map:
 #=============================================================
 #======== EXIT GATE ==========================================
     def initExitGate(self):
-        station = self.areaModel.find('**/station')
+        station = self.areaGeometry.find('**/station')
         exitGate = station.find('**/stationGate')
         ground = station.find('**/ground*')
 
@@ -270,7 +274,7 @@ class Map:
     def initLights(self):
         self.pointLightList = []
 
-        pointLightList = self.areaModel.findAllMatches('**/pLight*')
+        pointLightList = self.areaGameObjects.findAllMatches('**/pLight*') 
         if len(pointLightList) > 0:
             for i, plight in enumerate(pointLightList):
                 plightPos = plight.getPos()
@@ -280,11 +284,11 @@ class Map:
                 newPLightNode = self.areaNode.attachNewNode(newPLight)
                 newPLightNode.setPos(plightPos)
 
-                self.areaModel.find('**/ground').setLight(newPLightNode)
+                self.areaGeometry.find('**/ground').setLight(newPLightNode)
 
                 self.pointLightList.append(newPLightNode)
 
-                for obj in self.areaModel.find('**/geometry').getChildren():
+                for obj in self.areaGeometry.getChildren():
                     self.applyPointLightToObj(newPLightNode, obj)
 
         taskMgr.doMethodLater(1, self.updatePlayerLights, 'updatePlayerLightsTask')
@@ -301,7 +305,7 @@ class Map:
 
     def clearAllPointLights(self):
         for pLight in self.pointLightList:
-            for obj in self.areaModel.find('**/geometry').getChildren():
+            for obj in self.areaGeometry.getChildren():
                 self.removePointLightFromObj(pLight, obj)
 
             pLight.removeNode()
