@@ -4,6 +4,7 @@ import jsondate as json
 from direct.gui.DirectGui import DirectFrame, DirectButton, DirectLabel, DirectRadioButton, DirectEntry
 
 class GUI(object):
+    _BASE_URL = 'http://localhost:5001/api'
     _CHOICES = {0: 'Disagree strongly', 1: 'Disagree moderately', 2: 'Disagree a little',
                3: 'Neither agree nor disagree', 4: 'Agree a little', 5: 'Agree moderately',
                6: 'Agree strongly'}
@@ -19,6 +20,9 @@ class GUI(object):
         print("GUI class instantiated")
         taskMgr.add(self.recordTime, 'RecordTimeTask')
 
+        self.questions = requests.get('{}/question'.format(self._BASE_URL))
+        self.questions_dict = self.extract_questions()
+
         self.startTime = time.time()
         #print("startTime : " + str(self.startTime))
 
@@ -27,14 +31,28 @@ class GUI(object):
         DirectLabel(text=r.headers['date'], scale=0.09, hpr=(0, 0, 0),
                     pos=(0, 0, 0.7), frameColor=(0, 0, 0, 0))
 
-        # Right now this is just a pile of mess :)
-        r = requests.get('http://localhost:5001/api/question')
-        print r
-        # print r.text
-        print r.status_code
-        print type(r.status_code)
-        r_dict = json.loads(r.text)
-        json.loads(r.text)['objects']
+    def get_last_scenario(self):
+        all_participants = requests.get('{}/participant'.format(self._BASE_URL))
+        # getting the total number of participants allows us to find the latest one
+        number_of_participants = json.loads(self.all_participants.text)['num_results']
+        # then we can get that participants scenario
+        p = requests.get('{}/participant/{}'.format(self._BASE_URL, number_of_participants))
+        return json.loads(p.text)['scenario']
+
+    def create_user(self):
+        """This method must be called after get_last_scenario()"""
+        # uuid needs to be generated
+        scenario = 1 if self.get_last_scenario() == 0 else 0
+        # post the user to database
+
+    def save_answer(self, question_id, answer):
+        """question_id is a string or int of the question
+           answer is the user's answer as a string
+        """
+        pass
+
+    def extract_questions(self):
+        return json.loads(self.questions.text)['objects']
 
     def recordTime(self, task):
         self.currentTime = time.time()
