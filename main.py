@@ -15,7 +15,7 @@ from direct.task import Task
 from panda3d.ai import *
 import sys
 
-from src import utils, player, enemy, gui, hud, map, states, dda, scenario, database
+from src import utils, player, enemy, gui, hud, map, states, dda, scenario
 
 class World(ShowBase):
 
@@ -52,7 +52,7 @@ class World(ShowBase):
         # Instantiate other classes
         #self.databaseHandler = database.DatabaseHandler()
         self.scenarioHandler = scenario.ScenarioHandler()
-        
+
         self.DDAHandler = dda.DDA(self)
 
         self.stateHandler = states.StateHandler()
@@ -95,7 +95,7 @@ class World(ShowBase):
 
     def zoomOut(self): # key 3
         scale = 2
-        
+
         if self.player.stopCamera:
             self.player.stopCamera = False
 
