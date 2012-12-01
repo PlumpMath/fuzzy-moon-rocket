@@ -417,7 +417,8 @@ class Player(FSM, Unit):
                     break;
 
     def updateCameraPosition(self):
-        base.camera.setPos(self.playerNode, (0, self._cameraYModifier, self._cameraZModifier))
+        pos = self.playerNode.getPos()
+        base.camera.setPos(pos.getX(), pos.getY() + self._cameraYModifier, pos.getZ() + self._cameraZModifier)
 
     def updatePlayerPosition(self, deltaTime):
         #print('updatePlayerPosition')
@@ -457,10 +458,6 @@ class Player(FSM, Unit):
             return task.cont
 
         self.updatePlayerPosition(globalClock.getDt())
-
-        base.camera.setFluidPos(self.playerNode.getX(),
-                       self.playerNode.getY() + self._cameraYModifier,
-                       self.playerNode.getZ() + self._cameraZModifier)
 
         return task.cont
 
