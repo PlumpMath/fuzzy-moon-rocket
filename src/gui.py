@@ -3,6 +3,8 @@ import requests
 import jsondate as json
 from direct.gui.DirectGui import DirectFrame, DirectButton, DirectLabel, DirectRadioButton, DirectEntry
 
+import utils
+
 class GUI(object):
     _BASE_URL = 'http://localhost:5001/api'
     _CHOICES = {0: 'Disagree strongly', 1: 'Disagree moderately', 2: 'Disagree a little',
@@ -16,15 +18,15 @@ class GUI(object):
     _rButtonFrame = None
     done = False
 
-    def __init__(self):
+    def __init__(self, mainRef):
         print("GUI class instantiated")
-        taskMgr.add(self.recordTime, 'RecordTimeTask')
+        self._stateHandlerRef = mainRef.stateHandler
 
+        #self.initializeGUI()
+
+    def initializeGUI(self):
         self.questions = requests.get('{}/question'.format(self._BASE_URL))
         self.questions_dict = self.extract_questions()
-
-        self.startTime = time.time()
-        #print("startTime : " + str(self.startTime))
 
         # just to test that HTTP requests are working
         r = requests.get('http://api.github.com/users/octocat/orgs')
@@ -32,18 +34,21 @@ class GUI(object):
                     pos=(0, 0, 0.7), frameColor=(0, 0, 0, 0))
 
     def get_last_scenario(self):
-        all_participants = requests.get('{}/participant'.format(self._BASE_URL))
-        # getting the total number of participants allows us to find the latest one
-        number_of_participants = json.loads(self.all_participants.text)['num_results']
-        # then we can get that participants scenario
-        p = requests.get('{}/participant/{}'.format(self._BASE_URL, number_of_participants))
-        return json.loads(p.text)['scenario']
+        # all_participants = requests.get('{}/participant'.format(self._BASE_URL))
+        # # getting the total number of participants allows us to find the latest one
+        # number_of_participants = json.loads(self.all_participants.text)['num_results']
+        # # then we can get that participant's scenario
+        # p = requests.get('{}/participant/{}'.format(self._BASE_URL, number_of_participants))
+        # return json.loads(p.text)['scenario']
+        return utils.getDX(1)
 
     def create_user(self):
         """This method must be called after get_last_scenario()"""
         # uuid needs to be generated
         scenario = 1 if self.get_last_scenario() == 0 else 0
         # post the user to database
+
+        return scenario
 
     def save_answer(self, question_id, answer):
         """question_id is a string or int of the question
@@ -52,14 +57,8 @@ class GUI(object):
         pass
 
     def extract_questions(self):
-        return json.loads(self.questions.text)['objects']
-
-    def recordTime(self, task):
-        self.currentTime = time.time()
-        self.elapsedSeconds = self.currentTime - self.startTime
-        #print("elapsedSeconds: " + str(self.elapsedSeconds))
-
-        return task.cont
+        #return json.loads(self.questions.text)['objects']
+        return ''
 
     def toggleOverlayFrame(self):
         if self._overlayVisible:
@@ -79,10 +78,10 @@ class GUI(object):
 
     def build_likert_question(self):
         self._buttons = []
-        for i, label in enumerate(self._LABELS):
+        for i, label in enumerate(self._CHOICES):
             xPos = ((i * 40) / 100.0) - 0.6
             yPos = 0.2
-            print 'static + offset', xPos, yPos
+            #print 'static + offset', xPos, yPos
 
             self._buttonLabels.append(
                 DirectLabel(

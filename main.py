@@ -50,18 +50,16 @@ class World(ShowBase):
         self.initAI()
 
         # Instantiate other classes
-        #self.databaseHandler = database.DatabaseHandler()
-        self.scenarioHandler = scenario.ScenarioHandler()
+        self.stateHandler = states.StateHandler()
+        self.gui = gui.GUI(self)
+        self.scenarioHandler = scenario.ScenarioHandler(self)
 
         self.DDAHandler = dda.DDA(self)
-
-        self.stateHandler = states.StateHandler()
 
         self.mapHandler = map.Map(self)
 
         self.player = player.Player(self)
 
-        #self.gui = gui.GUI()
         self.hud = hud.HUD(self.player)
 
         # Add keyboard commands
@@ -73,7 +71,7 @@ class World(ShowBase):
     # Start of debugging implementation
 
         if debug:
-            #self.accept('shift-o', self.gui.toggleOverlayFrame)
+            self.accept('shift-o', self.gui.toggleOverlayFrame)
             self.accept('shift-1', self.damagePlayer)
             self.accept('shift-2', self.killEnemy)
             self.accept('shift-3', self.zoomOut)
