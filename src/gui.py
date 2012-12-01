@@ -62,7 +62,6 @@ class GUI(object):
     def build_likert_question(self):
         self._buttons = []
         for i, label in enumerate(self._LABELS):
-            print 'len', xPos, yPos
             xPos = ((i * 40) / 100.0) - 0.6
             yPos = 0.2
             print 'static + offset', xPos, yPos
