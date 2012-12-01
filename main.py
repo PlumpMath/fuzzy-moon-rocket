@@ -1,8 +1,8 @@
 from panda3d.core import loadPrcFileData
 
 #loadPrcFileData('', 'fullscreen 1')
-loadPrcFileData('', 'compressed-textures 1')
-loadPrcFileData('', 'basic-shaders-only #f')
+#loadPrcFileData('', 'compressed-textures 1')
+#loadPrcFileData('', 'basic-shaders-only #f')
 loadPrcFileData('', 'win-size 1200 650')
 loadPrcFileData('', 'window-title Fuzzy Moon Rocket')
 #loadPrcFileData('', 'undecorated 1')
@@ -60,7 +60,7 @@ class World(ShowBase):
 
         self.player = player.Player(self)
 
-        self.hud = hud.HUD(self.player)
+        self.hud = hud.HUD(self)
 
         # Add keyboard commands
         self.accept('escape', self.endGame)

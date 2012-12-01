@@ -1,7 +1,7 @@
 import time
 import requests
 import jsondate as json
-from direct.gui.DirectGui import DirectFrame, DirectButton, DirectLabel, DirectRadioButton, DirectEntry
+from direct.gui.DirectGui import *
 
 import utils
 
@@ -11,11 +11,11 @@ class GUI(object):
                3: 'Neither agree nor disagree', 4: 'Agree a little', 5: 'Agree moderately',
                6: 'Agree strongly'}
     _rButtonValue = [0]
-    _overlayFrame = None
+#    _overlayFrame = None
     _overlayVisible = False
     _buttons = []
     _buttonLabels = []
-    _rButtonFrame = None
+ #   _rButtonFrame = None
     done = False
 
     def __init__(self, mainRef):
@@ -61,23 +61,46 @@ class GUI(object):
         return ''
 
     def toggleOverlayFrame(self):
+        states = self._stateHandlerRef
+
         if self._overlayVisible:
             print "Toggle off"
-            self._overlayFrame.destroy()
+            #self._overlayFrame.destroy()
+            self.onQuestionsDone()
             self._overlayVisible = False
+
+            if states.state == states.BEFORE or states.state == states.DURING:
+                states.request(states.PLAY)
+            elif states.state == states.AFTER:
+                states.request(states.PLAY) # Change
         else:
             print "Toggle on"
-            self._overlayFrame = DirectFrame(frameColor=(1, 1, 1, 1),
-                                             # (Left,Right,Bottom,Top)
-                                             frameSize=(-1.4, 1.4, 1, -1),
-                                             pos=(0, 0, 0))
-            self._rButtonFrame = DirectFrame(
-                parent=self._overlayFrame, pos=(-0.5, 0, 0.2))
-            self.build_likert_question()
+            self.initializeOverlayFrame()
             self._overlayVisible = True
 
-    def build_likert_question(self):
-        self._buttons = []
+            if states.state == states.PLAY:
+                states.request(states.PAUSE)
+
+
+    def initializeOverlayFrame(self):
+        self.overlayFrame = DirectScrolledFrame(canvasSize=(-1,1, -1,1), 
+                                                frameSize=(-1,1, -1,1),
+                                                pos=(0,1, 0),
+                                                manageScrollBars=True, 
+                                                autoHideScrollBars=True) 
+        # self.buttonFrame = DirectFrame(parent=self.overlayFrame.getCanvas(), 
+        #                                 pos=(-.5, 0, 0))
+        self.doneButton = DirectButton(parent=self.overlayFrame.getCanvas(), 
+                                        pos=(.9, 0, -.9),
+                                        scale=0.05,
+                                        pad=(.2,.2, .2,.2),
+                                        text=('Done'),
+                                        pressEffect=1,
+                                        command=self.onQuestionsDone)
+
+
+    def build_likert_question(self, buttonFrame):
+        self.buttons = []
         for i, label in enumerate(self._CHOICES):
             xPos = ((i * 40) / 100.0) - 0.6
             yPos = 0.2
@@ -85,26 +108,27 @@ class GUI(object):
 
             self._buttonLabels.append(
                 DirectLabel(
-                    parent=self._rButtonFrame, text=label, scale=0.05,
+                    parent=self.buttonFrame, text=label, scale=0.05,
                     pos=(xPos, 0, yPos), frameColor=(0, 0, 0, 0),
                     text_wordwrap=7))
-            self._buttons.append(
+            self.buttons.append(
                 DirectRadioButton(
-                    parent=self._rButtonFrame, pos=(xPos, 0, 0),
+                    parent=self.buttonFrame, pos=(xPos, 0, 0),
                     variable=self._rButtonValue, value=[i], scale=0.05,
                     frameColor=(1, 1, 1, 0), indicatorValue=0))
 
-        for button in self._buttons:
-            button.setOthers(self._buttons)
+        for button in self.buttons:
+            button.setOthers(self.buttons)
 
-    def build_text_question(self, question_dict):  # , xPos, yPos):
-        xPos = 0
-        yPos = 0.2
+    def build_text_question(self, question_dict, textFrame):
         numLines = 5 if question_dict['type'] == 3 else 1  # type == 3 is essay Qs
 
-        DirectLabel(parent=self._rButtonFrame, text=question_dict['question'],
-                    scale=0.05, pos=(xPos, 0, yPos), frameColor=(0, 0, 0, 0),
+        DirectLabel(parent=textFrame, text=question_dict['question'],
+                    scale=0.05, pos=(-.3, 0, 0), frameColor=(0, 0, 0, 0),
                     text_wordwrap=20)
 
-        DirectEntry(text="", scale=.07, command=None,
-                    initialText="", numLines=numLines, focus=1)
+        DirectEntry(parent=textFrame, text="", scale=.07, command=None,
+                    pos=(-.3, 0, .3), initialText="", numLines=numLines, focus=1)
+
+    def onQuestionsDone(self):
+        self.overlayFrame.destroy()

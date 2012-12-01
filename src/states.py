@@ -4,6 +4,7 @@ from direct.fsm.FSM import FSM
 
 class StateHandler(FSM):
 
+    LOADING = 'Loading'
     BEFORE = 'Before'
     PLAY ='Play'
     PAUSE ='Pause'
