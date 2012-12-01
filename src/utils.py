@@ -129,14 +129,14 @@ class MouseHandler():
         return task.cont
 
     def onMouseDown(self):
-        #print('click')
         if base.mouseWatcherNode.hasMouse():
+            #print 'mouseDown'
             self._mouseDown = True
 
             mousePos = base.mouseWatcherNode.getMouse()
             self.pickerRay.setFromLens(base.camNode, mousePos.getX(), mousePos.getY())
 
     def onMouseUp(self):
-        #print('mouseUp')
+        #print 'mouseUp'
         self._mouseDown = False
 

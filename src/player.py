@@ -49,6 +49,23 @@ class Player(FSM, Unit):
         # Initialize player FSM state
         self.request('Idle')
 
+        DO = DirectObject()
+        DO.accept('shift-mouse1', self.onShiftDown)
+        DO.accept('shift-up', self.onShiftUp)
+
+        self._shiftButtonDown = False
+
+    def onShiftDown(self):
+        self._shiftButtonDown = True
+
+        attackDelay = self.getInitiativeRoll()
+        taskMgr.doMethodLater(attackDelay, self.shiftAttack, 'shiftAttackTask')
+
+    def onShiftUp(self):
+        self._shiftButtonDown = False
+
+        taskMgr.remove('shiftAttackTask')
+
 #----------------------------- INITIALIZATION ---------------------------------#
     def initPlayerAttributes(self):
         # Initialize player attributes
@@ -420,27 +437,30 @@ class Player(FSM, Unit):
         base.camera.setPos(self.playerNode, (0, self._cameraYModifier, self._cameraZModifier))
 
     def updatePlayerPosition(self, deltaTime):
-        #print('updatePlayerPosition')
-        newX = self.playerNode.getX() + self.velocity.getX() * deltaTime
-        newY = self.playerNode.getY() + self.velocity.getY() * deltaTime
-        newZ = self.playerNode.getZ()
+        if not self._shiftButtonDown:
+            #print('updatePlayerPosition')
+            newX = self.playerNode.getX() + self.velocity.getX() * deltaTime
+            newY = self.playerNode.getY() + self.velocity.getY() * deltaTime
+            newZ = self.playerNode.getZ()
 
-        self.playerNode.setFluidPos(newX, newY, newZ)
+            self.playerNode.setFluidPos(newX, newY, newZ)
 
-        self.velocity = self.destination - self.playerNode.getPos()
-        #print('distance to dest: ', self.velocity.lengthSquared())
+            self.velocity = self.destination - self.playerNode.getPos()
+            #print('distance to dest: ', self.velocity.lengthSquared())
 
-        if self.velocity.lengthSquared() < .1:
-            self.velocity = Vec3.zero()
+            if self.velocity.lengthSquared() < .1:
+                self.velocity = Vec3.zero()
 
-            if self.state == 'Run':
-                self.request('Idle')
+                if self.state == 'Run':
+                    self.request('Idle')
+            else:
+                self.velocity.normalize()
+                self.velocity *= self.movementSpeed
+
+                if self.state != 'Run':
+                    self.request('Run')
         else:
-            self.velocity.normalize()
-            self.velocity *= self.movementSpeed
-
-            if self.state != 'Run':
-                self.request('Run')
+            self.destination = self.playerNode.getPos()
 
     def playerUpdate(self, task):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
@@ -487,9 +507,73 @@ class Player(FSM, Unit):
             self.damageReceived += damageAmount
 
 #------------------------------- COMBAT ------------------------------#
+    def shiftAttack(self, task):
+        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
+            return task.done
+
+        #print 'shiftAttack. shift:', self._shiftButtonDown
+
+        if self._shiftButtonDown and base.mouseWatcherNode.hasMouse(): 
+            #print 'attack!'
+            self.playerModel.play('attack')
+
+            self.plane = Plane(Vec3(0, 0, 1), Point3(0, 0, 0))
+            mousePos = base.mouseWatcherNode.getMouse()
+
+            pos3d = Point3()
+            nearPoint = Point3()
+            farPoint = Point3()
+
+            base.camLens.extrude(mousePos, nearPoint, farPoint)
+            if self.plane.intersectsLine(pos3d, 
+                        base.render.getRelativePoint(camera, nearPoint),
+                        base.render.getRelativePoint(camera, farPoint)):
+                #print('Mouse ray intersects ground at ', pos3d)
+                destination = pos3d
+
+            pitchRoll = self.playerNode.getP(), self.playerNode.getR()
+            self.playerNode.headsUp(destination)
+            self.playerNode.setHpr(self.playerNode.getH(), *pitchRoll)
+
+            numEntries = self.attackCollisionHandler.getNumEntries()
+            if numEntries > 0:
+                self.attackCollisionHandler.sortEntries()
+                bAttacked = 0
+
+                for i in range(numEntries):
+                    entry = self.attackCollisionHandler.getEntry(i).getIntoNode()
+                    entryName = entry.getName()[:-6]
+                    #print('entryFound:', entryName)
+
+                    enemy = utils.enemyDictionary[entryName]
+                    if enemy is not None and not enemy.getIsDead():
+                        if utils.getIsInRange(self.playerNode.getPos(), enemy.enemyNode.getPos(), self.combatRange):
+                            bAttacked = self.attack(enemy) # Returns 1 if player attacked but did not hit, returns 2 on hit
+
+                if bAttacked != 0:
+                    #print('attackEnemies')
+
+                    for i in range(numEntries):
+                        enemyTargetName = self.attackCollisionHandler.getEntry(i).getIntoNode().getName()[:-6]
+                        enemyTarget = utils.enemyDictionary[enemyTargetName]
+
+                        if enemyTarget is not None and not enemyTarget.getIsDead():
+                            self.setCurrentTarget(enemyTarget)
+                            break;
+            
+            return task.again
+        else:
+            self.playerModel.stop()
+
+            return task.done
+
+
     def attackEnemies(self, task):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             return task.done
+
+        if self._shiftButtonDown:
+            return task.again
 
         numEntries = self.attackCollisionHandler.getNumEntries()
         if numEntries > 0:
