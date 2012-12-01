@@ -50,6 +50,12 @@ class GUI(object):
 
         return scenario
 
+    def getWantsToContinue(self):
+        '''This method returns the user's last 'I want to continue playing' answer
+            to be used to evaluate whether to return to Play state (again) or not
+        '''
+        return True
+
     def save_answer(self, question_id, answer):
         """question_id is a string or int of the question
            answer is the user's answer as a string
@@ -61,29 +67,21 @@ class GUI(object):
         return ''
 
     def toggleOverlayFrame(self):
-        states = self._stateHandlerRef
-
         if self._overlayVisible:
             print "Toggle off"
-            #self._overlayFrame.destroy()
             self.onQuestionsDone()
             self._overlayVisible = False
-
-            if states.state == states.BEFORE or states.state == states.DURING:
-                states.request(states.PLAY)
-            elif states.state == states.AFTER:
-                states.request(states.PLAY) # Change
         else:
             print "Toggle on"
             self.initializeOverlayFrame()
             self._overlayVisible = True
 
+            states = self._stateHandlerRef
             if states.state == states.PLAY:
-                states.request(states.PAUSE)
-
+                states.request(states.DURING)
 
     def initializeOverlayFrame(self):
-        self.overlayFrame = DirectScrolledFrame(canvasSize=(-1,1, -1,1), 
+        self.overlayFrame = DirectScrolledFrame(canvasSize=(-1.1,1.1, -1.1,1.1), 
                                                 frameSize=(-1,1, -1,1),
                                                 pos=(0,1, 0),
                                                 manageScrollBars=True, 
@@ -132,3 +130,11 @@ class GUI(object):
 
     def onQuestionsDone(self):
         self.overlayFrame.destroy()
+
+        states = self._stateHandlerRef
+        if states.state == states.BEFORE:
+            states.request(states.PLAY)
+        elif states.state == states.DURING and self.getWantsToContinue():
+            states.request(states.PLAY) # Change
+        else:
+            print 'End game'
