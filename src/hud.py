@@ -62,24 +62,28 @@ class HUD:
             self._showingStats = True
 
             self.myFrame = DirectFrame(
-                                                    frameColor=(1, 1, 1, 1),
-                                                    frameSize=(-0.5, 0.5, -0.5, 0.5),
-                                                    pos=(1.0, -0.5, 0.0)
-                                                    )
+                                    frameColor=(1, 1, 1, 1),
+                                    frameSize=(-0.5, 0.5, -0.5, 0.5),
+                                    pos=(1.0, -0.5, 0.0),
+                                    frameTexture='gui/Stats_Window.png'
+                                    )
 
             self.closeButton = DirectButton(
-                                                     text='x',
-                                                     pos=(.3, 0, .45),
-                                                     scale=.05,
-                                                     parent=self.myFrame,
-                                                     command=self.exitStats)
+                                         text='x',
+                                         pos=(.4, 0, .4),
+                                         scale=.05,
+                                         parent=self.myFrame,
+                                         command=self.exitStats)
 
             def addStats(pos, text):
                     return OnscreenText(text=text,
-                                                            pos=(-0.4, pos),
-                                                            scale=0.05,
-                                                            parent=self.myFrame,
-                                                            align=TextNode.ALeft)  
+                                        pos=(-0.4, pos),
+                                        fg=(.5, .1, .1, 1),
+                                        bg=(.1, .5, .5, .25), # Tweak bg and fg to make text easily readable
+                                        shadow=(0, 0, 0, 1),
+                                        scale=0.05,
+                                        parent=self.myFrame,
+                                        align=TextNode.ALeft)
 
             addStats(0.4, 'Strength: ' + str(self._playerRef.strength))
             addStats(0.3, 'Constitution: ' + str(self._playerRef.constitution))
@@ -175,35 +179,46 @@ class HUD:
         self.expBarLvlText.setText('Level ' + str(self._playerRef.level))
 
     def initPlayerAbilityBar(self):
-        self.abilityBar = DirectFrame(frameColor=(0.2, 0.2, 0.8, 1.0),
+        self.abilityBar = DirectFrame(frameColor=(0.7, 0.7, 0.7, 1.0),
                                             pos=(0, 0, -0.95),
                                             pad=(0.4, 0.075))
 
-        self.offensiveAbilityButton = DirectButton(text=('Off'),
+        scale=.05
+        imageUpModifier = .33
+
+        self.offensiveAbilityButton = DirectButton(text=(''),
                                                 parent=self.abilityBar,
-                                                scale=0.075,
+                                                scale=scale,
                                                 pos=(-0.3, 0, -0.01),
+                                                image='gui/Bullrush_white.png',
+                                                image_pos=(0, 0, imageUpModifier),
                                                 command=self._playerRef.fireAbility,
                                                 extraArgs=[1])
 
-        self.defensiveAbilityButton = DirectButton(text=('Def'),
+        self.defensiveAbilityButton = DirectButton(text=(''),
                                                  parent=self.abilityBar,
-                                                 scale=0.075,
+                                                 scale=scale,
                                                  pos=(-0.1, 0, -0.01),
+                                                 image='gui/Unstoppable.png',
+                                                 image_pos=(0, 0, imageUpModifier),
                                                  command=self._playerRef.fireAbility,
                                                  extraArgs=[2])
 
-        self.evasiveAbilityButton = DirectButton(text=('Eva'),
+        self.evasiveAbilityButton = DirectButton(text=(''),
                                                  parent=self.abilityBar,
-                                                 scale=0.075,
+                                                 scale=scale,
                                                  pos=(0.1, 0, -0.01),
+                                                 image='gui/Thicket_of_blades.png',
+                                                 image_pos=(0, 0, imageUpModifier),
                                                  command=self._playerRef.fireAbility,
                                                  extraArgs=[3])
 
-        self.aoeAbilityButton = DirectButton(text=('AoE'),
+        self.aoeAbilityButton = DirectButton(text=(''),
                                              parent=self.abilityBar,
-                                             scale=0.075,
+                                             scale=scale,
                                              pos=(0.3, 0, -0.01),
+                                             image='gui/Shift_the_battlefield.png',
+                                             image_pos=(0, 0, imageUpModifier),
                                              command=self._playerRef.fireAbility,
                                              extraArgs=[4])
     def initQuestButton(self):
@@ -222,7 +237,8 @@ class HUD:
             self.myFrame2 = DirectFrame(
                                 frameColor=(1, 1, 1, 1),
                                 frameSize=(-0.2, 0.2, -0.2, 0.2),
-                                pos=(-1.5, -0.5, 0.0)
+                                pos=(-1.5, -0.5, 0.0),
+                                frameTexture='gui/Quest_Window.png'
                                 )
 
             self.closeButton = DirectButton(
