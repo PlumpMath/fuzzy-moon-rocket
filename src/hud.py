@@ -12,9 +12,7 @@ class HUD:
         print("HUD class instantiated")
 
         self._playerRef = playerRef
-
-       
-
+        
         self.gameText = OnscreenText(
                                 text="Fuzzy Moon Rocket",
                                 pos=(1.5, 0.9), 
