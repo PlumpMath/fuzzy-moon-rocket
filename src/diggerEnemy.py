@@ -44,7 +44,6 @@ class Digger(enemy.Enemy):
                 'death3':modelPrefix+'death3'
             })
         self.enemyModel.reparentTo(self.enemyNode)
-        #self.enemyModel.setH(-180)
 
         self.enemyNode.setPos(Point3.zero())
 
@@ -67,7 +66,7 @@ class Digger(enemy.Enemy):
         loopWalkEnemy = Func(self.enemyModel.loop, 'pursue')
 
         # Only awake enemy if it comes from idle
-        if self.isSleeping: 
+        if self.isSleeping:
             self.isSleeping = False
 
             awakeEnemy = self.enemyModel.actorInterval('idle-walk-to-pursue', loop=0)
@@ -97,9 +96,11 @@ class Digger(enemy.Enemy):
                                     {'anim':'models/hole-anim'})
             self.holeModel.reparentTo(self._mainRef.mainNode)
 
+            self.holeModel.setPlayRate(.5, 'anim')
             self.holeModel.play('anim')
 
-            self.holeModel.setPos(self.enemyNode.getPos(render))
+            pos = self.enemyNode.getPos(render)
+            self.holeModel.setPos(pos.getX(), pos.getY()+.5, pos.getZ()+.01)
 
             removeHoleDelay = 6
             taskMgr.doMethodLater(removeHoleDelay, self.removeHole, 'removeHoleTask')
