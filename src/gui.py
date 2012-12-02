@@ -7,7 +7,7 @@ import utils
 
 
 class GUI(object):
-    _BASE_URL = 'http://localhost:5001/api'
+    _BASE_URL = 'http://fmr-api-507.herokuapp.com/api'
     _CHOICES = {
         0: 'Disagree strongly', 1: 'Disagree moderately', 2: 'Disagree a little',
         3: 'Neither agree nor disagree', 4: 'Agree a little', 5: 'Agree moderately',
@@ -36,13 +36,12 @@ class GUI(object):
                     pos=(0, 0, 0.7), frameColor=(0, 0, 0, 0))
 
     def get_last_scenario(self):
-        # all_participants = requests.get('{}/participant'.format(self._BASE_URL))
-        # # getting the total number of participants allows us to find the latest one
-        # number_of_participants = json.loads(self.all_participants.text)['num_results']
-        # # then we can get that participant's scenario
-        # p = requests.get('{}/participant/{}'.format(self._BASE_URL, number_of_participants))
-        # return json.loads(p.text)['scenario']
-        return utils.getDX(1)
+        all_participants = requests.get('{}/participant'.format(self._BASE_URL))
+        # getting the total number of participants allows us to find the latest one
+        number_of_participants = json.loads(self.all_participants.text)['num_results']
+        # then we can get that participant's scenario
+        p = requests.get('{}/participant/{}'.format(self._BASE_URL, number_of_participants))
+        return json.loads(p.text)['scenario']
 
     def create_user(self):
         """This method must be called after get_last_scenario()"""
@@ -65,8 +64,7 @@ class GUI(object):
         pass
 
     def extract_questions(self):
-        # return json.loads(self.questions.text)['objects']
-        return ''
+        return json.loads(self.questions.text)['objects']
 
     def toggleOverlayFrame(self):
         if self._overlayVisible:
