@@ -50,17 +50,16 @@ class World(ShowBase):
         self.initAI()
 
         # Instantiate other classes
-        self.scenarioHandler = scenario.ScenarioHandler()
+        self.stateHandler = states.StateHandler()
+        self.gui = gui.GUI(self)
+        self.scenarioHandler = scenario.ScenarioHandler(self)
 
         self.DDAHandler = dda.DDA(self)
-
-        self.stateHandler = states.StateHandler()
 
         self.mapHandler = map.Map(self)
 
         self.player = player.Player(self)
 
-        #self.gui = gui.GUI()
         self.hud = hud.HUD(self.player)
 
         # Add keyboard commands
