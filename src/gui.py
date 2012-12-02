@@ -5,24 +5,26 @@ from direct.gui.DirectGui import *
 
 import utils
 
+
 class GUI(object):
     _BASE_URL = 'http://localhost:5001/api'
-    _CHOICES = {0: 'Disagree strongly', 1: 'Disagree moderately', 2: 'Disagree a little',
-               3: 'Neither agree nor disagree', 4: 'Agree a little', 5: 'Agree moderately',
-               6: 'Agree strongly'}
+    _CHOICES = {
+        0: 'Disagree strongly', 1: 'Disagree moderately', 2: 'Disagree a little',
+        3: 'Neither agree nor disagree', 4: 'Agree a little', 5: 'Agree moderately',
+        6: 'Agree strongly'}
     _rButtonValue = [0]
-#    _overlayFrame = None
+    # _overlayFrame = None
     _overlayVisible = False
     _buttons = []
     _buttonLabels = []
- #   _rButtonFrame = None
+    # _rButtonFrame = None
     done = False
 
     def __init__(self, mainRef):
         print("GUI class instantiated")
         self._stateHandlerRef = mainRef.stateHandler
 
-        #self.initializeGUI()
+        # self.initializeGUI()
 
     def initializeGUI(self):
         self.questions = requests.get('{}/question'.format(self._BASE_URL))
@@ -63,7 +65,7 @@ class GUI(object):
         pass
 
     def extract_questions(self):
-        #return json.loads(self.questions.text)['objects']
+        # return json.loads(self.questions.text)['objects']
         return ''
 
     def toggleOverlayFrame(self):
@@ -81,28 +83,31 @@ class GUI(object):
                 states.request(states.DURING)
 
     def initializeOverlayFrame(self):
-        self.overlayFrame = DirectScrolledFrame(canvasSize=(-1.1,1.1, -1.1,1.1), 
-                                                frameSize=(-1,1, -1,1),
-                                                pos=(0,1, 0),
-                                                manageScrollBars=True, 
-                                                autoHideScrollBars=True) 
-        # self.buttonFrame = DirectFrame(parent=self.overlayFrame.getCanvas(), 
+        self.overlayFrame = DirectScrolledFrame(
+            canvasSize=(-1.1, 1.1, -1.1, 1.1),
+            frameSize=(-1, 1, -1, 1),
+            pos=(0, 1, 0),
+            manageScrollBars=True,
+            autoHideScrollBars=True)
+        # self.buttonFrame = DirectFrame(parent=self.overlayFrame.getCanvas(),
         #                                 pos=(-.5, 0, 0))
-        self.doneButton = DirectButton(parent=self.overlayFrame.getCanvas(), 
-                                        pos=(.9, 0, -.9),
-                                        scale=0.05,
-                                        pad=(.2,.2, .2,.2),
-                                        text=('Done'),
-                                        pressEffect=1,
-                                        command=self.onQuestionsDone)
-
+        self.doneButton = DirectButton(parent=self.overlayFrame.getCanvas(),
+                                       pos=(.9, 0, -.9),
+                                       scale=0.05,
+                                       pad=(.2, .2, .2, .2),
+                                       text=('Done'),
+                                       pressEffect=1,
+                                       command=self.onQuestionsDone)
 
     def build_likert_question(self, buttonFrame):
         self.buttons = []
+        DirectLabel(parent=textFrame, text=question_dict['question'],
+                    scale=0.05, pos=(-.3, 0, 0), frameColor=(0, 0, 0, 0),
+                    text_wordwrap=20)
         for i, label in enumerate(self._CHOICES):
             xPos = ((i * 40) / 100.0) - 0.6
             yPos = 0.2
-            #print 'static + offset', xPos, yPos
+            # print 'static + offset', xPos, yPos
 
             self._buttonLabels.append(
                 DirectLabel(
@@ -119,7 +124,8 @@ class GUI(object):
             button.setOthers(self.buttons)
 
     def build_text_question(self, question_dict, textFrame):
-        numLines = 5 if question_dict['type'] == 3 else 1  # type == 3 is essay Qs
+        numLines = 5 if question_dict[
+            'type'] == 3 else 1  # type == 3 is essay Qs
 
         DirectLabel(parent=textFrame, text=question_dict['question'],
                     scale=0.05, pos=(-.3, 0, 0), frameColor=(0, 0, 0, 0),
@@ -135,6 +141,6 @@ class GUI(object):
         if states.state == states.BEFORE:
             states.request(states.PLAY)
         elif states.state == states.DURING and self.getWantsToContinue():
-            states.request(states.PLAY) # Change
+            states.request(states.PLAY)  # Change
         else:
             print 'End game'
