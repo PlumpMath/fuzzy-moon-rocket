@@ -8,16 +8,14 @@ import player
 
 class HUD:
 
-    def __init__(self, mainRef):
+    def __init__(self, playerRef):
         print("HUD class instantiated")
 
-        self._playerRef = mainRef.player
-        self._stateHandlerRef = mainRef.stateHandler
-       
+        self._playerRef = playerRef
 
         self.gameText = OnscreenText(
                                 text="Fuzzy Moon Rocket",
-                                pos=(1.5, 0.9), 
+                                pos=(1.5, 0.9),
                                 bg=(0.25, 0.25, 0.25, 1),
                                 shadow=(.1, .1, .1, 1))
 
@@ -40,12 +38,20 @@ class HUD:
                                     scale = 0.5)
         self.targetBar.hide()
 
+    def updateTargetBar(self):
+        currentTarget = self._playerRef.getCurrentTarget()
+        if not currentTarget is None and not currentTarget.getIsDead():
+                self.targetBar.show()
+                self.targetBar['value'] = currentTarget.getCurrentHealthPointsAsPercentage()
+        else:
+                # Hide bar
+                self.targetBar.hide()
+
     def initStatsButton(self):
         self.statsButton = DirectButton(
                                     text ='Stats',
-                                    pos=(1.2, 0, -0.9), 
-                                    pad=(.2,.2, .2,.2),
-                                    scale=.05, 
+                                    pos=(1.2, 0, -0.9),
+                                    scale=.05,
                                     command=self.toggleStats)
 
         self._showingStats = False
@@ -62,20 +68,11 @@ class HUD:
                                     )
 
             self.closeButton = DirectButton(
-<<<<<<< HEAD
-                                                     text='x',
-                                                     pos=(.3, 0, .45),
-                                                     scale=.05,
-                                                     pad=(.2,.2, .2,.2),
-                                                     parent=self.myFrame,
-                                                     command=self.exitStats)
-=======
                                          text='x',
                                          pos=(.4, 0, .4),
                                          scale=.05,
                                          parent=self.myFrame,
                                          command=self.exitStats)
->>>>>>> refs/heads/master
 
             def addStats(pos, text):
                     return OnscreenText(text=text,
@@ -107,92 +104,27 @@ class HUD:
 
     def initHealthBar(self):
         self.healthBar = DirectWaitBar(
-                                text='Health', 
-                                value=100, 
+                                text='Health',
+                                value=100,
                                 pos=(0, 0, -0.8),
                                 scale=0.75)
 
-    def initEXPBar(self):
-        self.expBar = DirectWaitBar(text='',
-                                    value=0,
-                                    pos=(0, 0, -0.69),
-                                    scale=0.5,
-                                    barColor=(0, 1, 0, 0.5))
-        
-        self.expBarText = OnscreenText(text='',
-                                    parent=self.expBar,
-                                    pos=(0.2, -0.025),
-                                    scale=0.1,
-                                    mayChange=1)
-        
-        self.expBarLvlText = OnscreenText(text='',
-                                        parent=self.expBar,
-                                        pos=(-0.8, -0.025),
-                                        scale=0.1,
-                                        mayChange=1)
-
     def updateBars(self, task):
+        self.healthBar['value'] = self._playerRef.getCurrentHealthPointsAsPercentage()
         self.updateEXPBar()
-        self.updateHealthBar()
         self.updateTargetBar()
         self.updateAreaTransDialog()
+
         # Continue calling task again after initial delay
         return task.again
-
-    def updateHealthBar(self):
-        states = self._stateHandlerRef
-        if states.state == states.PLAY:
-            #self.healthBar.show()
-            if self.healthBar == None:
-                self.initHealthBar()
-
-            self.healthBar['value'] = self._playerRef.getCurrentHealthPointsAsPercentage()
-        else:
-            #self.healthBar.hide()
-            if self.healthBar != None:
-                self.healthBar.destroy()
-            self.healthBar = None
-
-    def updateTargetBar(self):
-        currentTarget = self._playerRef.getCurrentTarget()
-        states = self._stateHandlerRef
-        if not currentTarget is None and not currentTarget.getIsDead() and states.state == states.PLAY:
-                self.targetBar.show()
-                self.targetBar['value'] = currentTarget.getCurrentHealthPointsAsPercentage()
-        else:
-                # Hide bar
-                self.targetBar.hide()
-
-    def updateEXPBar(self):
-        states = self._stateHandlerRef
-        if states.state == states.PLAY:
-            if self.expBar == None:
-                self.initEXPBar()
-
-            self.expBar['value'] = self._playerRef.getEXPToNextLevelInPercentage()
-            
-            self._newEXPBarText = (str(int(self._playerRef.experience)) + 
-                                ' / ' + 
-                                str(int(self._playerRef.getEXPToNextLevel())) + 
-                                ' experience points')
-
-            self.expBarText.setText(self._newEXPBarText)
-            self.expBarLvlText.setText('Level ' + str(self._playerRef.level))
-
-            #self.expBar.show()
-        else:
-            #self.expBar.hide()
-            if self.expBar != None:
-                self.expBar.destroy()
-            self.expBar = None
 
     def updateAreaTransDialog(self):
         player = self._playerRef
 
         if player.areaTransitioning and not self.showAreaTransDialog:
             self.showAreaTransDialog = True
-            self.areaTransDialog = YesNoDialog(dialogName='AreaTransitionDialog', 
-                                            text='Do you want to transition to the next area?', 
+            self.areaTransDialog = YesNoDialog(dialogName='AreaTransitionDialog',
+                                            text='Do you want to transition to the next area?',
                                             fadeScreen=0,
                                             command=self.areaTransAnswer)
         elif not player.areaTransitioning and self.showAreaTransDialog:
@@ -215,6 +147,36 @@ class HUD:
         self.showAreaTransDialog = False
         self.areaTransDialog.cleanup()
 
+    def initEXPBar(self):
+        self.expBar = DirectWaitBar(text='',
+                                    value=0,
+                                    pos=(0, 0, -0.69),
+                                    scale=0.5,
+                                    barColor=(0, 1, 0, 0.5))
+
+        self.expBarText = OnscreenText(text='',
+                                    parent=self.expBar,
+                                    pos=(0.2, -0.025),
+                                    scale=0.1,
+                                    mayChange=1)
+
+        self.expBarLvlText = OnscreenText(text='',
+                                        parent=self.expBar,
+                                        pos=(-0.8, -0.025),
+                                        scale=0.1,
+                                        mayChange=1)
+
+    def updateEXPBar(self):
+        self.expBar['value'] = self._playerRef.getEXPToNextLevelInPercentage()
+
+        self._newEXPBarText = (str(int(self._playerRef.experience)) +
+                            ' / ' +
+                            str(int(self._playerRef.getEXPToNextLevel())) +
+                            ' experience points')
+
+        self.expBarText.setText(self._newEXPBarText)
+        self.expBarLvlText.setText('Level ' + str(self._playerRef.level))
+
     def initPlayerAbilityBar(self):
         self.abilityBar = DirectFrame(frameColor=(0.7, 0.7, 0.7, 1.0),
                                             pos=(0, 0, -0.95),
@@ -227,12 +189,8 @@ class HUD:
                                                 parent=self.abilityBar,
                                                 scale=scale,
                                                 pos=(-0.3, 0, -0.01),
-<<<<<<< HEAD
-                                                pad=(.2,.2, .2,.2),
-=======
                                                 image='gui/Bullrush_white.png',
                                                 image_pos=(0, 0, imageUpModifier),
->>>>>>> refs/heads/master
                                                 command=self._playerRef.fireAbility,
                                                 extraArgs=[1])
 
@@ -240,12 +198,8 @@ class HUD:
                                                  parent=self.abilityBar,
                                                  scale=scale,
                                                  pos=(-0.1, 0, -0.01),
-<<<<<<< HEAD
-                                                 pad=(.2,.2, .2,.2),
-=======
                                                  image='gui/Unstoppable.png',
                                                  image_pos=(0, 0, imageUpModifier),
->>>>>>> refs/heads/master
                                                  command=self._playerRef.fireAbility,
                                                  extraArgs=[2])
 
@@ -253,12 +207,8 @@ class HUD:
                                                  parent=self.abilityBar,
                                                  scale=scale,
                                                  pos=(0.1, 0, -0.01),
-<<<<<<< HEAD
-                                                 pad=(.2,.2, .2,.2),
-=======
                                                  image='gui/Thicket_of_blades.png',
                                                  image_pos=(0, 0, imageUpModifier),
->>>>>>> refs/heads/master
                                                  command=self._playerRef.fireAbility,
                                                  extraArgs=[3])
 
@@ -266,58 +216,10 @@ class HUD:
                                              parent=self.abilityBar,
                                              scale=scale,
                                              pos=(0.3, 0, -0.01),
-<<<<<<< HEAD
-                                             pad=(.2,.2, .2,.2),
-                                             command=self._playerRef.fireAbility,
-                                             extraArgs=[4])
-    def initQuestButton(self):
-        self.statsButton = DirectButton(
-                                text = ("Quest"),
-                                pos=(-1.2, 0, -0.9), 
-                                pad=(.2,.2, .2,.2),
-                                scale=.05, 
-                                command=self.toggleQuest)
-
-        self._showingQuest = False
-
-    def toggleQuest(self):
-        if not self._showingQuest:
-            self._showingQuest = True
-
-            self.myFrame2 = DirectFrame(
-                                frameColor=(1, 1, 1, 1),
-                                frameSize=(-0.2, 0.2, -0.2, 0.2),
-                                pos=(-1.5, -0.5, 0.0)
-                                )
-
-            self.closeButton = DirectButton(
-                                 text='x',
-                                 pos=(-.17, 0, .17),
-                                 scale=.05,
-                                 pad=(.2,.2, .2,.2),
-                                 parent=self.myFrame2,
-                                 command=self.exitQuest)
-
-            def addQuest(text):
-                return OnscreenText(text=text,
-                                    pos=(-.2, 0, .45),
-                                    scale=0.05,
-                                    parent=self.myFrame2,
-                                    align=TextNode.ALeft)
-
-            addQuest('Get to the station')  
-
-            
-        else:
-            self._showingQuest = False
-
-            self.exitQuest()
-=======
                                              image='gui/Shift_the_battlefield.png',
                                              image_pos=(0, 0, imageUpModifier),
                                              command=self._playerRef.fireAbility,
                                              extraArgs=[4])
->>>>>>> refs/heads/master
 
     def initQuest(self):
         self.questFrame = DirectFrame(frameSize=(-.2, .2, -.25, .25),

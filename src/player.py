@@ -330,7 +330,7 @@ class Player(FSM, Unit):
                     taskMgr.doMethodLater(1.5, self.removeEnemyFlee, 'removeEnemyFleeTask', extraArgs=[enemy], appendTask=True)
 
                     self.playerModel.play('attack')
-                    enemy.enemyModel.play('hit')
+                    enemy.playHitAnimation()#enemy.enemyModel.play('hit')
 
         return bSuccess
 

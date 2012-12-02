@@ -76,16 +76,16 @@ class Enemy(FSM, Unit):
         self._enemyListRef.append(self)
 
     def loadEnemyModel(self, modelName):
-        modelPrefix = 'models/'
-        self.enemyModel = Actor(modelPrefix + modelName + '-model', {
-                'walk':modelPrefix+modelName+'-walk',
-                'attack':modelPrefix+modelName+'-attack',
-                'idle':modelPrefix+modelName+'-idle',
-                'awake':modelPrefix+modelName+'-awake',
-                'stop':modelPrefix+modelName+'-stop',
-                'hit':modelPrefix+modelName+'-hit',
-                'death1':modelPrefix+modelName+'-death1',
-                'death2':modelPrefix+modelName+'-death2'
+        modelPrefix = 'models/' + modelName
+        self.enemyModel = Actor(modelPrefix + '-model', {
+                'walk':modelPrefix+'-walk',
+                'attack':modelPrefix+'-attack',
+                'idle':modelPrefix+'-idle',
+                'awake':modelPrefix+'-awake',
+                'stop':modelPrefix+'-stop',
+                'hit':modelPrefix+'-hit',
+                'death1':modelPrefix+'-death1',
+                'death2':modelPrefix+'-death2'
             })
         self.enemyModel.reparentTo(self.enemyNode)
         #self.enemyModel.setH(-180)
@@ -412,11 +412,17 @@ class Enemy(FSM, Unit):
 
             attacked = self.attack(self._playerRef)
             if attacked != 0:
-                self.enemyModel.play('attack', fromFrame=0, toFrame=12)
+                self.playAttackAnimation()
                 if attacked == 2:
                     self._playerRef.playerModel.play('hit')
 
             return task.again
+
+    def playAttackAnimation(self):
+        self.enemyModel.play('attack', fromFrame=0, toFrame=12)
+
+    def playHitAnimation(self):
+        self.enemyModel.play('hit')
 
     def moveEnemy(self, x, y):
         self.enemyNode.setPos(x, y, .01)

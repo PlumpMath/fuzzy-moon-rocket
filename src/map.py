@@ -7,6 +7,7 @@ from collections import namedtuple
 
 import utils
 import enemy
+from diggerEnemy import Digger
 
 Area = namedtuple('Area', ['modelName', 'enemies'] )
 
@@ -197,7 +198,11 @@ class Map:
     def spawnEnemies(self, spawnPos):
         for enemyType, enemyAmount in self._areaRef.enemies.iteritems():
             for i in range(enemyAmount):
-                newEnemy = enemy.Enemy(self._mainRef, enemyType)
+                if enemyType == enemy.koboldSkirmisher:
+                    newEnemy = Digger(self._mainRef)
+                else:
+                    newEnemy = enemy.Enemy(self._mainRef, enemyType)
+
                 randomPos = spawnPos.getX() + (utils.getD10()-5)*.1, spawnPos.getY() + (utils.getD10()-5)*.1
                 newEnemy.moveEnemy(*randomPos)
 
