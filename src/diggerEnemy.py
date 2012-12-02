@@ -97,7 +97,7 @@ class Digger(enemy.Enemy):
             self.holeModel.reparentTo(self._mainRef.mainNode)
 
             self.holeModel.setPlayRate(.5, 'anim')
-            self.holeModel.play('anim')
+            self.holeModel.play('anim', fromFrame=0, toFrame=120)
 
             pos = self.enemyNode.getPos(render)
             self.holeModel.setPos(pos.getX(), pos.getY()+.5, pos.getZ()+.01)
