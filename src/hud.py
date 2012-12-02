@@ -25,7 +25,7 @@ class HUD:
         self.initTargetBar()
         self.initStatsButton()
         self.initPlayerAbilityBar()
-        self.initQuestButton()
+        self.initQuest()
 
         self.showAreaTransDialog = False
 
@@ -50,7 +50,7 @@ class HUD:
 
     def initStatsButton(self):
         self.statsButton = DirectButton(
-                                    text = ("Stats"),
+                                    text ='Stats',
                                     pos=(1.2, 0, -0.9), 
                                     scale=.05, 
                                     command=self.toggleStats)
@@ -105,7 +105,7 @@ class HUD:
 
     def initHealthBar(self):
         self.healthBar = DirectWaitBar(
-                                text="Health", 
+                                text='Health', 
                                 value=100, 
                                 pos=(0, 0, -0.8),
                                 scale=0.75)
@@ -221,47 +221,24 @@ class HUD:
                                              image_pos=(0, 0, imageUpModifier),
                                              command=self._playerRef.fireAbility,
                                              extraArgs=[4])
-    def initQuestButton(self):
-        self.statsButton = DirectButton(
-                                text = ("Quest"),
-                                pos=(-1.2, 0, -0.9), 
-                                scale=.05, 
-                                command=self.toggleQuest)
 
-        self._showingQuest = False
+    def initQuest(self):
+        self.questFrame = DirectFrame(frameSize=(-.2, .2, -.25, .25),
+                                      pos=(1.5, 0, .5),
+                                      pad=(.2,.2, .2,.2),
+                                      frameTexture='gui/Quest_Window.png')
+        self.questText = None
+        self.addQuest('Explore the farm')
 
-    def toggleQuest(self):
-        if not self._showingQuest:
-            self._showingQuest = True
+    def addQuest(self, text):
+        if self.questText != None:
+            self.questText.destroy()
 
-            self.myFrame2 = DirectFrame(
-                                frameColor=(1, 1, 1, 1),
-                                frameSize=(-0.2, 0.2, -0.2, 0.2),
-                                pos=(-1.5, -0.5, 0.0),
-                                frameTexture='gui/Quest_Window.png'
-                                )
-
-            self.closeButton = DirectButton(
-                                 text='x',
-                                 pos=(-.17, 0, .17),
-                                 scale=.05,
-                                 parent=self.myFrame2,
-                                 command=self.exitQuest)
-
-            def addQuest(text):
-                return OnscreenText(text=text,
-                                    pos=(-.2, 0, .45),
-                                    scale=0.05,
-                                    parent=self.myFrame2,
+        self.questText = OnscreenText(text='Objective:\n'+text,
+                                    pos=(-.15, .15),
+                                    fg=(1, 1, 1, 1),
+                                    shadow=(0, 0, 0, .5),
+                                    parent=self.questFrame,
+                                    scale=.05,
+                                    wordwrap=7,
                                     align=TextNode.ALeft)
-
-            addQuest('Get to the station')  
-
-            
-        else:
-            self._showingQuest = False
-
-            self.exitQuest()
-
-    def exitQuest(self):
-        self.myFrame2.destroy()
