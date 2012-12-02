@@ -12,6 +12,7 @@ class HUD:
         print("HUD class instantiated")
 
         self._playerRef = playerRef
+        self._stateHandlerRef = playerRef._mainRef.stateHandler
 
         self.gameText = OnscreenText(
                                 text="Fuzzy Moon Rocket",
@@ -35,12 +36,12 @@ class HUD:
                                     text='Target health',
                                     value=1,
                                     pos=(0.1, 0, 0.9),
-                                    scale = 0.5)
+                                    scale=0.5)
         self.targetBar.hide()
 
     def updateTargetBar(self):
         currentTarget = self._playerRef.getCurrentTarget()
-        if not currentTarget is None and not currentTarget.getIsDead():
+        if not currentTarget is None and not currentTarget.getIsDead() and self._stateHandlerRef.state == self._stateHandlerRef.PLAY:
                 self.targetBar.show()
                 self.targetBar['value'] = currentTarget.getCurrentHealthPointsAsPercentage()
         else:
@@ -108,15 +109,23 @@ class HUD:
                                 value=100,
                                 pos=(0, 0, -0.8),
                                 scale=0.75)
+        self.healthBar.hide()
 
     def updateBars(self, task):
-        self.healthBar['value'] = self._playerRef.getCurrentHealthPointsAsPercentage()
+        self.updateHealthBar()
         self.updateEXPBar()
         self.updateTargetBar()
         self.updateAreaTransDialog()
 
         # Continue calling task again after initial delay
         return task.again
+
+    def updateHealthBar(self):
+        if self._stateHandlerRef.state == self._stateHandlerRef.PLAY:
+            self.healthBar.show()
+            self.healthBar['value'] = self._playerRef.getCurrentHealthPointsAsPercentage()
+        else:
+            self.healthBar.hide()
 
     def updateAreaTransDialog(self):
         player = self._playerRef
@@ -165,17 +174,22 @@ class HUD:
                                         pos=(-0.8, -0.025),
                                         scale=0.1,
                                         mayChange=1)
+        self.expBar.hide()
 
     def updateEXPBar(self):
-        self.expBar['value'] = self._playerRef.getEXPToNextLevelInPercentage()
+        if self._stateHandlerRef.state == self._stateHandlerRef.PLAY:
+            self.expBar.show()
+            self.expBar['value'] = self._playerRef.getEXPToNextLevelInPercentage()
 
-        self._newEXPBarText = (str(int(self._playerRef.experience)) +
-                            ' / ' +
-                            str(int(self._playerRef.getEXPToNextLevel())) +
-                            ' experience points')
+            self._newEXPBarText = (str(int(self._playerRef.experience)) +
+                                ' / ' +
+                                str(int(self._playerRef.getEXPToNextLevel())) +
+                                ' experience points')
 
-        self.expBarText.setText(self._newEXPBarText)
-        self.expBarLvlText.setText('Level ' + str(self._playerRef.level))
+            self.expBarText.setText(self._newEXPBarText)
+            self.expBarLvlText.setText('Level ' + str(self._playerRef.level))
+        else:
+            self.expBar.hide()
 
     def initPlayerAbilityBar(self):
         self.abilityBar = DirectFrame(frameColor=(0.7, 0.7, 0.7, 1.0),

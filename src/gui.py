@@ -30,11 +30,15 @@ class GUI(object):
     def initializeGUI(self):
         self.questions = requests.get('{}/question'.format(self._BASE_URL))
         self.questions_dict = self.extract_questions()
+        print self.questions_dict
 
         # just to test that HTTP requests are working
         # r = requests.get('http://api.github.com/users/octocat/orgs')
         # DirectLabel(text=r.headers['date'], scale=0.09, hpr=(0, 0, 0),
         #             pos=(0, 0, 0.7), frameColor=(0, 0, 0, 0))
+
+    def extract_questions(self):
+        return json.loads(self.questions.text)['objects']
 
     def get_last_scenario(self):
         # all_participants = requests.get('{}/participant'.format(self._BASE_URL))
@@ -53,7 +57,7 @@ class GUI(object):
 
         return scenario
 
-    def getWantsToContinue(self):
+    def get_wants_to_continue(self):
         '''This method returns the user's last 'I want to continue playing' answer
             to be used to evaluate whether to return to Play state (again) or not
         '''
@@ -64,9 +68,6 @@ class GUI(object):
            answer is the user's answer as a string
         """
         pass
-
-    def extract_questions(self):
-        return json.loads(self.questions.text)['objects']
 
     def toggleOverlayFrame(self):
         if self._overlayVisible:
@@ -83,25 +84,47 @@ class GUI(object):
                 states.request(states.DURING)
 
     def initializeOverlayFrame(self):
+        self.self.canvasWidth = 1.6
+        canvasHeight = 1
         self.overlayFrame = DirectScrolledFrame(
-            canvasSize=(-1.1, 1.1, -1.1, 1.1),
-            frameSize=(-1, 1, -1, 1),
+            canvasSize=(-self.canvasWidth, self.canvasWidth, -canvasHeight, canvasHeight),
+            frameSize=(-self.canvasWidth, self.canvasWidth, -canvasHeight, canvasHeight),
             pos=(0, 1, 0),
             manageScrollBars=True,
-            autoHideScrollBars=True)
-        # self.buttonFrame = DirectFrame(parent=self.overlayFrame.getCanvas(),
-        #                                 pos=(-.5, 0, 0))
+            autoHideScrollBars=True,
+            sortOrder=1000)
+
         self.doneButton = DirectButton(parent=self.overlayFrame.getCanvas(),
-                                       pos=(.9, 0, -.9),
+                                       pos=(self.canvasWidth-.1, 0, -(canvasHeight-.1)),
                                        scale=0.05,
                                        pad=(.2, .2, .2, .2),
                                        text=('Done'),
                                        pressEffect=1,
                                        command=self.onQuestionsDone)
 
-    def build_likert_question(self, buttonFrame):
+    def addQuestion(self, questionText, yPos):
+        questionFrame = DirectFrame(
+                        parent=self.overlayFrame.getCanvas(),
+                        #frameSize=(-(self.canvasWidth-.2),self.canvasWidth-.2, -.4,.4),
+                        frameColor=(.2, .2, .2, .5),
+                        pad=(-.1, .1, -.1, .1),
+                        pos=(-1, 0, yPos))
+        DirectLabel(parent=questionFrame,
+                    text=questionText,
+                    scale=.5,
+                    text_wordwrap=20)
+
+    def addAnswer(self, question_id, yPos):
+        answerFrame = DirectFrame(
+                    parent=self.overlayFrame.getCanvas(),
+                    #frameSize=(-(self.canvasWidth-.2),self.canvasWidth-.2, -.2,.2),
+                    frameColor=(.5, .5, .5, .5),
+                    pad=(-.1, .1, -.1, .1),
+                    pos=(-1, 0, yPos))
+
+    def build_likert_question(self, question_dict, buttonFrame):
         self.buttons = []
-        DirectLabel(parent=textFrame, text=question_dict['question'],
+        DirectLabel(parent=buttonFrame, text=question_dict['question'],
                     scale=0.05, pos=(-.3, 0, 0), frameColor=(0, 0, 0, 0),
                     text_wordwrap=20)
         for i, label in enumerate(self._CHOICES):
@@ -140,7 +163,7 @@ class GUI(object):
         states = self._stateHandlerRef
         if states.state == states.BEFORE:
             states.request(states.PLAY)
-        elif states.state == states.DURING and self.getWantsToContinue():
+        elif states.state == states.DURING and self.get_wants_to_continue():
             states.request(states.PLAY)  # Change
         else:
             print 'End game'
