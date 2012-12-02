@@ -1,7 +1,7 @@
 from panda3d.core import loadPrcFileData
 
 #loadPrcFileData('', 'fullscreen 1')
-loadPrcFileData('', 'compressed-textures 1')
+#loadPrcFileData('', 'compressed-textures 1')
 loadPrcFileData('', 'basic-shaders-only #f')
 loadPrcFileData('', 'win-size 1200 650')
 loadPrcFileData('', 'window-title Fuzzy Moon Rocket')
@@ -15,7 +15,7 @@ from direct.task import Task
 from panda3d.ai import *
 import sys
 
-from src import utils, player, enemy, gui, hud, map, states, dda, scenario, database
+from src import utils, player, enemy, gui, hud, map, states, dda, scenario
 
 class World(ShowBase):
 
@@ -50,7 +50,6 @@ class World(ShowBase):
         self.initAI()
 
         # Instantiate other classes
-        #self.databaseHandler = database.DatabaseHandler()
         self.scenarioHandler = scenario.ScenarioHandler()
         
         self.DDAHandler = dda.DDA(self)
