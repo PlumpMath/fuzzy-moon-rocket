@@ -84,7 +84,7 @@ class GUI(object):
                 states.request(states.DURING)
 
     def initializeOverlayFrame(self):
-        self.self.canvasWidth = 1.6
+        self.canvasWidth = 1.6
         canvasHeight = 1
         self.overlayFrame = DirectScrolledFrame(
             canvasSize=(-self.canvasWidth, self.canvasWidth, -canvasHeight, canvasHeight),
