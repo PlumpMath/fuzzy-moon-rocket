@@ -2,7 +2,7 @@ from panda3d.core import loadPrcFileData
 
 #loadPrcFileData('', 'fullscreen 1')
 #loadPrcFileData('', 'compressed-textures 1')
-#loadPrcFileData('', 'basic-shaders-only #f')
+loadPrcFileData('', 'basic-shaders-only #f')
 loadPrcFileData('', 'win-size 1200 650')
 loadPrcFileData('', 'window-title Fuzzy Moon Rocket')
 #loadPrcFileData('', 'undecorated 1')
@@ -50,17 +50,18 @@ class World(ShowBase):
         self.initAI()
 
         # Instantiate other classes
-        self.stateHandler = states.StateHandler()
-        self.gui = gui.GUI(self)
-        self.scenarioHandler = scenario.ScenarioHandler(self)
+        self.scenarioHandler = scenario.ScenarioHandler()
 
         self.DDAHandler = dda.DDA(self)
+
+        self.stateHandler = states.StateHandler()
 
         self.mapHandler = map.Map(self)
 
         self.player = player.Player(self)
 
-        self.hud = hud.HUD(self)
+        #self.gui = gui.GUI()
+        self.hud = hud.HUD(self.player)
 
         # Add keyboard commands
         self.accept('escape', self.endGame)
