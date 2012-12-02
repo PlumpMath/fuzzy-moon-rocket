@@ -14,11 +14,11 @@ class HUD:
         self._playerRef = playerRef
         self._stateHandlerRef = playerRef._mainRef.stateHandler
 
-        self.gameText = OnscreenText(
-                                text="Fuzzy Moon Rocket",
-                                pos=(1.5, 0.9),
-                                bg=(0.25, 0.25, 0.25, 1),
-                                shadow=(.1, .1, .1, 1))
+        # self.gameText = OnscreenText(
+        #                         text="Fuzzy Moon Rocket",
+        #                         pos=(1, 0.9),
+        #                         bg=(0.25, 0.25, 0.25, 1),
+        #                         shadow=(.1, .1, .1, 1))
 
         self.initHealthBar()
         self.initEXPBar()
@@ -51,7 +51,7 @@ class HUD:
     def initStatsButton(self):
         self.statsButton = DirectButton(
                                     text ='Stats',
-                                    pos=(1.2, 0, -0.9),
+                                    pos=(1, 0, -0.9),
                                     scale=.05,
                                     command=self.toggleStats)
 
@@ -237,7 +237,7 @@ class HUD:
 
     def initQuest(self):
         self.questFrame = DirectFrame(frameSize=(-.2, .2, -.25, .25),
-                                      pos=(1.5, 0, .5),
+                                      pos=(1, 0, .5),
                                       pad=(.2,.2, .2,.2),
                                       frameTexture='gui/Quest_Window.png')
         self.questText = None
