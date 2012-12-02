@@ -24,24 +24,26 @@ class GUI(object):
         print("GUI class instantiated")
         self._stateHandlerRef = mainRef.stateHandler
 
-        # self.initializeGUI()
+        self.initializeGUI()
+        self.toggleOverlayFrame()
 
     def initializeGUI(self):
         self.questions = requests.get('{}/question'.format(self._BASE_URL))
         self.questions_dict = self.extract_questions()
 
         # just to test that HTTP requests are working
-        r = requests.get('http://api.github.com/users/octocat/orgs')
-        DirectLabel(text=r.headers['date'], scale=0.09, hpr=(0, 0, 0),
-                    pos=(0, 0, 0.7), frameColor=(0, 0, 0, 0))
+        # r = requests.get('http://api.github.com/users/octocat/orgs')
+        # DirectLabel(text=r.headers['date'], scale=0.09, hpr=(0, 0, 0),
+        #             pos=(0, 0, 0.7), frameColor=(0, 0, 0, 0))
 
     def get_last_scenario(self):
-        all_participants = requests.get('{}/participant'.format(self._BASE_URL))
-        # getting the total number of participants allows us to find the latest one
-        number_of_participants = json.loads(self.all_participants.text)['num_results']
-        # then we can get that participant's scenario
-        p = requests.get('{}/participant/{}'.format(self._BASE_URL, number_of_participants))
-        return json.loads(p.text)['scenario']
+        # all_participants = requests.get('{}/participant'.format(self._BASE_URL))
+        # # getting the total number of participants allows us to find the latest one
+        # number_of_participants = json.loads(self.all_participants.text)['num_results']
+        # # then we can get that participant's scenario
+        # p = requests.get('{}/participant/{}'.format(self._BASE_URL, number_of_participants))
+        # return json.loads(p.text)['scenario']
+        return utils.getDXY(0, 1)
 
     def create_user(self):
         """This method must be called after get_last_scenario()"""
