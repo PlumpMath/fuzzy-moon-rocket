@@ -18,7 +18,8 @@ class HUD:
         self.gameText = OnscreenText(
                                 text="Fuzzy Moon Rocket",
                                 pos=(1.5, 0.9), 
-                                bg=(0.25, 0.25, 0.25, 1))
+                                bg=(0.25, 0.25, 0.25, 1),
+                                shadow=(.1, .1, .1, 1))
 
         self.initHealthBar()
         self.initEXPBar()
@@ -236,7 +237,7 @@ class HUD:
 
         self.questText = OnscreenText(text='Objective:\n'+text,
                                     pos=(-.15, .15),
-                                    fg=(1, 1, 1, 1),
+                                    fg=(.75, .75, .75, 1),
                                     shadow=(0, 0, 0, .5),
                                     parent=self.questFrame,
                                     scale=.05,
