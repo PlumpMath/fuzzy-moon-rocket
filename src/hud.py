@@ -18,14 +18,15 @@ class HUD:
         self.gameText = OnscreenText(
                                 text="Fuzzy Moon Rocket",
                                 pos=(1.5, 0.9), 
-                                bg=(0.25, 0.25, 0.25, 1))
+                                bg=(0.25, 0.25, 0.25, 1),
+                                shadow=(.1, .1, .1, 1))
 
         self.initHealthBar()
         self.initEXPBar()
         self.initTargetBar()
         self.initStatsButton()
         self.initPlayerAbilityBar()
-        self.initQuestButton()
+        self.initQuest()
 
         self.showAreaTransDialog = False
 
@@ -41,7 +42,7 @@ class HUD:
 
     def initStatsButton(self):
         self.statsButton = DirectButton(
-                                    text = ("Stats"),
+                                    text ='Stats',
                                     pos=(1.2, 0, -0.9), 
                                     pad=(.2,.2, .2,.2),
                                     scale=.05, 
@@ -54,25 +55,37 @@ class HUD:
             self._showingStats = True
 
             self.myFrame = DirectFrame(
-                                                    frameColor=(1, 1, 1, 1),
-                                                    frameSize=(-0.5, 0.5, -0.5, 0.5),
-                                                    pos=(1.0, -0.5, 0.0)
-                                                    )
+                                    frameColor=(1, 1, 1, 1),
+                                    frameSize=(-0.5, 0.5, -0.5, 0.5),
+                                    pos=(1.0, -0.5, 0.0),
+                                    frameTexture='gui/Stats_Window.png'
+                                    )
 
             self.closeButton = DirectButton(
+<<<<<<< HEAD
                                                      text='x',
                                                      pos=(.3, 0, .45),
                                                      scale=.05,
                                                      pad=(.2,.2, .2,.2),
                                                      parent=self.myFrame,
                                                      command=self.exitStats)
+=======
+                                         text='x',
+                                         pos=(.4, 0, .4),
+                                         scale=.05,
+                                         parent=self.myFrame,
+                                         command=self.exitStats)
+>>>>>>> refs/heads/master
 
             def addStats(pos, text):
                     return OnscreenText(text=text,
-                                                            pos=(-0.4, pos),
-                                                            scale=0.05,
-                                                            parent=self.myFrame,
-                                                            align=TextNode.ALeft)  
+                                        pos=(-0.4, pos),
+                                        fg=(.5, .1, .1, 1),
+                                        bg=(.1, .5, .5, .25), # Tweak bg and fg to make text easily readable
+                                        shadow=(0, 0, 0, 1),
+                                        scale=0.05,
+                                        parent=self.myFrame,
+                                        align=TextNode.ALeft)
 
             addStats(0.4, 'Strength: ' + str(self._playerRef.strength))
             addStats(0.3, 'Constitution: ' + str(self._playerRef.constitution))
@@ -94,7 +107,7 @@ class HUD:
 
     def initHealthBar(self):
         self.healthBar = DirectWaitBar(
-                                text="Health", 
+                                text='Health', 
                                 value=100, 
                                 pos=(0, 0, -0.8),
                                 scale=0.75)
@@ -203,38 +216,57 @@ class HUD:
         self.areaTransDialog.cleanup()
 
     def initPlayerAbilityBar(self):
-        self.abilityBar = DirectFrame(frameColor=(0.2, 0.2, 0.8, 1.0),
+        self.abilityBar = DirectFrame(frameColor=(0.7, 0.7, 0.7, 1.0),
                                             pos=(0, 0, -0.95),
                                             pad=(0.4, 0.075))
 
-        self.offensiveAbilityButton = DirectButton(text=('Off'),
+        scale=.05
+        imageUpModifier = .33
+
+        self.offensiveAbilityButton = DirectButton(text=(''),
                                                 parent=self.abilityBar,
-                                                scale=0.075,
+                                                scale=scale,
                                                 pos=(-0.3, 0, -0.01),
+<<<<<<< HEAD
                                                 pad=(.2,.2, .2,.2),
+=======
+                                                image='gui/Bullrush_white.png',
+                                                image_pos=(0, 0, imageUpModifier),
+>>>>>>> refs/heads/master
                                                 command=self._playerRef.fireAbility,
                                                 extraArgs=[1])
 
-        self.defensiveAbilityButton = DirectButton(text=('Def'),
+        self.defensiveAbilityButton = DirectButton(text=(''),
                                                  parent=self.abilityBar,
-                                                 scale=0.075,
+                                                 scale=scale,
                                                  pos=(-0.1, 0, -0.01),
+<<<<<<< HEAD
                                                  pad=(.2,.2, .2,.2),
+=======
+                                                 image='gui/Unstoppable.png',
+                                                 image_pos=(0, 0, imageUpModifier),
+>>>>>>> refs/heads/master
                                                  command=self._playerRef.fireAbility,
                                                  extraArgs=[2])
 
-        self.evasiveAbilityButton = DirectButton(text=('Eva'),
+        self.evasiveAbilityButton = DirectButton(text=(''),
                                                  parent=self.abilityBar,
-                                                 scale=0.075,
+                                                 scale=scale,
                                                  pos=(0.1, 0, -0.01),
+<<<<<<< HEAD
                                                  pad=(.2,.2, .2,.2),
+=======
+                                                 image='gui/Thicket_of_blades.png',
+                                                 image_pos=(0, 0, imageUpModifier),
+>>>>>>> refs/heads/master
                                                  command=self._playerRef.fireAbility,
                                                  extraArgs=[3])
 
-        self.aoeAbilityButton = DirectButton(text=('AoE'),
+        self.aoeAbilityButton = DirectButton(text=(''),
                                              parent=self.abilityBar,
-                                             scale=0.075,
+                                             scale=scale,
                                              pos=(0.3, 0, -0.01),
+<<<<<<< HEAD
                                              pad=(.2,.2, .2,.2),
                                              command=self._playerRef.fireAbility,
                                              extraArgs=[4])
@@ -280,6 +312,30 @@ class HUD:
             self._showingQuest = False
 
             self.exitQuest()
+=======
+                                             image='gui/Shift_the_battlefield.png',
+                                             image_pos=(0, 0, imageUpModifier),
+                                             command=self._playerRef.fireAbility,
+                                             extraArgs=[4])
+>>>>>>> refs/heads/master
 
-    def exitQuest(self):
-        self.myFrame2.destroy()
+    def initQuest(self):
+        self.questFrame = DirectFrame(frameSize=(-.2, .2, -.25, .25),
+                                      pos=(1.5, 0, .5),
+                                      pad=(.2,.2, .2,.2),
+                                      frameTexture='gui/Quest_Window.png')
+        self.questText = None
+        self.addQuest('Explore the farm')
+
+    def addQuest(self, text):
+        if self.questText != None:
+            self.questText.destroy()
+
+        self.questText = OnscreenText(text='Objective:\n'+text,
+                                    pos=(-.15, .15),
+                                    fg=(.75, .75, .75, 1),
+                                    shadow=(0, 0, 0, .5),
+                                    parent=self.questFrame,
+                                    scale=.05,
+                                    wordwrap=7,
+                                    align=TextNode.ALeft)
