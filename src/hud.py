@@ -61,19 +61,19 @@ class HUD:
         if not self._showingStats:
             self._showingStats = True
 
-            self.myFrame = DirectFrame(
-                                    frameColor=(1, 1, 1, 1),
-                                    frameSize=(-0.5, 0.5, -0.5, 0.5),
-                                    pos=(1.0, -0.5, 0.0),
-                                    frameTexture='gui/Stats_Window.png'
-                                    )
+            self.statsFrame = DirectFrame(
+                frameColor=(1, 1, 1, 1),
+                frameSize=(-0.5, 0.5, -0.5, 0.5),
+                pos=(1.0, -0.5, 0.0),
+                frameTexture='gui/Stats_Window.png'
+                )
 
-            self.closeButton = DirectButton(
-                                         text='x',
-                                         pos=(.4, 0, .4),
-                                         scale=.05,
-                                         parent=self.myFrame,
-                                         command=self.exitStats)
+            closeButton = DirectButton(
+                 text='x',
+                 pos=(.4, 0, .4),
+                 scale=.05,
+                 parent=self.statsFrame,
+                 command=self.exitStats)
 
             def addStats(pos, text):
                     return OnscreenText(text=text,
@@ -82,7 +82,7 @@ class HUD:
                                         bg=(.1, .5, .5, .25), # Tweak bg and fg to make text easily readable
                                         shadow=(0, 0, 0, 1),
                                         scale=0.05,
-                                        parent=self.myFrame,
+                                        parent=self.statsFrame,
                                         align=TextNode.ALeft)
 
             addStats(0.4, 'Strength: ' + str(self._playerRef.strength))
@@ -101,7 +101,7 @@ class HUD:
             self.exitStats()
 
     def exitStats(self):
-        self.myFrame.destroy()
+        self.statsFrame.destroy()
 
     def initHealthBar(self):
         self.healthBar = DirectWaitBar(
@@ -116,16 +116,28 @@ class HUD:
         self.updateEXPBar()
         self.updateTargetBar()
         self.updateAreaTransDialog()
+        self.updateStatsButton()
 
         # Continue calling task again after initial delay
         return task.again
 
+    def updateStatsButton(self):
+        if self._stateHandlerRef.state == self._stateHandlerRef.PLAY:
+            if self.statsButton.is_hidden():
+                self.statsButton.show()
+        else:
+            if not self.statsButton.is_hidden():
+                self.statsButton.hide()
+
     def updateHealthBar(self):
         if self._stateHandlerRef.state == self._stateHandlerRef.PLAY:
-            self.healthBar.show()
+            if self.healthBar.is_hidden():
+                self.healthBar.show()
+
             self.healthBar['value'] = self._playerRef.getCurrentHealthPointsAsPercentage()
         else:
-            self.healthBar.hide()
+            if not self.healthBar.is_hidden():
+                self.healthBar.hide()
 
     def updateAreaTransDialog(self):
         player = self._playerRef
@@ -178,7 +190,9 @@ class HUD:
 
     def updateEXPBar(self):
         if self._stateHandlerRef.state == self._stateHandlerRef.PLAY:
-            self.expBar.show()
+            if self.expBar.is_hidden():
+                self.expBar.show()
+
             self.expBar['value'] = self._playerRef.getEXPToNextLevelInPercentage()
 
             self._newEXPBarText = (str(int(self._playerRef.experience)) +
@@ -189,7 +203,8 @@ class HUD:
             self.expBarText.setText(self._newEXPBarText)
             self.expBarLvlText.setText('Level ' + str(self._playerRef.level))
         else:
-            self.expBar.hide()
+            if not self.expBar.is_hidden():
+                self.expBar.hide()
 
     def initPlayerAbilityBar(self):
         self.abilityBar = DirectFrame(frameColor=(0.7, 0.7, 0.7, 1.0),

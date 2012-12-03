@@ -96,11 +96,11 @@ class GUI(object):
 #---------------------------------- VISUAL GUI ---------------------------------------#
     def toggleOverlayFrame(self):
         if self._overlayVisible:
-            print "Toggle off"
+            #print "Toggle off"
             self.onQuestionsDone()
             self._overlayVisible = False
         else:
-            print "Toggle on"
+            #print "Toggle on"
             self.initializeOverlayFrame()
             self._overlayVisible = True
 
@@ -151,31 +151,66 @@ class GUI(object):
         DirectLabel(
             parent=self.overlayFrame,
             text=self.infoText,
-            scale=.07,
+            scale=.06,
             pos=(0, 0, canvasHeight-.25),
             text_wordwrap=30)
 
-        print self.questions
+        #print self.questions
         yPos = 0.0
         yInc = .4
         for item in self.questions:
             print item
             for key,value in item.iteritems():
-                if key == 'question':
+                if key == 'info_text':
+                    self.addInfoText(value, yPos)
+                elif key == 'question':
                     self.addQuestion(value, yPos)
                     yPos += yInc
+                elif key == 'type':
+                    if value == 3:
+                        self.addTextInputField(yPos)
 
-                if yPos >= (yInc * 4):
+                if yPos >= yInc * 4:
+
                     break
 
     def addQuestion(self, questionText, yPos):
+        yStart = .6
         OnscreenText(
             parent=self.overlayFrame,
             text=questionText,
             scale=.05,
             wordwrap=20,
-            pos=(-.8, .6-yPos),
+            pos=(-.8, yStart-yPos),
             align=TextNode.ALeft)
+
+    def addInfoText(self, infoText, yPos):
+        #print 'add info text:', infoText
+        yStart = 0.5
+        OnscreenText( # might want to apply slanted or italics to this one
+            parent=self.overlayFrame,
+            text=infoText,
+            scale=.04,
+            wordwrap=25,
+            pos=(-.8, yStart-yPos),
+            align=TextNode.ALeft)
+
+    def addTextInputField(self, type, yPos):
+        yStart = .43
+        inputField = DirectEntry(
+            parent=self.overlayFrame,
+            text="",
+            scale=.05,
+            command=None,
+            pos=(-.8, 0, yStart-yPos),
+            initialText='',
+            frameColor=(0.4, 0.4, 0.4, 0.75),
+            width=30,
+            numLines=4
+            #focus=1
+            )
+
+
 
     # def addAnswer(self, question_id, yPos):
     #     answerFrame = DirectFrame(
