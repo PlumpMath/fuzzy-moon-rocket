@@ -38,13 +38,12 @@ class GUI(object):
         return self.question_sets
 
     def get_last_scenario(self):
-        # all_participants = requests.get('{}/participant'.format(self._BASE_URL))
-        # # getting the total number of participants allows us to find the latest one
-        # number_of_participants = json.loads(self.all_participants.text)['num_results']
-        # # then we can get that participant's scenario
-        # p = requests.get('{}/participant/{}'.format(self._BASE_URL, number_of_participants))
-        # return json.loads(p.text)['scenario']
-        return utils.getDXY(0, 1)
+        all_participants = requests.get('{}/participant'.format(self._BASE_URL))
+        # getting the total number of participants allows us to find the latest one
+        number_of_participants = json.loads(all_participants.text)['num_results']
+        # then we can get that participant's scenario
+        p = requests.get('{}/participant/{}'.format(self._BASE_URL, number_of_participants))
+        return json.loads(p.text)['scenario']
 
     def create_user(self):
         """This method must be called after get_last_scenario()"""
