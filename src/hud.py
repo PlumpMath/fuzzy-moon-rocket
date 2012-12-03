@@ -32,6 +32,10 @@ class HUD:
 
         taskMgr.doMethodLater(1, self.updateBars, 'UpdateBarsTask')
 
+        # self.gameFrame = OnscreenImage(image='hud/Game_frame.png',
+        #                                 pos=(0, 0, 0))
+        # self.gameFrame.setTransparency(TransparencyAttrib.MAlpha)
+
     def initTargetBar(self):
         self.targetBar = DirectWaitBar(
                                     text='Target health',
@@ -194,7 +198,7 @@ class HUD:
                                                 parent=self.abilityBar,
                                                 scale=scale,
                                                 pos=(-0.3, 0, -0.01),
-                                                image='hud/Bullrush_white.png',
+                                                image='hud/Bullrush.png',
                                                 image_pos=(0, 0, imageUpModifier),
                                                 command=self._playerRef.fireAbility,
                                                 extraArgs=[1])
@@ -228,7 +232,7 @@ class HUD:
 
     def deactivateIcon(self, iconID):
         if iconID == 1:
-            self.offensiveAbilityButton['image'] = 'hud/Bullrush_white_deactivated.png'
+            self.offensiveAbilityButton['image'] = 'hud/Bullrush_deactivated.png'
         elif iconID == 2:
             self.defensiveAbilityButton['image'] = 'hud/Unstoppable_deactivated.png'
         elif iconID == 3:
@@ -238,7 +242,7 @@ class HUD:
 
     def activateIcon(self, iconID):
         if iconID == 1:
-            self.offensiveAbilityButton['image'] = 'hud/Bullrush_white.png'
+            self.offensiveAbilityButton['image'] = 'hud/Bullrush.png'
         elif iconID == 2:
             self.defensiveAbilityButton['image'] = 'hud/Unstoppable.png'
         elif iconID == 3:
@@ -248,7 +252,7 @@ class HUD:
 
     def initQuest(self):
         self.questFrame = DirectFrame(frameSize=(-.2, .2, -.25, .25),
-                                      pos=(1.5, 0, .5),
+                                      pos=(1.2, 0, .5),
                                       pad=(.2,.2, .2,.2),
                                       frameTexture='hud/Quest_Window.png')
         self.questFrame.setTransparency(TransparencyAttrib.MAlpha)

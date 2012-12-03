@@ -1,7 +1,7 @@
 <CoordinateSystem> { Z-Up }
 
 <Comment> {
-  "maya2egg2012 -p -keep-uvs -round-uvs -tbnall -a chan -cs z-up -uo cm -trans all -o B:/Dropbox/P5/mayaDropoff/scaled/enemies/Digger/hole_DownAni_120f.egg B:/Dropbox/P5/mayaDropoff/scaled/enemies/Digger/hole_DownAni_120f_temp.mb"
+  "maya2egg2012 -p -keep-uvs -round-uvs -tbnall -a chan -cs z-up -uo cm -trans all -o C:/Users/jinx/Dropbox/P5/mayaDropoff/scaled/enemies/Digger/hole_DownAni_120f.egg C:/Users/jinx/Dropbox/P5/mayaDropoff/scaled/enemies/Digger/hole_DownAni_120f_temp.mb"
 }
 <Table> {
   <Bundle> hole_DownAni_120f_temp {
@@ -451,6 +451,18 @@
                 0.65694 0.652967 0.650648 0.649899 0.649899 0.649899
               }
             }
+          }
+        }
+        <Table> pCylinder1 {
+          <Xfm$Anim_S$> xform {
+            <Scalar> fps { 24 }
+            <Char*> order { srpht }
+            <S$Anim> i { <V> { 0.994518 } }
+            <S$Anim> j { <V> { 0.994518 } }
+            <S$Anim> k { <V> { 0.994518 } }
+            <S$Anim> x { <V> { 1.14687 } }
+            <S$Anim> y { <V> { -0.813148 } }
+            <S$Anim> z { <V> { 0.975103 } }
           }
         }
       }

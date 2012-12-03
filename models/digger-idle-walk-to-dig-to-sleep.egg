@@ -1,7 +1,7 @@
 <CoordinateSystem> { Z-Up }
 
 <Comment> {
-  "maya2egg2012 -p -keep-uvs -round-uvs -tbnall -a chan -cs z-up -uo cm -trans all -o 'B:/Dropbox/P5/mayaDropoff/scaled/enemies/Digger/digger_idleWalkToDiggingAndGoingIntoAholeAmi(sleep)_120f.egg' 'B:/Dropbox/P5/mayaDropoff/scaled/enemies/Digger/digger_idleWalkToDiggingAndGoingIntoAholeAmi(sleep)_120f_temp.mb'"
+  "maya2egg2012 -p -keep-uvs -round-uvs -tbnall -a chan -cs z-up -uo cm -trans all -o 'C:/Users/jinx/Dropbox/P5/mayaDropoff/scaled/enemies/Digger/digger_idleWalkToDiggingAndGoingIntoAholeAmi(sleep)_120f.egg' 'C:/Users/jinx/Dropbox/P5/mayaDropoff/scaled/enemies/Digger/digger_idleWalkToDiggingAndGoingIntoAholeAmi(sleep)_120f_temp.mb'"
 }
 <Table> {
   <Bundle> "digger_idleWalkToDiggingAndGoingIntoAholeAmi(sleep)_120f_temp" {

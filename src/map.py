@@ -245,8 +245,8 @@ class Map:
         self.oII = Actor('models/oii')
         oIIAnim = self.oII.getAnimNames() # No animation added yet
         # print 'oII anim:', oIIAnim
-        self.oII.setPlayRate(0.5, oIIAnim)
-        self.oII.loop(oIIAnim, fromFrame=0, toFrame=12)
+        #self.oII.setPlayRate(0.5, oIIAnim)
+        self.oII.loop(oIIAnim, fromFrame=0, toFrame=50)
 
         self.oII.setPos(ground.getPos(render))
         self.oII.setZ(self.oII, 0.15)
