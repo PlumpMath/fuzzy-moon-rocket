@@ -21,6 +21,7 @@ class Player(FSM, Unit):
         Unit.__init__(self)
         FSM.__init__(self, 'playerFSM')
 
+        self._hudRef = None
         self._mainRef = mainRef
         self._enemyListRef = mainRef.enemyList
         self._ddaHandlerRef = mainRef.DDAHandler
@@ -214,8 +215,11 @@ class Player(FSM, Unit):
 
     def receiveEXP(self, value):
         self.experience += (value * self._ddaHandlerRef.EXPFactor)
+        self._hudRef.printFeedback('Experience gained: ' + str(self.experience), False)
+
         if self.experience >= self.getEXPToNextLevel():
             self.increaseLevel()
+            self._hudRef.printFeedback('Level gained!', False)
 
     def getEXPToNextLevelInPercentage(self):
         currentEXP = self.experience - self._prevEXP
@@ -281,6 +285,7 @@ class Player(FSM, Unit):
                     cd.count = 0
             else:
                 print 'Bull Rush in cd'
+                self._hudRef.printFeedback('Bull Rush is in cooldown')
 
         # Defensive - Unstoppable 10 sec cd
         elif ability == 2:
@@ -292,6 +297,7 @@ class Player(FSM, Unit):
                     cd.count = 0
             else:
                 print 'Unstoppable in cd'
+                self._hudRef.printFeedback('Unstoppable is in cooldown')
 
         # Evasive - Thicket of Blades 20 sec cd
         elif ability == 3:
@@ -303,6 +309,7 @@ class Player(FSM, Unit):
                     cd.count = 0
             else:
                 print 'Thicket of Blades in cd'
+                self._hudRef.printFeedback('Thicket of Blades is in cooldown')
 
         # Area of Effect - Shift the Battlefield 30 sec cd
         elif ability == 4:
@@ -314,6 +321,7 @@ class Player(FSM, Unit):
                     cd.count = 0
             else:
                 print 'Shift the Battlefield in cd'
+                self._hudRef.printFeedback('Shift the Battlefield is in cooldown')
 
     def bullRush(self):
         bSuccess = False
@@ -327,10 +335,12 @@ class Player(FSM, Unit):
 
                 if self.getStrengthModifier() + utils.getD20() > enemy.armorClass:
                     self.enemyFleeFromPlayer(enemy)
-                    taskMgr.doMethodLater(1.5, self.removeEnemyFlee, 'removeEnemyFleeTask', extraArgs=[enemy], appendTask=True)
 
                     self.playerModel.play('attack')
-                    enemy.playHitAnimation()#enemy.enemyModel.play('hit')
+                    enemy.playHitAnimation()
+                else:
+                    print 'bullRush missed'
+                    self._hudRef.printFeedback('Bull Rush missed')
 
         return bSuccess
 
@@ -341,6 +351,8 @@ class Player(FSM, Unit):
 
         self.playerModel.play('defense')
         taskMgr.doMethodLater(1.5, self.stopDefenseAnimation, 'stopDefenseAnimationTask')
+
+        self._hudRef.printFeedback('Unstoppable activated', False)
 
         duration = 30.0 # Half a minute (30 seconds) duration of temp hp
         taskMgr.doMethodLater(duration, self.removeTempHp, 'removeTempHpTask')
@@ -368,8 +380,11 @@ class Player(FSM, Unit):
                 if utils.getIsInRange(playerPos, enemyPos, self.combatRange):
                     bSuccess  = True
                     if self.getStrengthModifier() + utils.getD20() > enemy.armorClass:
-                        enemy.slowMovementByPercentage(25, 10) # slow by 25 % in 10 seconds, automatically removes it again
+                        enemy.slowMovementByPercentage(50, 10) # slow by 50 % in 10 seconds, automatically removes it again
                         enemy.enemyModel.play('hit')
+                    else:
+                        print 'thicketOfBlades missed'
+                        self._hudRef.printFeedback('Thicket of Blades missed')
 
         return bSuccess
 
@@ -383,14 +398,15 @@ class Player(FSM, Unit):
                 bSuccess = True
                 if self.getStrengthModifier() + utils.getD20() > enemy.armorClass:
                     self.enemyFleeFromPlayer(enemy)
-                    taskMgr.doMethodLater(1.5, self.removeEnemyFlee, 'removeEnemyFleeTask', extraArgs=[enemy], appendTask=True)
-
+    
                     # Might want to replace the getD8 to depend on the player's weapon
                     dmg = 2 * utils.getD8() + self.getStrengthModifier()
                     enemy.receiveDamage(dmg)
 
                     enemy.enemyModel.play('hit')
                 else:
+                    print 'shiftTheBattlefield missed'
+                    self._hudRef.printFeedback('Shift the Battlefield missed')
                     dmg = (2 * utils.getD8() + self.getStrengthModifier()) / 2
                     enemy.receiveDamage(dmg)
 
@@ -400,14 +416,18 @@ class Player(FSM, Unit):
 
     def enemyFleeFromPlayer(self, enemy):
         if enemy.state != 'Disabled':
+            #print 'enemyFleeFromPlayer:', enemy
             enemy.enemyAIBehaviors.removeAi('all')
             enemy.enemyAIBehaviors.flee(self.playerNode)
 
             enemy.enemyModel.loop('walk', fromFrame=0, toFrame=12)
             enemy.request('Disabled')
 
+            taskMgr.doMethodLater(1.5, self.removeEnemyFlee, 'removeEnemyFleeTask', extraArgs=[enemy], appendTask=True)
+
     def removeEnemyFlee(self, enemy, task):
         if enemy.state == 'Disabled':
+            #print 'removeEnemyFlee'
             enemy.enemyModel.stop()
             enemy.enemyAIBehaviors.removeAi('flee')
             enemy.request('Idle')
@@ -434,7 +454,8 @@ class Player(FSM, Unit):
                     break;
 
     def updateCameraPosition(self):
-        base.camera.setPos(self.playerNode, (0, self._cameraYModifier, self._cameraZModifier))
+        pos = self.playerNode.getPos()
+        base.camera.setPos(pos.getX(), pos.getY() + self._cameraYModifier, pos.getZ() + self._cameraZModifier)
 
     def updatePlayerPosition(self, deltaTime):
         if not self._shiftButtonDown:
@@ -467,6 +488,9 @@ class Player(FSM, Unit):
             # Do not do anything when paused
             return task.cont
 
+        if self._hudRef == None:
+            self._hudRef = self._mainRef.hud
+
         self.checkGroundCollisions()
         self.updateCameraPosition()
 
@@ -477,10 +501,6 @@ class Player(FSM, Unit):
             return task.cont
 
         self.updatePlayerPosition(globalClock.getDt())
-
-        base.camera.setFluidPos(self.playerNode.getX(),
-                       self.playerNode.getY() + self._cameraYModifier,
-                       self.playerNode.getZ() + self._cameraZModifier)
 
         return task.cont
 
@@ -633,9 +653,12 @@ class Player(FSM, Unit):
         attackDelay = self.getInitiativeRoll()
         self.combatTask = taskMgr.doMethodLater(attackDelay, self.attackEnemies, 'combatTask')
 
+        self._hudRef.printFeedback('In combat', True)
+
     def exitCombat(self):
         #print('exitCombat')
         taskMgr.remove(self.combatTask)
+        self._hudRef.printFeedback('Combat ended', False)
 
     def enterIdle(self):
         stopPlayer = self.playerModel.actorInterval('stop', loop=0)
@@ -659,6 +682,8 @@ class Player(FSM, Unit):
 
 #--------------------- PLAYER DEATH ---------------------------#
     def respawn(self, task):
+        self._hudRef.printFeedback('Respawning')
+
         # Move player back to start pos
         self.destination = self.startPos
         self.playerNode.setPos(self.startPos)

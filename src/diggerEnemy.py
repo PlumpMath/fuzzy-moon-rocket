@@ -15,7 +15,7 @@ class Digger(enemy.Enemy):
     def initAttributes(self, attributes):
         super(Digger, self).initAttributes(attributes)
 
-        rangeMultiplier = 2
+        rangeMultiplier = 1.5
         self.combatRange *= rangeMultiplier
         self.perceptionRange *= rangeMultiplier
 
@@ -51,25 +51,27 @@ class Digger(enemy.Enemy):
 
     def enterIdle(self):
         #print 'enemy enterIdle'
-        stopEnemy = self.enemyModel.actorInterval('pursue-to-idle', loop=0)
-        idleEnemy = Func(self.enemyModel.loop, 'idle-walk-to-dig')
-        digHole = Func(self.createHole)
-        jumpDownHole = self.enemyModel.actorInterval('idle-walk-to-dig-to-sleep')
+        idleTime = 30.0 #60 * 2
 
-        self.stopSequence = Sequence(stopEnemy, idleEnemy, Wait(1), digHole, Wait(1), jumpDownHole)
+        stopEnemy = self.enemyModel.actorInterval('pursue-to-idle', startFrame=0, endFrame=12)
+        idleEnemy = self.enemyModel.actorInterval('idle-walk-to-dig', startFrame=0, endFrame=60, duration=idleTime/2)
+        digHole = Parallel(Func(self.createHole), self.enemyModel.actorInterval('idle-walk-to-dig-to-sleep', startFrame=0, endFrame=120))
+        #suicide = Func(self.suicide)
+
+        self.stopSequence = Sequence(stopEnemy, Wait(1.0), idleEnemy, Wait(idleTime/2.0), digHole, Wait(idleTime/2.0))
         self.stopSequence.start()
 
         self.isSleeping = True
 
     def enterPursue(self):
         #print('enemy enterPursue')
-        loopWalkEnemy = Func(self.enemyModel.loop, 'pursue')
+        loopWalkEnemy = Func(self.enemyModel.loop, 'pursue', fromFrame=0, toFrame=24)
 
         # Only awake enemy if it comes from idle
         if self.isSleeping:
             self.isSleeping = False
 
-            awakeEnemy = self.enemyModel.actorInterval('idle-walk-to-pursue', loop=0)
+            awakeEnemy = self.enemyModel.actorInterval('idle-walk-to-pursue', startFrame=0, endFrame=24)
             self.awakeSequence = Sequence(awakeEnemy, loopWalkEnemy, Func(self.pursuePlayer))
         else:
             self.awakeSequence = Sequence(loopWalkEnemy, Func(self.pursuePlayer))
@@ -80,15 +82,15 @@ class Digger(enemy.Enemy):
         #print('enemy enterDeath')
         self.enemyAIBehaviors.removeAi('all')
         randomDeathAnim = 'death' + str(utils.getDX(3))
-        self.enemyModel.play(randomDeathAnim)
+        self.enemyModel.play(randomDeathAnim, fromFrame=0, toFrame=12)
 
     def playAttackAnimation(self):
         randomAttackAnim = 'attack' + str(utils.getD4())
-        self.enemyModel.play(randomAttackAnim)
+        self.enemyModel.play(randomAttackAnim, fromFrame=0, toFrame=12)
 
     def playHitAnimation(self):
         randomHitAnim = 'hit' + str(utils.getDX(2))
-        self.enemyModel.play(randomHitAnim)
+        self.enemyModel.play(randomHitAnim, fromFrame=0, toFrame=12)
 
     def createHole(self):
         if self.holeModel == None:
@@ -96,7 +98,6 @@ class Digger(enemy.Enemy):
                                     {'anim':'models/hole-anim'})
             self.holeModel.reparentTo(self._mainRef.mainNode)
 
-            self.holeModel.setPlayRate(.5, 'anim')
             self.holeModel.play('anim', fromFrame=0, toFrame=120)
 
             pos = self.enemyNode.getPos(render)

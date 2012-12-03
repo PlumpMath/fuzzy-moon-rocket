@@ -65,7 +65,8 @@ class Enemy(FSM, Unit):
         self.initEnemyCollisionHandlers()
         self.initEnemyCollisionSolids()
 
-        self.request('Idle')
+        #self.request('Idle')
+        self.request('Disabled')
 
         # Start enemy updater task
         self.enemyUpdaterTask = taskMgr.add(self.enemyUpdater, 'enemyUpdaterTask')
@@ -292,8 +293,8 @@ class Enemy(FSM, Unit):
 
             # If enemy is disabled
             elif self.state == 'Disabled':
-                if self.enemyAIBehaviors.getMaxForce() != self.movementSpeed:
-                    self.enemyAIBehaviors.setMaxForce(self.movementSpeed)
+                if self.enemyAI.getMaxForce() != self.movementSpeed:
+                    self.enemyAI.setMaxForce(self.movementSpeed)
 
         # If player is not within perception range
         else:

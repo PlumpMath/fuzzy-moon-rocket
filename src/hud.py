@@ -13,11 +13,11 @@ class HUD:
 
         self._playerRef = playerRef
         
-        self.gameText = OnscreenText(
-                                text="Fuzzy Moon Rocket",
-                                pos=(1.5, 0.9), 
-                                bg=(0.25, 0.25, 0.25, 1),
-                                shadow=(.1, .1, .1, 1))
+        # self.gameText = OnscreenText(
+        #                         text="Fuzzy Moon Rocket",
+        #                         pos=(1.5, 0.9), 
+        #                         bg=(0.25, 0.25, 0.25, 1),
+        #                         shadow=(.1, .1, .1, 1))
 
         self.initHealthBar()
         self.initEXPBar()
@@ -25,6 +25,8 @@ class HUD:
         self.initStatsButton()
         self.initPlayerAbilityBar()
         self.initQuest()
+
+        self.feedbackText = None
 
         self.showAreaTransDialog = False
 
@@ -241,3 +243,25 @@ class HUD:
                                     scale=.05,
                                     wordwrap=7,
                                     align=TextNode.ALeft)
+
+    def printFeedback(self, feedback, error=True):
+        if self.feedbackText != None:
+            self.feedbackText.destroy()
+
+        fg = (1, 0, 0, 1) if error == True else (0, 1, 0, 1)
+
+        self.feedbackText = OnscreenText(text=feedback,
+                                        pos=(-.95, -.6),
+                                        fg=fg,
+                                        bg=(0.25, 0.25, 0.25, 0.5),
+                                        scale=.06,
+                                        align=TextNode.ALeft
+                                        )
+
+        taskMgr.doMethodLater(5, self.removeFeedback, 'removeFeedbackTask')
+
+    def removeFeedback(self, task):
+        if self.feedbackText != None:
+            self.feedbackText.destroy()
+
+        return task.done
