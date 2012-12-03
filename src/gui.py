@@ -27,6 +27,7 @@ class GUI(object):
         self.initializeGUI()
         self.toggleOverlayFrame()
 
+#------------------------------- DATA HANDLING ----------------------------------------#
     def initializeGUI(self):
         question_sets_response = requests.get('{}/question_set'.format(self._BASE_URL))
         self.question_sets = json.loads(question_sets_response.text)
@@ -89,6 +90,7 @@ class GUI(object):
                       headers={'content-type': 'application/json'})
         return True if r.status_code == 201 else False
 
+#---------------------------------- VISUAL GUI ---------------------------------------#
     def toggleOverlayFrame(self):
         if self._overlayVisible:
             print "Toggle off"
@@ -106,16 +108,13 @@ class GUI(object):
     def initializeOverlayFrame(self):
         self.canvasWidth = 1
         canvasHeight = 1
-        self.overlayFrame = DirectScrolledFrame(
-            canvasSize=(-self.canvasWidth, self.canvasWidth, -canvasHeight, canvasHeight),
+        self.overlayFrame = DirectFrame(
             frameSize=(-self.canvasWidth, self.canvasWidth, -canvasHeight, canvasHeight),
             pos=(0, 1, 0),
-            manageScrollBars=True,
-            autoHideScrollBars=True,
-            sortOrder=1000)
+            sortOrder=10)
 
-        self.doneButton = DirectButton(
-            parent=self.overlayFrame.getCanvas(),
+        doneButton = DirectButton(
+           parent=self.overlayFrame,
            pos=(self.canvasWidth-.1, 0, -(canvasHeight-.1)),
            scale=0.05,
            pad=(.2, .2, .2, .2),
@@ -123,13 +122,48 @@ class GUI(object):
            pressEffect=1,
            command=self.onQuestionsDone)
 
+        questionSet = self.extract_question_set(self._stateHandlerRef.state)
+        #print 'questionSet:', questionSet
 
+        for item in questionSet.iteritems():
+            #print item
+            #print 'first item:', item[0]
+            key = item[0]
+            value = item[1]
+            if key == 'name':
+                self.name = value
+            elif key == 'info_text':
+                self.infoText = value
+            elif key == 'questions':
+                self.questions = value
+            # elif key == 'questionnaire': # Don't believe these are necessary
+            #     self.questionnaire  = value
 
+        DirectLabel(
+            parent=self.overlayFrame,
+            text=self.name,
+            scale=0.09,
+            pos=(0, 0, canvasHeight-.1))
 
+        DirectLabel(
+            parent=self.overlayFrame,
+            text=self.infoText,
+            scale=.07,
+            pos=(0, 0, canvasHeight-.25),
+            text_wordwrap=30)
+
+        # print self.questions
+        # yPos = 0.0
+        # for item in self.questions[0]:
+        #     key = item[0]
+        #     value = item[1]
+        #     if key == 'question':
+        #         self.addQuestion(value, yPos)
+        #         yPos += .15
 
     def addQuestion(self, questionText, yPos):
         questionFrame = DirectFrame(
-            parent=self.overlayFrame.getCanvas(),
+            parent=self.overlayFrame,
             #frameSize=(-(self.canvasWidth-.2),self.canvasWidth-.2, -.4,.4),
             frameColor=(.2, .2, .2, .5),
             pad=(-.1, .1, -.1, .1),
@@ -137,12 +171,12 @@ class GUI(object):
         DirectLabel(
             parent=questionFrame,
             text=questionText,
-            scale=.5,
+            scale=.05,
             text_wordwrap=20)
 
     # def addAnswer(self, question_id, yPos):
     #     answerFrame = DirectFrame(
-    #         parent=self.overlayFrame.getCanvas(),
+    #         parent=self.overlayFrame,
     #         #frameSize=(-(self.canvasWidth-.2),self.canvasWidth-.2, -.2,.2),
     #         frameColor=(.5, .5, .5, .5),
     #         pad=(-.1, .1, -.1, .1),
