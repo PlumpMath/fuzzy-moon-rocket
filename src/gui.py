@@ -45,6 +45,7 @@ class GUI(object):
         return self.question_sets
 
     def get_last_users_scenario(self):
+        """Returns the lastest user's scenario and returns it as an int."""
         all_participants = requests.get('{}/participant'.format(self._BASE_URL))
         # getting the total number of participants allows us to find the latest one
         number_of_participants = json.loads(all_participants.text)['num_results']
