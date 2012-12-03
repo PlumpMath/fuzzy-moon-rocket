@@ -266,6 +266,14 @@ class Player(FSM, Unit):
 
         if task.count >= cooldown:
             self.abilityDict[ability] = 1
+            if ability == 'offensive':
+                self._hudRef.activateIcon(1)
+            elif ability == 'defensive':
+                self._hudRef.activateIcon(2)
+            elif ability == 'evasive':
+                self._hudRef.activateIcon(3)
+            elif ability == 'area':
+                self._hudRef.activateIcon(4)
             return task.done
         else:
             return task.again
@@ -283,6 +291,8 @@ class Player(FSM, Unit):
                     self.abilityDict[off] = 0
                     cd = taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[off, 10], appendTask=True)
                     cd.count = 0
+
+                    self._hudRef.deactivateIcon(1)
             else:
                 print 'Bull Rush in cd'
                 self._hudRef.printFeedback('Bull Rush is in cooldown')
@@ -295,6 +305,8 @@ class Player(FSM, Unit):
                     self.abilityDict[defe] = 0
                     cd = taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[defe, 10], appendTask=True)
                     cd.count = 0
+
+                    self._hudRef.deactivateIcon(2)
             else:
                 print 'Unstoppable in cd'
                 self._hudRef.printFeedback('Unstoppable is in cooldown')
@@ -307,6 +319,8 @@ class Player(FSM, Unit):
                     self.abilityDict[eva] = 0
                     cd = taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[eva, 20], appendTask=True)
                     cd.count = 0
+
+                    self._hudRef.deactivateIcon(3)
             else:
                 print 'Thicket of Blades in cd'
                 self._hudRef.printFeedback('Thicket of Blades is in cooldown')
@@ -319,6 +333,8 @@ class Player(FSM, Unit):
                     self.abilityDict[aoe] = 0
                     cd = taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[aoe, 30], appendTask=True)
                     cd.count = 0
+
+                    self._hudRef.deactivateIcon(4)
             else:
                 print 'Shift the Battlefield in cd'
                 self._hudRef.printFeedback('Shift the Battlefield is in cooldown')

@@ -109,7 +109,8 @@ class HUD:
                                 text='Health', 
                                 value=100, 
                                 pos=(0, 0, -0.8),
-                                scale=0.75)
+                                scale=0.75,
+                                barTexture='hud/Health_bar_clear.png')
 
     def updateBars(self, task):
         self.healthBar['value'] = self._playerRef.getCurrentHealthPointsAsPercentage()
@@ -222,6 +223,26 @@ class HUD:
                                              image_pos=(0, 0, imageUpModifier),
                                              command=self._playerRef.fireAbility,
                                              extraArgs=[4])
+
+    def deactivateIcon(self, iconID):
+        if iconID == 1:
+            self.offensiveAbilityButton['image'] = 'hud/Bullrush_white_deactivated.png'
+        elif iconID == 2:
+            self.defensiveAbilityButton['image'] = 'hud/Unstoppable_deactivated.png'
+        elif iconID == 3:
+            self.evasiveAbilityButton['image'] = 'hud/Thicket_of_blades_deactivated.png'
+        elif iconID == 4:
+            self.aoeAbilityButton['image'] = 'hud/Shift_the_battlefield_deactivated.png'
+
+    def activateIcon(self, iconID):
+        if iconID == 1:
+            self.offensiveAbilityButton['image'] = 'hud/Bullrush_white.png'
+        elif iconID == 2:
+            self.defensiveAbilityButton['image'] = 'hud/Unstoppable.png'
+        elif iconID == 3:
+            self.evasiveAbilityButton['image'] = 'hud/Thicket_of_blades.png'
+        elif iconID == 4:
+            self.aoeAbilityButton['image'] = 'hud/Shift_the_battlefield.png'
 
     def initQuest(self):
         self.questFrame = DirectFrame(frameSize=(-.2, .2, -.25, .25),
