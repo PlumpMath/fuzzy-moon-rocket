@@ -28,14 +28,8 @@ class GUI(object):
         self.toggleOverlayFrame()
 
     def initializeGUI(self):
-        self.questions = requests.get('{}/question'.format(self._BASE_URL))
-        self.questions_dict = self.extract_questions()
-        print self.questions_dict
-
-        # just to test that HTTP requests are working
-        # r = requests.get('http://api.github.com/users/octocat/orgs')
-        # DirectLabel(text=r.headers['date'], scale=0.09, hpr=(0, 0, 0),
-        #             pos=(0, 0, 0.7), frameColor=(0, 0, 0, 0))
+        question_sets_response = requests.get('{}/question_set'.format(self._BASE_URL))
+        self.question_sets = json.loads(question_sets_response.text)
 
     def extract_questions(self):
         return json.loads(self.questions.text)['objects']
