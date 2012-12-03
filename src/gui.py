@@ -167,8 +167,10 @@ class GUI(object):
                     self.addQuestion(value, yPos)
                     yPos += yInc
                 elif key == 'type':
-                    if value == 3:
+                    if value == 3 or value == 1:
                         self.addTextInputField(yPos)
+                    # elif value == 2:
+                    #     self.addLikertScaleButtons(yPos)
 
                 if yPos >= yInc * 4:
 
@@ -195,7 +197,7 @@ class GUI(object):
             pos=(-.8, yStart-yPos),
             align=TextNode.ALeft)
 
-    def addTextInputField(self, type, yPos):
+    def addTextInputField(self, yPos):
         yStart = .43
         inputField = DirectEntry(
             parent=self.overlayFrame,
@@ -210,15 +212,33 @@ class GUI(object):
             #focus=1
             )
 
+    def addLikertScaleButtons(self, yPos):
+        self.buttons = []
+        for i, label in self._CHOICES.iteritems():
+            xPos = (i * .27) - 0.8
+            yStart = .55
 
+            OnscreenText(
+                parent=self.overlayFrame,
+                text=label,
+                scale=0.04,
+                pos=(xPos, 0, yStart-yPos),
+                #frameColor=(0, 0, 0, 0),
+                wordwrap=7
+                )
+            button = DirectRadioButton(
+                parent=self.overlayFrame,
+                pos=(xPos, 0, yStart-yPos-.05),
+                variable=self._rButtonValue,
+                value=[i],
+                scale=0.04,
+                frameColor=(1, 1, 1, 0),
+                indicatorValue=0
+                )
+            self.buttons.append(button)
 
-    # def addAnswer(self, question_id, yPos):
-    #     answerFrame = DirectFrame(
-    #         parent=self.overlayFrame,
-    #         #frameSize=(-(self.canvasWidth-.2),self.canvasWidth-.2, -.2,.2),
-    #         frameColor=(.5, .5, .5, .5),
-    #         pad=(-.1, .1, -.1, .1),
-    #         pos=(-1, 0, yPos))
+        for button in self.buttons:
+            button.setOthers(self.buttons)
 
     def build_likert_question(self, question_dict, buttonFrame):
         self.buttons = []
