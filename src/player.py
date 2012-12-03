@@ -83,7 +83,7 @@ class Player(FSM, Unit):
         self.armorClass = 10 + 8 # Base armor class + fullplate armor
         self.mass = 90
 
-        self.startLevel = 2
+        self.startLevel = 3
 
         for i in range(1, self.startLevel):
             self.increaseLevel()
@@ -103,7 +103,10 @@ class Player(FSM, Unit):
             'hit':modelPrefix+'hit',
             'defense':modelPrefix+'defense',
             'death':modelPrefix+'death',
-            'idle':modelPrefix+'idle'
+            'idle':modelPrefix+'idle',
+            'bull-rush':modelPrefix+'bull-rush',
+            'thicket-blades':modelPrefix+'thicket-blades',
+            'level-up':modelPrefix+'level-up'
             })
 
         self.playerModel.reparentTo(self.playerNode)
@@ -216,11 +219,12 @@ class Player(FSM, Unit):
     def receiveEXP(self, value):
         expGain = value * self._ddaHandlerRef.EXPFactor
         self.experience += expGain
-        self._hudRef.printFeedback('Experience gained: ' + str(expGain), False)
+        self._hudRef.printFeedback('Experience gained: ' + str(int(expGain)), False)
 
         if self.experience >= self.getEXPToNextLevel():
             self.increaseLevel()
             self._hudRef.printFeedback('Level gained!', False)
+            self.playerModel.play('level-up', fromFrame=0, toFrame=25)
 
     def getEXPToNextLevelInPercentage(self):
         currentEXP = self.experience - self._prevEXP
@@ -284,6 +288,8 @@ class Player(FSM, Unit):
             # Do not do anything when paused
             return 
 
+        self.playerModel.stop()
+
         # Offensive ability - Bull Rush 10 sec cd
         if ability == 1:
             off = 'offensive'
@@ -294,6 +300,7 @@ class Player(FSM, Unit):
                     cd.count = 0
 
                     self._hudRef.deactivateIcon(1)
+                    self.playerModel.play('bull-rush', fromFrame=0, toFrame=25)
             else:
                 #print 'Bull Rush in cd'
                 self._hudRef.printFeedback('Bull Rush is in cooldown')
@@ -308,6 +315,7 @@ class Player(FSM, Unit):
                     cd.count = 0
 
                     self._hudRef.deactivateIcon(2)
+                    self.playerModel.play('defense', fromFrame=0, toFrame=12)
             else:
                 #print 'Unstoppable in cd'
                 self._hudRef.printFeedback('Unstoppable is in cooldown')
@@ -322,6 +330,7 @@ class Player(FSM, Unit):
                     cd.count = 0
 
                     self._hudRef.deactivateIcon(3)
+                    self.playerModel.play('thicket-blades', fromFrame=0, toFrame=27)
             else:
                 #print 'Thicket of Blades in cd'
                 self._hudRef.printFeedback('Thicket of Blades is in cooldown')
@@ -367,8 +376,6 @@ class Player(FSM, Unit):
         self.receiveTemporaryHealth(tempHp)
         print 'unstoppable:', tempHp
 
-        self.playerModel.stop()
-        self.playerModel.play('defense')
         taskMgr.doMethodLater(1.5, self.stopDefenseAnimation, 'stopDefenseAnimationTask')
 
         self._hudRef.printFeedback('Unstoppable activated', False)

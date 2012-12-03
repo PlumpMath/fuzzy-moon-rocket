@@ -51,7 +51,7 @@ class Digger(enemy.Enemy):
 
     def enterIdle(self):
         #print 'enemy enterIdle'
-        idleTime = 60.0 * 2.0
+        #idleTime = 60.0 * 3.0
 
         stopEnemy = self.enemyModel.actorInterval('pursue-to-idle', startFrame=0, endFrame=12)
         idleEnemy = self.enemyModel.actorInterval('idle-walk-to-dig', startFrame=0, endFrame=60)
@@ -98,13 +98,11 @@ class Digger(enemy.Enemy):
                                     {'anim':'models/hole-anim'})
             self.holeModel.reparentTo(self._mainRef.mainNode)
 
+            self.holeModel.setPos(self.enemyNode, 0, -.1, 0)
+
             self.holeModel.play('anim', fromFrame=0, toFrame=120)
 
-            pos = self.enemyNode.getPos(render)
-            #self.holeModel.setPos(pos.getX(), pos.getY()+.5, pos.getZ()+.01)
-            self.holeModel.setPos(pos)
-
-            removeHoleDelay = 6
+            removeHoleDelay = 12
             taskMgr.doMethodLater(removeHoleDelay, self.removeHole, 'removeHoleTask')
 
     def removeHole(self, task):

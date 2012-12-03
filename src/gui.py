@@ -17,10 +17,6 @@ class GUI(object):
 
     def __init__(self):
         print("GUI class instantiated")
-        taskMgr.add(self.recordTime, 'RecordTimeTask')
-
-        self.startTime = time.time()
-        #print("startTime : " + str(self.startTime))
 
         # just to test that HTTP requests are working
         r = requests.get('http://api.github.com/users/octocat/orgs')
@@ -36,12 +32,6 @@ class GUI(object):
         r_dict = json.loads(r.text)
         json.loads(r.text)['objects']
 
-    def recordTime(self, task):
-        self.currentTime = time.time()
-        self.elapsedSeconds = self.currentTime - self.startTime
-        #print("elapsedSeconds: " + str(self.elapsedSeconds))
-
-        return task.cont
 
     def toggleOverlayFrame(self):
         if self._overlayVisible:

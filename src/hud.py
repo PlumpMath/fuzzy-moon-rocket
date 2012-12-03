@@ -191,7 +191,6 @@ class HUD:
                                             pos=(0, 0, -0.95),
                                             pad=(0.4, 0.075),
                                             frameTexture='hud/Abilities_Frame.png')
-
         scale=.05
         imageUpModifier = .4
 
