@@ -31,8 +31,11 @@ class GUI(object):
         question_sets_response = requests.get('{}/question_set'.format(self._BASE_URL))
         self.question_sets = json.loads(question_sets_response.text)
 
-    def extract_questions(self):
-        return json.loads(self.questions.text)['objects']
+    def extract_question_set(self, question_set):
+        for qs in self.question_sets['objects']:
+            if question_set.lower() in qs['name'].lower():
+                return qs
+        return self.question_sets
 
     def get_last_scenario(self):
         # all_participants = requests.get('{}/participant'.format(self._BASE_URL))
