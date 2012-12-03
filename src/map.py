@@ -249,7 +249,7 @@ class Map:
         self.oII.loop(oIIAnim, fromFrame=0, toFrame=50)
 
         self.oII.setPos(ground.getPos(render))
-        self.oII.setZ(self.oII, 0.15)
+        self.oII.setZ(self.oII, 0.1)
 
         self.oII.reparentTo(self.areaNode)
 

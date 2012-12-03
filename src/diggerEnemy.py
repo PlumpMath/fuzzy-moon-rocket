@@ -51,14 +51,14 @@ class Digger(enemy.Enemy):
 
     def enterIdle(self):
         #print 'enemy enterIdle'
-        idleTime = 30.0 #60 * 2
+        idleTime = 60.0 * 2.0
 
         stopEnemy = self.enemyModel.actorInterval('pursue-to-idle', startFrame=0, endFrame=12)
-        idleEnemy = self.enemyModel.actorInterval('idle-walk-to-dig', startFrame=0, endFrame=60, duration=idleTime/2)
+        idleEnemy = self.enemyModel.actorInterval('idle-walk-to-dig', startFrame=0, endFrame=60)
         digHole = Parallel(Func(self.createHole), self.enemyModel.actorInterval('idle-walk-to-dig-to-sleep', startFrame=0, endFrame=120))
         #suicide = Func(self.suicide)
 
-        self.stopSequence = Sequence(stopEnemy, Wait(1.0), idleEnemy, Wait(idleTime/2.0), digHole, Wait(idleTime/2.0))
+        self.stopSequence = Sequence(stopEnemy, Wait(1.0), idleEnemy, Wait(idleTime), digHole, Wait(idleTime/2.0))
         self.stopSequence.start()
 
         self.isSleeping = True
@@ -101,7 +101,8 @@ class Digger(enemy.Enemy):
             self.holeModel.play('anim', fromFrame=0, toFrame=120)
 
             pos = self.enemyNode.getPos(render)
-            self.holeModel.setPos(pos.getX(), pos.getY()+.5, pos.getZ()+.01)
+            #self.holeModel.setPos(pos.getX(), pos.getY()+.5, pos.getZ()+.01)
+            self.holeModel.setPos(pos)
 
             removeHoleDelay = 6
             taskMgr.doMethodLater(removeHoleDelay, self.removeHole, 'removeHoleTask')
