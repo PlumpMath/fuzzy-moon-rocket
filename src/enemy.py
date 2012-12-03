@@ -89,7 +89,6 @@ class Enemy(FSM, Unit):
                 'death2':modelPrefix+'-death2'
             })
         self.enemyModel.reparentTo(self.enemyNode)
-        #self.enemyModel.setH(-180)
 
         self.enemyNode.setPos(Point3.zero())
 

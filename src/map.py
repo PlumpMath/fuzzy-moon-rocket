@@ -348,8 +348,9 @@ class Map:
         # Setup directional light (a yellowish sun)
         sun = DirectionalLight('sun')
         sun.setColor(VBase4(0.25, 0.25, 0, 1))
-        sun.getLens().setNearFar(5.5, 500)
-        sun.getLens().setFilmSize(50)
+        #sun.getLens().setNearFar(5.5, 500)
+        #sun.getLens().setFilmSize(50)
+        sun.getLens().setAspectRatio(1.7778)
         #sun.showFrustum()
         sun.setShadowCaster(True, 4096, 4096) 
 

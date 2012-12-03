@@ -334,6 +334,7 @@ class Player(FSM, Unit):
                 bSuccess = True
 
                 if self.getStrengthModifier() + utils.getD20() > enemy.armorClass:
+                    self._hudRef.printFeedback('Bull Rush hit', True)
                     self.enemyFleeFromPlayer(enemy)
 
                     self.playerModel.play('attack')
@@ -380,6 +381,7 @@ class Player(FSM, Unit):
                 if utils.getIsInRange(playerPos, enemyPos, self.combatRange):
                     bSuccess  = True
                     if self.getStrengthModifier() + utils.getD20() > enemy.armorClass:
+                        self._hudRef.printFeedback('Thicket of Blades hit', True)
                         enemy.slowMovementByPercentage(50, 10) # slow by 50 % in 10 seconds, automatically removes it again
                         enemy.enemyModel.play('hit')
                     else:
@@ -397,6 +399,7 @@ class Player(FSM, Unit):
             if utils.getIsInRange(playerPos, enemyPos, self.combatRange):
                 bSuccess = True
                 if self.getStrengthModifier() + utils.getD20() > enemy.armorClass:
+                    self._hudRef.printFeedback('Shift the Battlefield hit', True)
                     self.enemyFleeFromPlayer(enemy)
     
                     # Might want to replace the getD8 to depend on the player's weapon
@@ -586,7 +589,6 @@ class Player(FSM, Unit):
             self.playerModel.stop()
 
             return task.done
-
 
     def attackEnemies(self, task):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:

@@ -66,7 +66,7 @@ class HUD:
                                     frameColor=(1, 1, 1, 1),
                                     frameSize=(-0.5, 0.5, -0.5, 0.5),
                                     pos=(1.0, -0.5, 0.0),
-                                    frameTexture='gui/Stats_Window.png'
+                                    frameTexture='hud/Stats_Window.png'
                                     )
 
             self.closeButton = DirectButton(
@@ -191,7 +191,7 @@ class HUD:
                                                 parent=self.abilityBar,
                                                 scale=scale,
                                                 pos=(-0.3, 0, -0.01),
-                                                image='gui/Bullrush_white.png',
+                                                image='hud/Bullrush_white.png',
                                                 image_pos=(0, 0, imageUpModifier),
                                                 command=self._playerRef.fireAbility,
                                                 extraArgs=[1])
@@ -200,7 +200,7 @@ class HUD:
                                                  parent=self.abilityBar,
                                                  scale=scale,
                                                  pos=(-0.1, 0, -0.01),
-                                                 image='gui/Unstoppable.png',
+                                                 image='hud/Unstoppable.png',
                                                  image_pos=(0, 0, imageUpModifier),
                                                  command=self._playerRef.fireAbility,
                                                  extraArgs=[2])
@@ -209,7 +209,7 @@ class HUD:
                                                  parent=self.abilityBar,
                                                  scale=scale,
                                                  pos=(0.1, 0, -0.01),
-                                                 image='gui/Thicket_of_blades.png',
+                                                 image='hud/Thicket_of_blades.png',
                                                  image_pos=(0, 0, imageUpModifier),
                                                  command=self._playerRef.fireAbility,
                                                  extraArgs=[3])
@@ -218,7 +218,7 @@ class HUD:
                                              parent=self.abilityBar,
                                              scale=scale,
                                              pos=(0.3, 0, -0.01),
-                                             image='gui/Shift_the_battlefield.png',
+                                             image='hud/Shift_the_battlefield.png',
                                              image_pos=(0, 0, imageUpModifier),
                                              command=self._playerRef.fireAbility,
                                              extraArgs=[4])
@@ -227,7 +227,7 @@ class HUD:
         self.questFrame = DirectFrame(frameSize=(-.2, .2, -.25, .25),
                                       pos=(1.5, 0, .5),
                                       pad=(.2,.2, .2,.2),
-                                      frameTexture='gui/Quest_Window.png')
+                                      frameTexture='hud/Quest_Window.png')
         self.questText = None
         self.addQuest('Explore the farm')
 
