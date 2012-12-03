@@ -214,8 +214,9 @@ class Player(FSM, Unit):
         return self._prevEXP + (self.level * 1000)
 
     def receiveEXP(self, value):
-        self.experience += (value * self._ddaHandlerRef.EXPFactor)
-        self._hudRef.printFeedback('Experience gained: ' + str(self.experience), False)
+        expGain = value * self._ddaHandlerRef.EXPFactor
+        self.experience += expGain
+        self._hudRef.printFeedback('Experience gained: ' + str(expGain), False)
 
         if self.experience >= self.getEXPToNextLevel():
             self.increaseLevel()
@@ -294,7 +295,7 @@ class Player(FSM, Unit):
 
                     self._hudRef.deactivateIcon(1)
             else:
-                print 'Bull Rush in cd'
+                #print 'Bull Rush in cd'
                 self._hudRef.printFeedback('Bull Rush is in cooldown')
 
         # Defensive - Unstoppable 10 sec cd
@@ -308,7 +309,7 @@ class Player(FSM, Unit):
 
                     self._hudRef.deactivateIcon(2)
             else:
-                print 'Unstoppable in cd'
+                #print 'Unstoppable in cd'
                 self._hudRef.printFeedback('Unstoppable is in cooldown')
 
         # Evasive - Thicket of Blades 20 sec cd
@@ -322,7 +323,7 @@ class Player(FSM, Unit):
 
                     self._hudRef.deactivateIcon(3)
             else:
-                print 'Thicket of Blades in cd'
+                #print 'Thicket of Blades in cd'
                 self._hudRef.printFeedback('Thicket of Blades is in cooldown')
 
         # Area of Effect - Shift the Battlefield 30 sec cd
@@ -336,7 +337,7 @@ class Player(FSM, Unit):
 
                     self._hudRef.deactivateIcon(4)
             else:
-                print 'Shift the Battlefield in cd'
+                #print 'Shift the Battlefield in cd'
                 self._hudRef.printFeedback('Shift the Battlefield is in cooldown')
 
     def bullRush(self):
@@ -356,7 +357,7 @@ class Player(FSM, Unit):
                     self.playerModel.play('attack')
                     enemy.playHitAnimation()
                 else:
-                    print 'bullRush missed'
+                    #print 'bullRush missed'
                     self._hudRef.printFeedback('Bull Rush missed')
 
         return bSuccess
@@ -366,6 +367,7 @@ class Player(FSM, Unit):
         self.receiveTemporaryHealth(tempHp)
         print 'unstoppable:', tempHp
 
+        self.playerModel.stop()
         self.playerModel.play('defense')
         taskMgr.doMethodLater(1.5, self.stopDefenseAnimation, 'stopDefenseAnimationTask')
 
@@ -390,19 +392,26 @@ class Player(FSM, Unit):
     def thicketOfBlades(self):
         bSuccess = False
 
-        playerPos = self.playerNode.getPos()
-        for enemy in self._enemyListRef:
-            if not enemy.getIsDead():
-                enemyPos = enemy.enemyNode.getPos()
-                if utils.getIsInRange(playerPos, enemyPos, self.combatRange):
-                    bSuccess  = True
-                    if self.getStrengthModifier() + utils.getD20() > enemy.armorClass:
-                        self._hudRef.printFeedback('Thicket of Blades hit', True)
-                        enemy.slowMovementByPercentage(50, 10) # slow by 50 % in 10 seconds, automatically removes it again
-                        enemy.enemyModel.play('hit')
-                    else:
-                        print 'thicketOfBlades missed'
-                        self._hudRef.printFeedback('Thicket of Blades missed')
+        numEntries = self.attackCollisionHandler.getNumEntries()
+        if numEntries > 0:
+            self.attackCollisionHandler.sortEntries()
+
+            for i in range(numEntries):
+                entry = self.attackCollisionHandler.getEntry(i).getIntoNode()
+                entryName = entry.getName()[:-6]
+                #print('entryFound:', entryName)
+
+                enemy = utils.enemyDictionary[entryName]
+                if enemy is not None and not enemy.getIsDead():
+                    if utils.getIsInRange(self.playerNode.getPos(), enemy.enemyNode.getPos(), self.combatRange):
+                        bSuccess  = True
+                        if self.getStrengthModifier() + utils.getD20() > enemy.armorClass:
+                            self._hudRef.printFeedback('Thicket of Blades hit', True)
+                            enemy.slowMovementByPercentage(50, 10) # slow by 50 % in 10 seconds, automatically removes it again
+                            enemy.enemyModel.play('hit')
+                        else:
+                            #print 'thicketOfBlades missed'
+                            self._hudRef.printFeedback('Thicket of Blades missed')
 
         return bSuccess
 
@@ -424,7 +433,7 @@ class Player(FSM, Unit):
 
                     enemy.enemyModel.play('hit')
                 else:
-                    print 'shiftTheBattlefield missed'
+                    #print 'shiftTheBattlefield missed'
                     self._hudRef.printFeedback('Shift the Battlefield missed')
                     dmg = (2 * utils.getD8() + self.getStrengthModifier()) / 2
                     enemy.receiveDamage(dmg)

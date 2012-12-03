@@ -189,10 +189,11 @@ class HUD:
     def initPlayerAbilityBar(self):
         self.abilityBar = DirectFrame(frameColor=(0.7, 0.7, 0.7, 1.0),
                                             pos=(0, 0, -0.95),
-                                            pad=(0.4, 0.075))
+                                            pad=(0.4, 0.075),
+                                            frameTexture='hud/Abilities_Frame.png')
 
         scale=.05
-        imageUpModifier = .33
+        imageUpModifier = .4
 
         self.offensiveAbilityButton = DirectButton(text=(''),
                                                 parent=self.abilityBar,

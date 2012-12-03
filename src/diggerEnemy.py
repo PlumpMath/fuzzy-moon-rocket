@@ -58,7 +58,7 @@ class Digger(enemy.Enemy):
         digHole = Parallel(Func(self.createHole), self.enemyModel.actorInterval('idle-walk-to-dig-to-sleep', startFrame=0, endFrame=120))
         #suicide = Func(self.suicide)
 
-        self.stopSequence = Sequence(stopEnemy, Wait(1.0), idleEnemy, Wait(idleTime), digHole, Wait(idleTime/2.0))
+        self.stopSequence = Sequence(stopEnemy, idleEnemy,  digHole)
         self.stopSequence.start()
 
         self.isSleeping = True
