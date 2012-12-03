@@ -32,6 +32,13 @@ class GUI(object):
         self.question_sets = json.loads(question_sets_response.text)
 
     def extract_question_set(self, question_set):
+        """Extracts a single questions set by checking if the string in
+           question_set is in any of the question_set's names.
+            Param:
+                question_set: A string from the constants in states.py
+            Returns:
+                A dictionary with the whole question_set
+        """
         for qs in self.question_sets['objects']:
             if question_set.lower() in qs['name'].lower():
                 return qs
