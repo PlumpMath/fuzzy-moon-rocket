@@ -248,7 +248,8 @@ class Map:
         #self.oII.setPlayRate(0.5, oIIAnim)
         self.oII.loop(oIIAnim, fromFrame=0, toFrame=50)
 
-        self.oII.setPos(ground.getPos(render))
+        exitPos = self.areaGameObjects.find('**/exitPos').getPos(render)
+        self.oII.setPos(exitPos)
         self.oII.setZ(self.oII, 0.1)
 
         self.oII.reparentTo(self.areaNode)

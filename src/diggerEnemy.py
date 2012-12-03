@@ -56,12 +56,20 @@ class Digger(enemy.Enemy):
         stopEnemy = self.enemyModel.actorInterval('pursue-to-idle', startFrame=0, endFrame=12)
         idleEnemy = self.enemyModel.actorInterval('idle-walk-to-dig', startFrame=0, endFrame=60)
         digHole = Parallel(Func(self.createHole), self.enemyModel.actorInterval('idle-walk-to-dig-to-sleep', startFrame=0, endFrame=120))
+        #hideEnemy = Func(self.enemyNode.hide)
         #suicide = Func(self.suicide)
 
         self.stopSequence = Sequence(stopEnemy, idleEnemy,  digHole)
         self.stopSequence.start()
 
         self.isSleeping = True
+
+        #taskMgr.doMethodLater(3, self.showEnemy, 'showEnemyTask')
+
+    def showEnemy(self, task):
+        if self.state == 'Idle':
+            self.enemyNode.show()
+        return task.done
 
     def enterPursue(self):
         #print('enemy enterPursue')

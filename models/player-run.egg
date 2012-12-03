@@ -1,10 +1,10 @@
 <CoordinateSystem> { Z-Up }
 
 <Comment> {
-  "maya2egg2012 -p -a chan -sf 0 -ef 12 -pd 'C:/Users/Rami Ahmed Bock/Desktop' -cs z-up -uo cm -trans all -o 'C:/Users/Rami Ahmed Bock/Desktop/player-run.egg' 'C:/Users/Rami Ahmed Bock/Dropbox/P5/mayaDropoff/update_c/farmer_run_small_geofix_c_temp.mb'"
+  "maya2egg2012 -p -a chan -sf 0 -ef 12 -pd 'C:/Users/Rami Ahmed Bock/Desktop' -cs z-up -uo cm -trans all -o 'C:/Users/Rami Ahmed Bock/Desktop/player-run.egg' 'C:/Users/Rami Ahmed Bock/Dropbox/P5/mayaDropoff/update_c/farmer_run_small_geofix_c2_temp.mb'"
 }
 <Table> {
-  <Bundle> farmer_run_small_geofix_c_temp {
+  <Bundle> farmer_run_small_geofix_c2_temp {
     <Table> "<skeleton>" {
       <Table> spaceFarmer {
         <Xfm$Anim_S$> xform {
