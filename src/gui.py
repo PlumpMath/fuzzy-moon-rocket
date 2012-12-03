@@ -47,11 +47,15 @@ class GUI(object):
 
     def create_user(self):
         """This method must be called after get_last_users_scenario()"""
-        # uuid needs to be generated
-        scenario = 1 if self.get_last_users_scenario() == 0 else 0
-        # post the user to database
-
-        return scenario
+        # TODO: Handle when user cannot be created, RuntimeError or similar
+        #       Check if possible to let people know that there is
+        #       something wrong with their connection.
+        participant_data = {'scenario': 1 if self.get_last_users_scenario() == 0 else 0}
+        r = requests.post('{}/participant'.format(self._BASE_URL),
+                      data=json.dumps(participant_data),
+                      headers={'content-type': 'application/json'})
+        self.participant_id = json.loads(r.text)['id']
+        return participant_data['scenario']
 
     def get_wants_to_continue(self):
         '''This method returns the user's last 'I want to continue playing' answer
