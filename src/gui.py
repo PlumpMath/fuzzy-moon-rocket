@@ -31,6 +31,8 @@ class GUI(object):
         question_sets_response = requests.get('{}/question_set'.format(self._BASE_URL))
         self.question_sets = json.loads(question_sets_response.text)
 
+        self.create_user()
+
     def extract_question_set(self, question_set):
         """Extracts a single questions set by checking if the string in
            question_set is in any of the question_set's names.
@@ -54,7 +56,7 @@ class GUI(object):
         return json.loads(p.text)['scenario']
 
     def create_user(self):
-        """This method must be called after get_last_users_scenario()"""
+        """This method must be called after get_last_users_scenario() - Why?"""
         # TODO: Handle when user cannot be created, RuntimeError or similar
         #       Check if possible to let people know that there is
         #       something wrong with their connection.
@@ -76,7 +78,7 @@ class GUI(object):
             Params:
                 question_id: a string or int of the question
                 answer: the user's answer as a string
-            Retruns:
+            Returns:
                 True if response is 201 (a new resource created)
                 False otherwise
         """
@@ -112,33 +114,39 @@ class GUI(object):
             autoHideScrollBars=True,
             sortOrder=1000)
 
-        self.doneButton = DirectButton(parent=self.overlayFrame.getCanvas(),
-                                       pos=(self.canvasWidth-.1, 0, -(canvasHeight-.1)),
-                                       scale=0.05,
-                                       pad=(.2, .2, .2, .2),
-                                       text=('Done'),
-                                       pressEffect=1,
-                                       command=self.onQuestionsDone)
+        self.doneButton = DirectButton(
+            parent=self.overlayFrame.getCanvas(),
+           pos=(self.canvasWidth-.1, 0, -(canvasHeight-.1)),
+           scale=0.05,
+           pad=(.2, .2, .2, .2),
+           text=('Done'),
+           pressEffect=1,
+           command=self.onQuestionsDone)
+
+
+
+
 
     def addQuestion(self, questionText, yPos):
         questionFrame = DirectFrame(
-                        parent=self.overlayFrame.getCanvas(),
-                        #frameSize=(-(self.canvasWidth-.2),self.canvasWidth-.2, -.4,.4),
-                        frameColor=(.2, .2, .2, .5),
-                        pad=(-.1, .1, -.1, .1),
-                        pos=(-1, 0, yPos))
-        DirectLabel(parent=questionFrame,
-                    text=questionText,
-                    scale=.5,
-                    text_wordwrap=20)
+            parent=self.overlayFrame.getCanvas(),
+            #frameSize=(-(self.canvasWidth-.2),self.canvasWidth-.2, -.4,.4),
+            frameColor=(.2, .2, .2, .5),
+            pad=(-.1, .1, -.1, .1),
+            pos=(-1, 0, yPos))
+        DirectLabel(
+            parent=questionFrame,
+            text=questionText,
+            scale=.5,
+            text_wordwrap=20)
 
-    def addAnswer(self, question_id, yPos):
-        answerFrame = DirectFrame(
-                    parent=self.overlayFrame.getCanvas(),
-                    #frameSize=(-(self.canvasWidth-.2),self.canvasWidth-.2, -.2,.2),
-                    frameColor=(.5, .5, .5, .5),
-                    pad=(-.1, .1, -.1, .1),
-                    pos=(-1, 0, yPos))
+    # def addAnswer(self, question_id, yPos):
+    #     answerFrame = DirectFrame(
+    #         parent=self.overlayFrame.getCanvas(),
+    #         #frameSize=(-(self.canvasWidth-.2),self.canvasWidth-.2, -.2,.2),
+    #         frameColor=(.5, .5, .5, .5),
+    #         pad=(-.1, .1, -.1, .1),
+    #         pos=(-1, 0, yPos))
 
     def build_likert_question(self, question_dict, buttonFrame):
         self.buttons = []

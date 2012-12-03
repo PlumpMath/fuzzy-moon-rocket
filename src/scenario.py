@@ -16,12 +16,13 @@ class ScenarioHandler():
         self.initializeScenario()
 
     def initializeScenario(self):
-        self.currentScenario = self._guiRef.create_user()
+        #self.currentScenario = self._guiRef.create_user()
+        self.currentScenario = self._guiRef.get_last_users_scenario()
 
         if self.currentScenario == self.BASELINE_SCENARIO:
-            print 'This game is baseline'
+            print 'This game is baseline' # = 0
         else:
-            print 'This game has DDA'
+            print 'This game has DDA' # = 1
 
     def getHasDDA(self):
         if self.currentScenario == self.DDA_SCENARIO:
