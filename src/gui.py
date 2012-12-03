@@ -64,10 +64,20 @@ class GUI(object):
         return True
 
     def save_answer(self, question_id, answer):
-        """question_id is a string or int of the question
-           answer is the user's answer as a string
+        """POSTs answer to server.
+            Params:
+                question_id: a string or int of the question
+                answer: the user's answer as a string
+            Retruns:
+                True if response is 201 (a new resource created)
+                False otherwise
         """
-        pass
+        question_data = {'participant_id': self.participant_id,
+                         'question_id': question_id, 'answer': answer}
+        r = requests.post('{}/answer'.format(self._BASE_URL),
+                      data=json.dumps(question_data),
+                      headers={'content-type': 'application/json'})
+        return True if r.status_code == 201 else False
 
     def toggleOverlayFrame(self):
         if self._overlayVisible:
