@@ -37,7 +37,7 @@ class GUI(object):
                 return qs
         return self.question_sets
 
-    def get_last_scenario(self):
+    def get_last_users_scenario(self):
         all_participants = requests.get('{}/participant'.format(self._BASE_URL))
         # getting the total number of participants allows us to find the latest one
         number_of_participants = json.loads(all_participants.text)['num_results']
@@ -46,9 +46,9 @@ class GUI(object):
         return json.loads(p.text)['scenario']
 
     def create_user(self):
-        """This method must be called after get_last_scenario()"""
+        """This method must be called after get_last_users_scenario()"""
         # uuid needs to be generated
-        scenario = 1 if self.get_last_scenario() == 0 else 0
+        scenario = 1 if self.get_last_users_scenario() == 0 else 0
         # post the user to database
 
         return scenario
