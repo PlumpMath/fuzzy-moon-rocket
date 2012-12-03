@@ -1,6 +1,6 @@
 from direct.gui.DirectGui import *
 from direct.gui.OnscreenText import OnscreenText
-from panda3d.core import TextNode
+from panda3d.core import TextNode, TransparencyAttrib
 from direct.task import Task
 import sys
 
@@ -62,28 +62,29 @@ class HUD:
         if not self._showingStats:
             self._showingStats = True
 
-            self.myFrame = DirectFrame(
+            self.statsFrame = DirectFrame(
                                     frameColor=(1, 1, 1, 1),
                                     frameSize=(-0.5, 0.5, -0.5, 0.5),
                                     pos=(1.0, -0.5, 0.0),
                                     frameTexture='hud/Stats_Window.png'
                                     )
+            self.statsFrame.setTransparency(TransparencyAttrib.MAlpha)
 
             self.closeButton = DirectButton(
                                          text='x',
                                          pos=(.4, 0, .4),
                                          scale=.05,
-                                         parent=self.myFrame,
+                                         parent=self.statsFrame,
                                          command=self.exitStats)
 
             def addStats(pos, text):
                     return OnscreenText(text=text,
                                         pos=(-0.4, pos),
-                                        fg=(.5, .1, .1, 1),
-                                        bg=(.1, .5, .5, .25), # Tweak bg and fg to make text easily readable
+                                        fg=(1, 1, 1, 1),
+                                        #bg=(.1, .5, .5, .25), # Tweak bg and fg to make text easily readable
                                         shadow=(0, 0, 0, 1),
                                         scale=0.05,
-                                        parent=self.myFrame,
+                                        parent=self.statsFrame,
                                         align=TextNode.ALeft)
 
             addStats(0.4, 'Strength: ' + str(self._playerRef.strength))
@@ -102,7 +103,7 @@ class HUD:
             self.exitStats()
 
     def exitStats(self):
-        self.myFrame.destroy()
+        self.statsFrame.destroy()
 
     def initHealthBar(self):
         self.healthBar = DirectWaitBar(
@@ -155,7 +156,8 @@ class HUD:
                                     value=0,
                                     pos=(0, 0, -0.69),
                                     scale=0.5,
-                                    barColor=(0, 1, 0, 0.5))
+                                    barColor=(0, 1, 0, 0.5),
+                                    barTexture='hud/XP_bar.png')
         
         self.expBarText = OnscreenText(text='',
                                     parent=self.expBar,
@@ -249,6 +251,7 @@ class HUD:
                                       pos=(1.5, 0, .5),
                                       pad=(.2,.2, .2,.2),
                                       frameTexture='hud/Quest_Window.png')
+        self.questFrame.setTransparency(TransparencyAttrib.MAlpha)
         self.questText = None
         self.addQuest('Explore the farm')
 
@@ -258,7 +261,7 @@ class HUD:
 
         self.questText = OnscreenText(text='Objective:\n'+text,
                                     pos=(-.15, .15),
-                                    fg=(.75, .75, .75, 1),
+                                    fg=(1, 1, 1, 1),
                                     shadow=(0, 0, 0, .5),
                                     parent=self.questFrame,
                                     scale=.05,
