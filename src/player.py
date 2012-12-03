@@ -488,7 +488,7 @@ class Player(FSM, Unit):
             self.velocity = self.destination - self.playerNode.getPos()
             #print('distance to dest: ', self.velocity.lengthSquared())
 
-            if self.velocity.lengthSquared() < .1:
+            if self.velocity.lengthSquared() < .2:
                 self.velocity = Vec3.zero()
 
                 if self.state == 'Run':
