@@ -1,7 +1,10 @@
+from direct.gui.DirectGui import *
+from direct.gui.OnscreenText import OnscreenText
+from panda3d.core import TextNode
+
 import time
 import requests
 import jsondate as json
-from direct.gui.DirectGui import *
 
 import utils
 
@@ -152,27 +155,27 @@ class GUI(object):
             pos=(0, 0, canvasHeight-.25),
             text_wordwrap=30)
 
-        # print self.questions
-        # yPos = 0.0
-        # for item in self.questions[0]:
-        #     key = item[0]
-        #     value = item[1]
-        #     if key == 'question':
-        #         self.addQuestion(value, yPos)
-        #         yPos += .15
+        print self.questions
+        yPos = 0.0
+        yInc = .4
+        for item in self.questions:
+            print item
+            for key,value in item.iteritems():
+                if key == 'question':
+                    self.addQuestion(value, yPos)
+                    yPos += yInc
+
+                if yPos >= (yInc * 4):
+                    break
 
     def addQuestion(self, questionText, yPos):
-        questionFrame = DirectFrame(
+        OnscreenText(
             parent=self.overlayFrame,
-            #frameSize=(-(self.canvasWidth-.2),self.canvasWidth-.2, -.4,.4),
-            frameColor=(.2, .2, .2, .5),
-            pad=(-.1, .1, -.1, .1),
-            pos=(-1, 0, yPos))
-        DirectLabel(
-            parent=questionFrame,
             text=questionText,
             scale=.05,
-            text_wordwrap=20)
+            wordwrap=20,
+            pos=(-.8, .6-yPos),
+            align=TextNode.ALeft)
 
     # def addAnswer(self, question_id, yPos):
     #     answerFrame = DirectFrame(
