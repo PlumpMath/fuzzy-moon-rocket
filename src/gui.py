@@ -9,16 +9,12 @@ import math
 
 import utils
 
-
 class GUI(object):
     _BASE_URL = 'http://fmr-api-507.herokuapp.com/api'
 
-    #_rButtonValue = [0]
-    _overlayVisible = False
-
     def __init__(self, mainRef):
         print("GUI class instantiated")
-        self._stateHandlerRef = mainRef.stateHandler
+        self._statesRef = mainRef.stateHandler
 
         self.initializeGUI()
         self.initializeOverlayFrame()
@@ -29,6 +25,7 @@ class GUI(object):
         self.question_sets = json.loads(question_sets_response.text)
 
         self.create_user()
+        self.timesAnswered = 1
 
     def extract_question_set(self, question_set):
         """Extracts a single questions set by checking if the string in
@@ -48,6 +45,8 @@ class GUI(object):
         all_participants = requests.get('{}/participant'.format(self._BASE_URL))
         # getting the total number of participants allows us to find the latest one
         number_of_participants = json.loads(all_participants.text)['num_results']
+        if number_of_participants <= 0:
+            return 0
         # then we can get that participant's scenario
         p = requests.get('{}/participant/{}'.format(self._BASE_URL, number_of_participants))
         return json.loads(p.text)['scenario']
@@ -64,11 +63,12 @@ class GUI(object):
         self.participant_id = json.loads(r.text)['id']
         return participant_data['scenario']
 
-    def get_wants_to_continue(self):
-        '''This method returns the user's last 'I want to continue playing' answer
-            to be used to evaluate whether to return to Play state (again) or not
-        '''
-        return True
+    def save_time(self, timeInSeconds):
+        time_data = {'play_time':timeInSeconds}
+        p = requests.put('{}/participant/{}'.format(self._BASE_URL, self.participant_id),
+                            data=json.dumps(time_data),
+                            headers={'content-type': 'application/json'})
+        return True if p.status_code == 201 else False
 
     def save_answer(self, question_id, answer):
         """POSTs answer to server.
@@ -81,6 +81,10 @@ class GUI(object):
         """
         question_data = {'participant_id': self.participant_id,
                          'question_id': question_id, 'answer': answer}
+
+        if self._statesRef.state == self._statesRef.DURING:
+            question_data['times_answered'] = self.timesAnswered
+
         r = requests.post('{}/answer'.format(self._BASE_URL),
                       data=json.dumps(question_data),
                       headers={'content-type': 'application/json'})
@@ -91,14 +95,15 @@ class GUI(object):
         self.canvasWidth = 1
         canvasHeight = 1
 
-        questionSet = self.extract_question_set(self._stateHandlerRef.state)
+        questionSet = self.extract_question_set(self._statesRef.state)
         #print 'questionSet:', questionSet
 
         questions = questionSet['questions']
 
         self.pagesList = []
         self.answersList = []
-        self.firstButtonValue = [0]
+        self.answersDict = {}
+        self.buttonValue = [0]
         self.multipleChoicesAdded = False
         self.notFinishedText = None
 
@@ -117,12 +122,13 @@ class GUI(object):
             self.addQuestion(page, item['question'], yPos)
 
             if item['type'] == 3: # essay
-                self.addTextInputField(page, yPos, info, False)
+                self.addTextInputField(page, yPos, info, item['id'], False)
             elif item['type'] == 1:
-                self.addTextInputField(page, yPos, info)
+                self.addTextInputField(page, yPos, info, item['id'])
             elif item['type'] in (2,4): # Likert scales and multiple choices
-                q = requests.get('{}/question/{}'.format(self._BASE_URL, item['id']))
-                self.addLikertScaleButtons(page, yPos, json.loads(q.text)['choices'])
+                qid = item['id']
+                q = requests.get('{}/question/{}'.format(self._BASE_URL, qid))
+                self.addLikertScaleButtons(page, yPos, json.loads(q.text)['choices'], qid)
 
             yPos += yIncrementor
             if yPos >= yIncrementor * questionsPerPage:
@@ -199,7 +205,7 @@ class GUI(object):
 
         return infoText
 
-    def addTextInputField(self, page, yPos, infoText, short=True):
+    def addTextInputField(self, page, yPos, infoText, question_id, short=True):
         numLines = 1 if short == True else 3
         if infoText != '':
             yStart = .43
@@ -218,9 +224,10 @@ class GUI(object):
             numLines=numLines
             #focus=1
             )
+        setattr(inputField, 'question_id', question_id)
         self.answersList.append(inputField)
 
-    def addLikertScaleButtons(self, page, yPos, choices):
+    def addLikertScaleButtons(self, page, yPos, choices, question_id):
         buttons = []
         self.multipleChoicesAdded = True
 
@@ -254,13 +261,17 @@ class GUI(object):
             button = DirectRadioButton(
                 parent=page,
                 pos=(xPos+.02, 0, buttonYPos),
-                variable=self.firstButtonValue,
-                value=[item['id']],
+                variable=self.buttonValue,
+                value=[item['sort_nr']],
                 scale=0.04,
                 frameColor=(1, 1, 1, 0),
                 indicatorValue=0
                 )
             buttons.append(button)
+            setattr(button, 'question_id', question_id)
+            print 'question_id:', button.question_id
+
+        self.button = buttons[0]
 
         for button in buttons:
             button.setOthers(buttons)
@@ -275,40 +286,56 @@ class GUI(object):
                 )
 
     def onQuestionsDone(self):
+        bContinue = False
         allAnswered = True
         for answer in self.answersList:
-            #print 'answer found:', answer['text'], 'type:', type(answer)
-            #print 'answer found:', answer.get()
             if answer.get() == '' and answer.getParent() == self.pagesList[self.currentPage]:
-                #print 'answer text not filled out'
                 allAnswered = False
 
-        #print 'firstButtonValue:', self.firstButtonValue
-        if self.firstButtonValue == 0 and self.multipleChoicesAdded:
-            #print 'button not filled out'
+        if self.buttonValue == 0 and self.multipleChoicesAdded:
             allAnswered = False
 
         if allAnswered == False:
             self.showNotFinishedText(self.pagesList[self.currentPage])
         else:
+            for answer in self.answersList:
+                if answer.getParent() == self.pagesList[self.currentPage]:
+                    self.answersDict[answer.question_id] = answer.get()
+
+            if self.multipleChoicesAdded:
+                self.answersDict[self.button.question_id] = self.buttonValue
+                if self._statesRef.state == self._statesRef.DURING:
+                    if self.button.question_id == 13 and self.buttonValue == 22: # Continue question, with yes answer
+                        bContinue = True
+
+            for id,answer in self.answersDict.iteritems():
+                self.save_answer(id, answer)
+
+            self.answersDict = {}
+            self.multipleChoicesAdded = False
+
             if self.currentPage < (self.amountOfPages-1):
                 self.pagesList[self.currentPage].hide()
                 self.currentPage += 1
                 self.pagesList[self.currentPage].show()
             else:
-                #self.overlayFrame.destroy()
                 for page in self.pagesList:
                     page.destroy()
 
-                states = self._stateHandlerRef
+                states = self._statesRef
                 if states.state == states.BEFORE:
                     states.request(states.PLAY)
-                elif states.state == states.DURING and self.get_wants_to_continue():
-                    states.request(states.PLAY)
-                else:
-                    states.request(states.AFTER)
-                    self.initializeOverlayFrame()
-#                    print 'End game'
+                elif states.state == states.DURING:
+                    self.timesAnswered += 1
+                    if bContinue:
+                        states.request(states.PLAY)
+                    else:
+                        states.request(states.AFTER)
+                        self.initializeOverlayFrame()
+                elif states.state == states.AFTER:
+                    print 'End game'
+                    elapsedSeconds = globalClock.getFrameTime()
+                    self.save_time(elapsedSeconds)
 
     def build_likert_question(self, question_dict, buttonFrame):
         self.buttons = []
