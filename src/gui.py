@@ -21,7 +21,7 @@ class GUI(object):
         self._stateHandlerRef = mainRef.stateHandler
 
         self.initializeGUI()
-        self.toggleOverlayFrame()
+        self.initializeOverlayFrame()
 
 #------------------------------- DATA HANDLING ----------------------------------------#
     def initializeGUI(self):
@@ -87,20 +87,6 @@ class GUI(object):
         return True if r.status_code == 201 else False
 
 #---------------------------------- VISUAL GUI ---------------------------------------#
-    def toggleOverlayFrame(self):
-        if self._overlayVisible:
-            #print "Toggle off"
-            self.onQuestionsDone()
-            self._overlayVisible = False
-        else:
-            #print "Toggle on"
-            self.initializeOverlayFrame()
-            self._overlayVisible = True
-
-            states = self._stateHandlerRef
-            if states.state == states.PLAY:
-                states.request(states.DURING)
-
     def initializeOverlayFrame(self):
         self.canvasWidth = 1
         canvasHeight = 1
@@ -320,7 +306,9 @@ class GUI(object):
                 elif states.state == states.DURING and self.get_wants_to_continue():
                     states.request(states.PLAY)
                 else:
-                    print 'End game'
+                    states.request(states.AFTER)
+                    self.initializeOverlayFrame()
+#                    print 'End game'
 
     def build_likert_question(self, question_dict, buttonFrame):
         self.buttons = []

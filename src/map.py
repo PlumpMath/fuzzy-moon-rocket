@@ -50,6 +50,8 @@ class Map:
         else:
             if self.currentArea > 1:
                 self.unloadArea()
+                self._stateHandlerRef.request(self._stateHandlerRef.DURING)
+                self._mainRef.gui.initializeOverlayFrame()
 
             taskMgr.doMethodLater(0.5, self.loadArea, 'loadAreaTask', extraArgs=[self.areaList[self.currentArea-1]])
             taskMgr.doMethodLater(1.0, self.startArea, 'startAreaTask', extraArgs=[])

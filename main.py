@@ -71,7 +71,6 @@ class World(ShowBase):
     # Start of debugging implementation
 
         if debug:
-            self.accept('shift-o', self.gui.toggleOverlayFrame)
             self.accept('shift-1', self.damagePlayer)
             self.accept('shift-2', self.killEnemy)
             self.accept('shift-3', self.zoomOut)
