@@ -14,6 +14,7 @@ class GUI(object):
 
     def __init__(self, mainRef):
         print("GUI class instantiated")
+        self._mainRef = mainRef
         self._statesRef = mainRef.stateHandler
 
         self.initializeGUI()
@@ -101,9 +102,11 @@ class GUI(object):
         questions = questionSet['questions']
 
         self.pagesList = []
+        self.buttonsList = []
         self.answersList = []
         self.answersDict = {}
-        self.buttonValue = [0]
+        self.firstButtonValue = [None]
+        self.secondButtonValue = [None]
         self.multipleChoicesAdded = False
         self.notFinishedText = None
 
@@ -121,10 +124,10 @@ class GUI(object):
             info = self.addInfoText(page, item['info_text'], yPos)
             self.addQuestion(page, item['question'], yPos)
 
-            if item['type'] == 3: # essay
+            if item['type'] == 3: # Single line is short
+                self.addTextInputField(page, yPos, info, item['id'], True)
+            elif item['type'] == 1: # Essay is NOT short
                 self.addTextInputField(page, yPos, info, item['id'], False)
-            elif item['type'] == 1:
-                self.addTextInputField(page, yPos, info, item['id'])
             elif item['type'] in (2,4): # Likert scales and multiple choices
                 qid = item['id']
                 q = requests.get('{}/question/{}'.format(self._BASE_URL, qid))
@@ -144,17 +147,14 @@ class GUI(object):
             sortOrder=10
             )
 
+        setattr(page, 'multipleChoicesAdded', False)
         page.hide()
         self.pagesList.append(page)
 
         buttonText = 'Next'
         index = self.pagesList.index(page)
-        #print 'index:', index
-        #print 'amountOfPages:', self.amountOfPages
         if index+1 == self.amountOfPages:
             buttonText = 'Done'
-
-        #print 'buttonText:', buttonText
 
         button = DirectButton(
            parent=page,
@@ -188,7 +188,7 @@ class GUI(object):
             parent=page,
             text=questionText,
             scale=.05,
-            wordwrap=30,
+            wordwrap=35,
             pos=(-.8, yStart-yPos),
             align=TextNode.ALeft)
 
@@ -229,7 +229,7 @@ class GUI(object):
 
     def addLikertScaleButtons(self, page, yPos, choices, question_id):
         buttons = []
-        self.multipleChoicesAdded = True
+        page.multipleChoicesAdded = True
 
         for i,item in enumerate(choices):
             xStart = .8
@@ -252,26 +252,24 @@ class GUI(object):
                 text=item['choice_text'],
                 scale=0.04,
                 pos=(xPos, yStart-yPos),
-                #frameColor=(0, 0, 0, 0),
                 wordwrap=7
                 )
 
-            #print 'value id:', item['id']
+            buttonVariable = self.firstButtonValue if len(self.buttonsList) == 0 else self.secondButtonValue
+
             buttonYPos = yStart - yPos - buttonYModifier
             button = DirectRadioButton(
                 parent=page,
                 pos=(xPos+.02, 0, buttonYPos),
-                variable=self.buttonValue,
+                variable=buttonVariable,
                 value=[item['sort_nr']],
                 scale=0.04,
                 frameColor=(1, 1, 1, 0),
                 indicatorValue=0
                 )
             buttons.append(button)
-            setattr(button, 'question_id', question_id)
-            print 'question_id:', button.question_id
 
-        self.button = buttons[0]
+        self.buttonsList.append((buttons[0], question_id, buttonVariable))
 
         for button in buttons:
             button.setOthers(buttons)
@@ -288,40 +286,52 @@ class GUI(object):
     def onQuestionsDone(self):
         bContinue = False
         allAnswered = True
+
+        currentPageFrame = self.pagesList[self.currentPage]
         for answer in self.answersList:
-            if answer.get() == '' and answer.getParent() == self.pagesList[self.currentPage]:
+            if answer.get() == '' and answer.getParent() == currentPageFrame:
                 allAnswered = False
 
-        if self.buttonValue == 0 and self.multipleChoicesAdded:
-            allAnswered = False
+        if currentPageFrame.multipleChoicesAdded:
+            if self.firstButtonValue is None:
+                # print 'firstButtonValue is none'
+                allAnswered = False
+            if len(self.buttonsList) > 1 and self.secondButtonValue is None:
+                # print 'secondButtonValue is none'
+                allAnswered = False
 
         if allAnswered == False:
-            self.showNotFinishedText(self.pagesList[self.currentPage])
+            self.showNotFinishedText(currentPageFrame)
         else:
             for answer in self.answersList:
-                if answer.getParent() == self.pagesList[self.currentPage]:
+                if answer.getParent() == currentPageFrame:
                     self.answersDict[answer.question_id] = answer.get()
 
-            if self.multipleChoicesAdded:
-                self.answersDict[self.button.question_id] = self.buttonValue
+            if currentPageFrame.multipleChoicesAdded:
+                for button,id,value in self.buttonsList:
+                    if value[0] is not None:
+                        self.answersDict[id] = value[0]
+
                 if self._statesRef.state == self._statesRef.DURING:
-                    if self.button.question_id == 13 and self.buttonValue == 22: # Continue question, with yes answer
-                        bContinue = True
+                    lastPage = self.pagesList[-1]
+                    if currentPageFrame == lastPage:
+                        if self.answersDict[13] == 1:
+                            bContinue = True
 
             for id,answer in self.answersDict.iteritems():
                 self.save_answer(id, answer)
 
             self.answersDict = {}
-            self.multipleChoicesAdded = False
 
-            if self.currentPage < (self.amountOfPages-1):
-                self.pagesList[self.currentPage].hide()
+            if self.currentPage < (self.amountOfPages-1): # Clicked 'Next'
+                currentPageFrame.hide()
                 self.currentPage += 1
                 self.pagesList[self.currentPage].show()
-            else:
+            else: # Click 'Done'
                 for page in self.pagesList:
                     page.destroy()
 
+                # Handle state changing
                 states = self._statesRef
                 if states.state == states.BEFORE:
                     states.request(states.PLAY)
@@ -336,39 +346,5 @@ class GUI(object):
                     print 'End game'
                     elapsedSeconds = globalClock.getFrameTime()
                     self.save_time(elapsedSeconds)
-
-    def build_likert_question(self, question_dict, buttonFrame):
-        self.buttons = []
-        DirectLabel(parent=buttonFrame, text=question_dict['question'],
-                    scale=0.05, pos=(-.3, 0, 0), frameColor=(0, 0, 0, 0),
-                    text_wordwrap=20)
-        for i, label in enumerate(self._CHOICES):
-            xPos = ((i * 40) / 100.0) - 0.6
-            yPos = 0.2
-            # print 'static + offset', xPos, yPos
-
-            self._buttonLabels.append(
-                DirectLabel(
-                    parent=self.buttonFrame, text=label, scale=0.05,
-                    pos=(xPos, 0, yPos), frameColor=(0, 0, 0, 0),
-                    text_wordwrap=7))
-            self.buttons.append(
-                DirectRadioButton(
-                    parent=self.buttonFrame, pos=(xPos, 0, 0),
-                    variable=self._rButtonValue, value=[i], scale=0.05,
-                    frameColor=(1, 1, 1, 0), indicatorValue=0))
-
-        for button in self.buttons:
-            button.setOthers(self.buttons)
-
-    def build_text_question(self, question_dict, textFrame):
-        numLines = 5 if question_dict[
-            'type'] == 3 else 1  # type == 3 is essay Qs
-
-        DirectLabel(parent=textFrame, text=question_dict['question'],
-                    scale=0.05, pos=(-.3, 0, 0), frameColor=(0, 0, 0, 0),
-                    text_wordwrap=20)
-
-        DirectEntry(parent=textFrame, text="", scale=.07, command=None,
-                    pos=(-.3, 0, .3), initialText="", numLines=numLines, focus=1)
+                    self._mainRef.endGame()
 
