@@ -173,7 +173,7 @@ class World(ShowBase):
     def pauseGame(self):
         if self.stateHandler.state == self.stateHandler.PAUSE:
             self.stateHandler.request(self.stateHandler.PLAY)
-        else:
+        elif self.stateHandler.state == self.stateHandler.PLAY:
             self.stateHandler.request(self.stateHandler.PAUSE)
 
     def endGame(self):

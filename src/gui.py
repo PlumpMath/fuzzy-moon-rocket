@@ -5,6 +5,7 @@ from panda3d.core import TextNode
 import time
 import requests
 import jsondate as json
+import math
 
 import utils
 
@@ -103,121 +104,158 @@ class GUI(object):
     def initializeOverlayFrame(self):
         self.canvasWidth = 1
         canvasHeight = 1
-        self.overlayFrame = DirectFrame(
-            frameSize=(-self.canvasWidth, self.canvasWidth, -canvasHeight, canvasHeight),
-            pos=(0, 1, 0),
-            sortOrder=10)
-
-        doneButton = DirectButton(
-           parent=self.overlayFrame,
-           pos=(self.canvasWidth-.1, 0, -(canvasHeight-.1)),
-           scale=0.05,
-           pad=(.2, .2, .2, .2),
-           text=('Next'),
-           pressEffect=1,
-           command=self.onQuestionsDone)
 
         questionSet = self.extract_question_set(self._stateHandlerRef.state)
         #print 'questionSet:', questionSet
 
-        name = questionSet['name']
-        infoText = questionSet['info_text']
         questions = questionSet['questions']
 
-        DirectLabel(
-            parent=self.overlayFrame,
-            text=name,
-            scale=0.09,
-            pos=(0, 0, canvasHeight-.1))
-
-        DirectLabel(
-            parent=self.overlayFrame,
-            text=infoText,
-            scale=.06,
-            pos=(0, 0, canvasHeight-.25),
-            text_wordwrap=30)
-
+        self.pagesList = []
         self.answersList = []
-        self.firstButtonValue = None
-        #self.secondButtonValue = None
+        self.firstButtonValue = [0]
+        self.multipleChoicesAdded = False
         self.notFinishedText = None
 
-        yPos = 0.0
-        yInc = .4
         questionsPerPage = 4
-        for item in questions:
-            print item
-            self.addInfoText(item['info_text'], yPos)
-            self.addQuestion(item['question'], yPos)
+        self.amountOfPages = int(math.ceil(len(questions)/float(questionsPerPage)))
+        for i in range(self.amountOfPages):
+            page = self.addPage(self.canvasWidth, canvasHeight)
+            self.addPageTitle(page, questionSet['name'], questionSet['info_text'])
 
-            if item['type'] == 3 or item['type'] == 1: # Text input single line / essay
-                self.addTextInputField(yPos)
+        yPos = 0.0
+        yIncrementor = .4
+        for i,item in enumerate(questions):
+            print item
+            page = self.pagesList[int(math.floor((i / float(questionsPerPage))))]
+            info = self.addInfoText(page, item['info_text'], yPos)
+            self.addQuestion(page, item['question'], yPos)
+
+            if item['type'] == 3: # essay
+                self.addTextInputField(page, yPos, info, False)
+            elif item['type'] == 1:
+                self.addTextInputField(page, yPos, info)
             elif item['type'] in (2,4): # Likert scales and multiple choices
                 q = requests.get('{}/question/{}'.format(self._BASE_URL, item['id']))
-                self.addLikertScaleButtons(yPos, json.loads(q.text)['choices'])
+                self.addLikertScaleButtons(page, yPos, json.loads(q.text)['choices'])
 
-            yPos += yInc
+            yPos += yIncrementor
+            if yPos >= yIncrementor * questionsPerPage:
+                yPos = 0.0
 
-            if yPos >= yInc * questionsPerPage:
+        self.currentPage = 0
+        self.pagesList[self.currentPage].show()
 
-                break
+    def addPage(self, width, height):
+        page = DirectFrame(
+            frameSize=(-width, width, -height, height),
+            pos=(0, 1, 0),
+            sortOrder=10
+            )
 
-    #def nextPage(self):
+        page.hide()
+        self.pagesList.append(page)
 
+        buttonText = 'Next'
+        index = self.pagesList.index(page)
+        #print 'index:', index
+        #print 'amountOfPages:', self.amountOfPages
+        if index+1 == self.amountOfPages:
+            buttonText = 'Done'
 
-    def addQuestion(self, questionText, yPos):
+        #print 'buttonText:', buttonText
+
+        button = DirectButton(
+           parent=page,
+           pos=(width-.1, 0, -(height-.1)),
+           scale=0.05,
+           pad=(.2, .2, .2, .2),
+           text=buttonText,
+           pressEffect=1,
+           command=self.onQuestionsDone
+           )
+
+        return page
+
+    def addPageTitle(self, page, title, infoText):
+        DirectLabel(
+            parent=page,
+            text=title,
+            scale=0.09,
+            pos=(0, 0, .9))
+
+        DirectLabel(
+            parent=page,
+            text=infoText,
+            scale=.06,
+            pos=(0, 0, .75),
+            text_wordwrap=30)
+
+    def addQuestion(self, page, questionText, yPos):
         yStart = .6
         OnscreenText(
-            parent=self.overlayFrame,
+            parent=page,
             text=questionText,
             scale=.05,
-            wordwrap=20,
+            wordwrap=30,
             pos=(-.8, yStart-yPos),
             align=TextNode.ALeft)
 
-    def addInfoText(self, infoText, yPos):
+    def addInfoText(self, page, infoText, yPos):
         #print 'add info text:', infoText
-        yStart = 0.5
+        yStart = 0.55
         OnscreenText( # might want to apply slanted or italics to this one
-            parent=self.overlayFrame,
+            parent=page,
             text=infoText,
             scale=.04,
             wordwrap=25,
             pos=(-.8, yStart-yPos),
             align=TextNode.ALeft)
 
-    def addTextInputField(self, yPos, short=True):
+        return infoText
+
+    def addTextInputField(self, page, yPos, infoText, short=True):
         numLines = 1 if short == True else 3
-        yStart = .43
+        if infoText != '':
+            yStart = .43
+        else:
+            yStart=.5
+
         inputField = DirectEntry(
-            parent=self.overlayFrame,
+            parent=page,
             text='',
             scale=.05,
             command=None,
             pos=(-.8, 0, yStart-yPos),
             initialText='',
-            frameColor=(0.4, 0.4, 0.4, 0.75),
+            frameColor=(0.9, 0.9, 0.9, 1),
             width=27,
             numLines=numLines
             #focus=1
             )
         self.answersList.append(inputField)
 
-    def addLikertScaleButtons(self, yPos, choices):
+    def addLikertScaleButtons(self, page, yPos, choices):
         buttons = []
+        self.multipleChoicesAdded = True
 
         for i,item in enumerate(choices):
             xStart = .8
+            yStart = .5
+
+            buttonYModifier = 0.05
+
             spacePerElement = .27
             if len(choices) == 2:
                 spacePerElement = .4
                 xStart = .75
+            else:
+                yStart = .45
+                buttonYModifier = .1
             
             xPos = (i * spacePerElement) - xStart
-            yStart = .5
 
             OnscreenText(
-                parent=self.overlayFrame,
+                parent=page,
                 text=item['choice_text'],
                 scale=0.04,
                 pos=(xPos, yStart-yPos),
@@ -225,11 +263,12 @@ class GUI(object):
                 wordwrap=7
                 )
 
-            buttonVariable = self.firstButtonValue if self.firstButtonValue == None else self.secondButtonValue
+            #print 'value id:', item['id']
+            buttonYPos = yStart - yPos - buttonYModifier
             button = DirectRadioButton(
-                parent=self.overlayFrame,
-                pos=(xPos+.02, 0, yStart-yPos-.05),
-                variable=[buttonVariable],
+                parent=page,
+                pos=(xPos+.02, 0, buttonYPos),
+                variable=self.firstButtonValue,
                 value=[item['id']],
                 scale=0.04,
                 frameColor=(1, 1, 1, 0),
@@ -240,10 +279,10 @@ class GUI(object):
         for button in buttons:
             button.setOthers(buttons)
 
-    def showNotFinishedText(self):
+    def showNotFinishedText(self, page):
         if self.notFinishedText == None:
             self.notFinishedText = OnscreenText(
-                parent=self.overlayFrame,
+                parent=page,
                 text='Please answer all questions before progressing',
                 pos=(0, -.9),
                 fg=(1, 0, 0, 1)
@@ -252,28 +291,36 @@ class GUI(object):
     def onQuestionsDone(self):
         allAnswered = True
         for answer in self.answersList:
-            print 'answer found:', answer['text'], 'type:', type(answer)
-            if answer['text'] == '':
-                print 'answer text not filled out'
+            #print 'answer found:', answer['text'], 'type:', type(answer)
+            #print 'answer found:', answer.get()
+            if answer.get() == '' and answer.getParent() == self.pagesList[self.currentPage]:
+                #print 'answer text not filled out'
                 allAnswered = False
-        if self.firstButtonValue is None:
-            print 'button not filled out'
+
+        #print 'firstButtonValue:', self.firstButtonValue
+        if self.firstButtonValue == 0 and self.multipleChoicesAdded:
+            #print 'button not filled out'
             allAnswered = False
-        # if self.secondButtonValue is None and not self._stateHandlerRef.state == self._stateHandlerRef.AFTER:
-        #     allAnswered = False
 
         if allAnswered == False:
-            self.showNotFinishedText()
+            self.showNotFinishedText(self.pagesList[self.currentPage])
         else:
-            self.overlayFrame.destroy()
-
-            states = self._stateHandlerRef
-            if states.state == states.BEFORE:
-                states.request(states.PLAY)
-            elif states.state == states.DURING and self.get_wants_to_continue():
-                states.request(states.PLAY)  # Change
+            if self.currentPage < (self.amountOfPages-1):
+                self.pagesList[self.currentPage].hide()
+                self.currentPage += 1
+                self.pagesList[self.currentPage].show()
             else:
-                print 'End game'
+                #self.overlayFrame.destroy()
+                for page in self.pagesList:
+                    page.destroy()
+
+                states = self._stateHandlerRef
+                if states.state == states.BEFORE:
+                    states.request(states.PLAY)
+                elif states.state == states.DURING and self.get_wants_to_continue():
+                    states.request(states.PLAY)
+                else:
+                    print 'End game'
 
     def build_likert_question(self, question_dict, buttonFrame):
         self.buttons = []
