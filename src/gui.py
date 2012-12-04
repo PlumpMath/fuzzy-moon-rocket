@@ -11,17 +11,9 @@ import utils
 
 class GUI(object):
     _BASE_URL = 'http://fmr-api-507.herokuapp.com/api'
-    _CHOICES = {
-        0: 'Disagree strongly', 1: 'Disagree moderately', 2: 'Disagree a little',
-        3: 'Neither agree nor disagree', 4: 'Agree a little', 5: 'Agree moderately',
-        6: 'Agree strongly'}
-    _rButtonValue = [0]
-    # _overlayFrame = None
+
+    #_rButtonValue = [0]
     _overlayVisible = False
-    _buttons = []
-    _buttonLabels = []
-    # _rButtonFrame = None
-    done = False
 
     def __init__(self, mainRef):
         print("GUI class instantiated")
@@ -121,60 +113,57 @@ class GUI(object):
            pos=(self.canvasWidth-.1, 0, -(canvasHeight-.1)),
            scale=0.05,
            pad=(.2, .2, .2, .2),
-           text=('Done'),
+           text=('Next'),
            pressEffect=1,
            command=self.onQuestionsDone)
 
         questionSet = self.extract_question_set(self._stateHandlerRef.state)
         #print 'questionSet:', questionSet
 
-        for item in questionSet.iteritems():
-            #print item
-            #print 'first item:', item[0]
-            key = item[0]
-            value = item[1]
-            if key == 'name':
-                self.name = value
-            elif key == 'info_text':
-                self.infoText = value
-            elif key == 'questions':
-                self.questions = value
-            # elif key == 'questionnaire': # Don't believe these are necessary
-            #     self.questionnaire  = value
+        name = questionSet['name']
+        infoText = questionSet['info_text']
+        questions = questionSet['questions']
 
         DirectLabel(
             parent=self.overlayFrame,
-            text=self.name,
+            text=name,
             scale=0.09,
             pos=(0, 0, canvasHeight-.1))
 
         DirectLabel(
             parent=self.overlayFrame,
-            text=self.infoText,
+            text=infoText,
             scale=.06,
             pos=(0, 0, canvasHeight-.25),
             text_wordwrap=30)
 
-        #print self.questions
+        self.answersList = []
+        self.firstButtonValue = None
+        #self.secondButtonValue = None
+        self.notFinishedText = None
+
         yPos = 0.0
         yInc = .4
-        for item in self.questions:
+        questionsPerPage = 4
+        for item in questions:
             print item
-            for key,value in item.iteritems():
-                if key == 'info_text':
-                    self.addInfoText(value, yPos)
-                elif key == 'question':
-                    self.addQuestion(value, yPos)
-                    yPos += yInc
-                elif key == 'type':
-                    if value == 3 or value == 1:
-                        self.addTextInputField(yPos)
-                    # elif value == 2:
-                    #     self.addLikertScaleButtons(yPos)
+            self.addInfoText(item['info_text'], yPos)
+            self.addQuestion(item['question'], yPos)
 
-                if yPos >= yInc * 4:
+            if item['type'] == 3 or item['type'] == 1: # Text input single line / essay
+                self.addTextInputField(yPos)
+            elif item['type'] in (2,4): # Likert scales and multiple choices
+                q = requests.get('{}/question/{}'.format(self._BASE_URL, item['id']))
+                self.addLikertScaleButtons(yPos, json.loads(q.text)['choices'])
 
-                    break
+            yPos += yInc
+
+            if yPos >= yInc * questionsPerPage:
+
+                break
+
+    #def nextPage(self):
+
 
     def addQuestion(self, questionText, yPos):
         yStart = .6
@@ -197,48 +186,94 @@ class GUI(object):
             pos=(-.8, yStart-yPos),
             align=TextNode.ALeft)
 
-    def addTextInputField(self, yPos):
+    def addTextInputField(self, yPos, short=True):
+        numLines = 1 if short == True else 3
         yStart = .43
         inputField = DirectEntry(
             parent=self.overlayFrame,
-            text="",
+            text='',
             scale=.05,
             command=None,
             pos=(-.8, 0, yStart-yPos),
             initialText='',
             frameColor=(0.4, 0.4, 0.4, 0.75),
-            width=30,
-            numLines=4
+            width=27,
+            numLines=numLines
             #focus=1
             )
+        self.answersList.append(inputField)
 
-    def addLikertScaleButtons(self, yPos):
-        self.buttons = []
-        for i, label in self._CHOICES.iteritems():
-            xPos = (i * .27) - 0.8
-            yStart = .55
+    def addLikertScaleButtons(self, yPos, choices):
+        buttons = []
+
+        for i,item in enumerate(choices):
+            xStart = .8
+            spacePerElement = .27
+            if len(choices) == 2:
+                spacePerElement = .4
+                xStart = .75
+            
+            xPos = (i * spacePerElement) - xStart
+            yStart = .5
 
             OnscreenText(
                 parent=self.overlayFrame,
-                text=label,
+                text=item['choice_text'],
                 scale=0.04,
-                pos=(xPos, 0, yStart-yPos),
+                pos=(xPos, yStart-yPos),
                 #frameColor=(0, 0, 0, 0),
                 wordwrap=7
                 )
+
+            buttonVariable = self.firstButtonValue if self.firstButtonValue == None else self.secondButtonValue
             button = DirectRadioButton(
                 parent=self.overlayFrame,
-                pos=(xPos, 0, yStart-yPos-.05),
-                variable=self._rButtonValue,
-                value=[i],
+                pos=(xPos+.02, 0, yStart-yPos-.05),
+                variable=[buttonVariable],
+                value=[item['id']],
                 scale=0.04,
                 frameColor=(1, 1, 1, 0),
                 indicatorValue=0
                 )
-            self.buttons.append(button)
+            buttons.append(button)
 
-        for button in self.buttons:
-            button.setOthers(self.buttons)
+        for button in buttons:
+            button.setOthers(buttons)
+
+    def showNotFinishedText(self):
+        if self.notFinishedText == None:
+            self.notFinishedText = OnscreenText(
+                parent=self.overlayFrame,
+                text='Please answer all questions before progressing',
+                pos=(0, -.9),
+                fg=(1, 0, 0, 1)
+                )
+
+    def onQuestionsDone(self):
+        allAnswered = True
+        for answer in self.answersList:
+            print 'answer found:', answer['text'], 'type:', type(answer)
+            if answer['text'] == '':
+                print 'answer text not filled out'
+                allAnswered = False
+        if self.firstButtonValue is None:
+            print 'button not filled out'
+            allAnswered = False
+        # if self.secondButtonValue is None and not self._stateHandlerRef.state == self._stateHandlerRef.AFTER:
+        #     allAnswered = False
+
+        if allAnswered == False:
+            self.showNotFinishedText()
+        else:
+            self.overlayFrame.destroy()
+
+            states = self._stateHandlerRef
+            if states.state == states.BEFORE:
+                states.request(states.PLAY)
+            elif states.state == states.DURING and self.get_wants_to_continue():
+                states.request(states.PLAY)  # Change
+            else:
+                print 'End game'
 
     def build_likert_question(self, question_dict, buttonFrame):
         self.buttons = []
@@ -275,13 +310,3 @@ class GUI(object):
         DirectEntry(parent=textFrame, text="", scale=.07, command=None,
                     pos=(-.3, 0, .3), initialText="", numLines=numLines, focus=1)
 
-    def onQuestionsDone(self):
-        self.overlayFrame.destroy()
-
-        states = self._stateHandlerRef
-        if states.state == states.BEFORE:
-            states.request(states.PLAY)
-        elif states.state == states.DURING and self.get_wants_to_continue():
-            states.request(states.PLAY)  # Change
-        else:
-            print 'End game'
