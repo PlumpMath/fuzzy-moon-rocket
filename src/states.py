@@ -17,13 +17,15 @@ class StateHandler(FSM):
         # Define allowed transitions; i.e. Before can go to Play or Pause
         self.defaultTransitions = {
             self.BEFORE: [self.PLAY],
-            self.PLAY:[self.PAUSE, self.DURING, self.PLAY],
+            self.PLAY:[self.PAUSE, self.DURING, self.PLAY, self.AFTER],
             self.PAUSE:[self.PLAY],
             self.DURING:[self.PLAY, self.AFTER],
             self.AFTER:[],
         }
 
         self.request(self.BEFORE)
+
+        self.hasBeenInDuring = False
 
     def enterBefore(self):
         print('State: enterBefore')
@@ -45,6 +47,7 @@ class StateHandler(FSM):
 
     def enterDuring(self):
         print('State: enterDuring')
+        self.hasBeenInDuring = True
 
     def exitDuring(self):
         print('State: exitDuring')

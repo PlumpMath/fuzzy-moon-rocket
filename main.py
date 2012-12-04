@@ -5,7 +5,7 @@ loadPrcFileData('', 'win-size 1366 768')
 #loadPrcFileData('', 'compressed-textures 1')
 loadPrcFileData('', 'basic-shaders-only #f')
 loadPrcFileData('', 'window-title Fuzzy Moon Rocket')
-#loadPrcFileData('', 'undecorated 1')
+loadPrcFileData('', 'undecorated 1')
 
 import direct.directbase.DirectStart
 from direct.showbase.ShowBase import ShowBase
@@ -63,7 +63,8 @@ class World(ShowBase):
         self.hud = hud.HUD(self.player)
 
         # Add keyboard commands
-        self.accept('escape', self.endGame)
+        self.accept('shift-escape', self.endGame)
+        self.accept('escape', self.escapeGame)
         self.accept('pause', self.pauseGame)
         self.accept('p', self.pauseGame)
 
@@ -174,6 +175,11 @@ class World(ShowBase):
             self.stateHandler.request(self.stateHandler.PLAY)
         elif self.stateHandler.state == self.stateHandler.PLAY:
             self.stateHandler.request(self.stateHandler.PAUSE)
+
+    def escapeGame(self):
+        if self.stateHandler.hasBeenInDuring:
+            self.stateHandler.request(self.stateHandler.AFTER)
+            self.gui.initializeOverlayFrame()
 
     def endGame(self):
         sys.exit(0)
