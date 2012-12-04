@@ -119,7 +119,7 @@ class GUI(object):
         yPos = 0.0
         yIncrementor = .4
         for i,item in enumerate(questions):
-            print item
+            #print item
             page = self.pagesList[int(math.floor((i / float(questionsPerPage))))]
             info = self.addInfoText(page, item['info_text'], yPos)
             self.addQuestion(page, item['question'], yPos)
