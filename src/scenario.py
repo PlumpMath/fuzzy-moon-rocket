@@ -1,3 +1,4 @@
+from gui import GUI
 import utils
 
 class ScenarioHandler():
@@ -7,15 +8,20 @@ class ScenarioHandler():
 
     currentScenario = -1
 
-    def __init__(self):
+    def __init__(self, mainRef):
         print 'ScenarioHandler instantiated'
 
-        if utils.getD100() < 50:
-            self.currentScenario = self.BASELINE_SCENARIO
-            print 'This game is baseline'
+        self._guiRef = mainRef.gui
+
+        self.initializeScenario()
+
+    def initializeScenario(self):
+        self.currentScenario = self._guiRef.participant_scenario
+
+        if self.currentScenario == self.BASELINE_SCENARIO:
+            print 'This game is baseline' # = 0
         else:
-            self.currentScenario = self.DDA_SCENARIO
-            print 'This game has DDA'
+            print 'This game has DDA' # = 1
 
     def getHasDDA(self):
         if self.currentScenario == self.DDA_SCENARIO:

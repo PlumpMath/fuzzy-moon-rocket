@@ -116,7 +116,9 @@ class Player(FSM, Unit):
         # Model is backwards, fix by changing the heading
         self.playerModel.setH(180)
 
-    def initPlayerCamera(self): 
+        self.velocity = Vec3.zero()
+
+    def initPlayerCamera(self):
         # Initialize the camera
         base.disableMouse()
 
@@ -167,7 +169,6 @@ class Player(FSM, Unit):
         self.groundHandler = CollisionHandlerQueue()
         self.collPusher = CollisionHandlerPusher()
         self.attackCollisionHandler = CollisionHandlerQueue()
-        self.cameraGroundHandler = CollisionHandlerQueue()
 
     def initPlayerCollisionSolids(self):
         # Player ground ray #
@@ -191,14 +192,14 @@ class Player(FSM, Unit):
         #collSphereNode.setCollideMask(BitMask32.bit(2))
         collSphereNode.setIntoCollideMask(BitMask32.allOff())
         collSphereNode.setFromCollideMask(BitMask32.bit(2))
-        
+
         sphereNode = self.playerNode.attachNewNode(collSphereNode)
         #sphereNode.show()
 
         base.cTrav.addCollider(sphereNode, self.collPusher)
         self.collPusher.addCollider(sphereNode, self.playerNode)
 
-        # Player attack collision sphere # 
+        # Player attack collision sphere #
         attackCollSphereNode = CollisionNode('playerAttackCollSphere')
 
         attackCollSphere = CollisionSphere(0, 0.3, 0.1, 0.2)
@@ -238,7 +239,7 @@ class Player(FSM, Unit):
     def setPlayerDestination(self, destination):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             # Do not do anything when paused
-            return 
+            return
 
         if self.getIsDead():
             return
@@ -286,7 +287,7 @@ class Player(FSM, Unit):
     def fireAbility(self, ability):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             # Do not do anything when paused
-            return 
+            return
 
         self.playerModel.stop()
 
@@ -552,7 +553,7 @@ class Player(FSM, Unit):
             self.deathHistory.append(self.deathCount)
             self.deathCount = 0
 
-            print self.deathHistory
+            #print self.deathHistory
 
         return task.again
 
@@ -568,7 +569,7 @@ class Player(FSM, Unit):
 
         #print 'shiftAttack. shift:', self._shiftButtonDown
 
-        if self._shiftButtonDown and base.mouseWatcherNode.hasMouse(): 
+        if self._shiftButtonDown and base.mouseWatcherNode.hasMouse():
             #print 'attack!'
             self.playerModel.play('attack')
 
@@ -580,7 +581,7 @@ class Player(FSM, Unit):
             farPoint = Point3()
 
             base.camLens.extrude(mousePos, nearPoint, farPoint)
-            if self.plane.intersectsLine(pos3d, 
+            if self.plane.intersectsLine(pos3d,
                         base.render.getRelativePoint(camera, nearPoint),
                         base.render.getRelativePoint(camera, farPoint)):
                 #print('Mouse ray intersects ground at ', pos3d)
@@ -615,7 +616,7 @@ class Player(FSM, Unit):
                         if enemyTarget is not None and not enemyTarget.getIsDead():
                             self.setCurrentTarget(enemyTarget)
                             break;
-            
+
             return task.again
         else:
             self.playerModel.stop()

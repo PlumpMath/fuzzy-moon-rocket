@@ -33,7 +33,6 @@ class World(ShowBase):
         # Set background color
         base.setBackgroundColor(0.1, 0.1, 0.1, 1)
         base.camLens.setNearFar(5.5, 500)
-        #base.camLens.setFov(45)
         base.camLens.setAspectRatio(1.7778)
 
         # Main game node
@@ -51,17 +50,16 @@ class World(ShowBase):
         self.initAI()
 
         # Instantiate other classes
-        self.scenarioHandler = scenario.ScenarioHandler()
-        
-        self.DDAHandler = dda.DDA(self)
-
         self.stateHandler = states.StateHandler()
+        self.gui = gui.GUI(self)
+        self.scenarioHandler = scenario.ScenarioHandler(self)
+
+        self.DDAHandler = dda.DDA(self)
 
         self.mapHandler = map.Map(self)
 
         self.player = player.Player(self)
 
-        #self.gui = gui.GUI()
         self.hud = hud.HUD(self.player)
 
         # Add keyboard commands
@@ -73,7 +71,6 @@ class World(ShowBase):
     # Start of debugging implementation
 
         if debug:
-            #self.accept('shift-o', self.gui.toggleOverlayFrame)
             self.accept('shift-1', self.damagePlayer)
             self.accept('shift-2', self.killEnemy)
             self.accept('shift-3', self.zoomOut)
@@ -95,7 +92,7 @@ class World(ShowBase):
 
     def zoomOut(self): # key 3
         scale = 2
-        
+
         if self.player.stopCamera:
             self.player.stopCamera = False
 
@@ -175,7 +172,7 @@ class World(ShowBase):
     def pauseGame(self):
         if self.stateHandler.state == self.stateHandler.PAUSE:
             self.stateHandler.request(self.stateHandler.PLAY)
-        else:
+        elif self.stateHandler.state == self.stateHandler.PLAY:
             self.stateHandler.request(self.stateHandler.PAUSE)
 
     def endGame(self):

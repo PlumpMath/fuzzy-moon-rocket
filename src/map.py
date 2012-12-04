@@ -50,6 +50,8 @@ class Map:
         else:
             if self.currentArea > 1:
                 self.unloadArea()
+                self._stateHandlerRef.request(self._stateHandlerRef.DURING)
+                self._mainRef.gui.initializeOverlayFrame()
 
             taskMgr.doMethodLater(0.5, self.loadArea, 'loadAreaTask', extraArgs=[self.areaList[self.currentArea-1]])
             taskMgr.doMethodLater(1.0, self.startArea, 'startAreaTask', extraArgs=[])
@@ -79,9 +81,9 @@ class Map:
         # Update sun position - does not change the shadows
         self.sunNode.setPos(self.startPos.getX(), self.startPos.getY(), self.startPos.getZ() + 10)
 
-        # Change state to play
-        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
-            self._stateHandlerRef.request(self._stateHandlerRef.PLAY)
+        # # Change state to play
+        # if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
+        #     self._stateHandlerRef.request(self._stateHandlerRef.PLAY)
 
         if not self.playerPlaced:
             # Initialize the player position
@@ -137,7 +139,7 @@ class Map:
 
         # Initialize inverted sphere
         self.invertedSphere = self.areaNode.attachNewNode(CollisionNode('worldSphere'))
-        self.invertedSphere.node().addSolid(CollisionInvSphere(0.0, 0.0, 1.0, 13)) 
+        self.invertedSphere.node().addSolid(CollisionInvSphere(0.0, 0.0, 1.0, 13))
 
         self.invertedSphere.node().setFromCollideMask(BitMask32.allOff())
         self.invertedSphere.node().setIntoCollideMask(BitMask32.bit(2))
@@ -234,9 +236,9 @@ class Map:
         exitGate = station.find('**/stationGate')
         ground = station.find('**/ground*')
 
-        self.exitGate = Actor('models/exitGate') 
+        self.exitGate = Actor('models/exitGate')
         self.exitGateAnim = self.exitGate.getAnimNames()
-        
+
         self.exitGate.setHpr(render, station.getHpr(render))
         self.exitGate.setPos(render, station.getPos(render))
 
@@ -281,7 +283,7 @@ class Map:
     def initLights(self):
         self.pointLightList = []
 
-        pointLightList = self.areaGameObjects.findAllMatches('**/pLight*') 
+        pointLightList = self.areaGameObjects.findAllMatches('**/pLight*')
         if len(pointLightList) > 0:
             for i, plight in enumerate(pointLightList):
                 plightPos = plight.getPos()
@@ -349,11 +351,11 @@ class Map:
         # Setup directional light (a yellowish sun)
         sun = DirectionalLight('sun')
         sun.setColor(VBase4(0.25, 0.25, 0, 1))
-        #sun.getLens().setNearFar(5.5, 500)
-        #sun.getLens().setFilmSize(50)
-        sun.getLens().setAspectRatio(1.7778)
+        #sun.getLens().setAspectRatio(1.7778)
+        sun.getLens().setFilmSize(50)
+        
         #sun.showFrustum()
-        sun.setShadowCaster(True, 4096, 4096) 
+        sun.setShadowCaster(True, 4096, 4096)
 
         self.sunNode = parentNode.attachNewNode(sun)
         self.sunNode.setP(-130)
