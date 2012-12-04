@@ -49,6 +49,7 @@ class Enemy(FSM, Unit):
         self._enemyListRef = mainRef.enemyList
         self._ddaHandlerRef = mainRef.DDAHandler
         self._stateHandlerRef = mainRef.stateHandler
+        self._soundsHandlerRef = mainRef.soundsHandler
         self._scenarioHandlerRef = mainRef.scenarioHandler
 
         #self.topEnemyNode = mainRef.mainNode.attachNewNode('topEnemyNode')
@@ -372,6 +373,8 @@ class Enemy(FSM, Unit):
 
     def enterDeath(self):
         #print('enemy enterDeath')
+        self._soundsHandlerRef.playProbeDeath()
+
         self.enemyAIBehaviors.removeAi('all')
         randomDeathAnim = 'death' + str(utils.getD2())
         self.enemyModel.play(randomDeathAnim)

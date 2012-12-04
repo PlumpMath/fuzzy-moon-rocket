@@ -6,7 +6,7 @@ loadPrcFileData('', 'win-size 1366 768')
 loadPrcFileData('', 'basic-shaders-only #f')
 loadPrcFileData('', 'window-title Fuzzy Moon Rocket')
 loadPrcFileData('', 'undecorated 1')
-#loadPrcFileData('', 'audio-library-name p3openal_audio')
+loadPrcFileData('', 'audio-library-name p3openal_audio')
 
 import direct.directbase.DirectStart
 from direct.showbase.ShowBase import ShowBase
@@ -16,7 +16,7 @@ from direct.task import Task
 from panda3d.ai import *
 import sys
 
-from src import utils, player, enemy, gui, hud, map, states, dda, scenario
+from src import utils, player, enemy, gui, hud, map, states, dda, scenario, sounds
 
 class World(ShowBase):
 
@@ -54,6 +54,8 @@ class World(ShowBase):
         self.stateHandler = states.StateHandler()
         self.gui = gui.GUI(self)
         self.scenarioHandler = scenario.ScenarioHandler(self)
+
+        self.soundsHandler = sounds.SoundsHandler()
 
         self.DDAHandler = dda.DDA(self)
 

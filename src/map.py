@@ -16,20 +16,21 @@ secondArea = Area(modelName='area_2', enemies={enemy.koboldSkirmisher:2, enemy.k
 
 class Map:
 
-    def __init__(self, main):
+    def __init__(self, mainRef):
         print("Map class instantiated")
-        self._mainRef = main
-        self._enemyListRef = main.enemyList
-        self._stateHandlerRef = main.stateHandler
+        self._mainRef = mainRef
+        self._enemyListRef = mainRef.enemyList
+        self._stateHandlerRef = mainRef.stateHandler
+        self._soundsHandlerRef = mainRef.soundsHandler
 
-        self.mapNode = main.mainNode.attachNewNode('mapNode')
+        self.mapNode = mainRef.mainNode.attachNewNode('mapNode')
 
         # Initialize area list and current area variable
         self.areaList = [farmArea, secondArea]
         self.currentArea = 0
 
         # Initialze sun
-        self.initSun(main.mainNode)
+        self.initSun(mainRef.mainNode)
 
         # Initialize image processing filters
         self.initFilters()
@@ -52,6 +53,7 @@ class Map:
                 self.unloadArea()
                 self._stateHandlerRef.request(self._stateHandlerRef.DURING)
                 self._mainRef.gui.initializeOverlayFrame()
+                self._soundsHandlerRef.playAreaExit()
 
             taskMgr.doMethodLater(0.5, self.loadArea, 'loadAreaTask', extraArgs=[self.areaList[self.currentArea-1]])
             taskMgr.doMethodLater(1.0, self.startArea, 'startAreaTask', extraArgs=[])

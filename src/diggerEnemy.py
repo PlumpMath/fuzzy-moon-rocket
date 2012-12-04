@@ -51,7 +51,7 @@ class Digger(enemy.Enemy):
 
     def enterIdle(self):
         #print 'enemy enterIdle'
-        #idleTime = 60.0 * 3.0
+        self._soundsHandlerRef.playDiggerIdle()
 
         stopEnemy = self.enemyModel.actorInterval('pursue-to-idle', startFrame=0, endFrame=12)
         idleEnemy = self.enemyModel.actorInterval('idle-walk-to-dig', startFrame=0, endFrame=60)
@@ -63,8 +63,6 @@ class Digger(enemy.Enemy):
         self.stopSequence.start()
 
         self.isSleeping = True
-
-        #taskMgr.doMethodLater(3, self.showEnemy, 'showEnemyTask')
 
     def showEnemy(self, task):
         if self.state == 'Idle':
@@ -88,11 +86,13 @@ class Digger(enemy.Enemy):
 
     def enterDeath(self):
         #print('enemy enterDeath')
+        self._soundsHandlerRef.playDiggerDeath()
         self.enemyAIBehaviors.removeAi('all')
         randomDeathAnim = 'death' + str(utils.getDX(3))
         self.enemyModel.play(randomDeathAnim, fromFrame=0, toFrame=12)
 
     def playAttackAnimation(self):
+        self._soundsHandlerRef.playDiggerAttack()
         randomAttackAnim = 'attack' + str(utils.getD4())
         self.enemyModel.play(randomAttackAnim, fromFrame=0, toFrame=12)
 

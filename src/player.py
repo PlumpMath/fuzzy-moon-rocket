@@ -27,6 +27,7 @@ class Player(FSM, Unit):
         self._ddaHandlerRef = mainRef.DDAHandler
         self._mapHandlerRef = mainRef.mapHandler
         self._stateHandlerRef = mainRef.stateHandler
+        self._soundsHandlerRef = mainRef.soundsHandler
         self._scenarioHandlerRef = mainRef.scenarioHandler
 
         self.playerNode = mainRef.mainNode.attachNewNode('playerNode')
@@ -541,6 +542,9 @@ class Player(FSM, Unit):
         return task.cont
 
     def ddaMonitor(self, task):
+        if not self._scenarioHandlerRef.getHasDDA():
+            return task.done
+
         task.count += 1
         self.healthHistory.append(self.currentHealthPoints)
         self.damageHistory.append(self.damageReceived)
@@ -605,6 +609,10 @@ class Player(FSM, Unit):
                     if enemy is not None and not enemy.getIsDead():
                         if utils.getIsInRange(self.playerNode.getPos(), enemy.enemyNode.getPos(), self.combatRange):
                             bAttacked = self.attack(enemy) # Returns 1 if player attacked but did not hit, returns 2 on hit
+                            if bAttacked == 2:
+                                self._soundsHandlerRef.playPlayerAttackHit()
+                            elif bAttacked == 1:
+                                self._soundsHandlerRef.playPlayerAttackMiss()
 
                 if bAttacked != 0:
                     #print('attackEnemies')
@@ -647,10 +655,14 @@ class Player(FSM, Unit):
 
                         if bAttacked == 2:
                             enemy.enemyModel.play('hit')
+                            self._soundsHandlerRef.playPlayerAttackHit()
 
             # Only play animations if player actually attacked
             if bAttacked != 0:
                 #print('attackEnemies')
+                if bAttacked == 1: # player missed
+                    self._soundsHandlerRef.playPlayerAttackMiss()
+
                 self.playerModel.play('attack')
 
                 for i in range(numEntries):
@@ -675,9 +687,11 @@ class Player(FSM, Unit):
 
 #----------------------- PLAYER STATES --------------------------------------#
     def enterRun(self):
+        self._soundsHandlerRef.playPlayerWalk()
         self.playerModel.loop('run', fromFrame=0, toFrame=12)
 
     def exitRun(self):
+        self._soundsHandlerRef.stopPlayerWalk()
         self.playerModel.stop()
 
     def enterCombat(self):
@@ -706,6 +720,7 @@ class Player(FSM, Unit):
         self.stopMovingSequence.finish()
 
     def enterDeath(self):
+        self._soundsHandlerRef.playPlayerDeath()
         self.playerModel.play('death')
 
         self.deathCount += 1
