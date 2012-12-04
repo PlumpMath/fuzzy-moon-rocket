@@ -6,6 +6,7 @@ loadPrcFileData('', 'win-size 1366 768')
 loadPrcFileData('', 'basic-shaders-only #f')
 loadPrcFileData('', 'window-title Fuzzy Moon Rocket')
 loadPrcFileData('', 'undecorated 1')
+#loadPrcFileData('', 'audio-library-name p3openal_audio')
 
 import direct.directbase.DirectStart
 from direct.showbase.ShowBase import ShowBase
