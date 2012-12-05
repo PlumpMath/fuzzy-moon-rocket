@@ -18,7 +18,7 @@ class GUI(object):
         self._statesRef = mainRef.stateHandler
 
         self.initializeGUI()
-        self.initializeOverlayFrame()
+        taskMgr.doMethodLater(3, self.initializeOverlayFrame, 'initializeOverlayFrameTask', extraArgs=[])
 
 #------------------------------- DATA HANDLING ----------------------------------------#
     def initializeGUI(self):

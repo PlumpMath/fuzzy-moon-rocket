@@ -154,8 +154,9 @@ class HUD:
             buttonValueList = []
             for area in mapRef.areaList:
                 if area != mapRef.getCurrentArea():
-                    buttonTextList.append(area.areaName)
-                    buttonValueList.append(area.areaID)
+                    if (area.areaID == 3 and mapRef.hasBeenInArea2) or area.areaID != 3:
+                        buttonTextList.append(area.areaName)
+                        buttonValueList.append(area.areaID)
 
             buttonTextList.append('Cancel')
             buttonValueList.append(-1)
@@ -171,7 +172,7 @@ class HUD:
         elif not player.areaTransitioning and self.showAreaTransDialog:
             self.showAreaTransDialog = False
             self.areaTransDialog.cleanup()
-            self.areaTransDialog.destroy()
+            #self.areaTransDialog.destroy()
 
     def areaTransAnswer(self, arg):
         player = self._playerRef

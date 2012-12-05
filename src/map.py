@@ -41,12 +41,17 @@ class Map:
         self.loadAreaByID(farmArea.areaID)
 
         self.playerPlaced = False
+        self.hasBeenInArea2 = False
 
 #===============================================================================
 #========================== AREA LOADING AND UNLOADING =========================
 
     def getCurrentArea(self):
-        return self.areaList[self.currentArea-1]
+        currentArea = self.currentArea-1
+        if currentArea > 0 and currentArea < len(self.areaList):
+            return self.areaList[self.currentArea-1]
+        else:
+            return None
 
     def loadAreaByID(self, areaID=0):
         newArea = None
@@ -57,43 +62,21 @@ class Map:
 
         if newArea is not None:
             self.currentArea = areaID
+            if self.getCurrentArea().areaID == 2:
+                self.hasBeenInArea2 = True
 
-            if self.currentArea > 1:
+            if self.currentArea > 0:
                 self.unloadArea()
                 self._stateHandlerRef.request(self._stateHandlerRef.DURING)
-                self._mainRef.gui.initializeOverlayFrame()
                 self._soundsHandlerRef.playAreaExit()
+
+                initGui = self._mainRef.gui.initializeOverlayFrame
+                taskMgr.doMethodLater(3.0, initGui, 'initGUITask', extraArgs=[])
 
             taskMgr.doMethodLater(1.0, self.loadArea, 'loadAreaTask', extraArgs=[newArea])
             taskMgr.doMethodLater(2.0, self.startArea, 'startAreaTask', extraArgs=[])
         else:
             print 'Error: Area not found'
-
-
-    # def loadNextArea(self):
-    #     self.currentArea += 1
-    #     if self.currentArea > len(self.areaList):
-    #         print 'No next area to load, loading previous instead'
-    #         self.loadPreviousArea()
-    #     else:
-    #         if self.currentArea > 1:
-    #             self.unloadArea()
-    #             self._stateHandlerRef.request(self._stateHandlerRef.DURING)
-    #             self._mainRef.gui.initializeOverlayFrame()
-    #             self._soundsHandlerRef.playAreaExit()
-
-    #         taskMgr.doMethodLater(1.0, self.loadArea, 'loadAreaTask', extraArgs=[self.areaList[self.currentArea-1]])
-    #         taskMgr.doMethodLater(2.0, self.startArea, 'startAreaTask', extraArgs=[])
-
-    # def loadPreviousArea(self):
-    #     self.currentArea -= 2
-    #     if self.currentArea < 0:
-    #         print 'No previous area to load, loading next instead'
-    #         self.loadNextArea()
-    #     else:
-    #         self.unloadArea()
-    #         taskMgr.doMethodLater(1.0, self.loadArea, 'loadAreaTask', extraArgs=[self.areaList[self.currentArea-1]])
-    #         taskMgr.doMethodLater(2.0, self.startArea, 'startAreaTask', extraArgs=[])
 
     def startArea(self):
         print 'startArea'
@@ -200,7 +183,7 @@ class Map:
         # Remove area model
         self.areaModel.remove()
 
-        # Remove spawn task
+        # Remove tasks
         taskMgr.remove(self.enemySpawnTask)
         taskMgr.remove('areaTransitionCheckerTask')
         taskMgr.remove('updatePlayerLightsTask')
@@ -289,21 +272,25 @@ class Map:
             taskMgr.doMethodLater(1, self.areaTransitionChecker, 'areaTransitionCheckerTask')
 
     def areaTransitionChecker(self, task):
+        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
+            return task.again
+
         player = self._playerRef
-        playerNode = player.playerNode
+        if player is not None:
+            playerNode = player.playerNode
 
-        if utils.getIsInRange(self.oII.getPos(render), playerNode.getPos(render), .5):
-            if not player.areaTransitioning:
-                #print 'fire up area transition dialog'
-                player.areaTransitioning = True
+            if utils.getIsInRange(self.oII.getPos(render), playerNode.getPos(render), .5):
+                if not player.areaTransitioning:
+                    #print 'fire up area transition dialog'
+                    player.areaTransitioning = True
 
-                self.exitGate.play(self.exitGateAnim, fromFrame=0, toFrame=12)
-        else:
-            if player.areaTransitioning:
-                #print 'close area transition dialog'
-                player.areaTransitioning = False
+                    self.exitGate.play(self.exitGateAnim, fromFrame=0, toFrame=12)
+            else:
+                if player.areaTransitioning:
+                    #print 'close area transition dialog'
+                    player.areaTransitioning = False
 
-                self.exitGate.play(self.exitGateAnim, fromFrame=13, toFrame=25)
+                    self.exitGate.play(self.exitGateAnim, fromFrame=13, toFrame=25)
 
         return task.again
 
@@ -362,16 +349,20 @@ class Map:
         if globalClock.getDt() > .5:
             return task.again
 
-        playerNode = self._playerRef.playerNode
+        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
+            return task.again
 
-        if len(self.pointLightList) > 0:
-            # Make point lights light up player as well
-            for plight in self.pointLightList:
-                if utils.getIsInRange(plight.getPos(render), playerNode.getPos(render), 2):
-                    playerNode.setLight(plight)
-                else:
-                    if playerNode.hasLight(plight):
-                        playerNode.clearLight(plight)
+        if self._playerRef is not None:
+            playerNode = self._playerRef.playerNode
+
+            if len(self.pointLightList) > 0:
+                # Make point lights light up player as well
+                for plight in self.pointLightList:
+                    if utils.getIsInRange(plight.getPos(render), playerNode.getPos(render), 2):
+                        playerNode.setLight(plight)
+                    else:
+                        if playerNode.hasLight(plight):
+                            playerNode.clearLight(plight)
 
         return task.cont
 
