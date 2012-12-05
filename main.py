@@ -3,7 +3,7 @@ from panda3d.core import loadPrcFileData
 #loadPrcFileData('', 'fullscreen 1')
 loadPrcFileData('', 'win-size 1366 768')
 #loadPrcFileData('', 'compressed-textures 1')
-loadPrcFileData('', 'basic-shaders-only #f')
+#loadPrcFileData('', 'basic-shaders-only #f')
 loadPrcFileData('', 'window-title Fuzzy Moon Rocket')
 #loadPrcFileData('', 'undecorated 1')
 loadPrcFileData('', 'audio-library-name p3openal_audio')
