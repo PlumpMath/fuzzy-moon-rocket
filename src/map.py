@@ -149,9 +149,6 @@ class Map:
         for spawnPoint in self.areaGameObjects.findAllMatches('**/spawnPoint*'):
             self.spawnPointsDict[spawnPoint] = 1 # Activate spawn point
 
-        # Start checking for quest point proximity
-        taskMgr.doMethodLater(0.1, self.initQuestSystem, 'initQuestSystemTask', extraArgs=[])
-
         # Load in point lights
         taskMgr.doMethodLater(0.25, self.initLights, 'initLightsTask', extraArgs=[])
 
@@ -160,6 +157,9 @@ class Map:
 
         # Initialize enemies
         taskMgr.doMethodLater(0.75, self.initEnemies, 'initEnemiesTask', extraArgs=[])
+
+        # Start checking for quest point proximity
+        taskMgr.doMethodLater(1.0, self.initQuestSystem, 'initQuestSystemTask', extraArgs=[])
 
     def unloadArea(self):
         print('unloadArea')
