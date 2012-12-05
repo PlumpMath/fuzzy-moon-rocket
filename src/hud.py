@@ -73,14 +73,16 @@ class HUD:
                  command=self.exitStats)
 
             def addStats(pos, text):
-                    return OnscreenText(text=text,
-                                        pos=(-0.4, pos),
-                                        fg=(.5, .1, .1, 1),
-                                        bg=(.1, .5, .5, .25), # Tweak bg and fg to make text easily readable
-                                        shadow=(0, 0, 0, 1),
-                                        scale=0.05,
-                                        parent=self.statsFrame,
-                                        align=TextNode.ALeft)
+                    return OnscreenText(
+                        text=text,
+                        pos=(-0.4, pos),
+                        fg=(.5, .1, .1, 1),
+                        bg=(.1, .5, .5, .25), # Tweak bg and fg to make text easily readable
+                        shadow=(0, 0, 0, 1),
+                        scale=0.05,
+                        parent=self.statsFrame,
+                        align=TextNode.ALeft
+                        )
 
             addStats(0.4, 'Strength: ' + str(self._playerRef.strength))
             addStats(0.3, 'Constitution: ' + str(self._playerRef.constitution))
