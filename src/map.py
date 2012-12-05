@@ -36,24 +36,24 @@ class Map:
         # Initialize image processing filters
         self.initFilters()
 
-        # Load the first area
-        #self.loadNextArea()
-        self.loadAreaByID(farmArea.areaID)
-
         self.playerPlaced = False
         self.hasBeenInArea2 = False
+        self.mapsStarted = False
+
+        # Load the first area
+        self.loadAreaByID(farmArea.areaID)
 
 #===============================================================================
 #========================== AREA LOADING AND UNLOADING =========================
 
     def getCurrentArea(self):
         currentArea = self.currentArea-1
-        if currentArea > 0 and currentArea < len(self.areaList):
-            return self.areaList[self.currentArea-1]
+        if currentArea >= 0 and currentArea < len(self.areaList):
+            return self.areaList[currentArea]
         else:
             return None
 
-    def loadAreaByID(self, areaID=0):
+    def loadAreaByID(self, areaID):
         newArea = None
         for area in self.areaList:
             if area.areaID == areaID:
@@ -62,10 +62,11 @@ class Map:
 
         if newArea is not None:
             self.currentArea = areaID
-            if self.getCurrentArea().areaID == 2:
+
+            if areaID == 2:
                 self.hasBeenInArea2 = True
 
-            if self.currentArea > 0:
+            if self.mapsStarted == True:
                 self.unloadArea()
                 self._stateHandlerRef.request(self._stateHandlerRef.DURING)
                 self._soundsHandlerRef.playAreaExit()
@@ -96,6 +97,7 @@ class Map:
         # # Change state to play
         # if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
         #     self._stateHandlerRef.request(self._stateHandlerRef.PLAY)
+        self.mapsStarted = True
 
         if not self.playerPlaced:
             # Initialize the player position
