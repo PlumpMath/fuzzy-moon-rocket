@@ -328,7 +328,21 @@ class HUD:
         
         self.questFrame.setTransparency(TransparencyAttrib.MAlpha)
         self.questText = None
-        self.addQuest('Explore the farm')
+
+        self.questsList = [
+            'You have lost power to your buildings. Explore your farm to find out why.', 
+            'Your generator is broken. Find spare parts in the city.',
+            'You found the spare parts. Bring them back to your generator.',
+            'You fixed your generator. However, an anomaly has been detected outside the city',
+            'You have identified the anomaly. Survive for as long as you can!'
+            ]
+        self.currentQuestIndex = 0
+
+        self.updateQuest()
+
+    def updateQuest(self):
+        self.addQuest(self.questsList[self.currentQuestIndex])
+        self.currentQuestIndex += 1
 
     def addQuest(self, text):
         if self.questText is not None:
@@ -337,7 +351,7 @@ class HUD:
         self.questText = OnscreenText(
             text='Objective:\n'+text,
             pos=(-.15, .15),
-            fg=(.75, .75, .75, 1),
+            fg=(.95, .95, .95, 1),
             shadow=(0, 0, 0, .5),
             parent=self.questFrame,
             scale=.05,

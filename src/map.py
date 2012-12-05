@@ -24,6 +24,7 @@ class Map:
         self._stateHandlerRef = mainRef.stateHandler
         self._soundsHandlerRef = mainRef.soundsHandler
 
+        # Instantiate map node
         self.mapNode = mainRef.mainNode.attachNewNode('mapNode')
 
         # Initialize area list and current area variable
@@ -36,6 +37,7 @@ class Map:
         # Initialize image processing filters
         self.initFilters()
 
+        # Set needed boolean variables
         self.playerPlaced = False
         self.hasBeenInArea2 = False
         self.mapsStarted = False
@@ -105,9 +107,6 @@ class Map:
         else:
             self._playerRef.initStartPosition(self.arrivalPos, self.exitPos)
 
-        # Debug
-        #self.areaModel.analyze()
-
     def loadArea(self, area):
         print('loadArea: ', area.modelName)
         # Save area attributes
@@ -150,23 +149,17 @@ class Map:
         for spawnPoint in self.areaGameObjects.findAllMatches('**/spawnPoint*'):
             self.spawnPointsDict[spawnPoint] = 1 # Activate spawn point
 
-        # Initialize inverted sphere
-        self.invertedSphere = self.areaNode.attachNewNode(CollisionNode('worldSphere'))
-        self.invertedSphere.node().addSolid(CollisionInvSphere(0.0, 0.0, 1.0, 13))
-
-        self.invertedSphere.node().setFromCollideMask(BitMask32.allOff())
-        self.invertedSphere.node().setIntoCollideMask(BitMask32.bit(2))
-
-        #self.invertedSphere.show()
+        # Start checking for quest point proximity
+        taskMgr.doMethodLater(0.1, self.initQuestSystem, 'initQuestSystemTask', extraArgs=[])
 
         # Load in point lights
-        taskMgr.doMethodLater(0.5, self.initLights, 'initLightsTask', extraArgs=[])
+        taskMgr.doMethodLater(0.25, self.initLights, 'initLightsTask', extraArgs=[])
 
         # Initialize Exit gate
-        taskMgr.doMethodLater(0.5, self.initExitGate, 'initExitGateTask', extraArgs=[])
+        taskMgr.doMethodLater(0.50, self.initExitGate, 'initExitGateTask', extraArgs=[])
 
         # Initialize enemies
-        taskMgr.doMethodLater(0.5, self.initEnemies, 'initEnemiesTask', extraArgs=[])
+        taskMgr.doMethodLater(0.75, self.initEnemies, 'initEnemiesTask', extraArgs=[])
 
     def unloadArea(self):
         print('unloadArea')
@@ -188,6 +181,7 @@ class Map:
         taskMgr.remove(self.enemySpawnTask)
         taskMgr.remove('areaTransitionCheckerTask')
         taskMgr.remove('updatePlayerLightsTask')
+        taskMgr.remove('checkQuestPointTask')
 
         # Removed animated models
         self.oII.cleanup()
@@ -199,6 +193,36 @@ class Map:
         # Remove nodes
         self.invertedSphere.removeNode()
         self.areaNode.removeNode()
+
+#============================================================
+#============ QUEST SYSTEM ==================================
+    def initQuestSystem(self):
+        # Locate and save quest points
+        self.questPoints = self.areaGameObjects.findAllMatches('**/quest*')
+
+        taskMgr.doMethodLater(1, self.checkQuestPoint, 'checkQuestPointTask')
+
+    def checkQuestPoint(self, task):
+        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
+            return task.again
+
+        if self._playerRef is None:
+             # Load player reference
+            self._playerRef = self._mainRef.player
+
+        questDetectionRadius = 4
+
+        hudRef = self._playerRef._hudRef
+        playerPos = self._playerRef.playerNode.getPos(render)
+        for qp in self.questPoints:
+            if utils.getIsInRange(playerPos, qp.getPos(render), questDetectionRadius):
+                qpNum = int(qp.getName()[-1])
+                if qpNum == hudRef.currentQuestIndex:
+                    hudRef.printFeedback('You have a new objective!', False)
+                    hudRef.updateQuest()
+                    break
+
+        return task.again
 
 #=============================================================
 #========== ENEMY SPAWNING ===================================
