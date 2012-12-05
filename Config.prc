@@ -1,5 +1,10 @@
+load-display pandagl
+load-display pandadx9
+load-display tinydisplay
+
 win-size 1366 768
-basic-shaders-only #f
 window-title Fuzzy Moon Rocket
-undecorated 1
 audio-library-name p3openal_audio
+
+#basic-shaders-only #f
+#undecorated 1

@@ -4,7 +4,7 @@ from panda3d.core import TextNode
 
 import time
 import requests
-import jsondate as json
+import json
 import math
 
 import utils
