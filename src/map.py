@@ -72,7 +72,7 @@ class Map:
                 self._soundsHandlerRef.playAreaExit()
 
                 initGui = self._mainRef.gui.initializeOverlayFrame
-                taskMgr.doMethodLater(3.0, initGui, 'initGUITask', extraArgs=[])
+                taskMgr.doMethodLater(2.5, initGui, 'initGUITask', extraArgs=[])
 
             taskMgr.doMethodLater(1.0, self.loadArea, 'loadAreaTask', extraArgs=[newArea])
             taskMgr.doMethodLater(2.0, self.startArea, 'startAreaTask', extraArgs=[])
@@ -94,10 +94,9 @@ class Map:
         # Update sun position - does not change the shadows
         self.sunNode.setPos(self.startPos.getX(), self.startPos.getY(), self.startPos.getZ() + 10)
 
-        # # Change state to play
-        # if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
-        #     self._stateHandlerRef.request(self._stateHandlerRef.PLAY)
-        self.mapsStarted = True
+        # First area has been loaded
+        if not self.mapsStarted:
+            self.mapsStarted = True
 
         if not self.playerPlaced:
             # Initialize the player position
@@ -227,7 +226,7 @@ class Map:
     def enemySpawnActivator(self, task):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             return task.again
-        
+
         if self._playerRef is None:
              # Load player reference
             self._playerRef = self._mainRef.player
