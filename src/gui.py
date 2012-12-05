@@ -93,8 +93,6 @@ class GUI(object):
 
 #---------------------------------- VISUAL GUI ---------------------------------------#
     def initializeOverlayFrame(self):
-        pass
-        
         self.canvasWidth = 1
         canvasHeight = 1
 
