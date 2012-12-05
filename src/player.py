@@ -725,7 +725,8 @@ class Player(FSM, Unit):
         self._soundsHandlerRef.playPlayerDeath()
         self.playerModel.play('death')
 
-        self.deathCount += 1
+        if self._scenarioHandlerRef.getHasDDA():
+            self.deathCount += 1
 
         taskMgr.doMethodLater(3, self.respawn, 'respawnTask')
 

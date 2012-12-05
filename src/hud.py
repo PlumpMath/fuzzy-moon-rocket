@@ -12,7 +12,8 @@ class HUD:
         print("HUD class instantiated")
 
         self._playerRef = playerRef
-        self._stateHandlerRef = playerRef._mainRef.stateHandler
+        self._mapHandlerRef = playerRef._mapHandlerRef
+        self._stateHandlerRef = playerRef._stateHandlerRef
 
         self.initHealthBar()
         self.initEXPBar()
@@ -142,26 +143,54 @@ class HUD:
 
         if player.areaTransitioning and not self.showAreaTransDialog:
             self.showAreaTransDialog = True
-            self.areaTransDialog = YesNoDialog(
+            # self.areaTransDialog = YesNoDialog(
+            #     dialogName='AreaTransitionDialog',
+            #     text='Do you want to transition to the next area?',
+            #     fadeScreen=0,
+            #     command=self.areaTransAnswer)
+
+            mapRef = self._mapHandlerRef
+            buttonTextList = []
+            buttonValueList = []
+            for area in mapRef.areaList:
+                if area != mapRef.getCurrentArea():
+                    buttonTextList.append(area.areaName)
+                    buttonValueList.append(area.areaID)
+
+            buttonTextList.append('Cancel')
+            buttonValueList.append(-1)
+
+            self.areaTransDialog = DirectDialog(
                 dialogName='AreaTransitionDialog',
-                text='Do you want to transition to the next area?',
+                text='Which area do you want to transition to?',
                 fadeScreen=0,
-                command=self.areaTransAnswer)
+                command=self.areaTransAnswer,
+                buttonTextList=buttonTextList,
+                buttonValueList=buttonValueList
+                )
         elif not player.areaTransitioning and self.showAreaTransDialog:
             self.showAreaTransDialog = False
             self.areaTransDialog.cleanup()
+            self.areaTransDialog.destroy()
 
     def areaTransAnswer(self, arg):
         player = self._playerRef
         mapRef = player._mapHandlerRef
 
+        # if self.showAreaTransDialog and player.areaTransitioning:
+        #     if arg:
+        #         #print 'Yes answered'
+        #         mapRef.loadNextArea()
+        #     else:
+        #         #print 'No answered'
+        #         pass
         if self.showAreaTransDialog and player.areaTransitioning:
-            if arg:
-                #print 'Yes answered'
-                mapRef.loadNextArea()
-            else:
-                #print 'No answered'
-                pass
+            if arg != -1:
+                mapRef.loadAreaByID(arg)
+        elif not player.areaTransitioning:
+            self.printFeedback('You moved away from the area transitional object')
+        else:
+            print 'Error in areaTransAnswer, arg:', arg
 
         player.areaTransitioning = False
         self.showAreaTransDialog = False
@@ -220,7 +249,7 @@ class HUD:
             frameTexture='hud/Abilities_Frame.png')
 
         scale=.05
-        imageUpModifier = .33
+        imageUpModifier = .4
 
         self.offensiveAbilityButton = DirectButton(
             text=(''),
@@ -286,7 +315,6 @@ class HUD:
         elif iconID == 4:
             self.aoeAbilityButton['image'] = 'hud/Shift_the_battlefield.png'
 
-
     def initQuest(self):
         self.questFrame = DirectFrame(
               frameSize=(-.2, .2, -.25, .25),
@@ -300,7 +328,7 @@ class HUD:
         self.addQuest('Explore the farm')
 
     def addQuest(self, text):
-        if self.questText != None:
+        if self.questText is not None:
             self.questText.destroy()
 
         self.questText = OnscreenText(
@@ -315,23 +343,24 @@ class HUD:
             )
 
     def printFeedback(self, feedback, error=True):
-        if self.feedbackText != None:
+        if self.feedbackText is not None:
             self.feedbackText.destroy()
 
         fg = (1, 0, 0, 1) if error == True else (0, 1, 0, 1)
 
-        self.feedbackText = OnscreenText(text=feedback,
-                                        pos=(-.95, -.6),
-                                        fg=fg,
-                                        bg=(0.25, 0.25, 0.25, 0.5),
-                                        scale=.06,
-                                        align=TextNode.ALeft
-                                        )
+        self.feedbackText = OnscreenText(
+            text=feedback,
+            pos=(-.95, -.6),
+            fg=fg,
+            bg=(0.25, 0.25, 0.25, 0.5),
+            scale=.06,
+            align=TextNode.ALeft
+            )
 
         taskMgr.doMethodLater(5, self.removeFeedback, 'removeFeedbackTask')
 
     def removeFeedback(self, task):
-        if self.feedbackText != None:
+        if self.feedbackText is not None:
             self.feedbackText.destroy()
 
         return task.done

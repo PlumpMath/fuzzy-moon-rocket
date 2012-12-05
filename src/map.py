@@ -9,10 +9,11 @@ import utils
 import enemy
 from diggerEnemy import Digger
 
-Area = namedtuple('Area', ['modelName', 'enemies'] )
+Area = namedtuple('Area', ['areaID', 'modelName', 'areaName', 'enemies'] )
 
-farmArea = Area(modelName='area_1', enemies={enemy.koboldMinion:2})
-secondArea = Area(modelName='area_2', enemies={enemy.koboldSkirmisher:2, enemy.koboldMinion:1})
+farmArea = Area(modelName='area_1', areaID=1, areaName='Farm Home', enemies={enemy.koboldMinion:2})
+cityArea = Area(modelName='area_2', areaID=2, areaName='City', enemies={enemy.koboldSkirmisher:2, enemy.koboldMinion:1})
+queenArea = Area(modelName='area_3', areaID=3, areaName='Desert of Death', enemies={enemy.koboldSkirmisher:3, enemy.koboldMinion:2})
 
 class Map:
 
@@ -26,7 +27,7 @@ class Map:
         self.mapNode = mainRef.mainNode.attachNewNode('mapNode')
 
         # Initialize area list and current area variable
-        self.areaList = [farmArea, secondArea]
+        self.areaList = [farmArea, cityArea, queenArea]
         self.currentArea = 0
 
         # Initialze sun
@@ -36,37 +37,63 @@ class Map:
         self.initFilters()
 
         # Load the first area
-        self.loadNextArea()
+        #self.loadNextArea()
+        self.loadAreaByID(farmArea.areaID)
 
         self.playerPlaced = False
 
 #===============================================================================
 #========================== AREA LOADING AND UNLOADING =========================
 
-    def loadNextArea(self):
-        self.currentArea += 1
-        if self.currentArea > len(self.areaList):
-            print 'No next area to load, loading previous instead'
-            self.loadPreviousArea()
-        else:
+    def getCurrentArea(self):
+        return self.areaList[self.currentArea-1]
+
+    def loadAreaByID(self, areaID=0):
+        newArea = None
+        for area in self.areaList:
+            if area.areaID == areaID:
+                newArea = area
+                break
+
+        if newArea is not None:
+            self.currentArea = areaID
+
             if self.currentArea > 1:
                 self.unloadArea()
                 self._stateHandlerRef.request(self._stateHandlerRef.DURING)
                 self._mainRef.gui.initializeOverlayFrame()
                 self._soundsHandlerRef.playAreaExit()
 
-            taskMgr.doMethodLater(0.5, self.loadArea, 'loadAreaTask', extraArgs=[self.areaList[self.currentArea-1]])
-            taskMgr.doMethodLater(1.0, self.startArea, 'startAreaTask', extraArgs=[])
-
-    def loadPreviousArea(self):
-        self.currentArea -= 2
-        if self.currentArea < 0:
-            print 'No previous area to load, loading next instead'
-            self.loadNextArea()
+            taskMgr.doMethodLater(1.0, self.loadArea, 'loadAreaTask', extraArgs=[newArea])
+            taskMgr.doMethodLater(2.0, self.startArea, 'startAreaTask', extraArgs=[])
         else:
-            self.unloadArea()
-            taskMgr.doMethodLater(0.5, self.loadArea, 'loadAreaTask', extraArgs=[self.areaList[self.currentArea-1]])
-            taskMgr.doMethodLater(1.0, self.startArea, 'startAreaTask', extraArgs=[])
+            print 'Error: Area not found'
+
+
+    # def loadNextArea(self):
+    #     self.currentArea += 1
+    #     if self.currentArea > len(self.areaList):
+    #         print 'No next area to load, loading previous instead'
+    #         self.loadPreviousArea()
+    #     else:
+    #         if self.currentArea > 1:
+    #             self.unloadArea()
+    #             self._stateHandlerRef.request(self._stateHandlerRef.DURING)
+    #             self._mainRef.gui.initializeOverlayFrame()
+    #             self._soundsHandlerRef.playAreaExit()
+
+    #         taskMgr.doMethodLater(1.0, self.loadArea, 'loadAreaTask', extraArgs=[self.areaList[self.currentArea-1]])
+    #         taskMgr.doMethodLater(2.0, self.startArea, 'startAreaTask', extraArgs=[])
+
+    # def loadPreviousArea(self):
+    #     self.currentArea -= 2
+    #     if self.currentArea < 0:
+    #         print 'No previous area to load, loading next instead'
+    #         self.loadNextArea()
+    #     else:
+    #         self.unloadArea()
+    #         taskMgr.doMethodLater(1.0, self.loadArea, 'loadAreaTask', extraArgs=[self.areaList[self.currentArea-1]])
+    #         taskMgr.doMethodLater(2.0, self.startArea, 'startAreaTask', extraArgs=[])
 
     def startArea(self):
         print 'startArea'
@@ -235,30 +262,31 @@ class Map:
 #======== EXIT GATE ==========================================
     def initExitGate(self):
         station = self.areaGeometry.find('**/station')
-        exitGate = station.find('**/stationGate')
-        ground = station.find('**/ground*')
+        if not station.is_empty():
+            exitGate = station.find('**/stationGate')
+            ground = station.find('**/ground*')
 
-        self.exitGate = Actor('models/exitGate')
-        self.exitGateAnim = self.exitGate.getAnimNames()
+            self.exitGate = Actor('models/exitGate')
+            self.exitGateAnim = self.exitGate.getAnimNames()
 
-        self.exitGate.setHpr(render, station.getHpr(render))
-        self.exitGate.setPos(render, station.getPos(render))
+            self.exitGate.setHpr(render, station.getHpr(render))
+            self.exitGate.setPos(render, station.getPos(render))
 
-        self.exitGate.reparentTo(self.areaNode)
+            self.exitGate.reparentTo(self.areaNode)
 
-        self.oII = Actor('models/oii')
-        oIIAnim = self.oII.getAnimNames() # No animation added yet
-        # print 'oII anim:', oIIAnim
-        #self.oII.setPlayRate(0.5, oIIAnim)
-        self.oII.loop(oIIAnim, fromFrame=0, toFrame=50)
+            self.oII = Actor('models/oii')
+            oIIAnim = self.oII.getAnimNames() # No animation added yet
+            # print 'oII anim:', oIIAnim
+            #self.oII.setPlayRate(0.5, oIIAnim)
+            self.oII.loop(oIIAnim, fromFrame=0, toFrame=50)
 
-        exitPos = self.areaGameObjects.find('**/exitPos').getPos(render)
-        self.oII.setPos(exitPos)
-        self.oII.setZ(self.oII, 0.1)
+            exitPos = self.areaGameObjects.find('**/exitPos').getPos(render)
+            self.oII.setPos(exitPos)
+            self.oII.setZ(self.oII, 0.1)
 
-        self.oII.reparentTo(self.areaNode)
+            self.oII.reparentTo(self.areaNode)
 
-        taskMgr.doMethodLater(1, self.areaTransitionChecker, 'areaTransitionCheckerTask')
+            taskMgr.doMethodLater(1, self.areaTransitionChecker, 'areaTransitionCheckerTask')
 
     def areaTransitionChecker(self, task):
         player = self._playerRef

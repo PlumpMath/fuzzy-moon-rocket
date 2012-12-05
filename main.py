@@ -76,7 +76,7 @@ class World(ShowBase):
 
         if debug:
             self.accept('shift-1', self.damagePlayer)
-            self.accept('shift-2', self.killEnemy)
+            self.accept('shift-2', self.killAllEnemies)
             self.accept('shift-3', self.zoomOut)
             self.accept('shift-4', self.outputTime)
             self.accept('shift-5', self.addEnemy)
@@ -91,8 +91,9 @@ class World(ShowBase):
     def damagePlayer(self): # key 1
         self.player.receiveDamage(self.player.maxHealthPoints - utils.getD8())
 
-    def killEnemy(self): # key 2
-        self.enemy.onDeath()
+    def killAllEnemies(self): # key 2
+        for enemy in enemyList:
+            enemy.onDeath()
 
     def zoomOut(self): # key 3
         scale = 2
