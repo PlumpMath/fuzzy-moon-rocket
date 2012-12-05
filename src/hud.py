@@ -14,6 +14,7 @@ class HUD:
         self._playerRef = playerRef
         self._mapHandlerRef = playerRef._mapHandlerRef
         self._stateHandlerRef = playerRef._stateHandlerRef
+        self._soundsHandlerRef = playerRef._soundsHandlerRef
 
         self.initHealthBar()
         self.initEXPBar()
@@ -343,6 +344,8 @@ class HUD:
     def updateQuest(self):
         self.addQuest(self.questsList[self.currentQuestIndex])
         self.currentQuestIndex += 1
+
+        self._soundsHandlerRef.playQuestSound()
 
     def addQuest(self, text):
         if self.questText is not None:

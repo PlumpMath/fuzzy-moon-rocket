@@ -25,6 +25,8 @@ class SoundsHandler():
         self.playerDeath = loader.loadSfx(soundsPath+'WilhelmScream_Player_Death.ogg')
         self.areaExit = loader.loadSfx(soundsPath+'Area_exit_sound.mp3')
 
+        self.questSound = loader.loadSfx(soundsPath+'Quest_sound.ogg')
+
     def startAmbientMusic(self):
         self.ambientMusic.setLoop(True)
         self.ambientMusic.play()
@@ -64,3 +66,7 @@ class SoundsHandler():
 
     def playAreaExit(self):
         self.areaExit.play()
+
+#-------------------------QUEST SOUNDS-----------------#
+    def playQuestSound(self):
+        self.questSound.play()
