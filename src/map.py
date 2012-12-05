@@ -225,6 +225,9 @@ class Map:
                 newEnemy.enemyNode.hide()
 
     def enemySpawnActivator(self, task):
+        if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
+            return task.again
+        
         if self._playerRef is None:
              # Load player reference
             self._playerRef = self._mainRef.player
