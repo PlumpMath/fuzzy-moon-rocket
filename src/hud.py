@@ -321,7 +321,7 @@ class HUD:
 
     def initQuest(self):
         self.questFrame = DirectFrame(
-              frameSize=(-.2, .2, -.25, .25),
+              frameSize=(-.25, .25, -.3, .3),
               pos=(1, 0, .5),
               pad=(.2,.2, .2,.2),
               frameTexture='hud/Quest_Window.png'
@@ -353,7 +353,7 @@ class HUD:
 
         self.questText = OnscreenText(
             text='Objective:\n'+text,
-            pos=(-.15, .15),
+            pos=(-.15, .2),
             fg=(.95, .95, .95, 1),
             shadow=(0, 0, 0, .5),
             parent=self.questFrame,

@@ -2,7 +2,9 @@ from direct.gui.DirectGui import *
 from direct.gui.OnscreenText import OnscreenText
 from panda3d.core import TextNode
 
-import time
+import sys
+sys.path.insert(0, '')
+
 import requests
 import json
 import math
