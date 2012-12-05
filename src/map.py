@@ -191,7 +191,6 @@ class Map:
         self.exitGate.delete()
 
         # Remove nodes
-        self.invertedSphere.removeNode()
         self.areaNode.removeNode()
 
 #============================================================

@@ -353,7 +353,7 @@ class HUD:
 
         self.questText = OnscreenText(
             text='Objective:\n'+text,
-            pos=(-.15, .2),
+            pos=(-.175, .2),
             fg=(.95, .95, .95, 1),
             shadow=(0, 0, 0, .5),
             parent=self.questFrame,
