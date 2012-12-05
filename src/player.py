@@ -107,7 +107,8 @@ class Player(FSM, Unit):
             'idle':modelPrefix+'idle',
             'bull-rush':modelPrefix+'bull-rush',
             'thicket-blades':modelPrefix+'thicket-blades',
-            'level-up':modelPrefix+'level-up'
+            'level-up':modelPrefix+'level-up',
+            'shift-battlefield':modelPrefix+'shift-battlefield'
             })
 
         self.playerModel.reparentTo(self.playerNode)
@@ -347,6 +348,7 @@ class Player(FSM, Unit):
                     cd.count = 0
 
                     self._hudRef.deactivateIcon(4)
+                    self.playerModel.play('shift-battlefield', fromFrame=0, toFrame=35)
             else:
                 #print 'Shift the Battlefield in cd'
                 self._hudRef.printFeedback('Shift the Battlefield is in cooldown')
