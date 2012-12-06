@@ -11,11 +11,12 @@ class Digger(enemy.Enemy):
         enemy.Enemy.__init__(self, mainRef, enemy.koboldSkirmisher) # Change to correct kobold
 
         self.holeModel = None
+        self.isUnderground = False
 
     def initAttributes(self, attributes):
         super(Digger, self).initAttributes(attributes)
 
-        rangeMultiplier = 1.5
+        rangeMultiplier = 1.75
         self.combatRange *= rangeMultiplier
         self.perceptionRange *= rangeMultiplier
 
@@ -35,6 +36,8 @@ class Digger(enemy.Enemy):
                 'idle-walk-to-pursue':modelPrefix+'idle-walk-to-pursue',
                 'idle-walk-to-dig':modelPrefix+'idle-walk-to-dig',
                 'idle-walk-to-dig-to-sleep':modelPrefix+'idle-walk-to-dig-to-sleep',
+
+                'spawn-to-idle':modelPrefix+'spawn-to-idle',
 
                 'hit1':modelPrefix+'hit1',
                 'hit2':modelPrefix+'hit2',
@@ -56,18 +59,15 @@ class Digger(enemy.Enemy):
         stopEnemy = self.enemyModel.actorInterval('pursue-to-idle', startFrame=0, endFrame=12)
         idleEnemy = self.enemyModel.actorInterval('idle-walk-to-dig', startFrame=0, endFrame=60)
         digHole = Parallel(Func(self.createHole), self.enemyModel.actorInterval('idle-walk-to-dig-to-sleep', startFrame=0, endFrame=120))
-        #hideEnemy = Func(self.enemyNode.hide)
-        #suicide = Func(self.suicide)
+        goUnder = Func(self.setIsUnderground)
 
-        self.stopSequence = Sequence(stopEnemy, idleEnemy,  digHole)
+        self.stopSequence = Sequence(stopEnemy, idleEnemy,  digHole, goUnder)
         self.stopSequence.start()
 
         self.isSleeping = True
 
-    def showEnemy(self, task):
-        if self.state == 'Idle':
-            self.enemyNode.show()
-        return task.done
+    def setIsUnderground(self):
+        self.isUnderground = True
 
     def enterPursue(self):
         #print('enemy enterPursue')
@@ -78,7 +78,12 @@ class Digger(enemy.Enemy):
             self.isSleeping = False
 
             awakeEnemy = self.enemyModel.actorInterval('idle-walk-to-pursue', startFrame=0, endFrame=24)
-            self.awakeSequence = Sequence(awakeEnemy, loopWalkEnemy, Func(self.pursuePlayer))
+
+            if self.isUnderground:
+                spawnEnemy = self.enemyModel.actorInterval('spawn-to-idle', startFrame=0, endFrame=100)
+                self.awakeSequence = Sequence(spawnEnemy, awakeEnemy, loopWalkEnemy, Func(self.pursuePlayer))
+            else:
+                self.awakeSequence = Sequence(awakeEnemy, loopWalkEnemy, Func(self.pursuePlayer))
         else:
             self.awakeSequence = Sequence(loopWalkEnemy, Func(self.pursuePlayer))
 

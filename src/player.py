@@ -252,7 +252,7 @@ class Player(FSM, Unit):
         self.playerNode.setHpr(self.playerNode.getH(), *pitchRoll)
 
         distance = abs(self.playerNode.getX() - destination.getX()) + abs(self.playerNode.getY() - destination.getY())
-        if distance > .5:
+        if distance > 1.0:
             self.destination = destination
             self.velocity = self.destination - self.playerNode.getPos()
 
