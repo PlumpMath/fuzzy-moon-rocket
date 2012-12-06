@@ -61,8 +61,7 @@ class Player(FSM, Unit):
         if not self._shiftButtonDown:
             self._shiftButtonDown = True
 
-            attackDelay = self.getInitiativeRoll()
-            taskMgr.doMethodLater(attackDelay, self.shiftAttack, 'shiftAttackTask')
+            taskMgr.doMethodLater(.1, self.shiftAttack, 'shiftAttackTask')
 
     def onShiftUp(self):
         if self._shiftButtonDown:
@@ -576,6 +575,9 @@ class Player(FSM, Unit):
             return task.done
 
         #print 'shiftAttack. shift:', self._shiftButtonDown
+        attackDelay = self.getInitiativeRoll()
+        if task.delayTime != attackDelay:
+            task.delayTime = attackDelay
 
         if self._shiftButtonDown and base.mouseWatcherNode.hasMouse():
             #print 'attack!'
@@ -642,6 +644,10 @@ class Player(FSM, Unit):
         if self._shiftButtonDown:
             return task.again
 
+        attackDelay = self.getInitiativeRoll()
+        if task.delayTime != attackDelay:
+            task.delayTime = attackDelay
+
         numEntries = self.attackCollisionHandler.getNumEntries()
         if numEntries > 0:
             self.attackCollisionHandler.sortEntries()
@@ -703,8 +709,7 @@ class Player(FSM, Unit):
         self.playerModel.stop()
         self.destination = self.playerNode.getPos()
 
-        attackDelay = self.getInitiativeRoll()
-        self.combatTask = taskMgr.doMethodLater(attackDelay, self.attackEnemies, 'combatTask')
+        self.combatTask = taskMgr.doMethodLater(.1, self.attackEnemies, 'combatTask')
 
         self._hudRef.printFeedback('In combat', True)
 
