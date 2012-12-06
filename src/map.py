@@ -13,7 +13,7 @@ Area = namedtuple('Area', ['areaID', 'modelName', 'areaName', 'enemies'] )
 
 farmArea = Area(modelName='area_1', areaID=1, areaName='Farm Home', enemies={enemy.koboldMinion:2})
 cityArea = Area(modelName='area_2', areaID=2, areaName='City', enemies={enemy.koboldSkirmisher:2, enemy.koboldMinion:1})
-queenArea = Area(modelName='area_3', areaID=3, areaName='Pit of Doom', enemies={enemy.koboldSkirmisher:3, enemy.koboldMinion:2})
+queenArea = Area(modelName='area_3', areaID=3, areaName='Pit of Doom', enemies={enemy.koboldSkirmisher:3})
 
 class Map:
 

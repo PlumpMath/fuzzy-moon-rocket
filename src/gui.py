@@ -20,7 +20,7 @@ class GUI(object):
         self._statesRef = mainRef.stateHandler
 
         self.initializeGUI()
-        taskMgr.doMethodLater(2.5, self.initializeOverlayFrame, 'initializeOverlayFrameTask', extraArgs=[])
+        #taskMgr.doMethodLater(2.5, self.initializeOverlayFrame, 'initializeOverlayFrameTask', extraArgs=[])
 
 #------------------------------- DATA HANDLING ----------------------------------------#
     def initializeGUI(self):

@@ -1,4 +1,5 @@
 from direct.gui.DirectGui import *
+from direct.gui.OnscreenImage import OnscreenImage
 from direct.gui.OnscreenText import OnscreenText
 from panda3d.core import TextNode, TransparencyAttrib
 from direct.task import Task
@@ -16,6 +17,7 @@ class HUD:
         self._stateHandlerRef = playerRef._stateHandlerRef
         self._soundsHandlerRef = playerRef._soundsHandlerRef
 
+        self.initInstructions()
         self.initHealthBar()
         self.initEXPBar()
         self.initTargetBar()
@@ -27,6 +29,68 @@ class HUD:
         self.showAreaTransDialog = False
 
         taskMgr.doMethodLater(1, self.updateBars, 'UpdateBarsTask')
+
+    def initInstructions(self):
+        if self._stateHandlerRef.state == self._stateHandlerRef.LOADING:
+            self.instructionsList = []
+            self.currentInstruction = 0
+
+            self.instructionsFrame = DirectFrame(
+                pos=(0, 0, 0),
+                sortOrder=10
+                )
+
+            imgScale = (1.5, 1, 1)
+            self.instructionsList.append(
+                OnscreenImage(
+                    parent=self.instructionsFrame,
+                    image='hud/movement_splash.png',
+                    scale=imgScale
+                    )
+                )
+            self.instructionsList.append(
+                OnscreenImage(
+                    parent=self.instructionsFrame,
+                    image='hud/combat_splash.png',
+                    scale=imgScale
+                    )
+                )
+            self.instructionsList.append(
+                OnscreenImage(
+                    parent=self.instructionsFrame,
+                    image='hud/transition_area_splash.png',
+                    scale=imgScale
+                    )
+                )
+
+            self.instructionsList[1].hide()
+            self.instructionsList[2].hide()
+
+            self.instructionsButton = DirectButton(
+                parent=self.instructionsFrame,
+                pos=(.9, 0, -.9),
+                scale=.06,
+                pad=(.2, .2, .2, .2),
+                pressEffect=1,
+                text='Next',
+                command=self.onInstructionsDone,
+                sortOrder=11
+                )
+
+    def onInstructionsDone(self):
+        if self.currentInstruction < len(self.instructionsList)-1:
+            self.instructionsList[self.currentInstruction].hide()
+            self.currentInstruction += 1
+            self.instructionsList[self.currentInstruction].show()
+        else:
+            for instruction in self.instructionsList:
+                instruction.destroy()
+
+            self.instructionsFrame.destroy()
+
+            self._stateHandlerRef.request(self._stateHandlerRef.BEFORE)
+
+            self._playerRef._mainRef.gui.initializeOverlayFrame()
 
     def initTargetBar(self):
         self.targetBar = DirectWaitBar(
@@ -119,6 +183,7 @@ class HUD:
         self.updateTargetBar()
         self.updateAreaTransDialog()
         self.updateStatsButton()
+        self.updateQuestFrame()
 
         # Continue calling task again after initial delay
         return task.again
@@ -308,6 +373,14 @@ class HUD:
             self.evasiveAbilityButton['image'] = 'hud/Thicket_of_blades.png'
         elif iconID == 4:
             self.aoeAbilityButton['image'] = 'hud/Shift_the_battlefield.png'
+
+    def updateQuestFrame(self):
+        if self._stateHandlerRef.state == self._stateHandlerRef.PLAY:
+            if self.questFrame.is_hidden():
+                self.questFrame.show()
+        else:
+            if not self.questFrame.is_hidden():
+                self.questFrame.hide()
 
     def initQuest(self):
         self.questFrame = DirectFrame(

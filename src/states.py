@@ -14,8 +14,9 @@ class StateHandler(FSM):
     def __init__(self):
         FSM.__init__(self, 'StateHandler')
 
-        # Define allowed transitions; i.e. Before can go to Play or Pause
+        # Define allowed transitions; e.g. Before can go to Play 
         self.defaultTransitions = {
+            self.LOADING: [self.BEFORE],
             self.BEFORE: [self.PLAY],
             self.PLAY:[self.PAUSE, self.DURING, self.PLAY, self.AFTER],
             self.PAUSE:[self.PLAY],
@@ -23,7 +24,7 @@ class StateHandler(FSM):
             self.AFTER:[],
         }
 
-        self.request(self.BEFORE)
+        self.request(self.LOADING)
 
         self.hasBeenInDuring = False
 
