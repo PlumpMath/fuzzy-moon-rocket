@@ -213,7 +213,7 @@ class GUI(object):
             parent=page,
             text=infoText,
             scale=.04,
-            wordwrap=25,
+            wordwrap=30,
             pos=(-.8, yStart-yPos),
             align=TextNode.ALeft)
 

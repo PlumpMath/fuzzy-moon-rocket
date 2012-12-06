@@ -233,19 +233,20 @@ class Map:
         questDetectionRadius = 1.5
 
         hudRef = self._playerRef._hudRef
-        playerPos = self._playerRef.playerNode.getPos(render)
-        for qp in self.questPoints:
-            qpNum = int(qp.getName()[-1])
-            if qpNum == hudRef.currentQuestIndex:
-                if utils.getIsInRange(playerPos, qp.getPos(render), questDetectionRadius):
-                    hudRef.printFeedback('You have a new objective!', False)
-                    hudRef.updateQuest()
+        if hudRef is not None:
+            playerPos = self._playerRef.playerNode.getPos(render)
+            for qp in self.questPoints:
+                qpNum = int(qp.getName()[-1])
+                if qpNum == hudRef.currentQuestIndex:
+                    if utils.getIsInRange(playerPos, qp.getPos(render), questDetectionRadius):
+                        hudRef.printFeedback('You have a new objective!', False)
+                        hudRef.updateQuest()
 
-                    self.removeQuestOII()
-                    break
+                        self.removeQuestOII()
+                        break
 
-                elif self.questOII is None:
-                    self.addOIIAtPos(qp.getPos(render))
+                    elif self.questOII is None:
+                        self.addOIIAtPos(qp.getPos(render))
 
         return task.again
 

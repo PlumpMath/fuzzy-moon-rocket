@@ -35,9 +35,6 @@ class Digger(enemy.Enemy):
                 'idle-walk':modelPrefix+'idle-walk',
                 'idle-walk-to-pursue':modelPrefix+'idle-walk-to-pursue',
                 'idle-walk-to-dig':modelPrefix+'idle-walk-to-dig',
-                'idle-walk-to-dig-to-sleep':modelPrefix+'idle-walk-to-dig-to-sleep',
-
-                'spawn-to-idle':modelPrefix+'spawn-to-idle',
 
                 'hit1':modelPrefix+'hit1',
                 'hit2':modelPrefix+'hit2',
@@ -57,11 +54,9 @@ class Digger(enemy.Enemy):
         self._soundsHandlerRef.playDiggerIdle()
 
         stopEnemy = self.enemyModel.actorInterval('pursue-to-idle', startFrame=0, endFrame=12)
-        idleEnemy = self.enemyModel.actorInterval('idle-walk-to-dig', startFrame=0, endFrame=60)
-        digHole = Parallel(Func(self.createHole), self.enemyModel.actorInterval('idle-walk-to-dig-to-sleep', startFrame=0, endFrame=120))
-        goUnder = Func(self.setIsUnderground)
+        idleEnemy = Func(self.enemyModel.loop, 'idle-walk-to-dig', fromFrame=0, toFrame=60)
 
-        self.stopSequence = Sequence(stopEnemy, idleEnemy,  digHole, goUnder)
+        self.stopSequence = Sequence(stopEnemy, idleEnemy)
         self.stopSequence.start()
 
         self.isSleeping = True
@@ -78,12 +73,7 @@ class Digger(enemy.Enemy):
             self.isSleeping = False
 
             awakeEnemy = self.enemyModel.actorInterval('idle-walk-to-pursue', startFrame=0, endFrame=24)
-
-            if self.isUnderground:
-                spawnEnemy = self.enemyModel.actorInterval('spawn-to-idle', startFrame=0, endFrame=100)
-                self.awakeSequence = Sequence(spawnEnemy, awakeEnemy, loopWalkEnemy, Func(self.pursuePlayer))
-            else:
-                self.awakeSequence = Sequence(awakeEnemy, loopWalkEnemy, Func(self.pursuePlayer))
+            self.awakeSequence = Sequence(awakeEnemy, loopWalkEnemy, Func(self.pursuePlayer))
         else:
             self.awakeSequence = Sequence(loopWalkEnemy, Func(self.pursuePlayer))
 
@@ -104,25 +94,3 @@ class Digger(enemy.Enemy):
     def playHitAnimation(self):
         randomHitAnim = 'hit' + str(utils.getDX(2))
         self.enemyModel.play(randomHitAnim, fromFrame=0, toFrame=12)
-
-    def createHole(self):
-        if self.holeModel == None:
-            self.holeModel = Actor('models/hole-model',
-                                    {'anim':'models/hole-anim'})
-            self.holeModel.reparentTo(self._mainRef.mainNode)
-
-            self.holeModel.setPos(self.enemyNode, 0, -.1, 0)
-
-            self.holeModel.play('anim', fromFrame=0, toFrame=120)
-
-            removeHoleDelay = 12
-            taskMgr.doMethodLater(removeHoleDelay, self.removeHole, 'removeHoleTask')
-
-    def removeHole(self, task):
-        if self.holeModel != None:
-            self.holeModel.cleanup()
-            self.holeModel.delete()
-
-            self.holeModel = None
-
-        return task.done
