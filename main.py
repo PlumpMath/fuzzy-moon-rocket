@@ -33,7 +33,7 @@ class World(ShowBase):
 
         # Set background color
         base.setBackgroundColor(0.1, 0.1, 0.1, 1)
-        base.camLens.setNearFar(5.5, 500)
+        base.camLens.setNearFar(4, 500)
         base.camLens.setAspectRatio(1.7778)
 
         # Main game node

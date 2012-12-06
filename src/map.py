@@ -149,6 +149,8 @@ class Map:
         for spawnPoint in self.areaGameObjects.findAllMatches('**/spawnPoint*'):
             self.spawnPointsDict[spawnPoint] = 1 # Activate spawn point
 
+        self.areaGeometry.find('**/domeOuter*').hide()
+
         # Load in point lights
         taskMgr.doMethodLater(0.25, self.initLights, 'initLightsTask', extraArgs=[])
 
@@ -187,6 +189,8 @@ class Map:
         self.oII.cleanup()
         self.oII.delete()
 
+        self.removeQuestOII()
+
         self.exitGate.cleanup()
         self.exitGate.delete()
 
@@ -198,8 +202,24 @@ class Map:
     def initQuestSystem(self):
         # Locate and save quest points
         self.questPoints = self.areaGameObjects.findAllMatches('**/quest*')
+        self.questOII = None
 
         taskMgr.doMethodLater(1, self.checkQuestPoint, 'checkQuestPointTask')
+
+    def addOIIAtPos(self, pos):
+        self.questOII = Actor('models/oii')
+        self.questOII.loop(self.questOII.getAnimNames(), fromFrame=0, toFrame=50)
+
+        self.questOII.setPos(pos)
+        self.questOII.setZ(self.questOII, .1)
+
+        self.questOII.reparentTo(self.areaNode)
+
+    def removeQuestOII(self):
+        if self.questOII is not None:
+            self.questOII.cleanup()
+            self.questOII.delete()
+            self.questOII = None
 
     def checkQuestPoint(self, task):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
@@ -209,17 +229,22 @@ class Map:
              # Load player reference
             self._playerRef = self._mainRef.player
 
-        questDetectionRadius = 4
+        questDetectionRadius = 1.5
 
         hudRef = self._playerRef._hudRef
         playerPos = self._playerRef.playerNode.getPos(render)
         for qp in self.questPoints:
-            if utils.getIsInRange(playerPos, qp.getPos(render), questDetectionRadius):
-                qpNum = int(qp.getName()[-1])
-                if qpNum == hudRef.currentQuestIndex:
+            qpNum = int(qp.getName()[-1])
+            if qpNum == hudRef.currentQuestIndex:
+                if utils.getIsInRange(playerPos, qp.getPos(render), questDetectionRadius):
                     hudRef.printFeedback('You have a new objective!', False)
                     hudRef.updateQuest()
+
+                    self.removeQuestOII()
                     break
+
+                elif self.questOII is None:
+                    self.addOIIAtPos(qp.getPos(render))
 
         return task.again
 

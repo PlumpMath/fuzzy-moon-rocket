@@ -146,11 +146,6 @@ class HUD:
 
         if player.areaTransitioning and not self.showAreaTransDialog:
             self.showAreaTransDialog = True
-            # self.areaTransDialog = YesNoDialog(
-            #     dialogName='AreaTransitionDialog',
-            #     text='Do you want to transition to the next area?',
-            #     fadeScreen=0,
-            #     command=self.areaTransAnswer)
 
             mapRef = self._mapHandlerRef
             buttonTextList = []
@@ -170,24 +165,19 @@ class HUD:
                 fadeScreen=0,
                 command=self.areaTransAnswer,
                 buttonTextList=buttonTextList,
-                buttonValueList=buttonValueList
+                buttonValueList=buttonValueList,
+                frameColor=(0.9, 0.9, 0.9, 0.75)
                 )
+            self.areaTransDialog.setTransparency(TransparencyAttrib.MAlpha)
+
         elif not player.areaTransitioning and self.showAreaTransDialog:
             self.showAreaTransDialog = False
             self.areaTransDialog.cleanup()
-            #self.areaTransDialog.destroy()
 
     def areaTransAnswer(self, arg):
         player = self._playerRef
         mapRef = player._mapHandlerRef
 
-        # if self.showAreaTransDialog and player.areaTransitioning:
-        #     if arg:
-        #         #print 'Yes answered'
-        #         mapRef.loadNextArea()
-        #     else:
-        #         #print 'No answered'
-        #         pass
         if self.showAreaTransDialog and player.areaTransitioning:
             if arg != -1:
                 mapRef.loadAreaByID(arg)
@@ -250,7 +240,8 @@ class HUD:
             frameColor=(0.7, 0.7, 0.7, 1.0),
             pos=(0, 0, -0.95),
             pad=(0.4, 0.075),
-            frameTexture='hud/Abilities_Frame.png')
+            frameTexture='hud/Abilities_Frame.png'
+            )
 
         scale=.05
         imageUpModifier = .4
@@ -326,8 +317,7 @@ class HUD:
               pad=(.2,.2, .2,.2),
               frameTexture='hud/Quest_Window.png'
               )
-        
-        self.questFrame.setTransparency(TransparencyAttrib.MAlpha)
+
         self.questText = None
 
         self.questsList = [
