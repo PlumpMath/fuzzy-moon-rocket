@@ -417,7 +417,7 @@ class Enemy(FSM, Unit):
             if attacked != 0:
                 self.playAttackAnimation()
                 if attacked == 2:
-                    self._playerRef.playerModel.play('hit')
+                    self._playerRef.playHitAnimation()
 
             return task.again
 

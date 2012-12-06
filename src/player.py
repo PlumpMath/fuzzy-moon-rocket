@@ -51,6 +51,9 @@ class Player(FSM, Unit):
         # Initialize player FSM state
         self.request('Idle')
 
+        # Skip attack variable
+        self.skipAttack = False
+
         DO = DirectObject()
         DO.accept('shift-mouse1', self.onShiftDown)
         DO.accept('shift-up', self.onShiftUp)
@@ -273,6 +276,9 @@ class Player(FSM, Unit):
     def startCooldown(self, ability, cooldown, task):
         task.count += 1
 
+        if task.count > 1 and self.skipAttack:
+            self.skipAttack = False
+
         if task.count >= cooldown:
             self.abilityDict[ability] = 1
             if ability == 'offensive':
@@ -302,6 +308,7 @@ class Player(FSM, Unit):
                     self.abilityDict[off] = 0
                     cd = taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[off, 10], appendTask=True)
                     cd.count = 0
+                    self.skipAttack = True
 
                     self._hudRef.deactivateIcon(1)
                     self.playerModel.play('bull-rush', fromFrame=0, toFrame=25)
@@ -317,6 +324,7 @@ class Player(FSM, Unit):
                     self.abilityDict[defe] = 0
                     cd = taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[defe, 10], appendTask=True)
                     cd.count = 0
+                    self.skipAttack = True
 
                     self._hudRef.deactivateIcon(2)
                     self.playerModel.play('defense', fromFrame=0, toFrame=12)
@@ -332,6 +340,7 @@ class Player(FSM, Unit):
                     self.abilityDict[eva] = 0
                     cd = taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[eva, 20], appendTask=True)
                     cd.count = 0
+                    self.skipAttack = True
 
                     self._hudRef.deactivateIcon(3)
                     self.playerModel.play('thicket-blades', fromFrame=0, toFrame=27)
@@ -347,6 +356,7 @@ class Player(FSM, Unit):
                     self.abilityDict[aoe] = 0
                     cd = taskMgr.doMethodLater(1, self.startCooldown, 'startCooldownTask', extraArgs=[aoe, 30], appendTask=True)
                     cd.count = 0
+                    self.skipAttack = True
 
                     self._hudRef.deactivateIcon(4)
                     self.playerModel.play('shift-battlefield', fromFrame=0, toFrame=35)
@@ -420,7 +430,7 @@ class Player(FSM, Unit):
                         if self.getStrengthModifier() + utils.getD20() > enemy.armorClass:
                             self._hudRef.printFeedback('Thicket of Blades hit', True)
                             enemy.slowMovementByPercentage(50, 10) # slow by 50 % in 10 seconds, automatically removes it again
-                            enemy.enemyModel.play('hit')
+                            enemy.playHitAnimation()
                         else:
                             #print 'thicketOfBlades missed'
                             self._hudRef.printFeedback('Thicket of Blades missed')
@@ -443,14 +453,14 @@ class Player(FSM, Unit):
                     dmg = 2 * utils.getD8() + self.getStrengthModifier()
                     enemy.receiveDamage(dmg)
 
-                    enemy.enemyModel.play('hit')
+                    enemy.playHitAnimation()
                 else:
                     #print 'shiftTheBattlefield missed'
                     self._hudRef.printFeedback('Shift the Battlefield missed')
                     dmg = (2 * utils.getD8() + self.getStrengthModifier()) / 2
                     enemy.receiveDamage(dmg)
 
-                    enemy.enemyModel.play('hit')
+                    enemy.playHitAnimation()
 
         return bSuccess
 
@@ -570,6 +580,10 @@ class Player(FSM, Unit):
             self.damageReceived += damageAmount
 
 #------------------------------- COMBAT ------------------------------#
+    def playHitAnimation(self):
+        if not self.skipAttack:
+            self.playerModel.play('hit')
+
     def shiftAttack(self, task):
         if self._stateHandlerRef.state != self._stateHandlerRef.PLAY:
             return task.done
@@ -578,6 +592,9 @@ class Player(FSM, Unit):
         attackDelay = self.getInitiativeRoll()
         if task.delayTime != attackDelay:
             task.delayTime = attackDelay
+
+        if self.skipAttack:
+            return task.cont
 
         if self._shiftButtonDown and base.mouseWatcherNode.hasMouse():
             #print 'attack!'
@@ -644,6 +661,9 @@ class Player(FSM, Unit):
         if self._shiftButtonDown:
             return task.again
 
+        if self.skipAttack:
+            return task.cont
+
         attackDelay = self.getInitiativeRoll()
         if task.delayTime != attackDelay:
             task.delayTime = attackDelay
@@ -664,7 +684,7 @@ class Player(FSM, Unit):
                         bAttacked = self.attack(enemy) # Returns 1 if player attacked but did not hit, returns 2 on hit
 
                         if bAttacked == 2:
-                            enemy.enemyModel.play('hit')
+                            enemy.playHitAnimation()
                             self._soundsHandlerRef.playPlayerAttackHit()
 
             # Only play animations if player actually attacked

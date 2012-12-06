@@ -23,7 +23,7 @@ class World(ShowBase):
     def __init__(self):
         print('World class instantiated')
         # Enable or disable debugging
-        debug = True
+        debug = False
 
         # Set background color
         base.setBackgroundColor(0.1, 0.1, 0.1, 1)
@@ -67,7 +67,6 @@ class World(ShowBase):
 
     #------------------------------------------------------------------------------------
     # Start of debugging implementation
-
         if debug:
             self.accept('shift-1', self.damagePlayer)
             self.accept('shift-2', self.killAllEnemies)
