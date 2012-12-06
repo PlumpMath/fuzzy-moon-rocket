@@ -1,3 +1,7 @@
+from panda3d.core import loadPrcFile
+ 
+loadPrcFile("Config.prc")
+
 import direct.directbase.DirectStart
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import *
