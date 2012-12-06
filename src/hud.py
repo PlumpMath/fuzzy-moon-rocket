@@ -152,7 +152,7 @@ class HUD:
             buttonValueList = []
             for area in mapRef.areaList:
                 if area != mapRef.getCurrentArea():
-                    if (area.areaID == 3 and mapRef.hasBeenInArea2) or area.areaID != 3:
+                    if (area.areaID == 3 and self.currentQuestIndex > 3) or area.areaID != 3:
                         buttonTextList.append(area.areaName)
                         buttonValueList.append(area.areaID)
 
@@ -168,7 +168,6 @@ class HUD:
                 buttonValueList=buttonValueList,
                 frameColor=(0.9, 0.9, 0.9, 0.75)
                 )
-            self.areaTransDialog.setTransparency(TransparencyAttrib.MAlpha)
 
         elif not player.areaTransitioning and self.showAreaTransDialog:
             self.showAreaTransDialog = False
@@ -317,6 +316,7 @@ class HUD:
               pad=(.2,.2, .2,.2),
               frameTexture='hud/Quest_Window.png'
               )
+        self.questFrame.setTransparency(TransparencyAttrib.MAlpha)
 
         self.questText = None
 

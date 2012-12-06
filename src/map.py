@@ -13,7 +13,7 @@ Area = namedtuple('Area', ['areaID', 'modelName', 'areaName', 'enemies'] )
 
 farmArea = Area(modelName='area_1', areaID=1, areaName='Farm Home', enemies={enemy.koboldMinion:2})
 cityArea = Area(modelName='area_2', areaID=2, areaName='City', enemies={enemy.koboldSkirmisher:2, enemy.koboldMinion:1})
-queenArea = Area(modelName='area_3', areaID=3, areaName='Desert of Death', enemies={enemy.koboldSkirmisher:3, enemy.koboldMinion:2})
+queenArea = Area(modelName='area_3', areaID=3, areaName='Pit of Doom', enemies={enemy.koboldSkirmisher:3, enemy.koboldMinion:2})
 
 class Map:
 
@@ -39,7 +39,7 @@ class Map:
 
         # Set needed boolean variables
         self.playerPlaced = False
-        self.hasBeenInArea2 = False
+        #self.hasBeenInArea2 = False
         self.mapsStarted = False
 
         # Load the first area
@@ -65,8 +65,8 @@ class Map:
         if newArea is not None:
             self.currentArea = areaID
 
-            if areaID == 2:
-                self.hasBeenInArea2 = True
+            #if areaID == 2:
+                #self.hasBeenInArea2 = True
 
             if self.mapsStarted == True:
                 self.unloadArea()
