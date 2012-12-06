@@ -16,11 +16,11 @@ class GUI(object):
 
     def __init__(self, mainRef):
         print("GUI class instantiated")
+        self._mapRef = None
         self._mainRef = mainRef
         self._statesRef = mainRef.stateHandler
 
         self.initializeGUI()
-        #taskMgr.doMethodLater(2.5, self.initializeOverlayFrame, 'initializeOverlayFrameTask', extraArgs=[])
 
 #------------------------------- DATA HANDLING ----------------------------------------#
     def initializeGUI(self):
@@ -82,11 +82,21 @@ class GUI(object):
                 True if response is 201 (a new resource created)
                 False otherwise
         """
+
+        if self._mapRef is None:
+            self._mapRef = self._mainRef.mapHandler
+
+        prevArea = self._mapRef.previousArea.areaName
+        currArea = self._mapRef.getCurrentArea().areaName
+
         question_data = {'participant_id': self.participant_id,
-                         'question_id': question_id, 'answer': answer}
+                         'question_id': question_id, 
+                         'answer': answer}
 
         if self._statesRef.state == self._statesRef.DURING:
             question_data['times_answered'] = self.timesAnswered
+            question_data['previous_area'] = prevArea
+            question_data['current_area'] = currArea
 
         r = requests.post('{}/answer'.format(self._BASE_URL),
                       data=json.dumps(question_data),

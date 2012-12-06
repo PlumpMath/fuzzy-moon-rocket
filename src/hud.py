@@ -44,21 +44,21 @@ class HUD:
             self.instructionsList.append(
                 OnscreenImage(
                     parent=self.instructionsFrame,
-                    image='hud/movement_splash.png',
+                    image='hud/movement_splash_hd.png',
                     scale=imgScale
                     )
                 )
             self.instructionsList.append(
                 OnscreenImage(
                     parent=self.instructionsFrame,
-                    image='hud/combat_splash.png',
+                    image='hud/combat_splash_hd.png',
                     scale=imgScale
                     )
                 )
             self.instructionsList.append(
                 OnscreenImage(
                     parent=self.instructionsFrame,
-                    image='hud/transition_area_splash.png',
+                    image='hud/transition_area_splash_hd.png',
                     scale=imgScale
                     )
                 )

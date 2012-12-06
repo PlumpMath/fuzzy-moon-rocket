@@ -42,6 +42,8 @@ class Map:
         #self.hasBeenInArea2 = False
         self.mapsStarted = False
 
+        self.previousArea = None
+
         # Load the first area
         self.loadAreaByID(farmArea.areaID)
 
@@ -63,10 +65,8 @@ class Map:
                 break
 
         if newArea is not None:
+            self.previousArea = self.getCurrentArea()
             self.currentArea = areaID
-
-            #if areaID == 2:
-                #self.hasBeenInArea2 = True
 
             if self.mapsStarted == True:
                 self.unloadArea()
@@ -80,6 +80,7 @@ class Map:
             taskMgr.doMethodLater(2.0, self.startArea, 'startAreaTask', extraArgs=[])
         else:
             print 'Error: Area not found'
+            self.loadAreaByID(1) # load farm area in case of error
 
     def startArea(self):
         print 'startArea'
