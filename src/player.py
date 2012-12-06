@@ -58,15 +58,17 @@ class Player(FSM, Unit):
         self._shiftButtonDown = False
 
     def onShiftDown(self):
-        self._shiftButtonDown = True
+        if not self._shiftButtonDown:
+            self._shiftButtonDown = True
 
-        attackDelay = self.getInitiativeRoll()
-        taskMgr.doMethodLater(attackDelay, self.shiftAttack, 'shiftAttackTask')
+            attackDelay = self.getInitiativeRoll()
+            taskMgr.doMethodLater(attackDelay, self.shiftAttack, 'shiftAttackTask')
 
     def onShiftUp(self):
-        self._shiftButtonDown = False
+        if self._shiftButtonDown:
+            self._shiftButtonDown = False
 
-        taskMgr.remove('shiftAttackTask')
+            taskMgr.remove('shiftAttackTask')
 
 #----------------------------- INITIALIZATION ---------------------------------#
     def initPlayerAttributes(self):
