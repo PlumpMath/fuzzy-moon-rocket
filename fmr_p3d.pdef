@@ -1,0 +1,21 @@
+import sys
+
+sys.path.insert(0, './requests/')
+print sys.path
+
+class FMR(p3d):
+    require('morepy', 'panda3d', 'ai', 'openal')
+
+    config(
+        version="1.0",
+        display_name="Fuzzy-Moon-Rocket")
+
+    module('requests', required=True)
+
+    dir('models', newDir='models')
+    dir('hud', newDir='hud')
+    dir('src', newDir='src')
+    dir('icons', newDir='icons')
+    dir('sounds', newDir='sounds')
+
+    mainModule('main')
