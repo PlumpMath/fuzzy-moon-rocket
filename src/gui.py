@@ -95,6 +95,8 @@ class GUI(object):
 
 #---------------------------------- VISUAL GUI ---------------------------------------#
     def initializeOverlayFrame(self):
+        base.disableAllAudio()
+
         self.canvasWidth = 1
         canvasHeight = 1
 
@@ -305,6 +307,8 @@ class GUI(object):
         if allAnswered == False:
             self.showNotFinishedText(currentPageFrame)
         else:
+            base.enableAllAudio()
+
             for answer in self.answersList:
                 if answer.getParent() == currentPageFrame:
                     self.answersDict[answer.question_id] = answer.get()
