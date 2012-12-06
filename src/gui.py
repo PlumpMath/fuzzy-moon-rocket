@@ -86,8 +86,8 @@ class GUI(object):
         if self._mapRef is None:
             self._mapRef = self._mainRef.mapHandler
 
-        prevArea = self._mapRef.previousArea.areaName
-        currArea = self._mapRef.getCurrentArea().areaName
+        prevArea = self._mapRef.previousArea
+        currArea = self._mapRef.getCurrentArea()
 
         question_data = {'participant_id': self.participant_id,
                          'question_id': question_id, 
@@ -95,8 +95,8 @@ class GUI(object):
 
         if self._statesRef.state == self._statesRef.DURING:
             question_data['times_answered'] = self.timesAnswered
-            question_data['previous_area'] = prevArea
-            question_data['current_area'] = currArea
+            question_data['previous_area'] = prevArea.areaName
+            question_data['current_area'] = currArea.areaName
 
         r = requests.post('{}/answer'.format(self._BASE_URL),
                       data=json.dumps(question_data),
