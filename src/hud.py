@@ -24,11 +24,22 @@ class HUD:
         self.initStatsButton()
         self.initPlayerAbilityBar()
         self.initQuest()
+        self.initWarningText()
 
         self.feedbackText = None
         self.showAreaTransDialog = False
 
         taskMgr.doMethodLater(1, self.updateBars, 'UpdateBarsTask')
+
+    def initWarningText(self):
+        OnscreenText(
+            pos=(1.2, .95),
+            scale=.04,
+            fg=(1, 1, 1, 1),
+            bg=(.5, .5, .5, .5),
+            text='Please do not exit the game by clicking the close button on the window (the x)',
+            align=TextNode.ARight
+            )
 
     def initInstructions(self):
         if self._stateHandlerRef.state == self._stateHandlerRef.LOADING:
