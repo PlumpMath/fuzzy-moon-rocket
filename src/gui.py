@@ -313,13 +313,15 @@ class GUI(object):
             button.setOthers(buttons)
 
     def showNotFinishedText(self, page):
-        if self.notFinishedText == None:
-            self.notFinishedText = OnscreenText(
-                parent=page,
-                text='Please answer all questions before progressing',
-                pos=(0, -.9),
-                fg=(1, 0, 0, 1)
-                )
+        if self.notFinishedText is not None:
+            self.notFinishedText.destroy()
+
+        self.notFinishedText = OnscreenText(
+            parent=page,
+            text='Please answer all questions before progressing',
+            pos=(0, -.9),
+            fg=(1, 0, 0, 1)
+            )
 
     def onQuestionsDone(self):
         bContinue = False
@@ -330,12 +332,14 @@ class GUI(object):
             if answer.get() == '' and answer.getParent() == currentPageFrame:
                 allAnswered = False
 
+        #print 'firstButtonValue:', self.firstButtonValue
+        #print 'secondButtonValue:', self.secondButtonValue
         if currentPageFrame.multipleChoicesAdded:
-            if self.firstButtonValue is None:
-                # print 'firstButtonValue is none'
+            if self.firstButtonValue[0] is None:
+                #print 'firstButtonValue is none'
                 allAnswered = False
-            if len(self.buttonsList) > 1 and self.secondButtonValue is None:
-                # print 'secondButtonValue is none'
+            if len(self.buttonsList) > 1 and self.secondButtonValue[0] is None and self.currentPage == 1:
+                #print 'secondButtonValue is none'
                 allAnswered = False
 
         if allAnswered == False:
@@ -370,6 +374,10 @@ class GUI(object):
             else: # Click 'Done'
                 for page in self.pagesList:
                     page.destroy()
+
+                self.firstButtonValue = None
+                self.secondButtonValue = None
+                self.buttonsList = []
 
                 # Handle state changing
                 states = self._statesRef
