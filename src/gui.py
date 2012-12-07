@@ -30,6 +30,24 @@ class GUI(object):
         self.participant_scenario = self.create_user()
         self.timesAnswered = 1
 
+        questionnaireTask = taskMgr.doMethodLater(10, self.checkGiveQuestionnaire, 'checkGiveQuestionnaireTask')
+        questionnaireTask.count = 0
+        self.giveQuestionnaire = True
+
+    def checkGiveQuestionnaire(self, task):
+        if self.giveQuestionnaire:
+            return task.again
+
+        task.count += 1
+
+        questionnaireIntervalInMinutes = 10
+
+        if (task.count * 6) >= questionnaireIntervalInMinutes:
+            self.giveQuestionnaire = True
+            task.count = 0
+
+        return task.again
+
     def extract_question_set(self, question_set):
         """Extracts a single questions set by checking if the string in
            question_set is in any of the question_set's names.
@@ -105,6 +123,12 @@ class GUI(object):
 
 #---------------------------------- VISUAL GUI ---------------------------------------#
     def initializeOverlayFrame(self):
+        if self._statesRef.state == self._statesRef.DURING:
+            if not self.giveQuestionnaire:
+                self._statesRef.request(self._statesRef.PLAY)
+                return
+            self.giveQuestionnaire = False
+
         base.disableAllAudio()
 
         self.canvasWidth = 1
