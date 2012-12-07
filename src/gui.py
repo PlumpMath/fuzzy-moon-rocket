@@ -39,10 +39,12 @@ class GUI(object):
             return task.again
 
         task.count += 1
+        #print 'count started:', task.count
 
         questionnaireIntervalInMinutes = 10
 
-        if (task.count * 6) >= questionnaireIntervalInMinutes:
+        if (task.count * 6) >= (questionnaireIntervalInMinutes * 6):
+            #print '10 minutes have elapsed, set giveQuestionnaire to true again'
             self.giveQuestionnaire = True
             task.count = 0
 
@@ -124,9 +126,12 @@ class GUI(object):
 #---------------------------------- VISUAL GUI ---------------------------------------#
     def initializeOverlayFrame(self):
         if self._statesRef.state == self._statesRef.DURING:
+            #print 'inDuring, giveQuestionnaire:', self.giveQuestionnaire
             if not self.giveQuestionnaire:
+                #print 'go to play'
                 self._statesRef.request(self._statesRef.PLAY)
                 return
+            #print 'set giveQuestionnaire to false'
             self.giveQuestionnaire = False
 
         base.disableAllAudio()

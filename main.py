@@ -175,8 +175,9 @@ class World(ShowBase):
 
     def escapeGame(self):
         if self.stateHandler.hasBeenInDuring:
-            self.stateHandler.request(self.stateHandler.AFTER)
-            self.gui.initializeOverlayFrame()
+            if self.stateHandler.state == self.stateHandler.PLAY:
+                self.stateHandler.request(self.stateHandler.AFTER)
+                self.gui.initializeOverlayFrame()
 
     def endGame(self):
         sys.exit(0)
